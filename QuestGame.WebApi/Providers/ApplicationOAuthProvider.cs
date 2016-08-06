@@ -11,6 +11,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using QuestGame.WebApi.Models;
 using QuestGame.Domain;
+using QuestGame.Domain.Entities;
 
 namespace QuestGame.WebApi.Providers
 {

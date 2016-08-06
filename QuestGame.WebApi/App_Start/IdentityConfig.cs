@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using QuestGame.WebApi.Models;
 using QuestGame.Domain;
+using QuestGame.Domain.Entities;
 
 namespace QuestGame.WebApi
 {
