@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace QuestGame.WebApi.Models
 {
-    // Models returned by AccountController actions.
+    // Модели, возвращаемые действиями AccountController.
 
     public class ExternalLoginViewModel
     {

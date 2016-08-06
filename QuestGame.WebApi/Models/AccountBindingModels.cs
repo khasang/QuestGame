@@ -4,12 +4,12 @@ using Newtonsoft.Json;
 
 namespace QuestGame.WebApi.Models
 {
-    // Models used as parameters to AccountController actions.
+    // Модели, используемые в качестве параметров действий AccountController.
 
     public class AddExternalLoginBindingModel
     {
         [Required]
-        [Display(Name = "External access token")]
+        [Display(Name = "Внешний маркер доступа")]
         public string ExternalAccessToken { get; set; }
     }
 
@@ -17,68 +17,68 @@ namespace QuestGame.WebApi.Models
     {
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Current password")]
+        [Display(Name = "Текущий пароль")]
         public string OldPassword { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "Значение {0} должно содержать не менее {2} символов.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "New password")]
+        [Display(Name = "Новый пароль")]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm new password")]
-        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        [Display(Name = "Подтверждение нового пароля")]
+        [Compare("NewPassword", ErrorMessage = "Новый пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
     }
 
     public class RegisterBindingModel
     {
         [Required]
-        [Display(Name = "Email")]
+        [Display(Name = "Адрес электронной почты")]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "Значение {0} должно содержать не менее {2} символов.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Пароль")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Подтверждение пароля")]
+        [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
     }
 
     public class RegisterExternalBindingModel
     {
         [Required]
-        [Display(Name = "Email")]
+        [Display(Name = "Адрес электронной почты")]
         public string Email { get; set; }
     }
 
     public class RemoveLoginBindingModel
     {
         [Required]
-        [Display(Name = "Login provider")]
+        [Display(Name = "Поставщик входа")]
         public string LoginProvider { get; set; }
 
         [Required]
-        [Display(Name = "Provider key")]
+        [Display(Name = "Ключ поставщика")]
         public string ProviderKey { get; set; }
     }
 
     public class SetPasswordBindingModel
     {
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "Значение {0} должно содержать не менее {2} символов.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "New password")]
+        [Display(Name = "Новый пароль")]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm new password")]
-        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        [Display(Name = "Подтверждение нового пароля")]
+        [Compare("NewPassword", ErrorMessage = "Новый пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
     }
 }

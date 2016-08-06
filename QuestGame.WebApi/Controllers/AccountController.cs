@@ -16,6 +16,7 @@ using Microsoft.Owin.Security.OAuth;
 using QuestGame.WebApi.Models;
 using QuestGame.WebApi.Providers;
 using QuestGame.WebApi.Results;
+using QuestGame.Domain;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -170,14 +171,14 @@ namespace QuestGame.WebApi.Controllers
                 && ticket.Properties.ExpiresUtc.HasValue
                 && ticket.Properties.ExpiresUtc.Value < DateTimeOffset.UtcNow))
             {
-                return BadRequest("External login failure.");
+                return BadRequest("Сбой внешнего входа.");
             }
 
             ExternalLoginData externalData = ExternalLoginData.FromIdentity(ticket.Identity);
 
             if (externalData == null)
             {
-                return BadRequest("The external login is already associated with an account.");
+                return BadRequest("Внешнее имя входа уже связано с учетной записью.");
             }
 
             IdentityResult result = await UserManager.AddLoginAsync(User.Identity.GetUserId(),
@@ -384,7 +385,7 @@ namespace QuestGame.WebApi.Controllers
             base.Dispose(disposing);
         }
 
-        #region Helpers
+        #region Вспомогательные приложения
 
         private IAuthenticationManager Authentication
         {
@@ -410,7 +411,7 @@ namespace QuestGame.WebApi.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    // No ModelState errors are available to send, so just return an empty BadRequest.
+                    // Ошибки ModelState для отправки отсутствуют, поэтому просто возвращается пустой BadRequest.
                     return BadRequest();
                 }
 
@@ -478,7 +479,7 @@ namespace QuestGame.WebApi.Controllers
 
                 if (strengthInBits % bitsPerByte != 0)
                 {
-                    throw new ArgumentException("strengthInBits must be evenly divisible by 8.", "strengthInBits");
+                    throw new ArgumentException("Значение strengthInBits должно нацело делиться на 8.", "strengthInBits");
                 }
 
                 int strengthInBytes = strengthInBits / bitsPerByte;

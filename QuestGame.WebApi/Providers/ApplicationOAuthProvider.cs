@@ -10,6 +10,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using QuestGame.WebApi.Models;
+using QuestGame.Domain;
 
 namespace QuestGame.WebApi.Providers
 {
@@ -35,7 +36,7 @@ namespace QuestGame.WebApi.Providers
 
             if (user == null)
             {
-                context.SetError("invalid_grant", "The user name or password is incorrect.");
+                context.SetError("invalid_grant", "Имя пользователя или пароль указаны неправильно.");
                 return;
             }
 
@@ -62,7 +63,7 @@ namespace QuestGame.WebApi.Providers
 
         public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
-            // Resource owner password credentials does not provide a client ID.
+            // Учетные данные владельца ресурса не содержат идентификатор клиента.
             if (context.ClientId == null)
             {
                 context.Validated();

@@ -12,12 +12,12 @@ namespace QuestGame.WebApi
     {
         public static void Register(HttpConfiguration config)
         {
-            // Web API configuration and services
-            // Configure Web API to use only bearer token authentication.
+            // Конфигурация и службы Web API
+            // Настройка Web API для использования только проверки подлинности посредством маркера-носителя.
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
-            // Web API routes
+            // Маршруты Web API
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(

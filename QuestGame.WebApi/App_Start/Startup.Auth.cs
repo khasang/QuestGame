@@ -10,6 +10,7 @@ using Microsoft.Owin.Security.OAuth;
 using Owin;
 using QuestGame.WebApi.Providers;
 using QuestGame.WebApi.Models;
+using QuestGame.Domain;
 
 namespace QuestGame.WebApi
 {
@@ -19,19 +20,19 @@ namespace QuestGame.WebApi
 
         public static string PublicClientId { get; private set; }
 
-        // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
+        // Дополнительные сведения о настройке аутентификации см. по адресу: http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
-            // Configure the db context and user manager to use a single instance per request
+            // Настройка контекста базы данных и диспетчера пользователей для использования одного экземпляра на запрос
             app.CreatePerOwinContext(ApplicationDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
 
-            // Enable the application to use a cookie to store information for the signed in user
-            // and to use a cookie to temporarily store information about a user logging in with a third party login provider
+            // Включение использования файла cookie, в котором приложение может хранить информацию для пользователя, выполнившего вход,
+            // и использование файла cookie для временного хранения информации о входах пользователя с помощью стороннего поставщика входа
             app.UseCookieAuthentication(new CookieAuthenticationOptions());
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
-            // Configure the application for OAuth based flow
+            // Настройка приложения для потока обработки на основе OAuth
             PublicClientId = "self";
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
@@ -39,14 +40,14 @@ namespace QuestGame.WebApi
                 Provider = new ApplicationOAuthProvider(PublicClientId),
                 AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
-                // In production mode set AllowInsecureHttp = false
+                // В рабочем режиме задайте AllowInsecureHttp = false
                 AllowInsecureHttp = true
             };
 
-            // Enable the application to use bearer tokens to authenticate users
+            // Включение использования приложением маркера-носителя для аутентификации пользователей
             app.UseOAuthBearerTokens(OAuthOptions);
 
-            // Uncomment the following lines to enable logging in with third party login providers
+            // Раскомментируйте приведенные далее строки, чтобы включить вход с помощью сторонних поставщиков входа
             //app.UseMicrosoftAccountAuthentication(
             //    clientId: "",
             //    clientSecret: "");

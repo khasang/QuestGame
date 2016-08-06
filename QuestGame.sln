@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuestGame.WebApi", "QuestGame.WebApi\QuestGame.WebApi.csproj", "{9A06A622-4F8B-4B3F-88E9-F2A716887385}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuestGame.Domain", "QuestGame.Domain\QuestGame.Domain.csproj", "{505742B2-622D-45A4-81B5-64C9DDAAFF46}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuestGame.BusinessLogic", "QuestGame.BusinessLogic\QuestGame.BusinessLogic.csproj", "{2249F308-4BDA-4537-84D8-271CD64E407B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuestGame.Common", "QuestGame.Common\QuestGame.Common.csproj", "{4961D524-DE45-4384-A674-4C3903AD8321}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuestGame.WebApi", "QuestGame.WebApi\QuestGame.WebApi.csproj", "{675FACF6-5D42-4777-8793-C2B9B6BFABFA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9A06A622-4F8B-4B3F-88E9-F2A716887385}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A06A622-4F8B-4B3F-88E9-F2A716887385}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A06A622-4F8B-4B3F-88E9-F2A716887385}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9A06A622-4F8B-4B3F-88E9-F2A716887385}.Release|Any CPU.Build.0 = Release|Any CPU
 		{505742B2-622D-45A4-81B5-64C9DDAAFF46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{505742B2-622D-45A4-81B5-64C9DDAAFF46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{505742B2-622D-45A4-81B5-64C9DDAAFF46}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{4961D524-DE45-4384-A674-4C3903AD8321}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4961D524-DE45-4384-A674-4C3903AD8321}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4961D524-DE45-4384-A674-4C3903AD8321}.Release|Any CPU.Build.0 = Release|Any CPU
+		{675FACF6-5D42-4777-8793-C2B9B6BFABFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{675FACF6-5D42-4777-8793-C2B9B6BFABFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{675FACF6-5D42-4777-8793-C2B9B6BFABFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{675FACF6-5D42-4777-8793-C2B9B6BFABFA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
