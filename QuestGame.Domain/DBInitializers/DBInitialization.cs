@@ -9,11 +9,11 @@ namespace QuestGame.Domain.DBInitializers
     public class DBInitialization
     {
         List<IInitialization> methods;
-        ApplicationDbContext context;
+        ApplicationDbContext dbContext;
 
-        public DBInitialization(ApplicationDbContext context)
+        public DBInitialization(ApplicationDbContext dbContext)
         {
-            this.context = context;
+            this.dbContext = dbContext;
             this.methods = new List<IInitialization>();
         }
 
@@ -26,7 +26,7 @@ namespace QuestGame.Domain.DBInitializers
         {
             foreach (var item in methods)
             {
-                item.Initialization(context);
+                item.Initialization(dbContext);
             }
         }
     }

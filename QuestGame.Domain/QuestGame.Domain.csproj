@@ -90,7 +90,7 @@
     <Compile Include="DBInitializers\DBInitialization.cs" />
     <Compile Include="DBInitializers\IInitialization.cs" />
     <Compile Include="Entities\ApplicationUser.cs" />
-    <Compile Include="DBInitializers\UserInit.cs" />
+    <Compile Include="DBInitializers\InitUserAdmin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
