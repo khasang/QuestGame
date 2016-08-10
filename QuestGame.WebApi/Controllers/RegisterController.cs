@@ -9,7 +9,7 @@ using QuestGame.WebApi.Models;
 
 namespace QuestGame.WebApi.Controllers
 {
-    public class RegisterMVCController : Controller
+    public class RegisterController : Controller
     {
         public ActionResult Index()
         {
@@ -21,9 +21,9 @@ namespace QuestGame.WebApi.Controllers
         [HttpPost]
         public ActionResult CreateUser( UserInvite user )
         {
-            var result = new RegisterWebApiController().RegisterUser( user );
             
-            ViewBag.Title = result;
+
+
             return View();
         }
     }
