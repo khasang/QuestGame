@@ -4,6 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web;
+using Newtonsoft.Json;
+
 using QuestGame.WebApi.Models;
 
 namespace QuestGame.WebApi.Controllers
@@ -12,7 +15,7 @@ namespace QuestGame.WebApi.Controllers
     {
         public string RegisterUser(UserInvite user)
         {
-            return "Строка передана из ВебАпи";
+            return JsonConvert.SerializeObject(user);
         }
     }
 }

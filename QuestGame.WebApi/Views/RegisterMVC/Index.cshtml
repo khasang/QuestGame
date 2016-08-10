@@ -11,18 +11,17 @@
         </div>
         <div class="panel-body">
             <form role="form" action="RegisterMVC\CreateUser" method="post">
-                <input type="hidden" value="@ViewBag.UserInvite" name="BookId" />
                 <div class="form-group">
                     <label for="InputLogin">Login</label>
-                    <input type="text" required  class="form-control" id="InputLogin" placeholder="Введите Login" >
+                    <input name="Login" type="text" required  class="form-control" id="InputLogin" placeholder="Введите Login" >
                 </div>
                 <div class="form-group">
                     <label for="InputEmail">Email</label>
-                    <input type="email" required class="form-control" id="InputEmail" placeholder="Введите Email">
+                    <input name="Email" type="email" required class="form-control" id="InputEmail" placeholder="Введите Email">
                 </div>
                 <div class="form-group">
                     <label for="InputPassword">Пароль</label>
-                    <input type="password" required  class="form-control" id="InputPassword" placeholder="Введите Password">
+                    <input name="Password" type="password" required  class="form-control" id="InputPassword" placeholder="Введите Password">
                 </div>
                 <button type="submit" class="btn btn-default" >Отправить</button>
             </form>
