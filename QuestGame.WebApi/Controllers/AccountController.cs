@@ -334,12 +334,15 @@ namespace QuestGame.WebApi.Controllers
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
-            if (!result.Succeeded)
+            var response = new RegisterResponse
             {
-                return GetErrorResult(result);
-            }
+                Success = result.Succeeded,
+                Status = result.Succeeded.ToString(),
+                Body = string.Empty,
+                ErrorMessage = result.Errors.ToString()
+            };
 
-            return Ok();
+            return Ok(response);
         }
 
         // POST api/Account/RegisterExternal
@@ -362,17 +365,16 @@ namespace QuestGame.WebApi.Controllers
             var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
 
             IdentityResult result = await UserManager.CreateAsync(user);
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result);
-            }
 
-            result = await UserManager.AddLoginAsync(user.Id, info.Login);
-            if (!result.Succeeded)
+            var response = new RegisterResponse
             {
-                return GetErrorResult(result); 
-            }
-            return Ok();
+                Success = result.Succeeded,
+                Status = result.Succeeded.ToString(),
+                Body = string.Empty,
+                ErrorMessage = result.Errors.ToString()
+            };
+
+            return Ok(response);
         }
 
         protected override void Dispose(bool disposing)
