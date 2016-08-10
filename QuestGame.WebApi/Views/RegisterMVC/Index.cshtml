@@ -1,0 +1,30 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+    <div class="panel panel-default" style="width:500px; margin: 20px auto">
+        <div class="panel-heading">
+            <h3 class="panel-title">Регистрация нового пользователя</h3>
+        </div>
+        <div class="panel-body">
+            <form role="form" action="RegisterMVC\CreateUser" method="post">
+                <input type="hidden" value="@ViewBag.UserInvite" name="BookId" />
+                <div class="form-group">
+                    <label for="InputLogin">Login</label>
+                    <input type="text" required  class="form-control" id="InputLogin" placeholder="Введите Login" >
+                </div>
+                <div class="form-group">
+                    <label for="InputEmail">Email</label>
+                    <input type="email" required class="form-control" id="InputEmail" placeholder="Введите Email">
+                </div>
+                <div class="form-group">
+                    <label for="InputPassword">Пароль</label>
+                    <input type="password" required  class="form-control" id="InputPassword" placeholder="Введите Password">
+                </div>
+                <button type="submit" class="btn btn-default" >Отправить</button>
+            </form>
+        </div>
+    </div>
