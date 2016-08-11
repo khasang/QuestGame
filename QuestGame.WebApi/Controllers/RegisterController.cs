@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web.Security;
 //using System.Web.Http;
 using System.Web.Mvc;
 using QuestGame.WebApi.Models;
+using System.Text;
+using System.Net.Http.Headers;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -15,14 +18,31 @@ namespace QuestGame.WebApi.Controllers
         {
             ViewBag.Title = "Страница регистрации";
 
-            return View();
+            return View( new UserInvite() );
         }
 
         [HttpPost]
         public ActionResult CreateUser( UserInvite user )
         {
-            
+            //string parsedContent = Newtonsoft.Json.JsonConvert.SerializeObject(user);
+ 
+            using ( var client = new HttpClient() )
+            {
+                client.BaseAddress = new Uri("http://localhost:9243");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+                var response = client.PostAsJsonAsync(@"api/Account/Register", user).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    ViewBag.Message = "Успешная регистрация";
+                }
+                else
+                {
+                    ViewBag.Message = "Что-то пошло не так";
+                }
+            }
 
             return View();
         }
