@@ -18,6 +18,9 @@ using QuestGame.WebApi.Providers;
 using QuestGame.WebApi.Results;
 using QuestGame.Domain;
 using QuestGame.Domain.Entities;
+using System.Net;
+using System.Web.Configuration;
+using System.Net.Http.Headers;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -343,6 +346,53 @@ namespace QuestGame.WebApi.Controllers
             };
 
             return Ok(response);
+        }
+
+        [AllowAnonymous]
+        [Route("LoginUser")]
+        public async Task<HttpResponseMessage> LoginUser(LoginBindingModel model)
+        {
+            if (model == null)
+            {
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Content = new StringContent("Invalid user data")
+                };
+            }
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["BaseUrl"]);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var requestParams = new Dictionary<string, string>
+                {
+                    { "grant_type", "password" },
+                    { "username", model.Email },
+                    { "password", model.Password }
+                };
+
+                var content = new FormUrlEncodedContent(requestParams);
+                var response = await client.PostAsync("Token", content);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.BadRequest
+                    };
+                }
+
+                var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
+                var authToken = responseData["access_token"];
+                return new HttpResponseMessage()
+                {
+                    Content = new StringContent(authToken),
+                    StatusCode = HttpStatusCode.OK
+                };
+            }
         }
 
         // POST api/Account/RegisterExternal

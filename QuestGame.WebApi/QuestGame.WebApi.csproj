@@ -208,6 +208,7 @@
     <Compile Include="Models\IdentityModels.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\RegisterResponse.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\UserModel.cs" />
@@ -288,6 +289,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
