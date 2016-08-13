@@ -80,7 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\ILoggerService.cs" />
-    <Compile Include="Interfaces\LoggerService.cs" />
+    <Compile Include="LoggerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

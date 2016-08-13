@@ -11,7 +11,6 @@ namespace QuestGame.Common
     public class LoggerService : ILoggerService
     {
         ILogger logger;
-
         public LoggerService()
         {
             logger = new LoggerConfiguration()
