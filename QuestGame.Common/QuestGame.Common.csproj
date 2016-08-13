@@ -79,8 +79,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LoggerService.cs" />
     <Compile Include="Interfaces\ILoggerService.cs" />
+    <Compile Include="LoggerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
