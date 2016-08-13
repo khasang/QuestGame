@@ -3,3 +3,4 @@
 
 ### [Architecture](https://github.com/khasang-incubator/QuestGame/blob/master/Architecture.md)
 ### [Roadmap](https://github.com/khasang-incubator/QuestGame/blob/master/Roadmap.md)
+### [User Stories](https://github.com/khasang-incubator/QuestGame/blob/master/UserStories.md)
