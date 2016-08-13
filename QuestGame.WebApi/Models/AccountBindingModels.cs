@@ -81,4 +81,17 @@ namespace QuestGame.WebApi.Models
         [Compare("NewPassword", ErrorMessage = "Новый пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
     }
+
+    public class LoginBindingModel
+    {
+        [Required]
+        [Display(Name = "Адрес электронной почты")]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Пароль")]
+        public string Password { get; set; }
+    }
 }

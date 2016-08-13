@@ -18,6 +18,11 @@ using QuestGame.WebApi.Providers;
 using QuestGame.WebApi.Results;
 using QuestGame.Domain;
 using QuestGame.Domain.Entities;
+using System.Net;
+using System.Web.Configuration;
+using System.Net.Http.Headers;
+using QuestGame.Common.Interfaces;
+using QuestGame.Common;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -27,6 +32,7 @@ namespace QuestGame.WebApi.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
+        private ILoggerService logger = LoggerService.Create();
 
         public AccountController()
         {
@@ -334,12 +340,65 @@ namespace QuestGame.WebApi.Controllers
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
-            if (!result.Succeeded)
+            var response = new RegisterResponse
             {
-                return GetErrorResult(result);
+                Success = result.Succeeded,
+                Status = result.Succeeded.ToString(),
+                Body = string.Empty,
+                ErrorMessage = result.Errors.ToString()
+            };
+
+            logger.Information("| Registration | {@user}", model);
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
+        [Route("LoginUser")]
+        public async Task<HttpResponseMessage> LoginUser(LoginBindingModel model)
+        {
+            if (model == null)
+            {
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Content = new StringContent("Invalid user data")
+                };
             }
 
-            return Ok();
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["BaseUrl"]);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                var requestParams = new Dictionary<string, string>
+                {
+                    { "grant_type", "password" },
+                    { "username", model.Email },
+                    { "password", model.Password }
+                };
+
+                var content = new FormUrlEncodedContent(requestParams);
+                var response = await client.PostAsync("Token", content);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.BadRequest
+                    };
+                }
+
+                var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
+                var authToken = responseData["access_token"];
+
+                logger.Information("| Login | {@user}", model);
+                return new HttpResponseMessage()
+                {
+                    Content = new StringContent(authToken),
+                    StatusCode = HttpStatusCode.OK
+                };
+            }
         }
 
         // POST api/Account/RegisterExternal
@@ -362,17 +421,16 @@ namespace QuestGame.WebApi.Controllers
             var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
 
             IdentityResult result = await UserManager.CreateAsync(user);
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result);
-            }
 
-            result = await UserManager.AddLoginAsync(user.Id, info.Login);
-            if (!result.Succeeded)
+            var response = new RegisterResponse
             {
-                return GetErrorResult(result); 
-            }
-            return Ok();
+                Success = result.Succeeded,
+                Status = result.Succeeded.ToString(),
+                Body = string.Empty,
+                ErrorMessage = result.Errors.ToString()
+            };
+
+            return Ok(response);
         }
 
         protected override void Dispose(bool disposing)
