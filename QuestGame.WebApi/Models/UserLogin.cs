@@ -11,10 +11,10 @@ namespace QuestGame.WebApi.Models
         public string grant_type = "password";
 
         [Required(ErrorMessage = "Не указан Email")]
-        public string Email { get; set; }
+        public string username { get; set; }
 
         [Required(ErrorMessage = "Не указан пароль")]
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public string password { get; set; }
     }
 }
