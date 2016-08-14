@@ -29,7 +29,7 @@ namespace QuestGame.WebApi.Controllers
         public ActionResult Login( UserLogin user )
         {
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
 
                 using (var client = new HttpClient())
@@ -38,7 +38,7 @@ namespace QuestGame.WebApi.Controllers
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = client.PostAsJsonAsync(@"/Token", user).Result;
+                    var response = client.PostAsJsonAsync("Token", user).Result;
 
                     if (response.IsSuccessStatusCode)
                     {

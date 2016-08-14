@@ -33,7 +33,7 @@ namespace QuestGame.WebApi.Controllers
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var response = await client.PostAsJsonAsync(@"api/Account/Register", user).Result;
+                var response = await client.PostAsJsonAsync(@"api/Account/Register", user);
 
                 if (response.IsSuccessStatusCode)
                 {
