@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using QuestGame.WebApi.Models;
 using System.Text;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -22,7 +23,7 @@ namespace QuestGame.WebApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateUser( UserInvite user )
+        public async Task<ActionResult> CreateUser( UserInvite user )
         {
             //string parsedContent = Newtonsoft.Json.JsonConvert.SerializeObject(user);
  
@@ -32,7 +33,7 @@ namespace QuestGame.WebApi.Controllers
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var response = client.PostAsJsonAsync(@"api/Account/Register", user).Result;
+                var response = await client.PostAsJsonAsync(@"api/Account/Register", user).Result;
 
                 if (response.IsSuccessStatusCode)
                 {
