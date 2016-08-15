@@ -10,11 +10,22 @@ using QuestGame.WebApi.Models;
 using System.Text;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+//using Serilog;
+
 
 namespace QuestGame.WebApi.Controllers
 {
     public class RegisterController : Controller
     {
+        //ILogger myLogger = null;
+
+        public RegisterController()
+        {
+            //myLogger = Log.Logger = new LoggerConfiguration()
+            //.WriteTo.RollingFile("~/myapp-Log.txt")
+            //.CreateLogger();
+        }
+
         public ActionResult Index()
         {
             ViewBag.Title = "Страница регистрации";
@@ -38,6 +49,8 @@ namespace QuestGame.WebApi.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     ViewBag.Message = "Успешная регистрация";
+
+                   // myLogger.Information("Регистрация пользователя");
                 }
                 else
                 {
