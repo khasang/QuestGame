@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using System.Net.Http;
 using QuestGame.WebApi.Models;
 using System.Net.Http.Headers;
-
+using System.Threading.Tasks;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -26,7 +26,7 @@ namespace QuestGame.WebApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login( UserLogin user )
+        public async Task<ActionResult> Login( UserLogin user )
         {
 
             if (ModelState.IsValid)
@@ -38,7 +38,15 @@ namespace QuestGame.WebApi.Controllers
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = client.PostAsJsonAsync("Token", user).Result;
+                    var requestParams = new Dictionary<string, string>
+                    {
+                        { "grant_type", "password" },
+                        { "username", user.Email },
+                        { "password", user.Password }
+                    };
+
+                    var content = new FormUrlEncodedContent(requestParams);
+                    var response = await client.PostAsync("Token", content);
 
                     if (response.IsSuccessStatusCode)
                     {

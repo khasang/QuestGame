@@ -8,13 +8,11 @@ namespace QuestGame.WebApi.Models
 {
     public class UserLogin
     {
-        public string grant_type = "password";
-
         [Required(ErrorMessage = "Не указан Email")]
-        public string username { get; set; }
+        public string Email { get; set; }
 
         [Required(ErrorMessage = "Не указан пароль")]
         [DataType(DataType.Password)]
-        public string password { get; set; }
+        public string Password { get; set; }
     }
 }
