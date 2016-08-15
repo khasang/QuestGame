@@ -10,20 +10,20 @@ using QuestGame.WebApi.Models;
 using System.Text;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-//using Serilog;
+using Serilog;
 
 
 namespace QuestGame.WebApi.Controllers
 {
     public class RegisterController : Controller
     {
-        //ILogger myLogger = null;
+        ILogger myLogger = null;
 
         public RegisterController()
         {
-            //myLogger = Log.Logger = new LoggerConfiguration()
-            //.WriteTo.RollingFile("~/myapp-Log.txt")
-            //.CreateLogger();
+            myLogger = Log.Logger = new LoggerConfiguration()
+            .WriteTo.RollingFile(@"e:\myapp-Log.txt")
+            .CreateLogger();
         }
 
         public ActionResult Index()
@@ -36,8 +36,7 @@ namespace QuestGame.WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateUser( UserInvite user )
         {
-            //string parsedContent = Newtonsoft.Json.JsonConvert.SerializeObject(user);
- 
+
             using ( var client = new HttpClient() )
             {
                 client.BaseAddress = new Uri("http://localhost:9243");
@@ -50,7 +49,7 @@ namespace QuestGame.WebApi.Controllers
                 {
                     ViewBag.Message = "Успешная регистрация";
 
-                   // myLogger.Information("Регистрация пользователя");
+                    myLogger.Information("Регистрация пользователя");
                 }
                 else
                 {

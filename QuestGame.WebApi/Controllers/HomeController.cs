@@ -7,11 +7,22 @@ using System.Net.Http;
 using QuestGame.WebApi.Models;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace QuestGame.WebApi.Controllers
 {
     public class HomeController : Controller
     {
+
+        ILogger myLogger = null;
+
+        public HomeController()
+        {
+            myLogger = Log.Logger = new LoggerConfiguration()
+                                        .WriteTo.RollingFile(@"e:\myapp-Log.txt")
+                                        .CreateLogger();
+        }
+
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";
@@ -56,6 +67,8 @@ namespace QuestGame.WebApi.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         ViewBag.Message = "Авторизация пройдена";
+
+                        myLogger.Information("Новая авторизация пользователя");
                     }
                     else
                     {
@@ -64,7 +77,9 @@ namespace QuestGame.WebApi.Controllers
                 }
             }
 
-            return View();
+            return RedirectToAction("Test", Session["Token"]);
+
+            //return View("");
         }
 
 
