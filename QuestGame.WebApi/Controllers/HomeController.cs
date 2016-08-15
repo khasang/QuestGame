@@ -48,6 +48,11 @@ namespace QuestGame.WebApi.Controllers
                     var content = new FormUrlEncodedContent(requestParams);
                     var response = await client.PostAsync("Token", content);
 
+                    var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
+                    var authToken = responseData["access_token"];
+
+                    Session["Token"] = authToken;
+
                     if (response.IsSuccessStatusCode)
                     {
                         ViewBag.Message = "Авторизация пройдена";
@@ -57,10 +62,15 @@ namespace QuestGame.WebApi.Controllers
                         ViewBag.Message = "Не авторизирован";
                     }
                 }
-
-                ViewBag.Message = "Данные не верны";
             }
 
+            return View();
+        }
+
+
+        [Authorize]
+        public ActionResult Test()
+        {
             return View();
         }
     }
