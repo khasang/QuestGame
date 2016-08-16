@@ -83,9 +83,11 @@ namespace QuestGame.WebApi.Controllers
         }
 
 
-        [Authorize]
         public ActionResult Test()
         {
+
+            Console.WriteLine(User.Identity.IsAuthenticated);
+
             return View();
         }
     }
