@@ -21,6 +21,8 @@ using QuestGame.Domain.Entities;
 using System.Net;
 using System.Web.Configuration;
 using System.Net.Http.Headers;
+using QuestGame.Common.Interfaces;
+using QuestGame.Common;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -30,6 +32,7 @@ namespace QuestGame.WebApi.Controllers
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
+        private ILoggerService logger = LoggerService.Create();
 
         public AccountController()
         {
@@ -345,6 +348,7 @@ namespace QuestGame.WebApi.Controllers
                 ErrorMessage = result.Errors.ToString()
             };
 
+            logger.Information("| Registration | {@user}", model);
             return Ok(response);
         }
 
@@ -387,6 +391,8 @@ namespace QuestGame.WebApi.Controllers
 
                 var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
                 var authToken = responseData["access_token"];
+
+                logger.Information("| Login | {@user}", model);
                 return new HttpResponseMessage()
                 {
                     Content = new StringContent(authToken),

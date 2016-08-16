@@ -299,6 +299,10 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\QuestGame.Common\QuestGame.Common.csproj">
+      <Project>{4961d524-de45-4384-a674-4c3903ad8321}</Project>
+      <Name>QuestGame.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\QuestGame.Domain\QuestGame.Domain.csproj">
       <Project>{505742b2-622d-45a4-81b5-64c9ddaaff46}</Project>
       <Name>QuestGame.Domain</Name>
