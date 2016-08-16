@@ -9,13 +9,35 @@ namespace QuestGame.Domain.Entities
 {
     public class Stage
     {
+        /// <summary>
+        /// Первичный ключ
+        /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// Название сцены
+        /// </summary>
         public string Title { get; set; }
+
+        /// <summary>
+        /// Текстовое тело сцены
+        /// </summary>
         public string Body { get; set; }
+
+        /// <summary>
+        /// Стоимость сцены
+        /// </summary>
+        public int Point { get; set; }
         
+        /// <summary>
+        /// Внешний ключ, указывающий на квест
+        /// </summary>
         public int QuestId { get; set; }
         public virtual Quest Quest { get; set; }
 
+        /// <summary>
+        /// Коллекция действий
+        /// </summary>
         [InverseProperty("OwnerStage")]
         public virtual ICollection<Motion> Motions { get; set; }
         
