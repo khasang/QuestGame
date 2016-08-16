@@ -91,6 +91,13 @@
     <Compile Include="DBInitializers\IInitialization.cs" />
     <Compile Include="Entities\ApplicationUser.cs" />
     <Compile Include="DBInitializers\InitUserAdmin.cs" />
+    <Compile Include="Entities\Motion.cs" />
+    <Compile Include="Entities\Quest.cs" />
+    <Compile Include="Entities\Stage.cs" />
+    <Compile Include="EntityConfigurations\ApplicationUserMapper.cs" />
+    <Compile Include="EntityConfigurations\MotionMapper.cs" />
+    <Compile Include="EntityConfigurations\QuestMapper.cs" />
+    <Compile Include="EntityConfigurations\StageMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
