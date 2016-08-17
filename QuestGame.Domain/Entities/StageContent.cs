@@ -1,14 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace QuestGame.Domain
+﻿
+namespace QuestGame.Domain.Entities
 {
     public class StageContent : Content
     {
-        [Key]
-        [ForeignKey("Owner")]
-        public override int Id { get; set; }
-
-        public new Stage Owner { get; set; }
+        public virtual Stage Parent { get; set; }
     }
 }

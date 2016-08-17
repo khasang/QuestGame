@@ -1,38 +1,26 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace QuestGame.Domain
+namespace QuestGame.Domain.Entities
 {
     public abstract class StageBase
     {
-        protected DateTime modifyDate;
-        protected ICollection<Operation> operations;
+        public StageBase()
+        {
+            this.Points = 0;
+            this.AllowSkip = false;
+            this.Operations = new List<Operation>();
+        }
 
         public int Id { get; set; }
         public string Title { get; set; }
-        public int Points { get; set; }
-        public bool? AllowSkip { get; set; }
-        public DateTime ModifyDate { get { return this.modifyDate; } set { this.modifyDate = DateTime.Now; } }
+        public Nullable<short> Points { get; set; }
+        public bool AllowSkip { get; set; }
+        public System.DateTime ModifyDate { get; set; }
+        public int QuestId { get; set; }
 
-        public int OwnerId { get; set; }
-        public Quest Owner { get; set; }
-
-        /// <summary>
-        /// Ссылка на содержимое для Сцены. Связь в БД 1-1
-        /// </summary>
-        public StageContent StageContent { get; set; }
-
-        /// <summary>
-        /// Коллекция действий для Сцены. Связь 1-∞
-        /// </summary>
+        public virtual Quest Quest { get; set; }
+        public virtual StageContent StageContent { get; set; }
         public virtual ICollection<Operation> Operations { get; set; }
-
-        public StageBase()
-        {
-            this.operations = new List<Operation>();
-        }
     }
 }

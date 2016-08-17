@@ -3,18 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace QuestGame.Domain
+namespace QuestGame.Domain.Entities
 {
     public class Operation
     {
-        protected DateTime modifyDate;
+        public int Id { get; set; }
+        public string Description { get; set; }
+        public System.DateTime ModifyDate { get; set; }
+        public int StageId { get; set; }
 
-        private int Id { get; set; }
-        private string Description { get; set; }
-        private Stage NextStage { get; set; }
-        public DateTime ModifyDate { get { return this.modifyDate; } set { this.modifyDate = DateTime.Now; } }
-
-        public int OwnerId { get; set; }
-        public Stage Owner { get; set; }
+        public virtual Stage Stage { get; set; }
     }
 }
