@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace QuestGame.Domain.Entities
 {
@@ -17,10 +18,12 @@ namespace QuestGame.Domain.Entities
         public Nullable<short> Points { get; set; }
         public bool AllowSkip { get; set; }
         public System.DateTime ModifyDate { get; set; }
-        public int QuestId { get; set; }
 
+        public int QuestId { get; set; }
         public virtual Quest Quest { get; set; }
+
         public virtual StageContent StageContent { get; set; }
+
         public virtual ICollection<Operation> Operations { get; set; }
     }
 }

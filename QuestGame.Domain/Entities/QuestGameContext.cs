@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Configuration;
 
 namespace QuestGame.Domain.Entities
 {
@@ -19,9 +20,8 @@ namespace QuestGame.Domain.Entities
                             DbModelBuilder modelBuilder)
         {
 
-            modelBuilder.Entity<Quest>().HasOptional(u => u.QuestContent).WithRequired();
-            modelBuilder.Entity<Stage>().HasOptional(u => u.StageContent).WithRequired();
-
+            modelBuilder.Entity<Stage>().HasRequired(s => s.StageContent).WithRequiredDependent( ss=> ss.Stage);
+            modelBuilder.Entity<Quest>().HasRequired(s => s.QuestContent).WithRequiredDependent(ss => ss.Quest);
 
             base.OnModelCreating(modelBuilder);
         }

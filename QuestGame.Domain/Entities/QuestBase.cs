@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace QuestGame.Domain.Entities
 {
@@ -22,6 +23,7 @@ namespace QuestGame.Domain.Entities
         public System.DateTime ModifyDate { get; set; }
 
         public virtual ICollection<Stage> Stages { get; set; }
+
         public virtual QuestContent QuestContent { get; set; }
 
     }
