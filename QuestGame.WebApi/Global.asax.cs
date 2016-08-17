@@ -6,7 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using QuestGame.Domain;
+using QuestGame.Domain.Entities;
 
 namespace QuestGame.WebApi
 {
@@ -19,6 +19,25 @@ namespace QuestGame.WebApi
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+
+            using (var db = new QuestGameContext())
+            {
+                var q = new Quest() { Title = "Первый", CountComplite = 5, Rate = 2, AddDate = DateTime.Now, ModifyDate = DateTime.Now };
+                var c = new QuestContent() { Image = null, Text = "Описание квеста", Video = null, ModifyDate = DateTime.Now };
+                q.QuestContent = c;
+
+                var s = new Stage() { Points = 50, Title = "Сцена 1", ModifyDate = DateTime.Now };
+                var c1 = new StageContent() { Image = null, Text = "Описание Сцены", Video = null, ModifyDate = DateTime.Now };
+
+                s.StageContent = c1;
+
+                q.Stages.Add(s);
+
+                db.Quests.Add(q);
+
+                var result = db.SaveChanges();
+            }
 
 
         }
