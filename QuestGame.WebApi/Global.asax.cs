@@ -23,20 +23,17 @@ namespace QuestGame.WebApi
 
             using (var db = new QuestGameContext())
             {
-                var q = new Quest() { Title = "Первый", CountComplite = 5, Rate = 2, AddDate = DateTime.Now, ModifyDate = DateTime.Now };
-                var c = new QuestContent() { Image = null, Text = "Описание квеста", Video = null, ModifyDate = DateTime.Now };
-                q.QuestContent = c;
+                var sc = new StageContent { ModifyDate = DateTime.Now, Text = "Описание сцены" };
+                var s = new Stage { Points =50, Title = "Сцена первая", ModifyDate = DateTime.Now, StageContent = sc };
 
-                var s = new Stage() { Points = 50, Title = "Сцена 1", ModifyDate = DateTime.Now };
-                var c1 = new StageContent() { Image = null, Text = "Описание Сцены", Video = null, ModifyDate = DateTime.Now };
-
-                s.StageContent = c1;
+                var qc = new QuestContent { ModifyDate = DateTime.Now, Text = "Описание Квеста" };
+                var q = new Quest { Rate = 3, CountComplite = 5, AddDate = DateTime.Now, ModifyDate = DateTime.Now, QuestContent = qc, Title = "Название квеста" };
 
                 q.Stages.Add(s);
 
                 db.Quests.Add(q);
 
-                var result = db.SaveChanges();
+                db.SaveChanges();
             }
 
 

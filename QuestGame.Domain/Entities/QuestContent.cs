@@ -5,9 +5,6 @@ namespace QuestGame.Domain.Entities
 {
     public class QuestContent : Content
     {
-        [Key]
-        [ForeignKey("Parent")]
-        public new int Id { get; set; }
-        public virtual Quest Parent { get; set; }
+        public virtual Quest Quest { get; set; }
     }
 }
