@@ -24,5 +24,5 @@ namespace QuestGame.Domain.Entities
             // Здесь добавьте настраиваемые утверждения пользователя
             return userIdentity;
         }
-    }
+    }    
 }
