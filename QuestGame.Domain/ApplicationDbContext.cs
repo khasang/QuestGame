@@ -37,15 +37,13 @@ namespace QuestGame.Domain
             })
             .Map(m =>
             {
-                m.Properties(d => new { d.Nik, d.Avatar, d.Losung, d.Contry, d.Rating, d.CountQuestsComplite });
+                m.Properties(d => new { d.Avatar, d.Losung, d.Contry, d.Rating, d.CountQuestsComplite });
                 m.ToTable("AspNetUsersProfile");
             })
-            .Ignore( m => new { m.Name, m.LastName })
             ;
 
             base.OnModelCreating(modelBuilder);
         }
 
-        public System.Data.Entity.DbSet<QuestGame.Domain.Entities.ApplicationUser> ApplicationUsers { get; set; }
     }
 }
