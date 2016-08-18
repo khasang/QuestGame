@@ -23,5 +23,8 @@ namespace QuestGame.Domain
         {
             return new ApplicationDbContext();
         }
+
+
+
     }
 }

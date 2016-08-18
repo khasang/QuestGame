@@ -16,14 +16,13 @@ namespace QuestGame.Domain.Entities
         public DbSet<QuestContent> QuestContents { get; set; }
         public DbSet<StageContent> StageContents { get; set; }
 
-        //protected override void OnModelCreating(
-        //                    DbModelBuilder modelBuilder)
-        //{
+        protected override void OnModelCreating(
+                            DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Stage>().HasRequired(s => s.StageContent).WithRequiredPrincipal(ss => ss.Stage);
+            modelBuilder.Entity<Quest>().HasRequired(s => s.QuestContent).WithRequiredPrincipal(ss => ss.Quest);
 
-        //    modelBuilder.Entity<Stage>().HasRequired(s => s.StageContent).WithRequiredDependent( ss=> ss.Stage);
-        //    modelBuilder.Entity<Quest>().HasRequired(s => s.QuestContent).WithRequiredDependent(ss => ss.Quest);
-
-        //    base.OnModelCreating(modelBuilder);
-        //}
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

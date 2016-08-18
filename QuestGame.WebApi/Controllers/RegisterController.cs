@@ -21,8 +21,8 @@ namespace QuestGame.WebApi.Controllers
 
         public RegisterController()
         {
-            myLogger = Log.Logger = new LoggerConfiguration()
-            .WriteTo.RollingFile(@"e:\myapp-Log.txt")
+            myLogger = new LoggerConfiguration()
+            .WriteTo.RollingFile("myapp-Log.txt")
             .CreateLogger();
         }
 
@@ -35,7 +35,7 @@ namespace QuestGame.WebApi.Controllers
 
         [HttpPost]
         public async Task<ActionResult> CreateUser( UserInvite user )
-        {
+        {             
 
             using ( var client = new HttpClient() )
             {

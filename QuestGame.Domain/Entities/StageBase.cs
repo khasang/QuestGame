@@ -22,6 +22,7 @@ namespace QuestGame.Domain.Entities
         public int QuestId { get; set; }
         public virtual Quest Quest { get; set; }
 
+        [Required]
         public virtual StageContent StageContent { get; set; }
 
         public virtual ICollection<Operation> Operations { get; set; }

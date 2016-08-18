@@ -22,10 +22,10 @@ namespace QuestGame.Domain.Entities
         public System.DateTime AddDate { get; set; }
         public System.DateTime ModifyDate { get; set; }
 
-        public virtual ICollection<Stage> Stages { get; set; }
-
+        [Required]
         public virtual QuestContent QuestContent { get; set; }
 
+        public virtual ICollection<Stage> Stages { get; set; }
     }
 
 }

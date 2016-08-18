@@ -5,8 +5,6 @@ namespace QuestGame.Domain.Entities
 {
     public abstract class Content
     {
-        [Key]
-        [ForeignKey("Parent")]
         public int Id { get; set; }
         public string Text { get; set; }
         public string Image { get; set; }

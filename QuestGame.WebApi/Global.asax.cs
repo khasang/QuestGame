@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using QuestGame.Domain.Entities;
+using System.Diagnostics;
 
 namespace QuestGame.WebApi
 {
@@ -23,17 +24,11 @@ namespace QuestGame.WebApi
 
             using (var db = new QuestGameContext())
             {
-                var sc = new StageContent { ModifyDate = DateTime.Now, Text = "Описание сцены" };
-                var s = new Stage { Points =50, Title = "Сцена первая", ModifyDate = DateTime.Now, StageContent = sc };
 
-                var qc = new QuestContent { ModifyDate = DateTime.Now, Text = "Описание Квеста" };
-                var q = new Quest { Rate = 3, CountComplite = 5, AddDate = DateTime.Now, ModifyDate = DateTime.Now, QuestContent = qc, Title = "Название квеста" };
+                var q = db.Quests.FirstOrDefault();
 
-                q.Stages.Add(s);
-
-                db.Quests.Add(q);
-
-                db.SaveChanges();
+                Console.WriteLine(q.QuestContent.Text);
+                Debug.WriteLine(q.QuestContent.Text);
             }
 
 

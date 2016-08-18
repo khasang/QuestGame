@@ -2,9 +2,9 @@
 {
     public class QuestRoute
     {
-        private int Id { get; set; }
-        private Quest Quest { get; set; }
-        private Entities.ApplicationUser User { get; set; }
+        public int Id { get; set; }
+        public Quest Quest { get; set; }
+        public Entities.ApplicationUser User { get; set; }
         public System.DateTime ModifyDate { get; set; }
     }
 }
