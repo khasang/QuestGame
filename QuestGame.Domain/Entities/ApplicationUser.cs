@@ -22,6 +22,8 @@ namespace QuestGame.Domain.Entities
 
         public int CountQuestsComplite { get; set; }
 
+        public DateTime AddDate { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {
             // Обратите внимание, что authenticationType должен совпадать с типом, определенным в CookieAuthenticationOptions.AuthenticationType

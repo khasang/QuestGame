@@ -26,11 +26,11 @@ namespace QuestGame.WebApi.Controllers
         {
             using (var db = new QuestGame.Domain.Entities.QuestGameContext())
             {
-                ViewBag.Quests = db.Quests.Select(n => n.Title).ToList();
+                ViewBag.Quests = db.Quests.OrderByDescending(y => y.AddDate).Select(n => n.Title).ToList().Take(5);
             }
             using (var db = new QuestGame.Domain.ApplicationDbContext())
             {
-                ViewBag.Users = db.Users.Select(u => u.UserName).ToList();
+                ViewBag.Users = db.Users.OrderBy(y => y.LockoutEndDateUtc).Select(u => u.UserName).ToList().Take(5);
             }
 
                 ViewBag.Title = "Home Page";

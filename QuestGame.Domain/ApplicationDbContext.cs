@@ -37,7 +37,7 @@ namespace QuestGame.Domain
             })
             .Map(m =>
             {
-                m.Properties(d => new { d.Avatar, d.Losung, d.Contry, d.Rating, d.CountQuestsComplite });
+                m.Properties(d => new { d.Avatar, d.Losung, d.Contry, d.Rating, d.CountQuestsComplite, d.AddDate });
                 m.ToTable("AspNetUsersProfile");
             })
             ;
