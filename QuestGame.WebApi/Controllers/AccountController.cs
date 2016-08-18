@@ -324,7 +324,7 @@ namespace QuestGame.WebApi.Controllers
         [AllowAnonymous]
         [Route("Register")]
         [HttpPost]
-        public async Task<IHttpActionResult> Register(RegisterBindingModel model)
+        public async Task<IHttpActionResult> Register( UserInvite model)
         {
             if (!ModelState.IsValid)
             {
@@ -333,13 +333,11 @@ namespace QuestGame.WebApi.Controllers
 
             var user = new ApplicationUser()
             {
-                UserName = model.Email,
+                UserName = model.Name + " " + model.LastName,
                 Email = model.Email,
-                Avatar =null,
-                Contry = "Russia",
-                CountQuestsComplite = 5,
-                Losung = "Все квесты несите мне.",
-                Rating = 1045                           
+                Avatar = model.Avatar,
+                Contry = model.Contry,
+                Losung = model.Losung,
             };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);

@@ -34,6 +34,17 @@ namespace QuestGame.WebApi.Models
 
     public class RegisterBindingModel
     {
+
+        public string Name { get; set; }
+
+        public string LastName { get; set; }
+
+        public string Avatar { get; set; }
+
+        public string Losung { get; set; }
+
+        public string Contry { get; set; }
+
         [Required]
         [Display(Name = "Адрес электронной почты")]
         public string Email { get; set; }

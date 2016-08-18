@@ -13,7 +13,6 @@ namespace QuestGame.WebApi.Controllers
 {
     public class HomeController : Controller
     {
-
         ILogger myLogger = null;
 
         public HomeController()
@@ -25,9 +24,18 @@ namespace QuestGame.WebApi.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
+            using (var db = new QuestGame.Domain.Entities.QuestGameContext())
+            {
+                ViewBag.Quests = db.Quests.Select(n => n.Title).ToList();
+            }
+            using (var db = new QuestGame.Domain.ApplicationDbContext())
+            {
+                ViewBag.Users = db.Users.Select(u => u.UserName).ToList();
+            }
 
-            return View();
+                ViewBag.Title = "Home Page";
+
+            return View(ViewBag);
         }
 
         public ActionResult Login()

@@ -8,6 +8,16 @@ namespace QuestGame.WebApi.Models
 {
     public class UserInvite
     {
+        public string Name  { get; set; }
+
+        public string LastName { get; set; }
+
+        public string Avatar { get; set; }
+
+        public string Losung { get; set; }
+
+        public string Contry { get; set; }
+
         [Required(ErrorMessage = "Не указан Email")]
         public string Email { get; set; }
 
