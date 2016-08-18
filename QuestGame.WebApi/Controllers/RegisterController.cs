@@ -34,7 +34,7 @@ namespace QuestGame.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateUser( UserInvite user )
+        public async Task<ActionResult> Index( UserInvite user )
         {             
 
             using ( var client = new HttpClient() )
@@ -57,7 +57,7 @@ namespace QuestGame.WebApi.Controllers
                 }
             }
 
-            return View();
+            return View("CreateUser");
         }
     }
 }
