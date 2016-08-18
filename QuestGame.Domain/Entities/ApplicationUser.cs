@@ -12,12 +12,6 @@ namespace QuestGame.Domain.Entities
     // Чтобы добавить данные профиля для пользователя, можно добавить дополнительные свойства в класс ApplicationUser. Дополнительные сведения см. по адресу: http://go.microsoft.com/fwlink/?LinkID=317594.
     public class ApplicationUser : IdentityUser
     {
-        public string Nik { get; set; }
-
-        public string Name { get; set; }
-
-        public string LastName { get; set; }
-
         public string Avatar { get; set; }
 
         public string Losung { get; set; }
