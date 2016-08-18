@@ -8,11 +8,13 @@ using QuestGame.WebApi.Models;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Serilog;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace QuestGame.WebApi.Controllers
 {
     public class HomeController : Controller
     {
+        Dictionary<string, dynamic> ViewModel;
 
         ILogger myLogger = null;
 
@@ -21,13 +23,24 @@ namespace QuestGame.WebApi.Controllers
             myLogger = Log.Logger = new LoggerConfiguration()
                                         .WriteTo.RollingFile(@"e:\myapp-Log.txt")
                                         .CreateLogger();
+            ViewModel = new Dictionary<string, dynamic>();
         }
 
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
 
-            return View();
+            using (var db = new QuestGame.Domain.Entities.QuestGameContext())
+            {
+                ViewModel.Add("QuestsList", db.Quests.Select(q => q.Title).ToList() );
+            }
+            //using (var db = new QuestGame.Domain.ApplicationDbContext())
+            //{
+            //    ViewModel.Add("UsersList", db.Users.Select( q => q.UserName ).ToList());
+            //}
+
+            ViewBag.Title = "QuestGame";
+
+            return View(ViewModel);
         }
 
         public ActionResult Login()
