@@ -331,9 +331,19 @@ namespace QuestGame.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
+            var name = "";
+            if (model.Name == null && model.LastName == null)
+            {
+                name = model.Email;
+            }
+            else
+            {
+                name = model.Name + " " + model.LastName;
+            }
+
             var user = new ApplicationUser()
             {
-                UserName = model.Name + " " + model.LastName,
+                UserName = name,
                 Email = model.Email,
                 Avatar = model.Avatar,
                 Contry = model.Contry,
