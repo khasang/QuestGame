@@ -22,14 +22,14 @@ namespace QuestGame.WebApi
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
 
-            using (var db = new QuestGameContext())
-            {
+            //using (var db = new QuestGameContext())
+            //{
 
-                var q = db.Quests.FirstOrDefault();
+            //    var q = db.Quests.FirstOrDefault();
 
-                Console.WriteLine(q.QuestContent.Text);
-                Debug.WriteLine(q.QuestContent.Text);
-            }
+            //    Console.WriteLine(q.QuestContent.Text);
+            //    Debug.WriteLine(q.QuestContent.Text);
+            //}
 
 
         }

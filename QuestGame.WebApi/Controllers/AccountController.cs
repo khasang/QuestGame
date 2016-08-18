@@ -331,7 +331,16 @@ namespace QuestGame.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser()
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                Avatar =null,
+                Contry = "Russia",
+                CountQuestsComplite = 5,
+                Losung = "Все квесты несите мне.",
+                Rating = 1045                           
+            };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
