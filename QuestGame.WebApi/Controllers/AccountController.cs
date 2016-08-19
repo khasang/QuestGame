@@ -324,14 +324,22 @@ namespace QuestGame.WebApi.Controllers
         [AllowAnonymous]
         [Route("Register")]
         [HttpPost]
-        public async Task<IHttpActionResult> Register(RegisterBindingModel model)
+        public async Task<IHttpActionResult> Register( UserInvite model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser()
+            {
+                UserName = model.Email,
+                Name = model.Name,
+                LastName = model.LastName,
+                Email = model.Email,
+                Avatar = model.Avatar,
+                Contry = model.Contry
+            };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 

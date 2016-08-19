@@ -89,29 +89,27 @@
     <Compile Include="DBInitializer.cs" />
     <Compile Include="DBInitializers\DBInitialization.cs" />
     <Compile Include="DBInitializers\IInitialization.cs" />
+    <Compile Include="DBInitializers\QuestsDBInit.cs" />
     <Compile Include="Entities\ApplicationUser.cs" />
     <Compile Include="DBInitializers\InitUserAdmin.cs" />
     <Compile Include="Entities\Content.cs" />
     <Compile Include="Entities\Operation.cs" />
     <Compile Include="Entities\Quest.cs" />
-    <Compile Include="Entities\QuestBase.cs" />
-    <Compile Include="Entities\QuestContent.cs" />
-    <Compile Include="Entities\QuestGameContext.cs" />
+    <Compile Include="Entities\ContentQuest.cs" />
     <Compile Include="Entities\QuestRoute.cs" />
     <Compile Include="Entities\Stage.cs" />
-    <Compile Include="Entities\StageBase.cs" />
-    <Compile Include="Entities\StageContent.cs" />
+    <Compile Include="Entities\ContentStage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DTO\" />
-    <Folder Include="Entities\NewFolder1\" />
     <Folder Include="Implementations\" />
     <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Entities\ModelsShema.cd" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

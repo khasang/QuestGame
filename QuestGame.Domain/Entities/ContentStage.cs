@@ -4,9 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuestGame.Domain.Entities
 {
-    public class StageContent : Content
+    public class ContentStage : Content
     {
-        //public int StageId { get; set; }
-        public virtual Stage Parent { get; set; }
+        public virtual Stage Stage { get; set; }
     }
 }

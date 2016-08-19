@@ -22,6 +22,8 @@ namespace QuestGame.Domain
             // Пример DBInitilizers.InitUserAdmin
             initialization.Add(new InitUserAdmin());  // Добавил Ruslan
 
+            initialization.Add(new QuestsDBInit());
+
             initialization.Initialization();
         }
     }

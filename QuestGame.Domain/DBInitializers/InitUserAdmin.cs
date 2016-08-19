@@ -17,11 +17,12 @@ namespace QuestGame.Domain.DBInitializers
             UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(dbContext));
             RoleManager<IdentityRole> roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(dbContext));
 
-            ApplicationUser user = new ApplicationUser()
+            var user = new ApplicationUser()
             {
                 UserName = "admin@admin.com",
                 Email = "admin@admin.com",
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                AddDate = DateTime.Now
             };
 
             IdentityRole role = new IdentityRole("admin");
