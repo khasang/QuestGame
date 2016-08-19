@@ -20,18 +20,6 @@ namespace QuestGame.WebApi
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-
-            //using (var db = new QuestGameContext())
-            //{
-
-            //    var q = db.Quests.FirstOrDefault();
-
-            //    Console.WriteLine(q.QuestContent.Text);
-            //    Debug.WriteLine(q.QuestContent.Text);
-            //}
-
-
         }
     }
 }

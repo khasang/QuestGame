@@ -24,18 +24,15 @@ namespace QuestGame.WebApi.Controllers
 
         public ActionResult Index()
         {
-            using (var db = new QuestGame.Domain.Entities.QuestGameContext())
-            {
-                ViewBag.Quests = db.Quests.Select(n => n.Title).ToList();
-            }
-            using (var db = new QuestGame.Domain.ApplicationDbContext())
-            {
-                ViewBag.Users = db.Users.Select(u => u.UserName).ToList();
-            }
+           // using (var db = new QuestGame.Domain.ApplicationDbContext())
+           // {
+           //     ViewBag.Quests = db.Quests.OrderByDescending( o=> o.AddDate ).Select(n => n.Title).ToList();
+           //     ViewBag.Users = db.Users.OrderByDescending( u=> u.UserName ).Select(u => u.UserName).ToList();
+           // }
 
-                ViewBag.Title = "Home Page";
+           //ViewBag.Title = HttpContext.User.Identity.Name;
 
-            return View(ViewBag);
+            return View();
         }
 
         public ActionResult Login()

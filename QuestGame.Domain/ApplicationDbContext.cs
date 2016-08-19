@@ -24,6 +24,15 @@ namespace QuestGame.Domain
             return new ApplicationDbContext();
         }
 
+
+        public DbSet<Quest> Quests { get; set; }
+        public DbSet<Stage> Stages { get; set; }
+        public DbSet<Operation> Operations { get; set; }
+
+        public DbSet<ContentQuest> QuestContents { get; set; }
+        public DbSet<ContentStage> StageContents { get; set; }
+
+
         protected override void OnModelCreating(
                     DbModelBuilder modelBuilder)
         {
@@ -39,8 +48,10 @@ namespace QuestGame.Domain
             {
                 m.Properties(d => new { d.Avatar, d.Losung, d.Contry, d.Rating, d.CountQuestsComplite });
                 m.ToTable("AspNetUsersProfile");
-            })
-            ;
+            });
+
+            modelBuilder.Entity<Stage>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Stage);
+            modelBuilder.Entity<Quest>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Quest);
 
             base.OnModelCreating(modelBuilder);
         }

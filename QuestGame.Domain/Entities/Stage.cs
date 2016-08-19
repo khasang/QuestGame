@@ -1,6 +1,31 @@
-﻿namespace QuestGame.Domain.Entities
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace QuestGame.Domain.Entities
 {
-    public class Stage : StageBase
+    public class Stage
     {
+        public Stage()
+        {
+            this.Points = 0;
+            this.AllowSkip = false;
+            this.Operations = new List<Operation>();
+            this.ModifyDate = DateTime.Now;
+        }
+
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public int? Points { get; set; }
+        public bool AllowSkip { get; set; }
+        public DateTime ModifyDate { get; set; }
+
+        public int QuestId { get; set; }
+        public virtual Quest Quest { get; set; }
+
+        [Required]
+        public virtual ContentStage Content { get; set; }
+
+        public virtual ICollection<Operation> Operations { get; set; }
     }
 }
