@@ -348,6 +348,7 @@ namespace QuestGame.WebApi.Controllers
                 Avatar = model.Avatar,
                 Contry = model.Contry,
                 Losung = model.Losung,
+                AddDate = DateTime.Now
             };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
