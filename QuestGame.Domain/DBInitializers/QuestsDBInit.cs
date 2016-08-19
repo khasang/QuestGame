@@ -11,14 +11,12 @@ namespace QuestGame.Domain.DBInitializers
     {
         public void Initialization(ApplicationDbContext dbContext)
         {
-            var rnd = new Random();
-
             for (var i = 1; i < 5; i++)
             {
                 var quest = new Quest()
                 {
                     Title = "Квест номер - " + i,
-                    Rate = rnd.Next(10),
+                    Rate = 5,
                     Content = new ContentQuest
                     {
                         Text = "Описание для Квеста - " + i
@@ -30,7 +28,7 @@ namespace QuestGame.Domain.DBInitializers
                     var stage = new Stage()
                     {
                         Title = "Сцена номер - " + s + " для Квеста № " + i,
-                        Points = rnd.Next(100),
+                        Points = 50,
                         Content = new ContentStage()
                         {
                             Text = "Описание для Сцены - " + s
@@ -50,7 +48,9 @@ namespace QuestGame.Domain.DBInitializers
 
                     quest.Stages.Add(stage);
                 }
-            }
+
+                dbContext.Quests.Add(quest);
+            }           
 
             var result = dbContext.SaveChanges();
         }
