@@ -1,7 +1,10 @@
-﻿using QuestGame.Domain.Implementations;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using QuestGame.Domain.Entities;
+using QuestGame.Domain.Implementations;
 using QuestGame.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,6 +60,22 @@ namespace QuestGame.Domain
             }
         }
 
+        public IDbSet<ApplicationUser> Users
+        {
+            get
+            {
+                return dbContext.GetUsers();
+            }
+        }
+
+        public IDbSet<IdentityRole> Roles
+        {
+            get
+            {
+                return dbContext.GetRoles();
+            }
+        }
+
         public void Save()
         {
             dbContext.SaveChanges();
@@ -74,6 +93,12 @@ namespace QuestGame.Domain
                 }
             }
             this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

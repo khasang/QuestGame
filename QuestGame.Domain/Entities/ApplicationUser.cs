@@ -17,6 +17,11 @@ namespace QuestGame.Domain.Entities
         /// </summary>
         public virtual ICollection<Quest> Quests { get; set; }
 
+        public ApplicationUser()
+        {
+            Quests = new List<Quest>();
+        }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {
             // Обратите внимание, что authenticationType должен совпадать с типом, определенным в CookieAuthenticationOptions.AuthenticationType

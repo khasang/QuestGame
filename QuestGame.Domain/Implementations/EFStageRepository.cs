@@ -44,7 +44,7 @@ namespace QuestGame.Domain.Implementations
 
         public void Update(Stage item)
         {
-            dbContext.Entry(item);
+            dbContext.EntryObj(item);
         }
     }
 }

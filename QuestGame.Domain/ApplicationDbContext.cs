@@ -17,8 +17,8 @@ namespace QuestGame.Domain
         public DbSet<Stage> Stages { get; set; }
         public DbSet<Motion> Motions { get; set; }
 
-        //public IDbSet<ApplicationUser> GetUsers() { return base.Users; }
-        //public IDbSet<IdentityRole> GetRoles() { return base.Roles; }
+        public IDbSet<ApplicationUser> GetUsers() { return base.Users; }
+        public IDbSet<IdentityRole> GetRoles() { return base.Roles; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
@@ -28,6 +28,16 @@ namespace QuestGame.Domain
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+
+        public void EntryObj<T>(T entity) where T : class
+        {
+            base.Entry(entity).State = EntityState.Modified;
+        }
+
+        public new void Dispose()
+        {
+            base.Dispose();
         }
     }
 }
