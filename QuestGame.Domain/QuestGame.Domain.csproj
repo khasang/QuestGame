@@ -103,7 +103,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DTO\" />
-    <Folder Include="Entities\NewFolder1\" />
     <Folder Include="Implementations\" />
     <Folder Include="Interfaces\" />
   </ItemGroup>

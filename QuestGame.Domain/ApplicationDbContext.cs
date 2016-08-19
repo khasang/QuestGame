@@ -46,9 +46,10 @@ namespace QuestGame.Domain
             })
             .Map(m =>
             {
-                m.Properties(d => new { d.Avatar, d.Losung, d.Contry, d.Rating, d.CountQuestsComplite, d.AddDate });
+                m.Properties(d => new {d.Name, d.LastName, d.Avatar, d.Contry, d.Rating, d.CountQuestsComplite, d.AddDate });
                 m.ToTable("AspNetUsersProfile");
-            });
+            })
+            .Ignore( d=> d.Token );
 
             modelBuilder.Entity<Stage>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Stage);
             modelBuilder.Entity<Quest>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Quest);

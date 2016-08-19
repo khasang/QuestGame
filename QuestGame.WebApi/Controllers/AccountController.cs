@@ -331,24 +331,14 @@ namespace QuestGame.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var name = "";
-            if (model.Name == null && model.LastName == null)
-            {
-                name = model.Email;
-            }
-            else
-            {
-                name = model.Name + " " + model.LastName;
-            }
-
             var user = new ApplicationUser()
             {
-                UserName = name,
+                UserName = model.Email,
+                Name = model.Name,
+                LastName = model.LastName,
                 Email = model.Email,
                 Avatar = model.Avatar,
-                Contry = model.Contry,
-                Losung = model.Losung,
-                AddDate = DateTime.Now
+                Contry = model.Contry
             };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);

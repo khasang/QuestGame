@@ -8,6 +8,9 @@ using QuestGame.WebApi.Models;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Serilog;
+using System.Security.Claims;
+using System.Threading;
+using QuestGame.Domain.Entities;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -27,10 +30,8 @@ namespace QuestGame.WebApi.Controllers
             using (var db = new QuestGame.Domain.ApplicationDbContext())
             {
                 ViewBag.Quests = db.Quests.OrderByDescending(o => o.AddDate).Select(n => n.Title).ToList();
-                ViewBag.Users = db.Users.OrderByDescending(u => u.UserName).Select(u => u.UserName).ToList();
+                ViewBag.Users = db.Users.OrderByDescending(u => u.AddDate).Select(u => u.UserName).ToList();
             }
-
-            ViewBag.Title = HttpContext.User.Identity.Name;
 
             return View();
         }
@@ -67,7 +68,16 @@ namespace QuestGame.WebApi.Controllers
                     var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
                     var authToken = responseData["access_token"];
 
-                    Session["Token"] = authToken;
+                    ApplicationUser UserInfo;
+
+                    using (var db = new QuestGame.Domain.ApplicationDbContext())
+                    {
+                        UserInfo = db.Users.FirstOrDefault(u => u.Email == user.Email );
+                    }
+
+                    if (UserInfo != null) { UserInfo.Token = authToken; }
+
+                    Session["UserInfo"] = UserInfo;
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -82,7 +92,7 @@ namespace QuestGame.WebApi.Controllers
                 }
             }
 
-            return RedirectToAction("Test", Session["Token"]);
+            return RedirectToAction("Test");
 
             //return View("");
         }

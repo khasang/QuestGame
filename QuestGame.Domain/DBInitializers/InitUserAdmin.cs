@@ -19,7 +19,7 @@ namespace QuestGame.Domain.DBInitializers
 
             var user = new ApplicationUser()
             {
-                UserName = "admin",
+                UserName = "admin@admin.com",
                 Email = "admin@admin.com",
                 EmailConfirmed = true,
                 AddDate = DateTime.Now
