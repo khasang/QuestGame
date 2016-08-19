@@ -93,10 +93,15 @@ namespace QuestGame.WebApi.Controllers
             }
 
             return RedirectToAction("Test");
-
-            //return View("");
         }
 
+        public ActionResult Logout()
+        {
+
+            Session["UserInfo"] = null;
+
+            return View();
+        }
 
         public ActionResult Test()
         {
