@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace QuestGame.Domain.Entities
 {
+    [Serializable]
     public class Quest
     {
         public Quest()
