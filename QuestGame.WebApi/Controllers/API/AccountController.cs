@@ -18,6 +18,7 @@ using QuestGame.WebApi.Providers;
 using QuestGame.WebApi.Results;
 using QuestGame.Domain;
 using QuestGame.Domain.Entities;
+using QuestGame.Domain.Implementations;
 
 namespace QuestGame.WebApi.Controllers
 {
