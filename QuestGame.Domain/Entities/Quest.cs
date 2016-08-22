@@ -27,11 +27,13 @@ namespace QuestGame.Domain.Entities
         /// <summary>
         /// Рейтинг квеста
         /// </summary>
+        [JsonProperty("rate")]
         public int Rate { get; set; }
 
         /// <summary>
         /// Флаг доступности квеста
         /// </summary>
+        [JsonProperty("active")]
         public bool Active { get; set; }
 
         /// <summary>

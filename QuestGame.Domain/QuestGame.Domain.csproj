@@ -91,6 +91,9 @@
     <Compile Include="DBInitializers\DBInitialization.cs" />
     <Compile Include="DBInitializers\IInitialization.cs" />
     <Compile Include="DBInitializers\InitQuest.cs" />
+    <Compile Include="DTO\MotionDTO.cs" />
+    <Compile Include="DTO\QuestDTO.cs" />
+    <Compile Include="DTO\StageDTO.cs" />
     <Compile Include="Entities\ApplicationUser.cs" />
     <Compile Include="DBInitializers\InitUserAdmin.cs" />
     <Compile Include="Entities\Motion.cs" />
@@ -111,7 +114,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DTO\" />
+    <Folder Include="DTO\RequestDTO\" />
+    <Folder Include="DTO\ResponseDTO\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
