@@ -8,17 +8,26 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using QuestGame.Domain;
 using QuestGame.Domain.Entities;
+using QuestGame.Domain.Implementations;
 
 namespace QuestGame.WebApi.Controllers
 {
     public class QuestsController : ApiController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        DataManager dataManager;
+
+        ApplicationDbContext db;
+
+        public QuestsController()
+        {
+            this.dataManager = new DataManager();
+            this.db = new ApplicationDbContext();
+        }
 
         // GET: api/Quests
         public IEnumerable<Quest> GetQuests()
         {
-            return db.Quests;
+            return dataManager.Quests.GetAll();
         }
 
         // GET: api/Quests/5
