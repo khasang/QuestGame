@@ -13,12 +13,12 @@ namespace QuestGame.Domain.Implementations
 
         public EFQuestRepository(ApplicationDbContext dbContext )
         {
-            db = dbContext;
+            this.db = dbContext;
         }
 
         public void Add(Quest item)
         {
-            db.Quests.Add(item);
+            this.db.Quests.Add(item);
         }
 
         public void Delete(object id)
@@ -28,7 +28,7 @@ namespace QuestGame.Domain.Implementations
 
         public void Delete(Quest item)
         {
-            db.Quests.Remove(item);
+            this.db.Quests.Remove(item);
         }
 
         public void Dispose()
@@ -38,7 +38,8 @@ namespace QuestGame.Domain.Implementations
 
         public IEnumerable<Quest> GetAll()
         {
-            return db.Quests;
+            var tttt = this.db.Quests;
+            return tttt;
         }
 
         public Quest GetByID(object id)

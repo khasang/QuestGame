@@ -14,20 +14,17 @@ namespace QuestGame.WebApi.Controllers
 {
     public class QuestsController : ApiController
     {
-        DataManager dataManager;
-
-        ApplicationDbContext db;        // Прямой
+        ApplicationDbContext db;  
 
         public QuestsController()
         {
-            this.dataManager = new DataManager();
             this.db = new ApplicationDbContext();
         }
 
         // GET: api/Quests
         public IEnumerable<Quest> GetQuests()
         {
-            return dataManager.Quests.GetAll();
+            return db.Quests;
         }
 
         // GET: api/Quests/5

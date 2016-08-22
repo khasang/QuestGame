@@ -99,12 +99,12 @@
     <Compile Include="Entities\QuestRoute.cs" />
     <Compile Include="Entities\Stage.cs" />
     <Compile Include="Entities\ContentStage.cs" />
-    <Compile Include="Implementations\DAL\DataManager.cs" />
-    <Compile Include="Implementations\DAL\EFContentQuestRepository.cs" />
-    <Compile Include="Implementations\DAL\EFContentStqgeRepository.cs" />
-    <Compile Include="Implementations\DAL\EFOperationRepository.cs" />
-    <Compile Include="Implementations\DAL\EFQuestRepository.cs" />
-    <Compile Include="Implementations\DAL\EFStageRepository.cs" />
+    <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFDataManager.cs" />
+    <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFContentQuestRepository.cs" />
+    <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFContentStqgeRepository.cs" />
+    <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFOperationRepository.cs" />
+    <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFQuestRepository.cs" />
+    <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFStageRepository.cs" />
     <Compile Include="Interfaces\DAL\IContentStageRepository.cs" />
     <Compile Include="Interfaces\DAL\IDataManager.cs" />
     <Compile Include="Interfaces\DAL\IOperationRepository.cs" />
@@ -119,9 +119,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
-    <None Include="ClassDiagram3.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

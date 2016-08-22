@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace QuestGame.Domain.Implementations
 {
-    public class DataManager : IDataManager
+    public class EFDataManager : IDataManager
     {
 
         IQuestRepository questsRepository;
@@ -18,9 +18,9 @@ namespace QuestGame.Domain.Implementations
 
         ApplicationDbContext db;
 
-        public DataManager()
+        public EFDataManager()
         {
-            db = new ApplicationDbContext();
+            this.db = new ApplicationDbContext();
         }
 
 
@@ -69,7 +69,7 @@ namespace QuestGame.Domain.Implementations
             {
                 if (this.questsRepository == null)
                 {
-                    this.questsRepository = new EFQuestRepository( db );
+                    this.questsRepository = new EFQuestRepository( this.db );
                 }
 
                 return questsRepository;
