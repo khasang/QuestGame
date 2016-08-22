@@ -9,6 +9,7 @@ using System.Web.Http.Description;
 using QuestGame.Domain;
 using QuestGame.Domain.Entities;
 using QuestGame.Domain.Implementations;
+using System;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -19,6 +20,7 @@ namespace QuestGame.WebApi.Controllers
         public QuestsController()
         {
             this.db = new ApplicationDbContext();
+
         }
 
         // GET: api/Quests
