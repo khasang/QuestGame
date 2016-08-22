@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,17 +23,14 @@ namespace QuestGame.Domain.Entities
         /// Следующая сцена
         /// </summary>
         public int? NextStageId { get; set; }
+        [JsonIgnore]
         public virtual Stage NextStage { get; set; }
 
         /// <summary>
         /// Внешний ключ, указывающий на сцену
         /// </summary>
         public int OwnerStageId { get; set; }
+        [JsonIgnore]
         public virtual Stage OwnerStage { get; set; }
-
-        //public Motion()
-        //{
-        //    Description = string.Empty;
-        //}
     }
 }

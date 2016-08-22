@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -33,6 +34,7 @@ namespace QuestGame.Domain.Entities
         /// Внешний ключ, указывающий на квест
         /// </summary>
         public int QuestId { get; set; }
+        [JsonIgnore]
         public virtual Quest Quest { get; set; }
 
         /// <summary>
@@ -43,8 +45,6 @@ namespace QuestGame.Domain.Entities
         
         public Stage()
         {
-            //Title = "Stage";
-            //Body = string.Empty;
             Motions = new List<Motion>();
         }
     }

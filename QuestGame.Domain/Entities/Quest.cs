@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,6 +38,7 @@ namespace QuestGame.Domain.Entities
         /// Внешний ключ, указывающий на автора квеста
         /// </summary>
         public string OwnerId { get; set; }
+        [JsonIgnore]
         public virtual ApplicationUser Owner { get; set; }
 
         /// <summary>
@@ -45,8 +47,6 @@ namespace QuestGame.Domain.Entities
         public virtual ICollection<Stage> Stages { get; set; }
         public Quest()
         {
-            //Title = "Quest";
-            //Date = DateTime.Now;
             Stages = new List<Stage>();
         }
     }

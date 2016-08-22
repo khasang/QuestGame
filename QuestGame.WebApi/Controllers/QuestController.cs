@@ -22,17 +22,11 @@ namespace QuestGame.WebApi.Controllers
         }
 
         [Route("Get")]
-        public List<QuestDTO> GetQuest()
+        public IEnumerable<Quest> GetQuest()
         {
             try
             {
-                var quests = dataManager.Quests.GetAll().Select(x => new QuestDTO
-                {
-                    Title = x.Title,
-                    Active = x.Active,
-                    Date = x.Date,
-                    Rate = x.Rate
-                }).ToList();
+                var quests = dataManager.Quests.GetAll().ToList();                
                 return quests;
             }
             catch(Exception ex)
