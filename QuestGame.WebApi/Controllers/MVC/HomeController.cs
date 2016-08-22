@@ -32,10 +32,11 @@ namespace QuestGame.WebApi.Controllers
 
             IDataManager dataManager = new EFDataManager();
 
-            var t = dataManager.Quests.GetAll();
+           var t = dataManager.Quests.GetAll();
 
             using (var db = new QuestGame.Domain.ApplicationDbContext())
             {
+                db.Database.Log = Console.Write;
                 ViewBag.Quests = db.Quests.OrderByDescending(o => o.AddDate).Select(n => n.Title).ToList();
                 ViewBag.Users = db.Users.OrderByDescending(u => u.AddDate).Select(u => u.UserName).ToList();
             }

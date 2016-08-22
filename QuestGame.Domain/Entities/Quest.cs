@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace QuestGame.Domain.Entities
 {
-    [Serializable]
     public class Quest
     {
         public Quest()
@@ -26,8 +26,10 @@ namespace QuestGame.Domain.Entities
         public DateTime ModifyDate { get; set; }
 
         [Required]
+        [JsonIgnore]
         public virtual ContentQuest Content { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<Stage> Stages { get; set; }
     }
 }
