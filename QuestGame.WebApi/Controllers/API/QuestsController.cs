@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using QuestGame.Domain;
 using QuestGame.Domain.Entities;
-using Newtonsoft.Json;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -22,9 +18,7 @@ namespace QuestGame.WebApi.Controllers
         // GET: api/Quests
         public IEnumerable<Quest> GetQuests()
         {
-            var t = db.Quests;
-            return JsonConvert.SerializeObject(t);
-
+            return db.Quests;
         }
 
         // GET: api/Quests/5
