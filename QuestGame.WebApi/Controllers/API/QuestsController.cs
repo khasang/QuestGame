@@ -16,7 +16,7 @@ namespace QuestGame.WebApi.Controllers
     {
         DataManager dataManager;
 
-        ApplicationDbContext db;
+        ApplicationDbContext db;        // Прямой
 
         public QuestsController()
         {
