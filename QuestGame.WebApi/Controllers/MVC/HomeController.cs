@@ -11,6 +11,8 @@ using Serilog;
 using System.Security.Claims;
 using System.Threading;
 using QuestGame.Domain.Entities;
+using QuestGame.Domain.Implementations;
+using QuestGame.Domain.Interfaces;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -27,6 +29,11 @@ namespace QuestGame.WebApi.Controllers
 
         public ActionResult Index()
         {
+
+            IDataManager dataManager = new EFDataManager();
+
+            var t = dataManager.Quests.GetAll();
+
             using (var db = new QuestGame.Domain.ApplicationDbContext())
             {
                 ViewBag.Quests = db.Quests.OrderByDescending(o => o.AddDate).Select(n => n.Title).ToList();
