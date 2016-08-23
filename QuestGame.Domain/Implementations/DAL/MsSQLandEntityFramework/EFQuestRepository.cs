@@ -38,13 +38,12 @@ namespace QuestGame.Domain.Implementations
 
         public IEnumerable<Quest> GetAll()
         {
-            var tttt = this.db.Quests;
-            return tttt;
+            return db.Quests;
         }
 
         public Quest GetByID(object id)
         {
-            return db.Quests.Find((int)id);
+            return db.Quests.Find( (int)id );
         }
 
         public void Update(Quest item)
