@@ -27,17 +27,32 @@ namespace QuestGame.WebApi.Controllers
                                         .CreateLogger();
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:9243");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            IDataManager dataManager = new EFDataManager();
+                var response = await client.GetAsync(@"api/Quests");
+                var responseData = await response.Content.ReadAsAsync<IEnumerable<Quest>>();
 
-           var t = dataManager.Quests.GetAll();
+                if (response.IsSuccessStatusCode)
+                {
+                    ViewBag.Quests = responseData.OrderByDescending( q => q.AddDate );
+                }
+                else
+                {
+                    ViewBag.Message = "Что-то пошло не так";
+                }
+            }
+
+
+
 
             using (var db = new QuestGame.Domain.ApplicationDbContext())
             {
-                db.Database.Log = Console.Write;
-                ViewBag.Quests = db.Quests.OrderByDescending(o => o.AddDate).Select(n => n.Title).ToList();
                 ViewBag.Users = db.Users.OrderByDescending(u => u.AddDate).Select(u => u.UserName).ToList();
             }
 

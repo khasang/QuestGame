@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -21,10 +22,15 @@ namespace QuestGame.Domain.Entities
         public DateTime ModifyDate { get; set; }
 
         public int QuestId { get; set; }
+
+        [JsonIgnore]
         public virtual Quest Quest { get; set; }
 
         [Required]
+        [JsonIgnore]
+
         public virtual ContentStage Content { get; set; }
+        [JsonIgnore]
 
         public virtual ICollection<Operation> Operations { get; set; }
     }
