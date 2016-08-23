@@ -10,9 +10,9 @@ namespace QuestGame.Domain.Implementations
 {
     public class EFQuestRepository : IQuestRepository
     {
-        private ApplicationDbContext dbContext;
+        private IApplicationDbContext dbContext;
 
-        public EFQuestRepository(ApplicationDbContext dbContext)
+        public EFQuestRepository(IApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
         }

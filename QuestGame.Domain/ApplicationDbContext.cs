@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using QuestGame.Domain.Entities;
+using QuestGame.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace QuestGame.Domain
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
     {
         public DbSet<Quest> Quests { get; set; }
         public DbSet<Stage> Stages { get; set; }
@@ -35,9 +36,14 @@ namespace QuestGame.Domain
             base.Entry(entity).State = EntityState.Modified;
         }
 
+        public new void SaveChanges()
+        {
+            base.SaveChanges();
+        }
+
         public new void Dispose()
         {
-            base.Dispose();
+            base.Dispose();        
         }
     }
 }

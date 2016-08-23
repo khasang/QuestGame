@@ -10,9 +10,9 @@ namespace QuestGame.Domain.Implementations
 {
     public class EFMotionRepository : IMotionRepository
     {
-        private ApplicationDbContext dbContext;
+        private IApplicationDbContext dbContext;
 
-        public EFMotionRepository(ApplicationDbContext dbContext)
+        public EFMotionRepository(IApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
         }

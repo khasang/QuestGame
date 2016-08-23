@@ -13,15 +13,15 @@ namespace QuestGame.Domain
 {
     public class DataManager : IDataManager
     {
-        ApplicationDbContext dbContext;
+        IApplicationDbContext dbContext;
 
         IQuestRepository questRepository;
         IStageRepository stageRepository;
         IMotionRepository motionRrepository;
 
-        public DataManager()
+        public DataManager(IApplicationDbContext dbContext)
         {
-            dbContext = new ApplicationDbContext();
+            this.dbContext = dbContext;
         }
 
         public IQuestRepository Quests

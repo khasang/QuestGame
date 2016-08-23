@@ -106,6 +106,7 @@
     <Compile Include="Implementations\EFMotionRepository.cs" />
     <Compile Include="Implementations\EFQuestRepository.cs" />
     <Compile Include="Implementations\EFStageRepository.cs" />
+    <Compile Include="Interfaces\IApplicationDbContext.cs" />
     <Compile Include="Interfaces\ICommonRepository.cs" />
     <Compile Include="Interfaces\IDataManager.cs" />
     <Compile Include="Interfaces\IMotionRepository.cs" />
