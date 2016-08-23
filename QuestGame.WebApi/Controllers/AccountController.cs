@@ -364,13 +364,13 @@ namespace QuestGame.WebApi.Controllers
                     Content = new StringContent("Invalid user data")
                 };
             }
-
+            
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["BaseUrl"]);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+                
                 var requestParams = new Dictionary<string, string>
                 {
                     { "grant_type", "password" },

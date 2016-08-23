@@ -86,17 +86,36 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationDbContext.cs" />
+    <Compile Include="DataManager.cs" />
     <Compile Include="DBInitializer.cs" />
     <Compile Include="DBInitializers\DBInitialization.cs" />
     <Compile Include="DBInitializers\IInitialization.cs" />
+    <Compile Include="DBInitializers\InitQuest.cs" />
+    <Compile Include="DTO\MotionDTO.cs" />
+    <Compile Include="DTO\QuestDTO.cs" />
+    <Compile Include="DTO\StageDTO.cs" />
     <Compile Include="Entities\ApplicationUser.cs" />
     <Compile Include="DBInitializers\InitUserAdmin.cs" />
+    <Compile Include="Entities\Motion.cs" />
+    <Compile Include="Entities\Quest.cs" />
+    <Compile Include="Entities\Stage.cs" />
+    <Compile Include="EntityConfigurations\ApplicationUserMapper.cs" />
+    <Compile Include="EntityConfigurations\MotionMapper.cs" />
+    <Compile Include="EntityConfigurations\QuestMapper.cs" />
+    <Compile Include="EntityConfigurations\StageMapper.cs" />
+    <Compile Include="Implementations\EFMotionRepository.cs" />
+    <Compile Include="Implementations\EFQuestRepository.cs" />
+    <Compile Include="Implementations\EFStageRepository.cs" />
+    <Compile Include="Interfaces\ICommonRepository.cs" />
+    <Compile Include="Interfaces\IDataManager.cs" />
+    <Compile Include="Interfaces\IMotionRepository.cs" />
+    <Compile Include="Interfaces\IQuestRepository.cs" />
+    <Compile Include="Interfaces\IStageRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DTO\" />
-    <Folder Include="Implementations\" />
-    <Folder Include="Interfaces\" />
+    <Folder Include="DTO\RequestDTO\" />
+    <Folder Include="DTO\ResponseDTO\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
