@@ -18,9 +18,9 @@ namespace QuestGame.WebApi.Controllers
     {
         IDataManager dataManager;
 
-        public QuestsController()
+        public QuestsController( IDataManager dataManager )
         {
-            this.dataManager = new EFDataManager();
+            this.dataManager = dataManager;
         }
 
         // GET: api/Quests
