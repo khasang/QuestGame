@@ -13,6 +13,13 @@ namespace QuestGame.WebApi
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
+
+            //app.UseErrorPage(); // See Microsoft.Owin.Diagnostics
+            //app.UseWelcomePage("/Welcome"); // See Microsoft.Owin.Diagnostics 
+            //app.Run(async context =>
+            //{
+            //    await context.Response.WriteAsync("Hello world using OWIN TestServer");
+            //});
         }
     }
 }
