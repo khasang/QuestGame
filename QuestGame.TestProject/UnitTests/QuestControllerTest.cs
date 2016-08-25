@@ -23,33 +23,58 @@ namespace QuestGame.TestProject.UnitTests
 
             var questRepositoryMock = new Mock<IQuestRepository>();
             questRepositoryMock.Setup(x => x.GetAll())
-                                .Returns(new List<Quest>
-                                {
-                                    new Quest{ Title = "1" },
-                                    new Quest{ Title = "2" },
-                                    new Quest{ Title = "3" }
-                                });
+                .Returns(new List<Quest>
+                {
+                    new Quest {Title = "1"},
+                    new Quest {Title = "2"},
+                    new Quest {Title = "3"}
+                });
 
             var dataManagerMoq = new Mock<IDataManager>();
             dataManagerMoq.Setup(x => x.Quests)
-                          .Returns(questRepositoryMock.Object);
+                .Returns(questRepositoryMock.Object);
 
             var mapperMock = new Mock<IMapper>();
             mapperMock.Setup(x => x.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(It.IsAny<IEnumerable<Quest>>()))
-                      .Returns(dataManagerMoq.Object.Quests.GetAll().Select(x => new QuestDTO { Title = x.Title }));
+                .Returns(dataManagerMoq.Object.Quests.GetAll().Select(x => new QuestDTO {Title = x.Title}));
+
+            var controller = new QuestController(dataManagerMoq.Object, mapperMock.Object, loggerMock.Object);
 
             // act
-            var controller = new QuestController(dataManagerMoq.Object, mapperMock.Object, loggerMock.Object);
-           
-            // act
             var result = controller.GetQuest();
-            
+
             // assert
             Assert.AreEqual(result.Count(), 3);
-            Assert.IsInstanceOfType(result, typeof(IEnumerable<QuestDTO>));
+            Assert.IsInstanceOfType(result, typeof (IEnumerable<QuestDTO>));
             Assert.AreEqual(result.ElementAt(0).Title, "1");
             Assert.AreEqual(result.ElementAt(1).Title, "2");
             Assert.AreEqual(result.ElementAt(2).Title, "3");
+        }
+
+        [TestMethod]
+        public void Quest_GetById_Count3()
+        {
+            var loggerMock = new Mock<ILoggerService>();
+
+            var questRepositoryMock = new Mock<IQuestRepository>();
+            questRepositoryMock.Setup(x => x.GetById(It.IsAny<int>()))
+                .Returns(new Quest { Title = "1", Id = 1 });
+
+            var dataManagerMoq = new Mock<IDataManager>();
+            dataManagerMoq.Setup(x => x.Quests)
+                .Returns(questRepositoryMock.Object);
+
+            var mapperMock = new Mock<IMapper>();
+            mapperMock.Setup(x => x.Map<Quest, QuestDTO>(It.IsAny<Quest>()))
+                .Returns(new QuestDTO { Title = dataManagerMoq.Object.Quests.GetById(1).Title });
+
+            var controller = new QuestController(dataManagerMoq.Object, mapperMock.Object, loggerMock.Object);
+
+            // act
+            var result = controller.GetById(1);
+
+            // assert
+            Assert.AreEqual(result.Title, "1");
         }
     }
 

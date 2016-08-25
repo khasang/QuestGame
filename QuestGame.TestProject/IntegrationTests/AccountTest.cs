@@ -20,7 +20,7 @@ namespace QuestGame.TestProject.IntegrationTests
     public class AccountTest
     {
         [TestMethod]
-        public void QuestGame_Authorize_Success()
+        public void QuestGame_Authorize1_Success()
         {
             var driver = ChromeDriver; // new ChromeDriver();
             driver.Navigate().GoToUrl("http://localhost:9243/Home/Login");
@@ -95,6 +95,32 @@ namespace QuestGame.TestProject.IntegrationTests
                 relativeUrl = "/" + relativeUrl;
             }
             return String.Format("http://localhost:{0}{1}", iisPort, relativeUrl);
+        }
+
+
+        [TestMethod]
+        public void QuestGame_Authorize_Success()
+        {
+            //var dr = FirefoxDriver();
+            var driver = new ChromeDriver();
+            driver.Navigate().GoToUrl("http://localhost:9243/Home/Login");
+
+            var login = driver.FindElementById("loginTextBox");
+            login.SendKeys("admin@admin.com");
+
+            var password = driver.FindElementById("passwordTextBox");
+            password.SendKeys("qwerty");
+
+            var button = driver.FindElementById("enterButton");
+            button.Click();
+
+            Thread.Sleep(5000);
+
+            var name = driver.FindElementById("userName");
+
+            Assert.IsTrue(name.Text.Contains("admin@admin.com"));
+
+            driver.Close();
         }
     }
 }

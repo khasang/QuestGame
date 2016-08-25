@@ -50,6 +50,14 @@ namespace QuestGame.WebApi.Controllers
                 throw;
             }            
         }
+
+        public QuestDTO GetById(int id)
+        {
+            var quest = dataManager.Quests.GetById(id);
+            var response = mapper.Map<Quest, QuestDTO>(quest);
+
+            return response;
+        }
     }    
 }
 
