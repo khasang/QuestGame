@@ -41,5 +41,65 @@ namespace QuestGame.WebApi.Controllers
 
             return Ok(quest); 
         }
+
+        // DELETE
+        [ResponseType(typeof(Quest))]
+        public IHttpActionResult DeleteQuest(int id)
+        {
+            Quest quest = dataManager.Quests.GetByID(id);
+
+            if (quest == null)
+            {
+                return NotFound();
+            }
+
+            dataManager.Quests.Delete( quest );
+            dataManager.Save();
+
+            return Ok( quest );
+        }
+
+        // Add
+        [ResponseType(typeof(Quest))]
+        public IHttpActionResult AddQuest(Quest quest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            dataManager.Quests.Add(quest);
+            dataManager.Save();
+
+            return CreatedAtRoute("DefaultApi", new { id = quest.Id }, quest);
+        }
+
+        // Update
+        [ResponseType(typeof(void))]
+        public IHttpActionResult Update(int id, Quest quest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != quest.Id)
+            {
+                return BadRequest();
+            }
+
+            dataManager.Quests.Update(quest);
+
+            try
+            {
+                dataManager.Save();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                    return NotFound();
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
     }
 }
