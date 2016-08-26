@@ -77,15 +77,15 @@ namespace QuestGame.WebApi.Controllers
         // GET api/Account/UserInfo
         //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("UserProfile")]
-        [AllowAnonymous]
         [HttpPost]
         [ResponseType(typeof(ApplicationUser))]
         public async Task<ApplicationUser> GetUserProfile( UserLogin model )
         {
             var p = Thread.CurrentPrincipal;
             var u = p.Identity;
+            var i = u.GetUserId();
 
-            ApplicationUser user = await UserManager.FindAsync( model.Email, model.Password );
+            ApplicationUser user = await UserManager.FindByIdAsync( i );
 
             return user;
         }
