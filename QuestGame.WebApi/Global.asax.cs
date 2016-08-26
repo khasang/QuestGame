@@ -8,6 +8,9 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using QuestGame.Domain.Entities;
 using System.Diagnostics;
+using Ninject.Modules;
+using QuestGame.WebApi.Infrastructura;
+using Ninject;
 
 namespace QuestGame.WebApi
 {
@@ -20,6 +23,13 @@ namespace QuestGame.WebApi
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            NinjectModule registrations = new NinjectRegistrations();
+            var kernel = new StandardKernel(registrations);
+            var ninjectResolver = new NinjectDependencyResolver(kernel);
+
+            DependencyResolver.SetResolver(ninjectResolver); // MVC
+            GlobalConfiguration.Configuration.DependencyResolver = ninjectResolver; // Web API
         }
     }
 }

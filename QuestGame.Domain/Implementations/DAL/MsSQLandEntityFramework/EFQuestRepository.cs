@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using QuestGame.Domain.Entities;
+using System.Data.Entity;
 
 namespace QuestGame.Domain.Implementations
 {
@@ -48,7 +49,7 @@ namespace QuestGame.Domain.Implementations
 
         public void Update(Quest item)
         {
-            db.Entry<Quest>(item);
+            db.Entry<Quest>(item).State = EntityState.Modified;
         }
     }
 }
