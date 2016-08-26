@@ -28,10 +28,9 @@ namespace QuestGame.Domain.Entities
 
         [Required]
         [JsonIgnore]
-
         public virtual ContentStage Content { get; set; }
-        [JsonIgnore]
 
+        [JsonIgnore]
         public virtual ICollection<Operation> Operations { get; set; }
     }
 }

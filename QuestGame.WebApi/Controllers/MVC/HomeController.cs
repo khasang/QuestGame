@@ -69,6 +69,9 @@ namespace QuestGame.WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult> Login( UserLogin user )
         {
+            string token;
+            ApplicationUser UserInfo = new ApplicationUser();
+
 
             if (ModelState.IsValid)
             {
@@ -79,7 +82,7 @@ namespace QuestGame.WebApi.Controllers
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    var response = await client.PostAsJsonAsync("LoginUser", user);
+                    var response = await client.PostAsJsonAsync("api/Account/LoginUser", user);
 
                     if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
@@ -87,33 +90,30 @@ namespace QuestGame.WebApi.Controllers
                         return View();
                     }
 
-                    var token = await response.Content.ReadAsStringAsync();
+                    token = await response.Content.ReadAsStringAsync();
 
-                    ApplicationUser UserInfo;
-
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                     var requestParams = new Dictionary<string, string>
                     {
-                        { "username", user.Email },
-                        { "password", user.Password }
+                        { "Email", user.Email },
+                        { "Password", user.Password }
                     };
 
                     var content = new FormUrlEncodedContent(requestParams);
 
-                    var responseProfile = await client.PostAsync("UserProfile", content);
+                    var responseProfile = await client.PostAsync("api/Account/UserProfile", content);
 
                     if (responseProfile.StatusCode == HttpStatusCode.OK)
                     {
-                        var yy = await response.Content.ReadAsAsync<Dictionary<string, string>>();
+                        UserInfo = await responseProfile.Content.ReadAsAsync<ApplicationUser>();
+
+                        UserInfo.Token = token;
                     }
 
+                    Session["UserInfo"] = UserInfo;
 
-                    //Session["UserInfo"] = UserInfo;
 
-
-                   
                 }
             }
 

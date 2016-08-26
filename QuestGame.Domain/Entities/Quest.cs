@@ -26,7 +26,7 @@ namespace QuestGame.Domain.Entities
         public DateTime ModifyDate { get; set; }
 
         [Required]
-        [JsonIgnore]
+        //[JsonIgnore]
         public virtual ContentQuest Content { get; set; }
 
         [JsonIgnore]

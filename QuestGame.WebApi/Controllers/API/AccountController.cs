@@ -16,11 +16,14 @@ using Microsoft.Owin.Security.OAuth;
 using QuestGame.WebApi.Models;
 using QuestGame.WebApi.Providers;
 using QuestGame.WebApi.Results;
+using System.Web.Http.Description;
 using QuestGame.Domain;
 using QuestGame.Domain.Entities;
 using QuestGame.Domain.Implementations;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Threading;
+using System.Security.Principal;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -72,10 +75,16 @@ namespace QuestGame.WebApi.Controllers
         }
 
         // GET api/Account/UserInfo
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        //[HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("UserProfile")]
+        [AllowAnonymous]
+        [HttpPost]
+        [ResponseType(typeof(ApplicationUser))]
         public async Task<ApplicationUser> GetUserProfile( UserLogin model )
         {
+            var p = Thread.CurrentPrincipal;
+            var u = p.Identity;
+
             ApplicationUser user = await UserManager.FindAsync( model.Email, model.Password );
 
             return user;
