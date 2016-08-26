@@ -11,6 +11,7 @@ using QuestGame.Domain.Entities;
 using QuestGame.Domain.Implementations;
 using System;
 using QuestGame.Domain.Interfaces;
+using System.Threading;
 
 namespace QuestGame.WebApi.Controllers
 {

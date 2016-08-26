@@ -13,6 +13,7 @@ using System.Threading;
 using QuestGame.Domain.Entities;
 using QuestGame.Domain.Implementations;
 using QuestGame.Domain.Interfaces;
+using System.Net;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -78,40 +79,41 @@ namespace QuestGame.WebApi.Controllers
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+                    var response = await client.PostAsJsonAsync("LoginUser", user);
+
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        ViewBag.ErrorMessage = "Неудачная попытка аутентификации!";
+                        return View();
+                    }
+
+                    var token = await response.Content.ReadAsStringAsync();
+
+                    ApplicationUser UserInfo;
+
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
                     var requestParams = new Dictionary<string, string>
                     {
-                        { "grant_type", "password" },
                         { "username", user.Email },
                         { "password", user.Password }
                     };
 
                     var content = new FormUrlEncodedContent(requestParams);
-                    var response = await client.PostAsync("Token", content);
 
-                    var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
-                    var authToken = responseData["access_token"];
+                    var responseProfile = await client.PostAsync("UserProfile", content);
 
-                    ApplicationUser UserInfo;
-
-                    using (var db = new QuestGame.Domain.ApplicationDbContext())
+                    if (responseProfile.StatusCode == HttpStatusCode.OK)
                     {
-                        UserInfo = db.Users.FirstOrDefault(u => u.Email == user.Email );
+                        var yy = await response.Content.ReadAsAsync<Dictionary<string, string>>();
                     }
 
-                    if (UserInfo != null) { UserInfo.Token = authToken; }
 
-                    Session["UserInfo"] = UserInfo;
+                    //Session["UserInfo"] = UserInfo;
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        ViewBag.Message = "Авторизация пройдена";
 
-                        myLogger.Information("Новая авторизация пользователя");
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Не авторизирован";
-                    }
+                   
                 }
             }
 
