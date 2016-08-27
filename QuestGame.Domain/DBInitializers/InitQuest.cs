@@ -26,9 +26,9 @@ namespace QuestGame.Domain.DBInitializers
                     Owner = owner,
                     Stages = new List<Stage>
                     {
-                        new Stage { Title = "Stage1", Body = "Body1", Point = rnd.Next(5) },
-                        new Stage { Title = "Stage2", Body = "Body2", Point = rnd.Next(5) },
-                        new Stage { Title = "Stage3", Body = "Body3", Point = rnd.Next(5) }
+                        new Stage { Title = "Stage1", Body = "Body1", Point = rnd.Next(5), Tag = GetGuidValue().ToString() },
+                        new Stage { Title = "Stage2", Body = "Body2", Point = rnd.Next(5), Tag = GetGuidValue().ToString() },
+                        new Stage { Title = "Stage3", Body = "Body3", Point = rnd.Next(5), Tag = GetGuidValue().ToString() }
                     }
                 };
 
@@ -46,6 +46,14 @@ namespace QuestGame.Domain.DBInitializers
             };
 
             dbContext.SaveChanges();
+        }
+
+        private Guid GetGuidValue()
+        {
+            var bytes = new byte[16];
+            for (int i = 0; i < 16; i++)
+                bytes[i] = (byte)rnd.Next(256);
+            return new Guid(bytes);
         }
     }
 }

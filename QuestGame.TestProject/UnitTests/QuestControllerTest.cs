@@ -50,7 +50,7 @@ namespace QuestGame.TestProject.UnitTests
             var controller = new QuestController(dataManagerMoq.Object, mapperMock.Object, loggerMock.Object);
 
             // act
-            var result = controller.GetQuest();
+            var result = controller.GetAll();
 
             // assert
             Assert.AreEqual(result.Count(), 3);

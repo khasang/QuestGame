@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using QuestGame.Domain.Entities;
+using QuestGame.Domain.EntityConfigurations;
 using QuestGame.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace QuestGame.Domain
         public DbSet<Quest> Quests { get; set; }
         public DbSet<Stage> Stages { get; set; }
         public DbSet<Motion> Motions { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
 
         public IDbSet<ApplicationUser> GetUsers() { return base.Users; }
         public IDbSet<IdentityRole> GetRoles() { return base.Roles; }
@@ -45,6 +47,20 @@ namespace QuestGame.Domain
         public new void Dispose()
         {
             base.Dispose();        
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            // Здесь подключаем настройки связей сущностей между собой
+
+            modelBuilder.Configurations.Add(new ApplicationUserMapper());
+            modelBuilder.Configurations.Add(new MotionMapper());
+            modelBuilder.Configurations.Add(new QuestMapper());
+            modelBuilder.Configurations.Add(new StageMapper());
+            modelBuilder.Configurations.Add(new UserProfileMapper());
+
+            base.OnModelCreating(modelBuilder);
+            // modelBuilder.Entity<ApplicationUser>().HasOptional(x => x.UserProfileId).WithRequired();
         }
     }
 }

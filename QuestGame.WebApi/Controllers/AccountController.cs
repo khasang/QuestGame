@@ -23,6 +23,7 @@ using System.Web.Configuration;
 using System.Net.Http.Headers;
 using QuestGame.Common.Interfaces;
 using QuestGame.Common;
+using System.Diagnostics;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -397,7 +398,7 @@ namespace QuestGame.WebApi.Controllers
                 {
                     Content = new StringContent(authToken),
                     StatusCode = HttpStatusCode.OK
-                };
+                };                
             }
         }
 
@@ -429,7 +430,7 @@ namespace QuestGame.WebApi.Controllers
                 Body = string.Empty,
                 ErrorMessage = result.Errors.ToString()
             };
-
+            
             return Ok(response);
         }
 
