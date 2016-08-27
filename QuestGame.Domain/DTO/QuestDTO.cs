@@ -12,7 +12,7 @@ namespace QuestGame.Domain.DTO
         public DateTime Date { get; set; }
         public int Rate { get; set; }
         public bool Active { get; set; }
-        public string Owner { get; set; }
+        public UserDTO Owner { get; set; }
         public ICollection<StageDTO> Stages { get; set; }
     }
 }

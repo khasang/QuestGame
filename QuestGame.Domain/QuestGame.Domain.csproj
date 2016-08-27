@@ -94,6 +94,7 @@
     <Compile Include="DTO\MotionDTO.cs" />
     <Compile Include="DTO\QuestDTO.cs" />
     <Compile Include="DTO\StageDTO.cs" />
+    <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="Entities\ApplicationUser.cs" />
     <Compile Include="DBInitializers\InitUserAdmin.cs" />
     <Compile Include="Entities\Motion.cs" />
@@ -103,21 +104,23 @@
     <Compile Include="EntityConfigurations\MotionMapper.cs" />
     <Compile Include="EntityConfigurations\QuestMapper.cs" />
     <Compile Include="EntityConfigurations\StageMapper.cs" />
+    <Compile Include="IdentityConfig.cs" />
     <Compile Include="Implementations\EFMotionRepository.cs" />
     <Compile Include="Implementations\EFQuestRepository.cs" />
+    <Compile Include="Implementations\EFRoleRopsitory.cs" />
     <Compile Include="Implementations\EFStageRepository.cs" />
+    <Compile Include="Implementations\EFUserRepository.cs" />
     <Compile Include="Interfaces\IApplicationDbContext.cs" />
     <Compile Include="Interfaces\ICommonRepository.cs" />
     <Compile Include="Interfaces\IDataManager.cs" />
     <Compile Include="Interfaces\IMotionRepository.cs" />
     <Compile Include="Interfaces\IQuestRepository.cs" />
+    <Compile Include="Interfaces\IRoleRepository.cs" />
     <Compile Include="Interfaces\IStageRepository.cs" />
+    <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DTO\RequestDTO\" />
-    <Folder Include="DTO\ResponseDTO\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />

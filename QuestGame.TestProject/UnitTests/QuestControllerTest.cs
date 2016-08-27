@@ -15,29 +15,38 @@ namespace QuestGame.TestProject.UnitTests
     [TestClass]
     public class QuestControllerTest
     {
+        Mock<ILoggerService> loggerMock;
+        Mock<IDataManager> dataManagerMoq;
+        Mock<IMapper> mapperMock;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            loggerMock = new Mock<ILoggerService>();
+
+            dataManagerMoq = new Mock<IDataManager>();
+            dataManagerMoq.Setup(x => x.Quests.GetAll())
+                          .Returns(new List<Quest>
+                          {
+                              new Quest {Title = "1"},
+                              new Quest {Title = "2"},
+                              new Quest {Title = "3"}
+                          });
+            dataManagerMoq.Setup(x => x.Quests.GetById(It.IsAny<int>()))
+                          .Returns(new Quest { Title = "1", Id = 1 });
+
+            mapperMock = new Mock<IMapper>();
+            mapperMock.Setup(x => x.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(It.IsAny<IEnumerable<Quest>>()))
+                      .Returns(dataManagerMoq.Object.Quests.GetAll().Select(x => new QuestDTO { Title = x.Title }));
+            mapperMock.Setup(x => x.Map<Quest, QuestDTO>(It.IsAny<Quest>()))
+                      .Returns(new QuestDTO { Title = dataManagerMoq.Object.Quests.GetById(It.IsAny<int>()).Title });
+
+        }
+
         [TestMethod]
         public void Quest_GetAll_Count3()
         {
             // arrange
-            var loggerMock = new Mock<ILoggerService>();
-
-            var questRepositoryMock = new Mock<IQuestRepository>();
-            questRepositoryMock.Setup(x => x.GetAll())
-                .Returns(new List<Quest>
-                {
-                    new Quest {Title = "1"},
-                    new Quest {Title = "2"},
-                    new Quest {Title = "3"}
-                });
-
-            var dataManagerMoq = new Mock<IDataManager>();
-            dataManagerMoq.Setup(x => x.Quests)
-                .Returns(questRepositoryMock.Object);
-
-            var mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(x => x.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(It.IsAny<IEnumerable<Quest>>()))
-                .Returns(dataManagerMoq.Object.Quests.GetAll().Select(x => new QuestDTO {Title = x.Title}));
-
             var controller = new QuestController(dataManagerMoq.Object, mapperMock.Object, loggerMock.Object);
 
             // act
@@ -52,22 +61,9 @@ namespace QuestGame.TestProject.UnitTests
         }
 
         [TestMethod]
-        public void Quest_GetById_Count3()
+        public void Quest_GetById_Title1()
         {
-            var loggerMock = new Mock<ILoggerService>();
-
-            var questRepositoryMock = new Mock<IQuestRepository>();
-            questRepositoryMock.Setup(x => x.GetById(It.IsAny<int>()))
-                .Returns(new Quest { Title = "1", Id = 1 });
-
-            var dataManagerMoq = new Mock<IDataManager>();
-            dataManagerMoq.Setup(x => x.Quests)
-                .Returns(questRepositoryMock.Object);
-
-            var mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(x => x.Map<Quest, QuestDTO>(It.IsAny<Quest>()))
-                .Returns(new QuestDTO { Title = dataManagerMoq.Object.Quests.GetById(1).Title });
-
+            // arrange
             var controller = new QuestController(dataManagerMoq.Object, mapperMock.Object, loggerMock.Object);
 
             // act
@@ -75,44 +71,8 @@ namespace QuestGame.TestProject.UnitTests
 
             // assert
             Assert.AreEqual(result.Title, "1");
+            Assert.IsInstanceOfType(result, typeof(QuestDTO));
         }
     }
 
-    public class QuestRepositoryFake : IQuestRepository
-    {
-        public IEnumerable<Quest> GetAll()
-        {
-            return new List<Quest>
-            {
-                new Quest{ Title = "1" },
-                new Quest{ Title = "2" },
-                new Quest{ Title = "3" }
-            };
-        }
-
-        public Quest GetById(object id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Add(Quest item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Quest item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Quest item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(object id)
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

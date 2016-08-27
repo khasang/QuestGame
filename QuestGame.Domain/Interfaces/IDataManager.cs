@@ -14,8 +14,10 @@ namespace QuestGame.Domain.Interfaces
         IQuestRepository Quests { get; }
         IStageRepository Stages { get; }
         IMotionRepository Motions { get; }
-        IDbSet<ApplicationUser> Users { get; }
-        IDbSet<IdentityRole> Roles { get; }
+        IUserRepository Users { get; }
+        IRoleRepository Roles { get; }
+        ApplicationUserManager UserManager { get; }
+
 
         void Save();
     }

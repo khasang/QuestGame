@@ -15,9 +15,13 @@ namespace QuestGame.Domain
     {
         IApplicationDbContext dbContext;
 
+        ApplicationUserManager userManager;
         IQuestRepository questRepository;
         IStageRepository stageRepository;
         IMotionRepository motionRrepository;
+        IUserRepository userRepository;
+        
+        IRoleRepository roleRepository;
 
         public DataManager(IApplicationDbContext dbContext)
         {
@@ -60,19 +64,39 @@ namespace QuestGame.Domain
             }
         }
 
-        public IDbSet<ApplicationUser> Users
+        public IUserRepository Users
         {
             get
             {
-                return dbContext.GetUsers();
+                if (userRepository == null)
+                {
+                    userRepository = new EFUserRepository(dbContext);
+                }
+                return userRepository;
             }
         }
 
-        public IDbSet<IdentityRole> Roles
+        public IRoleRepository Roles
         {
             get
             {
-                return dbContext.GetRoles();
+                if (roleRepository == null)
+                {
+                    roleRepository = new EFRoleRepository(dbContext);
+                }
+                return roleRepository;
+            }
+        }
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                if (userManager == null)
+                {
+                    userManager = new ApplicationUserManager(new UserStore<ApplicationUser>((DbContext)(dbContext)));
+                }
+                return userManager;
             }
         }
 
