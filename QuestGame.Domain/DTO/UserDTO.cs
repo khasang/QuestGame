@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace QuestGame.Domain.DTO
 {
-    public class MotionDTO
+    public class UserDTO
     {
-        public string Description { get; set; }
-        public int? NextStageId { get; set; }
+        public string UserName { get; set; }
+        public string Token { get; set; }
     }
 }

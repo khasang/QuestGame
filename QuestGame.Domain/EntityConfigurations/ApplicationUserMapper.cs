@@ -15,6 +15,9 @@ namespace QuestGame.Domain.EntityConfigurations
             this.HasMany(x => x.Quests)
                 .WithRequired(x => x.Owner)
                 .HasForeignKey(x => x.OwnerId);
+
+            this.HasOptional(x => x.UserProfile)
+                .WithRequired(x => x.User);
         }
     }
 }

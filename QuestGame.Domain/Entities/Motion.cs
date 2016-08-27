@@ -23,14 +23,14 @@ namespace QuestGame.Domain.Entities
         /// Следующая сцена
         /// </summary>
         public int? NextStageId { get; set; }
-        [JsonIgnore]
+        //[JsonIgnore]
         public virtual Stage NextStage { get; set; }
 
         /// <summary>
         /// Внешний ключ, указывающий на сцену
         /// </summary>
         public int OwnerStageId { get; set; }
-        [JsonIgnore]
+        //[JsonIgnore]
         public virtual Stage OwnerStage { get; set; }
     }
 }

@@ -10,9 +10,9 @@ namespace QuestGame.Domain.Implementations
 {
     public class EFStageRepository : IStageRepository
     {
-        private ApplicationDbContext dbContext;
+        private IApplicationDbContext dbContext;
 
-        public EFStageRepository(ApplicationDbContext dbContext)
+        public EFStageRepository(IApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
         }

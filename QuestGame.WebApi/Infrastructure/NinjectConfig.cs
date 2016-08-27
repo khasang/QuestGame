@@ -5,6 +5,7 @@ using Ninject.Syntax;
 using QuestGame.Common;
 using QuestGame.Common.Interfaces;
 using QuestGame.Domain;
+using QuestGame.Domain.Implementations;
 using QuestGame.Domain.Interfaces;
 using QuestGame.WebApi.Mapping;
 using System;
@@ -76,9 +77,13 @@ namespace QuestGame.WebApi.Infrastructure
     {
         public override void Load()
         {
-            Bind<IDataManager>().To<DataManager>().InSingletonScope();
-            Bind<IMapper>().ToConstant(AutoMapperConfiguration.CreateMappings());
+            Bind<IApplicationDbContext>().To<ApplicationDbContext>();
+            Bind<IDataManager>().To<DataManager>();
             Bind<ILoggerService>().To<LoggerService>();
+            Bind<IMapper>().ToConstant(AutoMapperConfiguration.CreateMappings());
+            //Bind<IQuestRepository>().To<EFQuestRepository>();
+            //Bind<IStageRepository>().To<EFStageRepository>();
+            //Bind<IMotionRepository>().To<EFMotionRepository>();
         }
     }
 }

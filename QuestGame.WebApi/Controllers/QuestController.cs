@@ -15,9 +15,11 @@ using System.Web.Http;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
 using QuestGame.Common.Interfaces;
+using System.Web;
 
 namespace QuestGame.WebApi.Controllers
 {
+    [Authorize]
     [RoutePrefix("api/Quest")]
     public class QuestController : ApiController
     {
@@ -30,13 +32,14 @@ namespace QuestGame.WebApi.Controllers
             this.dataManager = dataManager;
             this.mapper = mapper;
             this.logger = logger;
+
+            logger.Information("Request | QuestController | from {0} | user: {1}", HttpContext.Current.Request.UserHostAddress, User.Identity.Name);
         }
 
-        [Route("Get")]
-        public IEnumerable<QuestDTO> GetQuest()
+        [HttpGet]
+        [Route("GetAll")]
+        public IEnumerable<QuestDTO> GetAll()
         {
-            logger.Information("Запрос на все квесты!");
-
             try
             {
                 var quests = dataManager.Quests.GetAll().ToList();
@@ -49,6 +52,61 @@ namespace QuestGame.WebApi.Controllers
                 Debug.WriteLine(ex.Message);
                 throw;
             }            
+        }
+
+        [HttpGet]
+        [Route("GetById")]
+        public QuestDTO GetById(int id)
+        {
+            var quest = dataManager.Quests.GetById(id);
+            var response = mapper.Map<Quest, QuestDTO>(quest);
+
+            return response;
+        }
+
+        [HttpPost]
+        [Route("Add")]
+        public IHttpActionResult Add(QuestDTO quest)
+        {
+            var model = mapper.Map<QuestDTO, Quest>(quest);
+
+            try
+            {
+                //var owner = dataManager.UserManager.FindByNameAsync(quest.Owner);
+                var owner = dataManager.Users.GetAll().FirstOrDefault(x => x.UserName == quest.Owner);
+                if (owner == null)
+                    throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+                model.Owner = owner;
+                model.Date = DateTime.Now;
+
+                dataManager.Quests.Add(model);
+                dataManager.Save();
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+        }
+
+        [HttpPut]
+        [Route("Update")]
+        public void Update(QuestDTO quest)
+        {
+            var model = mapper.Map<QuestDTO, Quest>(quest);
+            dataManager.Quests.Update(model);
+            dataManager.Save();
+        }
+
+        [HttpDelete]
+        [Route("Delete")]
+        public void Delete(QuestDTO quest)
+        {
+            var model = mapper.Map<QuestDTO, Quest>(quest);
+            dataManager.Quests.Delete(model);
+            dataManager.Save();
         }
     }    
 }
