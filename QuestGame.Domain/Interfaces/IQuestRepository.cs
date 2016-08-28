@@ -9,5 +9,7 @@ namespace QuestGame.Domain.Interfaces
 {
     public interface IQuestRepository : ICommonRepository<Quest>
     {
+        Quest GetByTitle(string title);
+        void DeleteByTitle(string title);
     }
 }

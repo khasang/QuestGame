@@ -95,7 +95,14 @@ namespace QuestGame.WebApi.Controllers
         [Route("Update")]
         public void Update(QuestDTO quest)
         {
-            var model = mapper.Map<QuestDTO, Quest>(quest);
+            var questEntity = dataManager.Quests.GetById(quest.Id);
+            var model = mapper.Map<QuestDTO, Quest>(quest, questEntity);
+
+            var owner = dataManager.Users.GetAll().FirstOrDefault(x => x.UserName == quest.Owner);
+            if (owner == null)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            model.Owner = owner;            
             dataManager.Quests.Update(model);
             dataManager.Save();
         }
@@ -105,8 +112,15 @@ namespace QuestGame.WebApi.Controllers
         public void Delete(QuestDTO quest)
         {
             var model = mapper.Map<QuestDTO, Quest>(quest);
-            dataManager.Quests.Delete(model);
-            dataManager.Save();
+
+            // Пока не работает. Нужен Id
+            //dataManager.Quests.Delete(model);
+
+            if (model != null && !string.IsNullOrEmpty(model.Title))
+            {
+                dataManager.Quests.DeleteByTitle(model.Title);
+                dataManager.Save();
+            }            
         }
     }    
 }

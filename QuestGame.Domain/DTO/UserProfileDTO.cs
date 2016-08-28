@@ -8,6 +8,7 @@ namespace QuestGame.Domain.DTO
 {
     public class UserProfileDTO
     {
+        public int Id { get; set; }
         public DateTime Birthday { get; set; }
         public bool Sex { get; set; }
     }
