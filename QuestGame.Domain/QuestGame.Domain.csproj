@@ -90,6 +90,11 @@
     <Compile Include="DBInitializers\DBInitialization.cs" />
     <Compile Include="DBInitializers\IInitialization.cs" />
     <Compile Include="DBInitializers\QuestsDBInit.cs" />
+    <Compile Include="DTO\ContentDTO.cs" />
+    <Compile Include="DTO\OperationDTO.cs" />
+    <Compile Include="DTO\QuestDTO.cs" />
+    <Compile Include="DTO\QuestRouteDTO.cs" />
+    <Compile Include="DTO\StageDTO.cs" />
     <Compile Include="Entities\ApplicationUser.cs" />
     <Compile Include="DBInitializers\InitUserAdmin.cs" />
     <Compile Include="Entities\Content.cs" />
@@ -114,9 +119,7 @@
     <Compile Include="Interfaces\DAL\IStageRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DTO\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />

@@ -6,6 +6,8 @@ using QuestGame.Domain.Implementations;
 using System;
 using System.Collections.Generic;
 using System.Web.Http.Dependencies;
+using AutoMapper;
+using QuestGame.WebApi.Mappings;
 
 namespace QuestGame.WebApi.Infrastructura
 {
@@ -71,6 +73,7 @@ namespace QuestGame.WebApi.Infrastructura
         public override void Load()
         {
             Bind<IDataManager>().To<EFDataManager>().InSingletonScope();
+            Bind<IMapper>().ToConstant(AutoMapperConfig.CreateMappings());
         }
     }
 }
