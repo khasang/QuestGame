@@ -74,6 +74,7 @@ namespace QuestGame.WebApi.Infrastructura
         {
             Bind<IDataManager>().To<EFDataManager>().InSingletonScope();
             Bind<IMapper>().ToConstant(AutoMapperConfig.CreateMappings());
+            Bind<IDBContext>().To<EFDBContext>().InSingletonScope();
         }
     }
 }

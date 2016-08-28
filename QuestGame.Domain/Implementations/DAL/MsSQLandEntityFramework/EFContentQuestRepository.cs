@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using QuestGame.Domain.Entities;
+using QuestGame.Domain.Interfaces;
 
 namespace QuestGame.Domain.Implementations
 {
     class EFContentQuestRepository : QuestGame.Domain.Interfaces.IContentQuestRepository
     {
-        private ApplicationDbContext db;
+        private IDBContext db;
 
-        public EFContentQuestRepository(ApplicationDbContext dbContext)
+        public EFContentQuestRepository(IDBContext dbContext)
         {
             db = dbContext;
         }
@@ -48,7 +49,7 @@ namespace QuestGame.Domain.Implementations
 
         public void Update(ContentQuest item)
         {
-            db.Entry<ContentQuest>(item);
+           // db.Entry<ContentQuest>(item);
         }
     }
 }

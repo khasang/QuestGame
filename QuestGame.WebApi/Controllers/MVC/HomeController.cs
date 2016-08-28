@@ -38,7 +38,7 @@ namespace QuestGame.WebApi.Controllers
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 var response = await client.GetAsync(@"api/Quests");
-                var responseData = await response.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
+                var responseData = await response.Content.ReadAsAsync<IEnumerable<Quest>>();
 
                 if (response.IsSuccessStatusCode)
                 {

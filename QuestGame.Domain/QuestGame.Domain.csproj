@@ -107,11 +107,13 @@
     <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFDataManager.cs" />
     <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFContentQuestRepository.cs" />
     <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFContentStqgeRepository.cs" />
+    <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFDBContext.cs" />
     <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFOperationRepository.cs" />
     <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFQuestRepository.cs" />
     <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFStageRepository.cs" />
     <Compile Include="Interfaces\DAL\IContentStageRepository.cs" />
     <Compile Include="Interfaces\DAL\IDataManager.cs" />
+    <Compile Include="Interfaces\DAL\IDBContext.cs" />
     <Compile Include="Interfaces\DAL\IOperationRepository.cs" />
     <Compile Include="Interfaces\DAL\IContentQuestRepository.cs" />
     <Compile Include="Interfaces\DAL\IQuestRepository.cs" />
