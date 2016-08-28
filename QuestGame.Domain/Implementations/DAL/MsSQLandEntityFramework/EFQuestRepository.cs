@@ -9,7 +9,7 @@ using QuestGame.Domain.Interfaces;
 
 namespace QuestGame.Domain.Implementations
 {
-    class EFQuestRepository : QuestGame.Domain.Interfaces.IQuestRepository
+    class EFQuestRepository : IQuestRepository
     {
         private IDBContext db;
 
@@ -46,6 +46,11 @@ namespace QuestGame.Domain.Implementations
         public Quest GetByID(object id)
         {
             return db.Quests.Find( (int)id );
+        }
+
+        public void Save()
+        {
+            db.Save();
         }
 
         public void Update(Quest item)

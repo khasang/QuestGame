@@ -8,7 +8,7 @@ using QuestGame.Domain.Interfaces;
 
 namespace QuestGame.Domain.Implementations
 {
-    class EFContentQuestRepository : QuestGame.Domain.Interfaces.IContentQuestRepository
+    class EFContentQuestRepository : IContentQuestRepository
     {
         private IDBContext db;
 
@@ -45,6 +45,11 @@ namespace QuestGame.Domain.Implementations
         public ContentQuest GetByID(object id)
         {
             return db.QuestContents.Find((int)id);
+        }
+
+        public void Save()
+        {
+            db.Save();
         }
 
         public void Update(ContentQuest item)

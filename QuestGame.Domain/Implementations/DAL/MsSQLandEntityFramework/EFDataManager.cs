@@ -91,7 +91,7 @@ namespace QuestGame.Domain.Implementations
 
         public void Save()
         {
-           // db.SaveChanges();
+            db.Save();
         }
 
 

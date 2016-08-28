@@ -106,7 +106,7 @@
     <Compile Include="Entities\ContentStage.cs" />
     <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFDataManager.cs" />
     <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFContentQuestRepository.cs" />
-    <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFContentStqgeRepository.cs" />
+    <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFContentStageRepository.cs" />
     <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFDBContext.cs" />
     <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFOperationRepository.cs" />
     <Compile Include="Implementations\DAL\MsSQLandEntityFramework\EFQuestRepository.cs" />

@@ -9,7 +9,7 @@ using QuestGame.Domain.Interfaces;
 
 namespace QuestGame.Domain.Implementations
 {
-    class EFStageRepository : QuestGame.Domain.Interfaces.IStageRepository
+    class EFStageRepository : IStageRepository
     {
         private IDBContext db;
 
@@ -46,6 +46,11 @@ namespace QuestGame.Domain.Implementations
         public Stage GetByID(object id)
         {
             return db.Stages.Find((int)id);
+        }
+
+        public void Save()
+        {
+            db.Save();
         }
 
         public void Update(Stage item)

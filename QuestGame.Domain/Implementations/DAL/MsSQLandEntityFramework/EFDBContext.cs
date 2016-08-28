@@ -30,6 +30,11 @@ namespace QuestGame.Domain.Implementations
             return new ApplicationDbContext();
         }
 
+        public void Save()
+        {
+            this.SaveChanges();
+        }
+
 
         protected override void OnModelCreating(
             DbModelBuilder modelBuilder)

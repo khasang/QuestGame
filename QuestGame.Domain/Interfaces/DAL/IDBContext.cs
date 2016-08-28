@@ -17,5 +17,7 @@ namespace QuestGame.Domain.Interfaces
 
         DbSet<ContentQuest> QuestContents { get; set; }
         DbSet<ContentStage> StageContents { get; set; }
+
+        void Save();
     }
 }

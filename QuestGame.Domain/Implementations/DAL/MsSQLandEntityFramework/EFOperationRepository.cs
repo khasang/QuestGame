@@ -8,7 +8,7 @@ using QuestGame.Domain.Interfaces;
 
 namespace QuestGame.Domain.Implementations
 {
-    class EFOperationRepository : QuestGame.Domain.Interfaces.IOperationRepository
+    class EFOperationRepository : IOperationRepository
     {
         private IDBContext db;
 
@@ -45,6 +45,11 @@ namespace QuestGame.Domain.Implementations
         public Operation GetByID(object id)
         {
             return db.Operations.Find((int)id);
+        }
+
+        public void Save()
+        {
+            db.Save();
         }
 
         public void Update(Operation item)
