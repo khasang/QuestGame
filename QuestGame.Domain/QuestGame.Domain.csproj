@@ -94,6 +94,7 @@
     <Compile Include="DBInitializers\InitUserProfile.cs" />
     <Compile Include="DTO\MotionDTO.cs" />
     <Compile Include="DTO\QuestDTO.cs" />
+    <Compile Include="DTO\QuestFullDTO.cs" />
     <Compile Include="DTO\StageDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="DTO\UserProfileDTO.cs" />

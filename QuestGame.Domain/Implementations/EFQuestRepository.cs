@@ -44,7 +44,7 @@ namespace QuestGame.Domain.Implementations
 
         public void Delete(Quest item)
         {
-            dbContext.Quests.Remove(item);
+            var q = dbContext.Quests.Remove(item);
         }
 
         public void DeleteByTitle(string title)

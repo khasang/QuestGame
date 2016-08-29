@@ -36,10 +36,10 @@ namespace QuestGame.TestProject.UnitTests
                           .Returns(new Quest { Title = "1", Id = 1 });
 
             mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(x => x.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(It.IsAny<IEnumerable<Quest>>()))
-                      .Returns(dataManagerMoq.Object.Quests.GetAll().Select(x => new QuestDTO { Title = x.Title }));
-            mapperMock.Setup(x => x.Map<Quest, QuestDTO>(It.IsAny<Quest>()))
-                      .Returns(new QuestDTO { Title = dataManagerMoq.Object.Quests.GetById(It.IsAny<int>()).Title });
+            mapperMock.Setup(x => x.Map<IEnumerable<Quest>, IEnumerable<QuestFullDTO>>(It.IsAny<IEnumerable<Quest>>()))
+                      .Returns(dataManagerMoq.Object.Quests.GetAll().Select(x => new QuestFullDTO { Title = x.Title }));
+            mapperMock.Setup(x => x.Map<Quest, QuestFullDTO>(It.IsAny<Quest>()))
+                      .Returns(new QuestFullDTO { Title = dataManagerMoq.Object.Quests.GetById(It.IsAny<int>()).Title });
 
         }
 
@@ -47,14 +47,14 @@ namespace QuestGame.TestProject.UnitTests
         public void Quest_GetAll_Count3()
         {
             // arrange
-            var controller = new QuestController(dataManagerMoq.Object, mapperMock.Object, loggerMock.Object);
+            var controller = new QuestFullController(dataManagerMoq.Object, mapperMock.Object, loggerMock.Object);
 
             // act
             var result = controller.GetAll();
 
             // assert
             Assert.AreEqual(result.Count(), 3);
-            Assert.IsInstanceOfType(result, typeof (IEnumerable<QuestDTO>));
+            Assert.IsInstanceOfType(result, typeof (IEnumerable<QuestFullDTO>));
             Assert.AreEqual(result.ElementAt(0).Title, "1");
             Assert.AreEqual(result.ElementAt(1).Title, "2");
             Assert.AreEqual(result.ElementAt(2).Title, "3");
@@ -64,14 +64,14 @@ namespace QuestGame.TestProject.UnitTests
         public void Quest_GetById_Title1()
         {
             // arrange
-            var controller = new QuestController(dataManagerMoq.Object, mapperMock.Object, loggerMock.Object);
+            var controller = new QuestFullController(dataManagerMoq.Object, mapperMock.Object, loggerMock.Object);
 
             // act
             var result = controller.GetById(1);
 
             // assert
             Assert.AreEqual(result.Title, "1");
-            Assert.IsInstanceOfType(result, typeof(QuestDTO));
+            Assert.IsInstanceOfType(result, typeof(QuestFullDTO));
         }
     }
 

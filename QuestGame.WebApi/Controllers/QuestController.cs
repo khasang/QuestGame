@@ -40,18 +40,10 @@ namespace QuestGame.WebApi.Controllers
         [Route("GetAll")]
         public IEnumerable<QuestDTO> GetAll()
         {
-            try
-            {
-                var quests = dataManager.Quests.GetAll().ToList();
+            var quests = dataManager.Quests.GetAll().ToList();
 
-                var response = mapper.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(quests);           
-                return response;
-            }
-            catch(Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                throw;
-            }            
+            var response = mapper.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(quests);
+            return response;
         }
 
         [HttpGet]
@@ -59,8 +51,8 @@ namespace QuestGame.WebApi.Controllers
         public QuestDTO GetById(int id)
         {
             var quest = dataManager.Quests.GetById(id);
-            var response = mapper.Map<Quest, QuestDTO>(quest);
 
+            var response = mapper.Map<Quest, QuestDTO>(quest);
             return response;
         }
 
@@ -70,25 +62,16 @@ namespace QuestGame.WebApi.Controllers
         {
             var model = mapper.Map<QuestDTO, Quest>(quest);
 
-            try
-            {
-                //var owner = dataManager.UserManager.FindByNameAsync(quest.Owner);
-                var owner = dataManager.Users.GetAll().FirstOrDefault(x => x.UserName == quest.Owner);
-                if (owner == null)
-                    throw new HttpResponseException(HttpStatusCode.BadRequest);
-
-                model.Owner = owner;
-                model.Date = DateTime.Now;
-
-                dataManager.Quests.Add(model);
-                dataManager.Save();
-                return Ok();
-            }
-            catch(Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
+            var owner = dataManager.Users.GetAll().FirstOrDefault(x => x.UserName == quest.Owner);
+            if (owner == null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
-            }
+
+            model.Owner = owner;
+            model.Date = DateTime.Now;
+
+            dataManager.Quests.Add(model);
+            dataManager.Save();
+            return Ok();
         }
 
         [HttpPut]
@@ -102,7 +85,7 @@ namespace QuestGame.WebApi.Controllers
             if (owner == null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            model.Owner = owner;            
+            model.Owner = owner;
             dataManager.Quests.Update(model);
             dataManager.Save();
         }
@@ -115,14 +98,15 @@ namespace QuestGame.WebApi.Controllers
 
             // Пока не работает. Нужен Id
             //dataManager.Quests.Delete(model);
+            //dataManager.Save();
 
             if (model != null && !string.IsNullOrEmpty(model.Title))
             {
                 dataManager.Quests.DeleteByTitle(model.Title);
                 dataManager.Save();
-            }            
+            }
         }
-    }    
+    }
 }
 
-    
+
