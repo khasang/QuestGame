@@ -19,84 +19,7 @@ namespace QuestGame.TestProject.IntegrationTests
     [TestClass]
     public class AccountTest
     {
-        [TestMethod]
-        public void QuestGame_Authorize1_Success()
-        {
-            var driver = ChromeDriver; // new ChromeDriver();
-            driver.Navigate().GoToUrl("http://localhost:9243/Home/Login");
-
-            var login = driver.FindElementById("loginTextBox");
-            login.SendKeys("admin@admin.com");
-
-            var password = driver.FindElementById("passwordTextBox");
-            password.SendKeys("qwerty");
-
-            var button = driver.FindElementById("enterButton");
-            button.Click();
-
-            Thread.Sleep(5000);
-
-            var name = driver.FindElementById("userName");
-
-            Assert.IsTrue(name.Text.Contains("admin@admin.com"));
-
-            driver.Close();
-        }
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            // Start IISExpress
-            StartIIS();
-
-            this.ChromeDriver = new ChromeDriver();
-        }
-
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            // Ensure IISExpress is stopped
-            if (_iisProcess.HasExited == false)
-            {
-                _iisProcess.Kill();
-            }
-
-            this.ChromeDriver.Quit();
-        }
-
-        public ChromeDriver ChromeDriver { get; set; }
-        const int iisPort = 7085;
-        private string _applicationName = "QuestGame.WebApi";
-        private Process _iisProcess;
-
-        private void StartIIS()
-        {
-            var applicationPath = GetApplicationPath(_applicationName);
-            var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-
-            _iisProcess = new Process();
-            _iisProcess.StartInfo.FileName = programFiles + @"\IIS Express\iisexpress.exe";
-            _iisProcess.StartInfo.Arguments = string.Format("/path:{0} /port:{1}", applicationPath, iisPort);
-            _iisProcess.Start();
-        }
-
-
-        protected virtual string GetApplicationPath(string applicationName)
-        {
-            var solutionFolder = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory)));
-            return Path.Combine(solutionFolder, applicationName);
-        }
-
-        public string GetAbsoluteUrl(string relativeUrl)
-        {
-            if (!relativeUrl.StartsWith("/"))
-            {
-                relativeUrl = "/" + relativeUrl;
-            }
-            return String.Format("http://localhost:{0}{1}", iisPort, relativeUrl);
-        }
-
+        private static Random rnd = new Random();
 
         [TestMethod]
         public void QuestGame_Authorize_Success()
@@ -121,6 +44,63 @@ namespace QuestGame.TestProject.IntegrationTests
             Assert.IsTrue(name.Text.Contains("admin@admin.com"));
 
             driver.Close();
+        }
+
+        [TestMethod]
+        public void QuestGame_Registration_Succes()
+        {
+            var rndEmail = GetRndEmail();
+
+            var driver = new ChromeDriver();
+            driver.Navigate().GoToUrl("http://localhost:9243/Home/Register");
+
+            // Регистрация
+
+            var login = driver.FindElementById("Email");
+            login.SendKeys(rndEmail);
+
+            var password = driver.FindElementById("Password");
+            password.SendKeys("qwerty");
+
+            var confirmPassword = driver.FindElementById("ConfirmPassword");
+            confirmPassword.SendKeys("qwerty");
+
+            var button = driver.FindElementById("registerButton");
+            button.Click();
+
+            Thread.Sleep(5000);
+
+            // Логинимся
+
+            driver.Navigate().GoToUrl("http://localhost:9243/Home/Login");
+
+            var login1 = driver.FindElementById("loginTextBox");
+            login1.SendKeys(rndEmail);
+
+            var password1 = driver.FindElementById("passwordTextBox");
+            password1.SendKeys("qwerty");
+
+            var button1 = driver.FindElementById("enterButton");
+            button1.Click();
+
+            Thread.Sleep(5000);
+
+            var name = driver.FindElementById("userName");
+
+            Assert.IsTrue(name.Text.Contains(rndEmail));
+
+            driver.Close();
+        }
+
+        private string GetRndEmail()
+        {
+            StringBuilder text = new StringBuilder();
+
+            for (int i = 0; i < 8; i++)
+                text.Append("abcdefghijklmnopqrstuvwxyz"[rnd.Next(0, 26)]);
+            text.Append("@admin.com");
+
+            return text.ToString();
         }
     }
 }
