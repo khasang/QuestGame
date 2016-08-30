@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace QuestGame.WebApi.Controllers.MVC
 {
-    public class UserQuestsController : Controller
+    public class QuestsController : Controller
     {
         // GET: UserQuests
         public async Task<ActionResult> Index()
@@ -35,6 +35,24 @@ namespace QuestGame.WebApi.Controllers.MVC
             }
 
             return View();
+        }
+
+        public ActionResult Add()
+        {
+            ViewBag.Message = "Добавление";
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> Add ( Models.QuestVM quest )
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return null;
         }
     }
 }

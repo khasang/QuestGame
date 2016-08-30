@@ -243,7 +243,7 @@
     <Compile Include="Controllers\MVC\HomeController.cs" />
     <Compile Include="Controllers\MVC\RegisterController.cs" />
     <Compile Include="Controllers\API\ValuesController.cs" />
-    <Compile Include="Controllers\MVC\UserQuestsController.cs" />
+    <Compile Include="Controllers\MVC\QuestsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -253,6 +253,7 @@
     <Compile Include="Models\IdentityModels.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\QuestViewModels\QuestVM.cs" />
     <Compile Include="Models\UserInvite.cs" />
     <Compile Include="Models\UserLogin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -334,7 +335,7 @@
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Test.cshtml" />
     <Content Include="Views\Register\Index.cshtml" />
-    <Content Include="Views\UserQuests\Index.cshtml" />
+    <Content Include="Views\Quests\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
