@@ -63,7 +63,7 @@ namespace QuestGame.WebApi.Controllers.MVC
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", usr.Token);
 
-                var response = await client.PostAsJsonAsync(@"api/Quests/AddQuest", quest);
+                var response = await client.PostAsJsonAsync(@"api/Quests/Add", quest);
 
                 if (response.IsSuccessStatusCode)
                 {

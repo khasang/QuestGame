@@ -71,6 +71,7 @@ namespace QuestGame.WebApi.Controllers
 
         // Add
         [HttpPost]
+        [Route("Add")]
         public IHttpActionResult AddQuest( QuestVM quest )
         {
             var q = mapper.Map<QuestVM, Quest>(quest);
