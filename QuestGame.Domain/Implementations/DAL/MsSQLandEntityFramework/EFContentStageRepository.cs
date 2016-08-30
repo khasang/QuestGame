@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using QuestGame.Domain.Entities;
+using QuestGame.Domain.Interfaces;
 
 namespace QuestGame.Domain.Implementations
 {
-    class EFContentStageRepository : QuestGame.Domain.Interfaces.IContentStageRepository
+    class EFContentStageRepository : IContentStageRepository
     {
-        private ApplicationDbContext db;
+        private IDBContext db;
 
-        public EFContentStageRepository(ApplicationDbContext dbContext)
+        public EFContentStageRepository(IDBContext dbContext)
         {
             db = dbContext;
         }
@@ -46,9 +47,14 @@ namespace QuestGame.Domain.Implementations
             return db.StageContents.Find((int)id);
         }
 
+        public void Save()
+        {
+            db.Save();
+        }
+
         public void Update(ContentStage item)
         {
-            db.Entry<ContentStage>(item);
+           // db.Entry<ContentStage>(item);
         }
     }
 }

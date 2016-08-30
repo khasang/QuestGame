@@ -12,22 +12,30 @@ using QuestGame.Domain.Implementations;
 using System;
 using QuestGame.Domain.Interfaces;
 using System.Threading;
+using AutoMapper;
+using QuestGame.Domain.DTO;
+using QuestGame.WebApi.Mappings;
 
 namespace QuestGame.WebApi.Controllers
 {
     public class QuestsController : ApiController
     {
         IDataManager dataManager;
+        IMapper mapper;
 
-        public QuestsController( IDataManager dataManager )
+        public QuestsController( IDataManager dataManager, IMapper mapper)
         {
             this.dataManager = dataManager;
+            this.mapper = mapper;
         }
 
         // GET: api/Quests
-        public IEnumerable<Quest> GetQuests()
+        public IEnumerable<QuestDTO> GetQuests()
         {
-            return dataManager.Quests.GetAll().ToList();
+            var quests = dataManager.Quests.GetAll().ToList();
+            var response = mapper.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(quests);
+
+            return response;
         }
 
         // GET: api/Quests/5

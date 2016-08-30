@@ -16,11 +16,11 @@ namespace QuestGame.Domain.Implementations
         IContentQuestRepository contentQuestRepository;
         IContentStageRepository contentStageRepository;
 
-        ApplicationDbContext db;
+        IDBContext db;
 
-        public EFDataManager()
+        public EFDataManager(IDBContext db)
         {
-            this.db = new ApplicationDbContext();
+            this.db = db;
         }
 
 
@@ -91,7 +91,7 @@ namespace QuestGame.Domain.Implementations
 
         public void Save()
         {
-            db.SaveChanges();
+            db.Save();
         }
 
 

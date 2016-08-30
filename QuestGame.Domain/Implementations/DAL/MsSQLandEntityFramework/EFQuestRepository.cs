@@ -5,14 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using QuestGame.Domain.Entities;
 using System.Data.Entity;
+using QuestGame.Domain.Interfaces;
 
 namespace QuestGame.Domain.Implementations
 {
-    class EFQuestRepository : QuestGame.Domain.Interfaces.IQuestRepository
+    class EFQuestRepository : IQuestRepository
     {
-        private ApplicationDbContext db;
+        private IDBContext db;
 
-        public EFQuestRepository(ApplicationDbContext dbContext )
+        public EFQuestRepository(IDBContext dbContext )
         {
             this.db = dbContext;
         }
@@ -47,9 +48,14 @@ namespace QuestGame.Domain.Implementations
             return db.Quests.Find( (int)id );
         }
 
+        public void Save()
+        {
+            db.Save();
+        }
+
         public void Update(Quest item)
         {
-            db.Entry<Quest>(item).State = EntityState.Modified;
+           // db.Entry<Quest>(item).State = EntityState.Modified;
         }
     }
 }

@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using QuestGame.Domain.Entities;
+using QuestGame.Domain.Interfaces;
 
 namespace QuestGame.Domain.Implementations
 {
-    class EFOperationRepository : QuestGame.Domain.Interfaces.IOperationRepository
+    class EFOperationRepository : IOperationRepository
     {
-        private ApplicationDbContext db;
+        private IDBContext db;
 
-        public EFOperationRepository(ApplicationDbContext dbContext)
+        public EFOperationRepository(IDBContext dbContext)
         {
             db = dbContext;
         }
@@ -46,9 +47,14 @@ namespace QuestGame.Domain.Implementations
             return db.Operations.Find((int)id);
         }
 
+        public void Save()
+        {
+            db.Save();
+        }
+
         public void Update(Operation item)
         {
-            db.Entry<Operation>(item);
+            //db.Entry<Operation>(item);
         }
     }
 }

@@ -15,5 +15,7 @@ namespace QuestGame.Domain.Interfaces
         void Update(T item);
         void Delete(T item);
         void Delete( object id);
+
+        void Save();
     }
 }
