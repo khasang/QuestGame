@@ -75,7 +75,7 @@ namespace QuestGame.WebApi.Controllers.MVC
                 }
             }
 
-            return null;
+            return View("Index");
         }
     }
 }

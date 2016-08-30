@@ -19,6 +19,7 @@ using QuestGame.WebApi.Models;
 
 namespace QuestGame.WebApi.Controllers
 {
+    [RoutePrefix("api/Quests")]
     public class QuestsController : ApiController
     {
         IDataManager dataManager;
@@ -74,20 +75,20 @@ namespace QuestGame.WebApi.Controllers
         [Route("Add")]
         public IHttpActionResult AddQuest( QuestVM quest )
         {
-            var q = mapper.Map<QuestVM, Quest>(quest);
-            var c = mapper.Map<QuestVM, ContentQuest>(quest);
-
-            
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            var q = mapper.Map<QuestVM, Quest>(quest);
+            var c = mapper.Map<QuestVM, ContentQuest>(quest);
+
+            q.Content = c;
+
             dataManager.Quests.Add(q);
             dataManager.Save();
 
-            return CreatedAtRoute("DefaultApi", new { id = q.Id }, quest);
+            return Ok(q);
         }
 
         // Update
