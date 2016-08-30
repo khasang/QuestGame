@@ -15,6 +15,7 @@ using System.Threading;
 using AutoMapper;
 using QuestGame.Domain.DTO;
 using QuestGame.WebApi.Mappings;
+using QuestGame.WebApi.Models;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -69,18 +70,23 @@ namespace QuestGame.WebApi.Controllers
         }
 
         // Add
-        [ResponseType(typeof(Quest))]
-        public IHttpActionResult AddQuest(Quest quest)
+        [HttpPost]
+        public IHttpActionResult AddQuest( QuestVM quest )
         {
+            var q = mapper.Map<QuestVM, Quest>(quest);
+            var c = mapper.Map<QuestVM, ContentQuest>(quest);
+
+            
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            dataManager.Quests.Add(quest);
+            dataManager.Quests.Add(q);
             dataManager.Save();
 
-            return CreatedAtRoute("DefaultApi", new { id = quest.Id }, quest);
+            return CreatedAtRoute("DefaultApi", new { id = q.Id }, quest);
         }
 
         // Update

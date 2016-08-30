@@ -94,6 +94,7 @@
     <Compile Include="DTO\OperationDTO.cs" />
     <Compile Include="DTO\QuestDTO.cs" />
     <Compile Include="DTO\QuestRouteDTO.cs" />
+    <Compile Include="DTO\QuestVmDTO.cs" />
     <Compile Include="DTO\StageDTO.cs" />
     <Compile Include="Entities\ApplicationUser.cs" />
     <Compile Include="DBInitializers\InitUserAdmin.cs" />
