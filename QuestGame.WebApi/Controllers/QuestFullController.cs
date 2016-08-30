@@ -33,7 +33,7 @@ namespace QuestGame.WebApi.Controllers
             this.mapper = mapper;
             this.logger = logger;
 
-            logger.Information("Request | QuestController | from {0} | user: {1}", HttpContext.Current.Request.UserHostAddress, User.Identity.Name);
+            //logger.Information("Request | QuestController | from {0} | user: {1}", HttpContext.Current.Request.UserHostAddress, User.Identity.Name);
         }
 
         [HttpGet]
@@ -88,14 +88,13 @@ namespace QuestGame.WebApi.Controllers
         public void Update(QuestFullDTO quest)
         {
             var questEntity = dataManager.Quests.GetById(quest.Id);
-            var model = mapper.Map<QuestFullDTO, Quest>(quest, questEntity);
+            mapper.Map<QuestFullDTO, Quest>(quest, questEntity);
 
             var owner = dataManager.Users.GetAll().FirstOrDefault(x => x.UserName == quest.Owner);
             if (owner == null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            model.Owner = owner;
-            dataManager.Quests.Update(model);
+            dataManager.Quests.Update(questEntity);
             dataManager.Save();
         }
 
