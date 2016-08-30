@@ -1,0 +1,34 @@
+﻿@model IEnumerable<QuestGame.Domain.DTO.QuestDTO> 
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Rate</th>
+        <th>Active</th>
+        <th>Author</th>
+    </tr>
+    </thead>
+    <tbody>
+    @{
+        foreach (var quest in Model)
+        {
+            <tr>
+                <td>@quest.Id</td>
+                <td>@quest.Title</td>
+                <td>@quest.Date</td>
+                <td>@quest.Rate</td>
+                <td>@quest.Active</td>
+                <td>@quest.Owner</td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
