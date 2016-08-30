@@ -44,11 +44,6 @@ namespace QuestGame.Domain
             base.SaveChanges();
         }
 
-        public new void Dispose()
-        {
-            base.Dispose();        
-        }
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             // Здесь подключаем настройки связей сущностей между собой
