@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Web.Http.Dependencies;
 using AutoMapper;
 using QuestGame.WebApi.Mappings;
+using QuestGame.WebApi.Controllers;
 
 namespace QuestGame.WebApi.Infrastructura
 {

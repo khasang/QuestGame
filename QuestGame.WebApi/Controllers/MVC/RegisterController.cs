@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Security;
-//using System.Web.Http;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using QuestGame.WebApi.Models;
-using System.Text;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Serilog;
-
+using QuestGame.Domain.Implementations;
+using QuestGame.Domain.Interfaces;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -35,17 +27,11 @@ namespace QuestGame.WebApi.Controllers
 
         [HttpPost]
         public async Task<ActionResult> Index( UserInvite user )
-        {             
+        {
+            IRequest client = new DirectRequest();
+            var response = await client.PostRequestAsync(@"api/Account/Register", user);
 
-            using ( var client = new HttpClient() )
-            {
-                client.BaseAddress = new Uri("http://localhost:9243");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                var response = await client.PostAsJsonAsync(@"api/Account/Register", user);
-
-                if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
                 {
                     ViewBag.Message = "Успешная регистрация";
 
@@ -55,7 +41,6 @@ namespace QuestGame.WebApi.Controllers
                 {
                     ViewBag.Message = "Что-то пошло не так";
                 }
-            }
 
             return View("CreateUser");
         }

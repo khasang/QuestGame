@@ -11,6 +11,9 @@ namespace QuestGame.Domain.Implementations
     {
         private HttpClient client;
 
+        /// <summary>
+        /// HttpClient без авторизации 
+        /// </summary>
         public DirectRequest()
         {
             this.client = new HttpClient();
@@ -26,6 +29,22 @@ namespace QuestGame.Domain.Implementations
             try
             {
                 response = await client.GetAsync(requestUri);
+            }
+            finally
+            {
+                client.Dispose();
+            }
+
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> PostRequestAsync<T>(string requestUri, T value)
+        {
+            var response = new HttpResponseMessage();
+
+            try
+            {
+                response = await client.PostAsJsonAsync(requestUri, value);
             }
             finally
             {

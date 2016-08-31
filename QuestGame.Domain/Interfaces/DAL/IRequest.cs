@@ -10,5 +10,6 @@ namespace QuestGame.Domain.Interfaces
     public interface IRequest
     {
         Task<HttpResponseMessage> GetRequestAsync(string requestUri);
+        Task<HttpResponseMessage> PostRequestAsync<T>(string requestUri, T value);
     }
 }

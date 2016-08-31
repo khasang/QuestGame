@@ -48,28 +48,8 @@ namespace QuestGame.WebApi.Controllers.MVC
                 return RedirectToAction("Index");
             }
 
-
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("http://localhost:9243");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                ApplicationUser usr = Session["UserInfo"] as ApplicationUser;
-
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", usr.Token);
-
-                var response = await client.PostAsJsonAsync(@"api/Quests/Add", quest);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    ViewBag.Message = "Успешная регистрация";
-                }
-                else
-                {
-                    ViewBag.Message = "Что-то пошло не так";
-                }
-            }
+            var client = new AuthRequest( (Session["UserInfo"] as ApplicationUser).Token );
+            var response = await client.PostRequestAsync(@"api/Quests/Add", quest);
 
             return View("Index");
         }

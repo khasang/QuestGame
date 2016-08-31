@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Configuration;
-using System.Web.SessionState;
 
 namespace QuestGame.Domain.Implementations
 {
@@ -14,6 +13,9 @@ namespace QuestGame.Domain.Implementations
 
         private HttpClient client;
 
+        /// <summary>
+        /// HttpClient c авторизацией через токен
+        /// </summary>
         public AuthRequest( string token )
         {
             this.Token = token;
@@ -25,13 +27,13 @@ namespace QuestGame.Domain.Implementations
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.Token);
         }
 
-        public async Task<HttpResponseMessage> PostRequestAsync(string requestUri, string value)
+        public async Task<HttpResponseMessage> PostRequestAsync<T>(string requestUri, T value)
         {
             var response = new HttpResponseMessage();
 
             try
             {
-               // response = await client.PostAsJsonAsync(requestUri, value);
+                response = await client.PostAsJsonAsync(requestUri, value);
             }
             finally
             {
