@@ -1,0 +1,37 @@
+﻿@model IEnumerable<QuestGame.Domain.Entities.Quest>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row jumbotron">
+    <h2>@ViewBag.Title</h2>
+</div>
+<div class="row">
+    <a href="Quests/AddQuest">
+        <div class="col-sm-3">
+            <div class="thumbnail">
+                <img src="http://isot.bmstu.ru/assets/templates/main/images/pkp/plus.png" style="width:100px">
+                <div class="caption">
+                    <h3 style="margin: 0 auto">Добавить Квест</h3>
+                </div>
+            </div>
+        </div>
+    </a>
+    @foreach (var Item in Model)
+    {
+        <div class="col-sm-3" style="max-height: 278px; overflow: auto;">
+            <div class="thumbnail">
+                <img src="@Item.Content.Image" style="width:100px">
+                <div class="caption">
+                    <h3>@Item.Title</h3>
+                    <p>@Item.Content.Text</p>
+                    <p><a href="#" class="btn btn-primary" role="button">Кнопка</a>
+                       <a href="Quests/RemoveQuest/@Item.Id" class="btn btn-default" role="button" data-id="@Item.Id">Удаление</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

@@ -37,7 +37,7 @@ namespace QuestGame.WebApi.Controllers
 
             if (response.IsSuccessStatusCode)
                 {
-                    ViewBag.Quests = responseData.OrderByDescending( q => q.AddDate );
+                    ViewBag.Quests = responseData.OrderByDescending( q => q.AddDate ).Take(5);
                 }
                 else
                 {
@@ -47,7 +47,7 @@ namespace QuestGame.WebApi.Controllers
 
             using (var db = new QuestGame.Domain.ApplicationDbContext())
             {
-                ViewBag.Users = db.Users.OrderByDescending(u => u.AddDate).Select(u => u.UserName).ToList();
+                ViewBag.Users = db.Users.OrderByDescending(u => u.AddDate).Select(u => u.UserName).ToList().Take(5);
             }
 
             return View();
