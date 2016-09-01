@@ -15,6 +15,8 @@ namespace QuestGame.WebApi.Mapping
             {
                 cfg.AddProfile<EntityToDTOMappingProfile>();
                 cfg.AddProfile<DTOToEntitylMappingProfile>();
+                cfg.AddProfile<DTOToViewModelMappingProfile>();
+                cfg.AddProfile<ViewModelToDTOMappingProfile>();
             }).CreateMapper();
         }
     }

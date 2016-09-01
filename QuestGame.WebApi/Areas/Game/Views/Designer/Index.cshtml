@@ -1,0 +1,52 @@
+﻿@model IEnumerable<QuestGame.WebApi.Areas.Game.Models.QuestViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading"><h2>Редактор квестов</h2></div>
+        <div class="panel-body">
+            <div>
+                @Html.ActionLink("Добавить новый квест", "AddQuest", "Designer", new { @class = "btn btn-primary btn-lg" })
+            </div>
+        </div>
+        @{ 
+            if(Model.Count() == 0)
+            {
+                <p>Нет созданных Вами квестов...</p>
+            }
+            else
+            {
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Атор</th>
+                            <th>Дата создания</th>
+                            <th>Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var quest in Model)
+                    {
+                        <tr>
+                            <td>@Html.ActionLink(quest.Title, "Details", new { id = quest.Title }, null)</td>
+                            <td>@quest.Owner</td>
+                            <td>@quest.Date</td>
+                            <td>
+                                <a href=@Url.Action("Details", "Designer", new { title = quest.Title }, null)><span class="glyphicon glyphicon-info-sign"></span></a>
+                                <a href=@Url.Action("Edit", "Designer", new { title = quest.Title }, null)><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a href=@Url.Action("DeleteQuest", "Designer", new { title = quest.Title }, null)><span class="glyphicon glyphicon-remove-circle"></span></a>                               
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            }
+        }        
+    </div>
+    @Html.ActionLink("Назад", "Index", "MainPage", new { area = "Game" }, new { @class = "btn btn-default" })
+</div>

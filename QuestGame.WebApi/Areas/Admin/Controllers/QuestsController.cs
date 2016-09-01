@@ -12,7 +12,7 @@ using QuestGame.WebApi.Models;
 
 namespace QuestGame.WebApi.Areas.Admin.Controllers
 {
-    public class AdminController : Controller
+    public class QuestsController : Controller
     {
         // GET: Admin/Admin
         public async Task<ActionResult> Index()
@@ -26,7 +26,7 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
                 var response = await client.GetAsync(@"api/Quest/GetAll");
                 var answer = await response.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
 
-                return View("Index", "Admin",answer, "Admin");
+                return View(answer);
             }
         }
     }
