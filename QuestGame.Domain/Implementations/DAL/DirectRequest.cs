@@ -53,5 +53,21 @@ namespace QuestGame.Domain.Implementations
 
             return response;
         }
+
+        public async Task<HttpResponseMessage> DeleteRequestAsync(string requestUri)
+        {
+            var response = new HttpResponseMessage();
+
+            try
+            {
+                response = await client.DeleteAsync(requestUri);
+            }
+            finally
+            {
+                client.Dispose();
+            }
+
+            return response;
+        }
     }
 }

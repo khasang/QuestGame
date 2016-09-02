@@ -51,10 +51,11 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
         public async Task<ActionResult> RemoveQuest(int id)
         {
             var client = new DirectRequest();
-            var response = await client.GetRequestAsync(@"api/Quests/Del/" + id);
+            var response = await client.DeleteRequestAsync(@"api/Quests/Del?id=" + id);
 
             return RedirectToAction("Index");
         }

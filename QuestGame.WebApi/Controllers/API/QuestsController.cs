@@ -54,6 +54,7 @@ namespace QuestGame.WebApi.Controllers
         }
 
         // DELETE
+        [HttpDelete]
         [Route("Del")]
         public IHttpActionResult DeleteQuest(int id)
         {
@@ -63,6 +64,8 @@ namespace QuestGame.WebApi.Controllers
             {
                 return NotFound();
             }
+
+            dataManager.ContentQuest.Delete( quest.Content );
 
             dataManager.Quests.Delete( quest );
             dataManager.Save();
