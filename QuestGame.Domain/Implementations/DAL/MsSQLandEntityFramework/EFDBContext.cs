@@ -24,6 +24,10 @@ namespace QuestGame.Domain.Implementations
         public DbSet<ContentQuest> QuestContents { get; set; }
         public DbSet<ContentStage> StageContents { get; set; }
 
+        public DbSet<QuestRoute> QuestRoutes { get; set; }
+
+        //public override IDbSet<ApplicationUser> Users { get; set; }
+
 
         public static ApplicationDbContext Create()
         {
@@ -52,7 +56,8 @@ namespace QuestGame.Domain.Implementations
                     d.LockoutEndDateUtc,
                     d.LockoutEnabled,
                     d.AccessFailedCount,
-                    d.UserName
+                    d.UserName,
+                    d.Identificator
                 });
                 m.ToTable("AspNetUsers");
             })
@@ -63,8 +68,15 @@ namespace QuestGame.Domain.Implementations
             })
             .Ignore(d => d.Token);
 
-            modelBuilder.Entity<Stage>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Stage);
-            modelBuilder.Entity<Quest>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Quest);
+            //modelBuilder.Entity<ApplicationUser>().HasMany(p => p.Quests).WithRequired(p => p.User).WillCascadeOnDelete(true);
+            //modelBuilder.Entity<ApplicationUser>().HasMany(p => p.QuestsRoutes).WithRequired(p => p.User).WillCascadeOnDelete(true);
+
+            //modelBuilder.Entity<Quest>().HasRequired(s => s.User);
+            modelBuilder.Entity<Quest>().HasMany(s => s.Stages).WithRequired(q => q.Quest).WillCascadeOnDelete(true);
+            modelBuilder.Entity<Quest>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Quest).WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<Stage>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Stage).WillCascadeOnDelete(true);
+            modelBuilder.Entity<Stage>().HasMany(p => p.Operations).WithRequired(p => p.Stage).WillCascadeOnDelete(true);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -31,24 +31,24 @@ namespace QuestGame.WebApi.Controllers
 
         public async Task<ActionResult> Index()
         {
-            IRequest client = new DirectRequest();
-            var response = await client.GetRequestAsync(@"api/Quests");
-            var responseData = await response.Content.ReadAsAsync<IEnumerable<Quest>>();
+            //IRequest client = new DirectRequest();
+            //var response = await client.GetRequestAsync(@"api/Quests");
+            //var responseData = await response.Content.ReadAsAsync<IEnumerable<Quest>>();
 
-            if (response.IsSuccessStatusCode)
-                {
-                    ViewBag.Quests = responseData.OrderByDescending( q => q.AddDate ).Take(5);
-                }
-                else
-                {
-                    ViewBag.Message = "Что-то пошло не так";
-                }
+            //if (response.IsSuccessStatusCode)
+            //    {
+            //        ViewBag.Quests = responseData.OrderByDescending( q => q.AddDate ).Take(5);
+            //    }
+            //    else
+            //    {
+            //        ViewBag.Message = "Что-то пошло не так";
+            //    }
             
 
-            using (var db = new QuestGame.Domain.ApplicationDbContext())
-            {
-                ViewBag.Users = db.Users.OrderByDescending(u => u.AddDate).Select(u => u.UserName).ToList().Take(5);
-            }
+            //using (var db = new QuestGame.Domain.ApplicationDbContext())
+            //{
+            //    ViewBag.Users = db.Users.OrderByDescending(u => u.AddDate).Select(u => u.UserName).ToList().Take(5);
+            //}
 
             return View();
         }

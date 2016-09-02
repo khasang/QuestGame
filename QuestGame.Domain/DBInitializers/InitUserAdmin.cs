@@ -30,6 +30,20 @@ namespace QuestGame.Domain.DBInitializers
             userManager.Create(user, "qwerty");
             roleManager.Create(role);
             userManager.AddToRole(user.Id, role.Name);
+
+            var user1 = new ApplicationUser()
+            {
+                UserName = "kloder3@gmail.com",
+                Email = "kloder3@gmail.com",
+                EmailConfirmed = true,
+                AddDate = DateTime.Now
+            };
+
+            role = new IdentityRole("admin");
+
+            userManager.Create(user1, "qwerty");
+            roleManager.Create(role);
+            userManager.AddToRole(user1.Id, role.Name);
         }
     }
 }
