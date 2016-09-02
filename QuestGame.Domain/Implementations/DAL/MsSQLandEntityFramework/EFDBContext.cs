@@ -26,8 +26,8 @@ namespace QuestGame.Domain.Implementations
 
         public DbSet<QuestRoute> QuestRoutes { get; set; }
 
-        //public override IDbSet<ApplicationUser> Users { get; set; }
-
+        public IDbSet<ApplicationUser> GetUsers() { return base.Users; }
+        public IDbSet<IdentityRole> GetRoles() { return base.Roles; }
 
         public static ApplicationDbContext Create()
         {
@@ -39,46 +39,5 @@ namespace QuestGame.Domain.Implementations
             this.SaveChanges();
         }
 
-
-        protected override void OnModelCreating(
-            DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<ApplicationUser>().Map(m =>
-            {
-                m.Properties(d => new {
-                    d.Email,
-                    d.EmailConfirmed,
-                    d.PasswordHash,
-                    d.SecurityStamp,
-                    d.PhoneNumber,
-                    d.PhoneNumberConfirmed,
-                    d.TwoFactorEnabled,
-                    d.LockoutEndDateUtc,
-                    d.LockoutEnabled,
-                    d.AccessFailedCount,
-                    d.UserName,
-                    d.Identificator
-                });
-                m.ToTable("AspNetUsers");
-            })
-            .Map(m =>
-            {
-                m.Properties(d => new { d.Name, d.LastName, d.Avatar, d.Contry, d.Rating, d.CountQuestsComplite, d.AddDate });
-                m.ToTable("AspNetUsersProfile");
-            })
-            .Ignore(d => d.Token);
-
-            //modelBuilder.Entity<ApplicationUser>().HasMany(p => p.Quests).WithRequired(p => p.User).WillCascadeOnDelete(true);
-            //modelBuilder.Entity<ApplicationUser>().HasMany(p => p.QuestsRoutes).WithRequired(p => p.User).WillCascadeOnDelete(true);
-
-            //modelBuilder.Entity<Quest>().HasRequired(s => s.User);
-            modelBuilder.Entity<Quest>().HasMany(s => s.Stages).WithRequired(q => q.Quest).WillCascadeOnDelete(true);
-            modelBuilder.Entity<Quest>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Quest).WillCascadeOnDelete(true);
-
-            modelBuilder.Entity<Stage>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Stage).WillCascadeOnDelete(true);
-            modelBuilder.Entity<Stage>().HasMany(p => p.Operations).WithRequired(p => p.Stage).WillCascadeOnDelete(true);
-
-            base.OnModelCreating(modelBuilder);
-        }
     }
 }

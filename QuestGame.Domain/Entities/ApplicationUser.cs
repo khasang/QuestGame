@@ -34,7 +34,7 @@ namespace QuestGame.Domain.Entities
 
         public string LastName { get; set; }
 
-        //public DateTime Bithday { get; set; }
+        public DateTime? Bithday { get; set; }
 
         public string Avatar { get; set; }
 
@@ -62,7 +62,7 @@ namespace QuestGame.Domain.Entities
             // Здесь добавьте настраиваемые утверждения пользователя
 
             userIdentity.AddClaim(new Claim(ClaimTypes.Name, this.Name + " " + this.LastName));
-            //userIdentity.AddClaim(new Claim(ClaimTypes.DateOfBirth, this.Bithday.ToString()));
+            userIdentity.AddClaim(new Claim(ClaimTypes.DateOfBirth, this.Bithday.ToString()));
             userIdentity.AddClaim(new Claim("Avatar", this.Avatar));
             userIdentity.AddClaim(new Claim(ClaimTypes.Country, this.Contry));
             userIdentity.AddClaim(new Claim("Rating", this.Rating.ToString()));

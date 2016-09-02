@@ -1,24 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
-namespace QuestGame.WebApi.Models
+namespace QuestGame.WebApi.Models.UserViewModels
 {
-    public class UserInvite
+    public class UserRegisterVM
     {
+        [HiddenInput(DisplayValue = false)]
+        public string UserName { get; set; }
+
         [Display(Name = "Ваше Имя")]
-        public string Name  { get; set; }
+        public string Name { get; set; }
 
         [Display(Name = "Фамилия")]
-        public string LastName { get; set; }
+        public string LastName{ get; set; }
+
+        [DataType(DataType.Date)]
+    //        [DisplayFormat(DataFormatString = "{0:dd'/'MM'/'yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Дата рождения")]
+        public DateTime? Bithday { get; set; }
 
         [Display(Name = "Аватар")]
         public string Avatar { get; set; }
-
-        [Display(Name = "Подпись")]
-        public string Losung { get; set; }
 
         [Display(Name = "Страна")]
         public string Contry { get; set; }
@@ -34,7 +40,7 @@ namespace QuestGame.WebApi.Models
 
         [Display(Name = "Повторите пароль")]
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Пароль введен неверно")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "Пароли не совпадают")]
         public string ConfirmPassword { get; set; }
     }
 }

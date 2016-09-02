@@ -24,6 +24,8 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Security.Principal;
+using QuestGame.WebApi.Models.UserViewModels;
+using AutoMapper;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -34,8 +36,11 @@ namespace QuestGame.WebApi.Controllers
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
 
-        public AccountController()
+        IMapper mapper;
+
+        public AccountController( IMapper mapper )
         {
+            this.mapper = mapper;
         }
 
         public AccountController(ApplicationUserManager userManager,
@@ -396,22 +401,14 @@ namespace QuestGame.WebApi.Controllers
         [AllowAnonymous]
         [Route("Register")]
         [HttpPost]
-        public async Task<IHttpActionResult> Register( UserInvite model)
+        public async Task<IHttpActionResult> Register( UserRegisterVM model )
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser()
-            {
-                UserName = model.Email,
-                Name = model.Name,
-                LastName = model.LastName,
-                Email = model.Email,
-                Avatar = model.Avatar,
-                Contry = model.Contry
-            };
+            var user = mapper.Map<UserRegisterVM, ApplicationUser>(model);
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 

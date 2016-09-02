@@ -18,6 +18,11 @@ namespace QuestGame.Domain.Interfaces
         DbSet<ContentQuest> QuestContents { get; set; }
         DbSet<ContentStage> StageContents { get; set; }
 
+        DbSet<QuestRoute> QuestRoutes { get; set; }
+
+        IDbSet<ApplicationUser> GetUsers();
+        IDbSet<IdentityRole> GetRoles();
+
         void Save();
     }
 }
