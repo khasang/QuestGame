@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using QuestGame.WebApi.Areas.Game.Models;
 
 namespace QuestGame.WebApi.Mapping.Profiles
 {
@@ -11,7 +12,7 @@ namespace QuestGame.WebApi.Mapping.Profiles
     {
         public DTOToViewModelMappingProfile()
         {
-            //CreateMap<QuestDTO, QuestViewModel>();
+            CreateMap<QuestDTO, QuestViewModel>();
             //CreateMap<StageDTO, StageViewModel>();
             //CreateMap<MotionDTO, MotionViewModel>();
         }

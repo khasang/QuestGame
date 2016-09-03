@@ -12,7 +12,7 @@ using QuestGame.WebApi.Models;
 
 namespace QuestGame.WebApi.Areas.Admin.Controllers
 {
-    public class AdminController : Controller
+    public class QuestsController : Controller
     {
         // GET: Admin/Admin
         public async Task<ActionResult> Index()
