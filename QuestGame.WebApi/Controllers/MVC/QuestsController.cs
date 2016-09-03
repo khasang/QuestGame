@@ -23,7 +23,7 @@ namespace QuestGame.WebApi.Controllers.MVC
 
             if (response.IsSuccessStatusCode)
             {
-                ViewBag.Quests = responseData.OrderByDescending(q => q.AddDate);
+                //ViewBag.Quests = responseData.OrderByDescending(q => q.AddDate);
             }
             else
             {

@@ -25,7 +25,7 @@ namespace QuestGame.Domain.Entities
         public DateTime AddDate { get; set; }
         public DateTime ModifyDate { get; set; }
 
-        public string UserId { get; set; }
+        public string UserId { get; set; }        
 
         [JsonIgnore]
         public virtual ApplicationUser User { get; set; }
@@ -33,6 +33,8 @@ namespace QuestGame.Domain.Entities
         [Required]
         //[JsonIgnore]
         public virtual ContentQuest Content { get; set; }
+        public int ContentId { get; set; }
+
 
         [JsonIgnore]
         public virtual ICollection<Stage> Stages { get; set; }

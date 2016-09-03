@@ -57,11 +57,13 @@ namespace QuestGame.Domain
             //modelBuilder.Entity<ApplicationUser>().HasMany(s => s.QuestsRoutes).WithRequired(q => q.User).WillCascadeOnDelete(true);
             modelBuilder.Entity<ApplicationUser>().HasMany(s => s.Quests).WithRequired(q => q.User).WillCascadeOnDelete(true);
 
-            modelBuilder.Entity<Quest>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Quest).WillCascadeOnDelete(true);
+            modelBuilder.Entity<Quest>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Owner).WillCascadeOnDelete(true);
             modelBuilder.Entity<Quest>().HasMany(s => s.Stages).WithRequired(q => q.Quest).WillCascadeOnDelete(true);
 
+            //modelBuilder.Entity<ContentQuest>().HasKey(k => k.OwnerId);
+            //modelBuilder.Entity<ContentStage>().HasKey(k => k.OwnerId);
 
-            modelBuilder.Entity<Stage>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Stage).WillCascadeOnDelete(true);
+            modelBuilder.Entity<Stage>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Owner).WillCascadeOnDelete(true);
             modelBuilder.Entity<Stage>().HasMany(o => o.Operations).WithRequired(s => s.Stage).WillCascadeOnDelete(true);
 
             base.OnModelCreating(modelBuilder);

@@ -24,12 +24,14 @@ namespace QuestGame.WebApi.Models.UserViewModels
         public DateTime? Bithday { get; set; }
 
         [Display(Name = "Аватар")]
+        [DataType(DataType.Upload)]
         public string Avatar { get; set; }
 
         [Display(Name = "Страна")]
         public string Contry { get; set; }
 
         [Display(Name = "Email адрес регистрации")]
+        [DataType(DataType.EmailAddress)]
         [Required(ErrorMessage = "Не указан Email")]
         public string Email { get; set; }
 

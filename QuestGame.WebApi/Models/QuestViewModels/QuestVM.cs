@@ -21,11 +21,13 @@ namespace QuestGame.WebApi.Models
         [HiddenInput(DisplayValue = false)]
         public string Image { get; set; }
 
-        [Required]
-        [Display(Name = "Введите название Квеста")]
+        [Required(ErrorMessage = "Назваие не может быть пустым")]
+        [Display(Name = "Название Квеста")]
+        [StringLength(250, MinimumLength = 3, ErrorMessage = "Длина строки должна быть от 3 символов")]
         public string Title { get; set; }
 
         [Display(Name = "Введите описание")]
+        [DataType(DataType.MultilineText)]
         public string Text { get; set; }
     }
 }

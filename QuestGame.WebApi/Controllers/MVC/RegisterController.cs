@@ -2,10 +2,12 @@
 using QuestGame.WebApi.Models;
 using System.Threading.Tasks;
 using Serilog;
+using System.Net.Http;
 using QuestGame.Domain.Implementations;
 using QuestGame.Domain.Interfaces;
 using QuestGame.WebApi.Models.UserViewModels;
 using AutoMapper;
+using System.Collections.Generic;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -42,6 +44,8 @@ namespace QuestGame.WebApi.Controllers
             IRequest client = new DirectRequest();
             var response = await client.PostRequestAsync(@"api/Account/Register", user);
 
+            var result = await response.Content.ReadAsAsync<IEnumerable<string>>();
+
             if (response.IsSuccessStatusCode)
                 {
                     ViewBag.Message = "Успешная регистрация";
@@ -51,7 +55,7 @@ namespace QuestGame.WebApi.Controllers
                     ViewBag.Message = "Что-то пошло не так";
                 }
 
-            return View("CreateUser", user);  // Вставить страницу на проиль нового пользователя
+            return View("Index", user);  // Вставить страницу на проиль нового пользователя
         }
     }
 }

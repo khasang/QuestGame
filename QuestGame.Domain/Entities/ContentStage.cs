@@ -8,6 +8,6 @@ namespace QuestGame.Domain.Entities
     public class ContentStage : Content
     {
         [JsonIgnore]
-        public virtual Stage Stage { get; set; }
+        public virtual Stage Owner { get; set; }
     }
 }

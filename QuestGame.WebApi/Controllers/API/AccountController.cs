@@ -401,11 +401,11 @@ namespace QuestGame.WebApi.Controllers
         [AllowAnonymous]
         [Route("Register")]
         [HttpPost]
-        public async Task<IHttpActionResult> Register( UserRegisterVM model )
+        public async Task<HttpResponseMessage> Register( UserRegisterVM model )
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return new HttpResponseMessage { StatusCode = HttpStatusCode.BadRequest };
             }
 
             var user = mapper.Map<UserRegisterVM, ApplicationUser>(model);
@@ -414,10 +414,15 @@ namespace QuestGame.WebApi.Controllers
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                var errors = result.Errors;
+
+                return Request.CreateResponse(HttpStatusCode.BadRequest, errors);
+
+                //return BadRequest(user);
+                //return GetErrorResult(result);
             }
 
-            return Ok();
+            return new HttpResponseMessage { StatusCode = HttpStatusCode.OK };
         }
 
         // POST api/Account/RegisterExternal
@@ -482,9 +487,10 @@ namespace QuestGame.WebApi.Controllers
             {
                 if (result.Errors != null)
                 {
+                    var i = 0;
                     foreach (string error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error);
+                    {                        
+                        ModelState.AddModelError("key" + i++, error);
                     }
                 }
 
