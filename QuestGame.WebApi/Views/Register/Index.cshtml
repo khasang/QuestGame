@@ -4,15 +4,26 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="jumbotron">
+<div class="page-header">
     <h2>@ViewBag.Title</h2>
 </div>
 
+@if (ViewBag.Alerts != null)
+{
+    foreach (var alert in ViewBag.Alerts)
+    {
+        <div class="alert alert-danger" role="alert">
+            <strong>Ошибка</strong>
+            @alert
+        </div>
+    }
+}
 
-@using (Html.BeginForm()) 
+
+@using (Html.BeginForm("Index", "Register", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -49,7 +60,6 @@
                 </div>
             </div>
         </div>
-
 
         <div class="col-sm-8">
             <div class="panel panel-info">
@@ -92,11 +102,14 @@
                     </div>
 
                     <div class="col-sm-6">
+                        <div class="col-md-12">
+                            <img height="220" src="http://www.novelupdates.com/img/noimagefound.jpg" class="img-circle">
+                        </div>
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Avatar, htmlAttributes: new { @class = "col-md-12" })
-                            <div class="col-md-10">
-                                @Html.EditorFor(model => model.Avatar, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.Avatar, "", new { @class = "text-danger" })
+                            @Html.LabelFor(model => model.File, htmlAttributes: new { @class = "col-md-12" })
+                            <div class="col-md-10 upload btn btn-info">
+                                <span>Загрузить</span>
+                                <input type="file" name="File" />
                             </div>
                         </div>
                     </div>
@@ -110,9 +123,34 @@
             </div>
         </div>
 
-        </div>
+    </div>
 }
 
+<style>
+       div.upload {
+       /*width: 157px;
+       height: 57px;
+       background: url(https://lh6.googleusercontent.com/-dqTIJRTqEAQ/UJaofTQm3hI/AAAAAAAABHo/w7ruR1SOIsA/s157/upload.png);*/
+       overflow: hidden;
+   }
+
+   div.upload input {
+       display: block !important;
+       /*width: 157px !important;
+       height: 57px !important;*/
+       opacity: 0 !important;
+       overflow: hidden !important;
+   }
+
+           div.upload span {
+               display: inline-block;
+               width:100%;
+               text-align:center;
+               position: absolute;
+               top:7px;
+               left:10px;
+           }
+</style>
 
 
 @section Scripts {

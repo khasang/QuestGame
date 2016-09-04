@@ -7,10 +7,10 @@
     <h3>@ViewBag.Title</h3>
 
     @if (user != null)
-        {
-            <h3>@user.Name</h3>
-        }
-    
+    {
+        <h3>@user.Name</h3>
+    }
+
 
     <p class="lead">QuestGame, это место где можно отдохнуть от дел и поиграть в игры-квесты.</p>
     <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
@@ -19,21 +19,21 @@
     <div class="col-md-4">
         <h3>Список квестов</h3>
         @*@foreach (var Item in ViewBag.Quests)
-        {
-            <ul>
-                <li><p>@Item.Title</p></li>
-            </ul>
-        }*@
+            {
+                <ul>
+                    <li><p>@Item.Title</p></li>
+                </ul>
+            }*@
         <p><a class="btn btn-default" href="../Admin/Quests">Все квесты &raquo;</a></p>
     </div>
     <div class="col-md-4">
         <h3>Недавно присоединились</h3>
         @*@foreach (var Item in ViewBag.Users)
-        {
-            <ul>
-                <li><p>@Item</p></li>
-            </ul>
-        }*@        
+            {
+                <ul>
+                    <li><p>@Item</p></li>
+                </ul>
+            }*@
         <p><a class="btn btn-default" href="#">Список игроков &raquo;</a></p>
     </div>
     <div class="col-md-4">

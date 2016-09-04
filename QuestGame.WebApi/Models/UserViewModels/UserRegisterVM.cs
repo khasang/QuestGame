@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -19,12 +20,14 @@ namespace QuestGame.WebApi.Models.UserViewModels
         public string LastName{ get; set; }
 
         [DataType(DataType.Date)]
-    //        [DisplayFormat(DataFormatString = "{0:dd'/'MM'/'yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Дата рождения")]
         public DateTime? Bithday { get; set; }
 
+        [JsonIgnore]
         [Display(Name = "Аватар")]
-        [DataType(DataType.Upload)]
+        public HttpPostedFileBase File { get; set; }
+
+        [HiddenInput(DisplayValue = false)]
         public string Avatar { get; set; }
 
         [Display(Name = "Страна")]

@@ -8,6 +8,7 @@ using QuestGame.Domain.Interfaces;
 using QuestGame.WebApi.Models.UserViewModels;
 using AutoMapper;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -24,19 +25,28 @@ namespace QuestGame.WebApi.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.Title = "Страница регистрации";
-
+            ViewBag.Title = "Регистрация нового пользователя";
             return View();
         }
 
         [HttpPost]
-        public async Task<ActionResult> Index( UserRegisterVM  user )
-        {
-            ViewBag.Title = "Регистрация нового пользователя";
-
+        public async Task<ActionResult> Index(UserRegisterVM user)
+        {            
             if (!ModelState.IsValid)
             {
-                return View();
+                ViewBag.Alerts = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage));
+                return View(user);
+            }
+
+            if (user.File != null)
+            {
+                string fileName = System.IO.Path.GetFileName(user.File.FileName);
+                //user.File.SaveAs(Server.MapPath("~/Content/Images/GameContent/" + fileName));
+                user.Avatar = @"/Content/Images/GameContent/" + fileName;
+            }
+            else
+            {
+                user.Avatar = "http://www.novelupdates.com/img/noimagefound.jpg";
             }
 
             user.UserName = user.Email;
@@ -44,18 +54,29 @@ namespace QuestGame.WebApi.Controllers
             IRequest client = new DirectRequest();
             var response = await client.PostRequestAsync(@"api/Account/Register", user);
 
-            var result = await response.Content.ReadAsAsync<IEnumerable<string>>();
-
             if (response.IsSuccessStatusCode)
+            {
+                ViewBag.Message = "Успешная регистрация";
+
+                if (user.File != null)
                 {
-                    ViewBag.Message = "Успешная регистрация";
+                    string fileName = System.IO.Path.GetFileName(user.File.FileName);
+                    user.File.SaveAs(Server.MapPath("~/Content/Images/GameContent/" + fileName));
                 }
-                else
+            }
+            else
+            {
+                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
-                    ViewBag.Message = "Что-то пошло не так";
+                    ViewBag.Alerts = await response.Content.ReadAsAsync<IEnumerable<string>>();
                 }
 
-            return View("Index", user);  // Вставить страницу на проиль нового пользователя
+                ViewBag.Message = "Что-то пошло не так";
+
+                return View(user);
+            }
+
+            return View(user);  // Вставить страницу на проиль нового пользователя
         }
     }
 }

@@ -260,6 +260,7 @@
     <Compile Include="Controllers\MVC\RegisterController.cs" />
     <Compile Include="Controllers\API\ValuesController.cs" />
     <Compile Include="Controllers\MVC\QuestsController.cs" />
+    <Compile Include="Controllers\MVC\UserProfileController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -358,6 +359,7 @@
     <Content Include="Views\Home\Test.cshtml" />
     <Content Include="Views\Quests\Add.cshtml" />
     <Content Include="Views\Register\Index.cshtml" />
+    <Content Include="Views\UserProfile\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
