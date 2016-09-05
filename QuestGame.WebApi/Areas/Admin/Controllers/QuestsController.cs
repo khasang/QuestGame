@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -45,7 +46,8 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
                 model.Image = "http://www.novelupdates.com/img/noimagefound.jpg";
             }
 
-            var client = new DirectRequest();
+            var user = Session["UserInfo"] as ApplicationUser;
+            var client = new AuthRequest(user.Token);
             var response = await client.PostRequestAsync(@"api/Quests/Add", model);
 
             return RedirectToAction("Index");
@@ -59,6 +61,7 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
+
 
     }
 }

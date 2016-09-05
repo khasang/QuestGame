@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace QuestGame.WebApi.Models
 {
-    public class UserLogin
+    public class UserLoginVM
     {
         [Required(ErrorMessage = "Не указан Email")]
         public string Email { get; set; }

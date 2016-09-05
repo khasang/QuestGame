@@ -274,7 +274,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\QuestViewModels\QuestVM.cs" />
-    <Compile Include="Models\UserLogin.cs" />
+    <Compile Include="Models\UserViewModels\UserLoginVM.cs" />
+    <Compile Include="Models\UserViewModels\UserProfileVM.cs" />
     <Compile Include="Models\UserViewModels\UserRegisterVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />

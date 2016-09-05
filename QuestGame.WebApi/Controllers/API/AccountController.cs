@@ -85,20 +85,30 @@ namespace QuestGame.WebApi.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ResponseType(typeof(ApplicationUser))]
-        public async Task<ApplicationUser> GetUserProfile( UserLogin model )
+        public async Task<ApplicationUser> GetUserProfile()
         {
-            var p = Thread.CurrentPrincipal;
-            var u = p.Identity;
+            var principal = Thread.CurrentPrincipal;
+            var identity = principal.Identity;
+            var id = identity.GetUserId();
 
-            ApplicationUser user = await UserManager.FindAsync( model.Email, model.Password );
+            ApplicationUser user = await UserManager.FindByIdAsync(id);
 
             return user;
         }
 
+        [Route("GetUserById")]
+        [AllowAnonymous]
+        [HttpPost]
+        [ResponseType(typeof(ApplicationUser))]
+        public async Task<ApplicationUser> GetUser(string id)
+        {
+            ApplicationUser user = await UserManager.FindByIdAsync(id);
+            return user;
+        }
 
         [AllowAnonymous]
         [Route("LoginUser")]
-        public async Task<HttpResponseMessage> LoginUser( UserLogin model)
+        public async Task<HttpResponseMessage> LoginUser( UserLoginVM model)
         {
             if (model == null)
             {
@@ -417,9 +427,6 @@ namespace QuestGame.WebApi.Controllers
                 var errors = result.Errors;
 
                 return Request.CreateResponse(HttpStatusCode.BadRequest, errors);
-
-                //return BadRequest(user);
-                //return GetErrorResult(result);
             }
 
             return new HttpResponseMessage { StatusCode = HttpStatusCode.OK };

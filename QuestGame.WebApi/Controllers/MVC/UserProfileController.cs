@@ -10,6 +10,12 @@ namespace QuestGame.WebApi.Controllers.MVC
     public class UserProfileController : Controller
     {
         // GET: UserProfile
+        public ActionResult Index()
+        {
+            ViewBag.Title = "Профиль пользователя";
+            return View();
+        }
+        // GET: UserProfile
         public ActionResult Index(UserRegisterVM user)
         {
             ViewBag.Title = "Профиль пользователя - " + user.Name + " " + user.LastName;

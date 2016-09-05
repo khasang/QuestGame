@@ -66,7 +66,6 @@ namespace QuestGame.Domain.Entities
             userIdentity.AddClaim(new Claim("Avatar", this.Avatar));
             userIdentity.AddClaim(new Claim(ClaimTypes.Country, this.Contry));
             userIdentity.AddClaim(new Claim("Rating", this.Rating.ToString()));
-            userIdentity.AddClaim(new Claim("CountQuestsComplite", this.CountQuestsComplite.ToString()));
             userIdentity.AddClaim(new Claim("AddDate", this.AddDate.ToString()));
             userIdentity.AddClaim(new Claim("Identificator", this.Identificator.ToString()));
 

@@ -36,7 +36,7 @@ namespace QuestGame.Domain.Implementations
 
         public void Save()
         {
-            this.SaveChanges();
+            base.SaveChanges();
         }
 
     }

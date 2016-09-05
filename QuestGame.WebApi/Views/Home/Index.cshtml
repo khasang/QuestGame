@@ -18,12 +18,12 @@
 <div class="row">
     <div class="col-md-4">
         <h3>Список квестов</h3>
-        @*@foreach (var Item in ViewBag.Quests)
+        @foreach (var Item in ViewBag.Quests)
             {
                 <ul>
                     <li><p>@Item.Title</p></li>
                 </ul>
-            }*@
+            }
         <p><a class="btn btn-default" href="../Admin/Quests">Все квесты &raquo;</a></p>
     </div>
     <div class="col-md-4">
@@ -39,6 +39,7 @@
     <div class="col-md-4">
         <h3>Создай свой квест</h3>
         <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="№">Начать &raquo;</a></p>
+        <p><a class="btn btn-default" href="#">Начать &raquo;</a></p>
+        @*<p><a class="btn btn-default" href="../UserProfile">Prof &raquo;</a></p>*@
     </div>
 </div>

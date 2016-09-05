@@ -8,10 +8,11 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using QuestGame.Domain.Interfaces;
 
 namespace QuestGame.Domain
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IDBContext
     {
 
         public ApplicationDbContext()
@@ -35,6 +36,12 @@ namespace QuestGame.Domain
 
         public IDbSet<ApplicationUser> GetUsers() { return base.Users; }
         public IDbSet<IdentityRole> GetRoles() { return base.Roles; }
+
+        public void Save()
+        {
+            this.SaveChanges();
+        }
+
 
         protected override void OnModelCreating(
                     DbModelBuilder modelBuilder)
