@@ -31,7 +31,7 @@ namespace QuestGame.WebApi.Controllers
 
         [HttpPost]
         public async Task<ActionResult> Index(UserRegisterVM user)
-        {            
+        {
             if (!ModelState.IsValid)
             {
                 ViewBag.Alerts = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage));
@@ -56,8 +56,6 @@ namespace QuestGame.WebApi.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                ViewBag.Message = "Успешная регистрация";
-
                 if (user.File != null)
                 {
                     string fileName = System.IO.Path.GetFileName(user.File.FileName);
@@ -71,12 +69,10 @@ namespace QuestGame.WebApi.Controllers
                     ViewBag.Alerts = await response.Content.ReadAsAsync<IEnumerable<string>>();
                 }
 
-                ViewBag.Message = "Что-то пошло не так";
-
                 return View(user);
             }
 
-            return View(user);  // Вставить страницу на проиль нового пользователя
+            return RedirectToAction("Login", "Home", new { area = "" });
         }
     }
 }
