@@ -110,7 +110,7 @@ namespace QuestGame.WebApi.Controllers
 
         [AllowAnonymous]
         [Route("LoginUser")]
-        public async Task<HttpResponseMessage> LoginUser( UserLoginVM model)
+        public async Task<HttpResponseMessage> LoginUser( UserLoginVM model )
         {
             if (model == null)
             {
@@ -121,38 +121,30 @@ namespace QuestGame.WebApi.Controllers
                 };
             }
 
-            using (HttpClient client = new HttpClient())
+            var client = new DirectRequest();
+            client.AddUrlParam("grant_type", "password");
+            client.AddUrlParam("username", model.Email);
+            client.AddUrlParam("password", model.Password);
+
+            var response = await client.PostAsync("Token");
+
+            if (response.StatusCode != HttpStatusCode.OK)
             {
-                client.BaseAddress = new Uri("http://localhost:9243");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                var requestParams = new Dictionary<string, string>
+                return new HttpResponseMessage
                 {
-                    { "grant_type", "password" },
-                    { "username", model.Email },
-                    { "password", model.Password }
-                };
-
-                var content = new FormUrlEncodedContent(requestParams);
-                var response = await client.PostAsync("Token", content);
-
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    return new HttpResponseMessage
-                    {
-                        StatusCode = HttpStatusCode.BadRequest
-                    };
-                }
-
-                var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
-                var authToken = responseData["access_token"];
-                return new HttpResponseMessage()
-                {
-                    Content = new StringContent(authToken),
-                    StatusCode = HttpStatusCode.OK
+                    Content = new StringContent("Имя пользователя или пароль не найдены"),
+                    StatusCode = HttpStatusCode.BadRequest
                 };
             }
+
+            var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
+
+            var authToken = responseData["access_token"];
+            return new HttpResponseMessage()
+            {
+                Content = new StringContent(authToken),
+                StatusCode = HttpStatusCode.OK
+            };
         }
 
 

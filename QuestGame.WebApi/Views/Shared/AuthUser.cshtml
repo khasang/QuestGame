@@ -10,12 +10,12 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">@user.Name @user.LastName<b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li><a href="#">Профиль</a></li>
-                <li><a href="#">Квесты</a></li>
+                <li>@Html.ActionLink("Мои Квесты", "Index", "Quests", new { area = "Admin" }, null)</li>
                 <li class="divider"></li>
-                <li><a href="#">LogOut</a></li>
+                <li>@Html.ActionLink("Выход", "Logout", "Home", new { area = "" }, null)</li>
             </ul>
         </li>
-        <li>@Html.ActionLink("Выход", "Login", "Home", new { area = "" }, null)</li>
+        <li>@Html.ActionLink("Выход", "Logout", "Home", new { area = "" }, null)</li>
     </ul>
 }
 else

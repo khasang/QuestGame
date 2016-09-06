@@ -106,7 +106,7 @@ namespace QuestGame.WebApi.Controllers
 
             Session["UserInfo"] = null;
 
-            return View();
+            return RedirectToAction("Index");
         }
 
         public ActionResult Test()

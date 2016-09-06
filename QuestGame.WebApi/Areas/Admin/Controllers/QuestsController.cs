@@ -2,6 +2,7 @@
 using QuestGame.Domain.Implementations;
 using QuestGame.Domain.Interfaces;
 using QuestGame.WebApi.Models;
+using QuestGame.WebApi.Models.UserViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,15 +16,24 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
 {
     public class QuestsController : Controller
     {
+        UserProfileVM user  = new UserProfileVM();
+
         // GET: Admin/Quests
         public async Task<ActionResult> Index()
         {
+            if (!this.IsAutherize())
+            {
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+            user = this.GetUser();
             IRequest client = new DirectRequest();
             var request = await client.GetRequestAsync( @"api/Quests" );
-            var result = await request.Content.ReadAsAsync<IEnumerable<Quest>>();
+            var response = await request.Content.ReadAsAsync<IEnumerable<Quest>>();
+
+            var result = from quest in response where quest.UserId == user.Id select quest;
 
             ViewBag.Title = "Мои квесты";
-            return View(result.OrderByDescending( q => q.AddDate));
+            return View(result.OrderByDescending( o => o.AddDate));
         }
 
         public ActionResult AddQuest()
@@ -46,7 +56,7 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
                 model.Image = "http://www.novelupdates.com/img/noimagefound.jpg";
             }
 
-            var user = Session["UserInfo"] as ApplicationUser;
+            var user = Session["UserInfo"] as UserProfileVM;
             var client = new AuthRequest(user.Token);
             var response = await client.PostRequestAsync(@"api/Quests/Add", model);
 
@@ -62,6 +72,19 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        private bool IsAutherize()
+        {
+            return Session["UserInfo"] == null ? false : true;
+        }
+
+        private UserProfileVM GetUser()
+        {
+            if (this.IsAutherize())
+            {
+                this.user = (UserProfileVM)Session["UserInfo"];
+            }
+            return user;
+        }
 
     }
 }

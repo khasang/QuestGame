@@ -85,7 +85,7 @@ namespace QuestGame.Domain.Implementations
         {
             urlParams.Add(Key, value);
         }
-        private void ClearParams()
+        public void ClearParams()
         {
             urlParams.Clear();
         }

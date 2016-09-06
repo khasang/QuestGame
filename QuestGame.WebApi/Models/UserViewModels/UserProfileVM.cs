@@ -10,6 +10,9 @@ namespace QuestGame.WebApi.Models.UserViewModels
 {
     public class UserProfileVM
     {
+        [HiddenInput(DisplayValue = false)]
+        public string Id { get; set; }
+
         [Display(Name = "Имя")]
         public string Name { get; set; }
 

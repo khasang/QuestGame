@@ -4,18 +4,23 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Configuration;
+using System.Collections.Generic;
 
 namespace QuestGame.Domain.Implementations
 {
     public class DirectRequest : IRequest
     {
         private HttpClient client;
+        private Dictionary<string, string> urlParams;
 
         /// <summary>
         /// HttpClient без авторизации 
         /// </summary>
         public DirectRequest()
         {
+            urlParams = new Dictionary<string, string>();
+            this.ClearParams();
+
             this.client = new HttpClient();
             client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["BaseUrl"]);
             client.DefaultRequestHeaders.Accept.Clear();
@@ -54,6 +59,25 @@ namespace QuestGame.Domain.Implementations
             return response;
         }
 
+        public async Task<HttpResponseMessage> PostAsync(string requestUri)
+        {
+            var content = new FormUrlEncodedContent(this.urlParams);
+
+            var response = new HttpResponseMessage();
+
+            try
+            {
+                response = await client.PostAsync(requestUri, content);
+            }
+            finally
+            {
+                client.Dispose();
+            }
+
+            return response;
+        }
+
+
         public async Task<HttpResponseMessage> DeleteRequestAsync(string requestUri)
         {
             var response = new HttpResponseMessage();
@@ -68,6 +92,15 @@ namespace QuestGame.Domain.Implementations
             }
 
             return response;
+        }
+
+        public void AddUrlParam(string Key, string value)
+        {
+            urlParams.Add(Key, value);
+        }
+        public void ClearParams()
+        {
+            urlParams.Clear();
         }
     }
 }

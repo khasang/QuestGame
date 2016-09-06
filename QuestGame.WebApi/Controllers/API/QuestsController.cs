@@ -42,6 +42,14 @@ namespace QuestGame.WebApi.Controllers
             return response;
         }
 
+        public IEnumerable<QuestDTO> GetQuests( string userIdentificator )
+        {
+            var quests = dataManager.Quests.GetAll();
+            var response = mapper.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(quests);
+
+            return response;
+        }
+
         // GET: api/Quests/5
         [ResponseType(typeof(Quest))]
         public IHttpActionResult GetQuest(int id)
