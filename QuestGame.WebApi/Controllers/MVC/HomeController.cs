@@ -63,7 +63,7 @@ namespace QuestGame.WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult> Login( UserLoginVM user )
         {
-            ViewBag.Message = "Авторизация";
+            ViewBag.Title = "Авторизация";
 
             string token;
             var UserInfo = new UserProfileVM();
@@ -76,7 +76,7 @@ namespace QuestGame.WebApi.Controllers
                 var response = await client.PostRequestAsync(@"api/Account/LoginUser", user);
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    ViewBag.ErrorMessage = "Неудачная попытка аутентификации!";
+                    ViewBag.Alerts = await response.Content.ReadAsStringAsync();
                     return View();
                 }
                 token = await response.Content.ReadAsStringAsync();
@@ -95,6 +95,7 @@ namespace QuestGame.WebApi.Controllers
 
                     Session["UserInfo"] = UserInfo;
                 }
+
             }
         
 
