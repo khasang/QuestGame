@@ -7,37 +7,37 @@
 <div class="row page-header">
     <h2>@ViewBag.Title</h2>
 </div>
+
 <div class="row">
     <a href="Quests/AddQuest">
         <div class="col-sm-3">
-            <div class="thumbnail">
                 <img src="http://isot.bmstu.ru/assets/templates/main/images/pkp/plus.png" style="width:100px">
-                <div class="caption">
                     <h3 style="margin: 0 auto">Добавить Квест</h3>
-                </div>
-            </div>
         </div>
     </a>
-
-    <div class="card-columns">
-        @foreach (var Item in Model)
-        {
-            <div class="card">
-                <img class="card-img-top" src="@Item.Content.Image" width="270" alt="Квест - @Item.Title">
-                <div class="card-block">
-                    <h4 class="card-title">@Item.Title</h4>
-                    <p class="card-text">@Item.Content.Text</p>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Подробнее</li>
-                </ul>
-                <div class="card-block">
-                    <a href="#" class="card-link">Играть</a>
-                    <a href="#" class="card-link">Редактировать</a>
-                    <a href="Quests/RemoveQuest/@Item.Id" class="card-link">Удаление</a>
-                </div>
-            </div>
-        }
-    </div>
-
 </div>
+
+<br /><br />
+    <div class="row">
+        <div class="card-columns">
+            @foreach (var Item in Model)
+            {
+                <div class="card" style="margin-bottom: 20px">
+                    <div class="card-img-title" style="background: url(@Item.Content.Image) top no-repeat; background-size: cover; height: 250px;"></div>
+                    <div class="card-block">
+                        <h4 class="card-title">@Item.Title</h4>
+                        <p class="card-text">@Item.Content.Text</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Подробнее</li>
+                    </ul>
+                    <div class="card-block">
+                        <a href="#" class="card-link  btn btn-primary">Играть</a>
+                        <a href="#" class="card-link">Редактировать</a>
+                        <a href="Quests/RemoveQuest/@Item.Id" class="card-link">Удаление</a>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>

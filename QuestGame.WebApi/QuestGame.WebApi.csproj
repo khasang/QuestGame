@@ -321,7 +321,6 @@
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Views\Quests\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Quests\AddQuest.cshtml" />
-    <Content Include="ClassDiagram1.cd" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
