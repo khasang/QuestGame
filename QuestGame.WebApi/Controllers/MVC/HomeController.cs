@@ -15,6 +15,7 @@ using QuestGame.Domain.Implementations;
 using QuestGame.Domain.Interfaces;
 using System.Net;
 using QuestGame.Domain.DTO;
+using QuestGame.WebApi.Models.UserViewModels;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -62,53 +63,40 @@ namespace QuestGame.WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult> Login( UserLoginVM user )
         {
+            ViewBag.Message = "Авторизация";
+
             string token;
-            ApplicationUser UserInfo = new ApplicationUser();
+            var UserInfo = new UserProfileVM();
 
 
             if (ModelState.IsValid)
             {
 
-                using (var client = new HttpClient())
+                IRequest client = new DirectRequest();
+                var response = await client.PostRequestAsync(@"api/Account/LoginUser", user);
+                if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    client.BaseAddress = new Uri("http://localhost:9243");
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    ViewBag.ErrorMessage = "Неудачная попытка аутентификации!";
+                    return View();
+                }
+                token = await response.Content.ReadAsStringAsync();
 
-                    var response = await client.PostAsJsonAsync("api/Account/LoginUser", user);
+                AuthRequest authClient = new AuthRequest(token);
+                authClient.AddUrlParam("Email", user.Email);
+                authClient.AddUrlParam("Password", user.Password);
 
-                    if (response.StatusCode == HttpStatusCode.BadRequest)
-                    {
-                        ViewBag.ErrorMessage = "Неудачная попытка аутентификации!";
-                        return View();
-                    }
+                var responseProfile = await authClient.PostAsync(@"api/Account/UserProfile");
 
-                    token = await response.Content.ReadAsStringAsync();
+                if (responseProfile.StatusCode == HttpStatusCode.OK)
+                {
+                    UserInfo = await responseProfile.Content.ReadAsAsync<UserProfileVM>();
 
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-                    var requestParams = new Dictionary<string, string>
-                    {
-                        { "Email", user.Email },
-                        { "Password", user.Password }
-                    };
-
-                    var content = new FormUrlEncodedContent(requestParams);
-
-                    var responseProfile = await client.PostAsync("api/Account/UserProfile", content);
-
-                    if (responseProfile.StatusCode == HttpStatusCode.OK)
-                    {
-                        UserInfo = await responseProfile.Content.ReadAsAsync<ApplicationUser>();
-
-                        UserInfo.Token = token;
-                    }
+                    UserInfo.Token = token;
 
                     Session["UserInfo"] = UserInfo;
-
-
                 }
             }
+        
 
             return RedirectToAction("Test");
         }

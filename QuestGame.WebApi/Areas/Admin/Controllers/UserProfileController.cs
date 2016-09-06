@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace QuestGame.WebApi.Controllers.MVC
+namespace QuestGame.WebApi.Areas.Admin.Controllers
 {
     public class UserProfileController : Controller
     {

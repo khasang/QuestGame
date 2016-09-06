@@ -31,6 +31,9 @@ namespace QuestGame.WebApi.Models.UserViewModels
         public string Email { get; set; }
 
         [HiddenInput(DisplayValue = false)]
+        public string Identificator { get; set; }
+
+        [HiddenInput(DisplayValue = false)]
         public string Token { get; set; }
     }
 }

@@ -85,13 +85,15 @@ namespace QuestGame.WebApi.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ResponseType(typeof(ApplicationUser))]
-        public async Task<ApplicationUser> GetUserProfile()
+        public async Task<UserProfileVM> GetUserProfile()
         {
             var principal = Thread.CurrentPrincipal;
             var identity = principal.Identity;
             var id = identity.GetUserId();
 
-            ApplicationUser user = await UserManager.FindByIdAsync(id);
+            var appUser = await UserManager.FindByIdAsync(id);
+
+            var user = mapper.Map<ApplicationUser, UserProfileVM>(appUser);
 
             return user;
         }

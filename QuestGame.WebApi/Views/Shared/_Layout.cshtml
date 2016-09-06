@@ -25,10 +25,9 @@
                     <li>@Html.ActionLink("Домашняя страница", "Index", "Home", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li>@Html.ActionLink("Регистрация", "Index", "Register", new { area = "" }, null )</li>
-                    <li>@Html.ActionLink("Авторизация", "Login", "Home", new { area = "" }, null)</li>
-                </ul>
+
+                @Html.Partial("AuthUser")
+
 </div>
         </div>
     </div>
