@@ -321,6 +321,7 @@
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Views\Quests\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Quests\AddQuest.cshtml" />
+    <Content Include="Areas\Admin\Views\UserProfile\Index.cshtml" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -359,7 +360,7 @@
     <Content Include="Views\Home\Test.cshtml" />
     <Content Include="Views\Quests\Add.cshtml" />
     <Content Include="Views\Register\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\UserProfile\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\UserProfile\Index1.cshtml" />
     <Content Include="Views\Shared\AuthUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
