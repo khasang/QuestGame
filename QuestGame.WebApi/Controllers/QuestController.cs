@@ -58,9 +58,9 @@ namespace QuestGame.WebApi.Controllers
 
         [HttpPost]
         [Route("Add")]
-        public IHttpActionResult Add(QuestDTO quest)
+        public IHttpActionResult Add(QuestFullDTO quest)
         {
-            var model = mapper.Map<QuestDTO, Quest>(quest);
+            var model = mapper.Map<QuestFullDTO, Quest>(quest);
 
             var owner = dataManager.Users.GetAll().FirstOrDefault(x => x.UserName == quest.Owner);
             if (owner == null)

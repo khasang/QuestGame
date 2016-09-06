@@ -77,7 +77,7 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", SessionUser.Token);
 
-                var response = await client.PostAsJsonAsync(@"api/Quest", request);
+                var response = await client.PostAsJsonAsync(@"api/Quest/Add", request);
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
