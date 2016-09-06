@@ -186,7 +186,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
-    <Compile Include="Areas\Admin\Controllers\QuestsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminController.cs" />
     <Compile Include="Areas\Game\Controllers\DesignerController.cs" />
     <Compile Include="Areas\Game\Controllers\MainPageController.cs" />
     <Compile Include="Areas\Game\GameAreaRegistration.cs" />
@@ -287,7 +287,7 @@
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\Admin\Views\Quests\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Admin\Index.cshtml" />
     <Content Include="Areas\Game\Views\Designer\AddQuest.cshtml" />
     <Content Include="Areas\Game\Views\Designer\Index.cshtml" />
     <Content Include="Areas\Game\Views\MainPage\Index.cshtml" />
