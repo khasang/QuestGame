@@ -14,8 +14,10 @@ using System.Web.Mvc;
 
 namespace QuestGame.WebApi.Areas.Admin.Controllers
 {
-    public class QuestsController : BaseController
+    public class QuestsController : Controller
     {
+        UserProfileVM user  = new UserProfileVM();
+
         // GET: Admin/Quests
         public async Task<ActionResult> Index()
         {
@@ -23,12 +25,12 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
             {
                 return RedirectToAction("Login", "Home", new { area = "" });
             }
-
+            user = this.GetUser();
             IRequest client = new DirectRequest();
             var request = await client.GetRequestAsync( @"api/Quests" );
             var response = await request.Content.ReadAsAsync<IEnumerable<Quest>>();
 
-            var result = from quest in response where quest.UserId == CurrentAuthUser.Id select quest;
+            var result = from quest in response where quest.UserId == user.Id select quest;
 
             ViewBag.Title = "Мои квесты";
             return View(result.OrderByDescending( o => o.AddDate));
@@ -69,5 +71,20 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
+
+        private bool IsAutherize()
+        {
+            return Session["UserInfo"] == null ? false : true;
+        }
+
+        private UserProfileVM GetUser()
+        {
+            if (this.IsAutherize())
+            {
+                this.user = (UserProfileVM)Session["UserInfo"];
+            }
+            return user;
+        }
+
     }
 }

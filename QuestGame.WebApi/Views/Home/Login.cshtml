@@ -1,21 +1,12 @@
 ﻿@model QuestGame.WebApi.Models.UserLoginVM
 
 @{
+    ViewBag.Title = "Login";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="page-header">
-    <h2>@ViewBag.Title</h2>
-</div>
+<h2>Login</h2>
 
-
-@if (ViewBag.Alerts != null)
-{
-        <div class="alert alert-danger" role="alert">
-            <strong>Ошибка</strong>
-            @ViewBag.Alerts
-        </div>
-}
 
 @using (Html.BeginForm())
 {
