@@ -6,7 +6,7 @@
 
 <div class="row page-header">
     <h3>Квест</h3>
-    <h2>@Model.Title</h2>
+    <h1>@Model.Title</h1>
 </div>
 
 
@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="col-md-8 col-lg-offset-4">
-                    @Html.ActionLink("Добавить сцену", "AddStage", "Stages", new { questId = @Model.Id }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Добавить сцену", "AddStage", "Stages", new { id = @Model.Id }, new { @class = "btn btn-primary" })
                 </div>
 
             </div>
@@ -50,7 +50,7 @@
                                 <p class="card-text">@Item.Content.Text</p>
                             </div>
                             <div class="card-block">
-                                <a href="Quests/EditQuest?questId=@Item.Id" class="card-link">Редактировать</a>
+                                <a href="Quests/EditQuest/@Item.Id" class="card-link">Редактировать</a>
                             </div>
                         </div>
                     }

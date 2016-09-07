@@ -25,7 +25,7 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
 
 
         [HttpGet]
-        public ActionResult AddStage( int questId )
+        public ActionResult AddStage(int id)
         {
             if (!this.IsAutherize())
             {
@@ -33,7 +33,8 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
             }
 
             var stagePrepare = new StageVM();
-            stagePrepare.QuestId = questId;
+            stagePrepare.QuestId = id;
+            stagePrepare.Title = "Сцена - ";
 
             return View(stagePrepare);
         }

@@ -1,7 +1,6 @@
 ﻿@model QuestGame.WebApi.Models.StageVM
 
 @{
-    ViewBag.Title = "AddStage";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -32,12 +31,13 @@
             </div>
         </div>
 
-        @*<div class="form-group">
+        <div class="form-group">
             @Html.LabelFor(model => model.QuestId, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input name="QuestId"  />
+                @Html.EditorFor(model => model.QuestId, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.QuestId, "", new { @class = "text-danger" })
             </div>
-        </div>*@
+        </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

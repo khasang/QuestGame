@@ -19,7 +19,7 @@ namespace QuestGame.WebApi.Models
         [DataType(DataType.MultilineText)]
         public string Text { get; set; }
 
-        [HiddenInput(DisplayValue = false)]
+        //[HiddenInput(DisplayValue = false)]
         public int QuestId { get; set; }
     }
 }

@@ -97,24 +97,24 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> QuestPreview(int questId)
+        public async Task<ActionResult> QuestPreview(int id)
         {
             IRequest client = new DirectRequest();
             var request = await client.GetRequestAsync(@"api/Quests");
             var response = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
 
-            var result = response.FirstOrDefault(q => q.Id == questId);
+            var result = response.FirstOrDefault(q => q.Id == id);
 
             return View(result);
         }
 
         [HttpGet]
-        public async Task<ActionResult> EditQuest(int id)
+        public async Task<ActionResult> EditQuest(int? id)
         {
-            //if (id == null)
-            //{
-            //    return RedirectToAction("Index");
-            //}
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
 
             IRequest client = new DirectRequest();
             var request = await client.GetRequestAsync(@"api/Quests");
