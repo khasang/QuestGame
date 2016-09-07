@@ -1,4 +1,4 @@
-﻿@model IEnumerable<QuestGame.Domain.Entities.Quest>
+﻿@model IEnumerable<QuestGame.Domain.DTO.QuestDTO>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -32,8 +32,9 @@
                         <li class="list-group-item">Подробнее</li>
                     </ul>
                     <div class="card-block">
-                        <a href="#" class="card-link  btn btn-primary">Играть</a>
-                        <a href="#" class="card-link">Редактировать</a>
+                        <a href="Quests/AddStage?questId=@Item.Id" class="card-link  btn btn-primary">Играть</a>
+                        <a href="Quests/EditQuest/@Item.Id" class="card-link">Редактировать</a>
+                        <a href="Stages?questId=@Item.Id" class="card-link">ЗАполнить</a>
                         <a href="Quests/RemoveQuest/@Item.Id" class="card-link">Удаление</a>
                     </div>
                 </div>

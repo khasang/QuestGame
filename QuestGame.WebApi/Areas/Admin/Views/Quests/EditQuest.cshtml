@@ -1,0 +1,62 @@
+﻿@model QuestGame.Domain.DTO.QuestDTO
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row page-header">
+    <h3>Квест</h3>
+    <h2>@Model.Title</h2>
+</div>
+
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-heading">Описание</div>
+            <div class="panel-body">
+                <div class="col-md-4">
+                    <p class="thumbnail">
+                        <img src="@Model.Content.Image" alt="@Model.Title">
+                    </p>
+                </div>
+                <div class="col-md-8">
+                    <p>@Model.Content.Text</p>
+                </div>
+
+                <div class="col-md-8 col-lg-offset-4">
+                    @Html.ActionLink("Добавить сцену", "AddStage", "Stages", new { questId = @Model.Id }, new { @class = "btn btn-primary" })
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+@if (Model.Stages.Count > 0)
+{
+    <div class="col-md-12">
+        <div class="panel panel-info">
+            <div class="panel-heading">Сцены квеста</div>
+            <div class="panel-body">
+                <div class="card-columns">
+                    @foreach (var Item in Model.Stages)
+                    {
+                        <div class="card" style="margin-bottom: 20px">
+                            <div class="card-img-title" style="background: url(@Item.Content.Image) top no-repeat; background-size: cover; height: 250px;"></div>
+                            <div class="card-block">
+                                <h4 class="card-title">@Item.Title</h4>
+                                <p class="card-text">@Item.Content.Text</p>
+                            </div>
+                            <div class="card-block">
+                                <a href="Quests/EditQuest?questId=@Item.Id" class="card-link">Редактировать</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+</div>

@@ -1,4 +1,5 @@
-﻿using QuestGame.Domain.Entities;
+﻿using QuestGame.Domain.DTO;
+using QuestGame.Domain.Entities;
 using QuestGame.Domain.Implementations;
 using QuestGame.Domain.Interfaces;
 using QuestGame.WebApi.Models;
@@ -18,6 +19,13 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
     {
         UserProfileVM user  = new UserProfileVM();
 
+        //IEnumerable<QuestDTO> userQuests = new List<QuestDTO>();
+
+        public QuestsController()
+        {
+            //this.userQuests = GetAllUserQuests().Result;
+        }
+
         // GET: Admin/Quests
         public async Task<ActionResult> Index()
         {
@@ -27,13 +35,16 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
             }
             user = this.GetUser();
             IRequest client = new DirectRequest();
-            var request = await client.GetRequestAsync( @"api/Quests" );
-            var response = await request.Content.ReadAsAsync<IEnumerable<Quest>>();
+            var request = await client.GetRequestAsync(@"api/Quests");
+            var response = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
 
             var result = from quest in response where quest.UserId == user.Id select quest;
 
             ViewBag.Title = "Мои квесты";
-            return View(result.OrderByDescending( o => o.AddDate));
+            return View(result.OrderByDescending(o => o.AddDate));
+
+            //ViewBag.Title = "Мои квесты";
+            //return View(GetAllUserQuests().Result.OrderByDescending(o => o.AddDate));
         }
 
         public ActionResult AddQuest()
@@ -56,7 +67,7 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
                 model.Image = "http://www.novelupdates.com/img/noimagefound.jpg";
             }
 
-            var user = Session["UserInfo"] as UserProfileVM;
+            var user = GetUser();
             var client = new AuthRequest(user.Token);
             var response = await client.PostRequestAsync(@"api/Quests/Add", model);
 
@@ -71,6 +82,60 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<ActionResult> AddStage(int id)
+        {
+            user = this.GetUser();
+            IRequest client = new DirectRequest();
+            var request = await client.GetRequestAsync(@"api/Quests");
+            var response = await request.Content.ReadAsAsync<IEnumerable<Quest>>();
+
+            var result = response.FirstOrDefault( q => q.Id == id );
+
+            return View(result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> QuestPreview(int questId)
+        {
+            IRequest client = new DirectRequest();
+            var request = await client.GetRequestAsync(@"api/Quests");
+            var response = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
+
+            var result = response.FirstOrDefault(q => q.Id == questId);
+
+            return View(result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> EditQuest(int id)
+        {
+            //if (id == null)
+            //{
+            //    return RedirectToAction("Index");
+            //}
+
+            IRequest client = new DirectRequest();
+            var request = await client.GetRequestAsync(@"api/Quests");
+            var response = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
+
+            var result = response.FirstOrDefault(q => q.Id == id);
+
+            return View(result);
+        }
+
+        //private async Task<IEnumerable<QuestDTO>> GetAllUserQuests()
+        //{
+        //    this.user = this.GetUser();
+        //    IRequest client = new DirectRequest();
+        //    var request = await client.GetRequestAsync(@"api/Quests");
+        //    var response = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
+
+        //    var result = from quest in response where quest.UserId == user.Id select quest;
+
+        //    return result;
+        //}
 
         private bool IsAutherize()
         {

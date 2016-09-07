@@ -16,6 +16,8 @@ namespace QuestGame.WebApi.Mappings
         {
             CreateMap<QuestVM, Quest>();
             CreateMap<QuestVM, ContentQuest>();
+            CreateMap<StageVM, Stage>();
+            CreateMap<StageVM, ContentStage>();
             CreateMap<UserRegisterVM, ApplicationUser>();
             CreateMap<ApplicationUser, UserProfileVM>();
         }
