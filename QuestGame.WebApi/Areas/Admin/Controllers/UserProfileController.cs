@@ -7,10 +7,8 @@ using System.Web.Mvc;
 
 namespace QuestGame.WebApi.Areas.Admin.Controllers
 {
-    public class UserProfileController : Controller
+    public class UserProfileController : AuthController
     {
-        UserProfileVM user = new UserProfileVM();
-
         // GET: UserProfile
         public ActionResult Index()
         {
@@ -19,7 +17,7 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
                 return RedirectToAction("Login", "Home", new { area = "" });
             }
 
-            user = this.GetUser();
+            var user = this.GetUser();
 
             ViewBag.Title = "Профиль пользователя";
             return View(user);
@@ -31,18 +29,5 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
         //    return View(user);
         //}
 
-        private bool IsAutherize()
-        {
-            return Session["UserInfo"] == null ? false : true;
-        }
-
-        private UserProfileVM GetUser()
-        {
-            if (this.IsAutherize())
-            {
-                this.user = (UserProfileVM)Session["UserInfo"];
-            }
-            return user;
-        }
     }
 }

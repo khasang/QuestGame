@@ -30,11 +30,13 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
                 return RedirectToAction("Login", "Home", new { area = "" });
             }
 
-            var stagePrepare = new StageVM();
-            stagePrepare.QuestId = id;
-            stagePrepare.Title = "Сцена - ";
+            var modelPrepare = new StageVM
+            {
+                QuestId = id,
+                Title = "Сцена - "
+            };
 
-            return View(stagePrepare);
+            return View(modelPrepare);
         }
 
         [HttpPost]
@@ -45,6 +47,23 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
             var response = await client.PostRequestAsync(@"api/Stages/Add", model);
 
             return RedirectToAction("EditQuest", "Quests", new { id = model.QuestId });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> EditStage(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            IRequest client = new DirectRequest();
+            var request = await client.GetRequestAsync(@"api/Stages");
+            var response = await request.Content.ReadAsAsync<IEnumerable<StageDTO>>();
+
+            var result = response.FirstOrDefault(s => s.Id == id);
+
+            return View(result);
         }
     }
 }

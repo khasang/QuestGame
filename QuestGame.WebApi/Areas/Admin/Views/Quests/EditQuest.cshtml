@@ -50,7 +50,10 @@
                                 <p class="card-text">@Item.Content.Text</p>
                             </div>
                             <div class="card-block">
-                                <a href="Quests/EditQuest/@Item.Id" class="card-link">Редактировать</a>
+                                @*<a href="Stages/EditStage/@Item.Id" class="card-link">Редактировать</a>*@
+                                @Html.ActionLink("Редактировать", "EditStage", "Stages", new { id = Item.Id }, new { area = "Admin" })
+
+
                             </div>
                         </div>
                     }
