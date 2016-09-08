@@ -1,11 +1,14 @@
 ﻿using QuestGame.Domain.DTO;
+using QuestGame.Domain.Entities;
 using QuestGame.Domain.Implementations;
 using QuestGame.Domain.Interfaces;
 using QuestGame.WebApi.Models;
+using QuestGame.WebApi.Models.UserViewModels;
 using System;
-using System.Net.Http;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -16,9 +19,11 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
     {
         IEnumerable<QuestDTO> listUserQuest = new List<QuestDTO>();
 
-        public OperationsController()
+        public OperationsController() : base()
         {
-            this.listUserQuest = UserQuestFill().Result;
+            var user = this.GetUser();
+
+            this.listUserQuest = UserQuestFill(user).Result;
         }
 
 
@@ -58,11 +63,11 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
         }
 
 
-        private async Task<IEnumerable<QuestDTO>> UserQuestFill()
+        private async Task<IEnumerable<QuestDTO>> UserQuestFill(UserProfileVM user)
         {
             IEnumerable<QuestDTO> result = new List<QuestDTO>();
 
-            var user = this.GetUser();
+
             IRequest client = new DirectRequest();
             var request = await client.GetRequestAsync(@"api/Quests");
             var response = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
