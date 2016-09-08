@@ -279,6 +279,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\OperationsViewModels\OperationsVM.cs" />
+    <Compile Include="Models\OperationsViewModels\OperationsVM_n.cs" />
     <Compile Include="Models\QuestViewModels\QuestVM.cs" />
     <Compile Include="Models\StageViewModel\StageVM.cs" />
     <Compile Include="Models\UserViewModels\UserLoginVM.cs" />

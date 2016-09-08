@@ -14,6 +14,14 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
 {
     public class OperationsController : AuthController
     {
+        IEnumerable<QuestDTO> listUserQuest = new List<QuestDTO>();
+
+        public OperationsController()
+        {
+            this.listUserQuest = UserQuestFill().Result;
+        }
+
+
         // GET: Admin/Operations
         public ActionResult Index()
         {
@@ -28,13 +36,19 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
                 return RedirectToAction("Index", "Quests", new { area = "Admin" });
             }
 
-            var modelPrepare = new OperationsVM(id);
+            var stages = listUserQuest.FirstOrDefault( q => q.Id == listUserQuest.SelectMany(x => x.Stages).FirstOrDefault(m => m.Id == id).QuestId).Stages;
+
+            var modelPrepare = new OperationsVM_n(id);
+            foreach (var item in stages)
+            {
+                modelPrepare.StagesList.Add(item.Id, item.Title);
+            }
 
             return View(modelPrepare);
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddOperations(OperationsVM model)
+        public async Task<ActionResult> AddOperations(OperationsVM_n model)
         {
             var user = GetUser();
             var client = new AuthRequest(user.Token);
@@ -43,6 +57,20 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
             return RedirectToAction("EditStage", "Stages", new { id = model.StageId });
         }
 
+
+        private async Task<IEnumerable<QuestDTO>> UserQuestFill()
+        {
+            IEnumerable<QuestDTO> result = new List<QuestDTO>();
+
+            var user = this.GetUser();
+            IRequest client = new DirectRequest();
+            var request = await client.GetRequestAsync(@"api/Quests");
+            var response = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
+
+            result = from quest in response where quest.UserId == user.Id select quest;
+
+            return result;
+        }
 
     }
 }
