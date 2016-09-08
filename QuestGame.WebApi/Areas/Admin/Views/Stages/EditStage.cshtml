@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="col-md-8 col-lg-offset-4">
-                    @Html.ActionLink("Добавить действие", "AddStage", "Stages", new { id = @Model.Id }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Добавить действие", "AddOperations", "Operations", new { id = @Model.Id }, new { @class = "btn btn-primary" })
                 </div>
 
             </div>
@@ -44,15 +44,34 @@
                                 <th>#</th>
                                 <th>Описание действия</th>
                                 <th>Переход на сцену</th>
+                                @*<th></th>*@
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var operat in Model.Operations)
                             {
                                 <tr>
-                                    <th scope="row"></th>
-                                    <td>@operat.Description</td>
-                                    <td>@operat.StageId</td>
+                                    <td class="col-md-2">
+                                        <div class="form-group">
+                                            @operat.Id
+                                        </div>
+                                    </td>
+
+                                    <td class="col-md-4">
+                                        <div class="form-group col-md-12">
+                                            @operat.Description
+                                        </div>
+                                    </td>
+                                    <td class="col-md-3">
+                                        <div class="form-group">
+                                            @operat.StageTitle
+                                        </div>
+                                    </td>
+                                    <td class="col-md-3">
+                                        <div class="form-group">
+                                            @Html.ActionLink("Редактироать", "Edit", "Operations", new { id = @operat.Id }, new { @class = "btn btn-default" })
+                                        </div>
+                                    </td>
                                 </tr>
                             }
                         </tbody>

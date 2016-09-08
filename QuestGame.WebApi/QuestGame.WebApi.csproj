@@ -226,6 +226,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AuthController.cs" />
+    <Compile Include="Areas\Admin\Controllers\OperationsController.cs" />
     <Compile Include="Areas\Admin\Controllers\QuestsController.cs" />
     <Compile Include="Areas\Admin\Controllers\StagesController.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
@@ -257,6 +258,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
+    <Compile Include="Controllers\API\OperationsController.cs" />
     <Compile Include="Controllers\API\StagesController.cs" />
     <Compile Include="Controllers\API\QuestsController.cs" />
     <Compile Include="Controllers\MVC\HomeController.cs" />
@@ -276,6 +278,7 @@
     <Compile Include="Models\IdentityModels.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\OperationsViewModels\OperationsVM.cs" />
     <Compile Include="Models\QuestViewModels\QuestVM.cs" />
     <Compile Include="Models\StageViewModel\StageVM.cs" />
     <Compile Include="Models\UserViewModels\UserLoginVM.cs" />
@@ -332,6 +335,7 @@
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Admin\Views\Stages\EditStage.cshtml" />
+    <Content Include="Areas\Admin\Views\Operations\AddOperations.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

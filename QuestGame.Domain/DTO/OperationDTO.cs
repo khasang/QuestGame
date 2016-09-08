@@ -12,5 +12,6 @@ namespace QuestGame.Domain.DTO
         public string Description { get; set; }
         public DateTime ModifyDate { get; set; }
         public int StageId { get; set; }
+        public string StageTitle { get; set; }
     }
 }
