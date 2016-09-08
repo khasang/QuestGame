@@ -13,10 +13,8 @@ using QuestGame.WebApi.Models;
 
 namespace QuestGame.WebApi.Areas.Admin.Controllers
 {
-    public class StagesController : Controller
+    public class StagesController : AuthController
     {
-        UserProfileVM user = new UserProfileVM();
-
         //GET: Admin/Stages
         public ActionResult Index()
         {
@@ -47,24 +45,6 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
             var response = await client.PostRequestAsync(@"api/Stages/Add", model);
 
             return RedirectToAction("EditQuest", "Quests", new { id = model.QuestId });
-        }
-
-
-
-
-
-        private bool IsAutherize()
-        {
-            return Session["UserInfo"] == null ? false : true;
-        }
-
-        private UserProfileVM GetUser()
-        {
-            if (this.IsAutherize())
-            {
-                this.user = (UserProfileVM)Session["UserInfo"];
-            }
-            return user;
         }
     }
 }

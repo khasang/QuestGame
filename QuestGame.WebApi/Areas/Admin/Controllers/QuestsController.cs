@@ -15,9 +15,9 @@ using System.Web.Mvc;
 
 namespace QuestGame.WebApi.Areas.Admin.Controllers
 {
-    public class QuestsController : Controller
+    public class QuestsController : AuthController
     {
-        UserProfileVM user  = new UserProfileVM();
+        //UserProfileVM user  = new UserProfileVM();
 
         //IEnumerable<QuestDTO> userQuests = new List<QuestDTO>();
 
@@ -33,7 +33,7 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
             {
                 return RedirectToAction("Login", "Home", new { area = "" });
             }
-            user = this.GetUser();
+            var user = this.GetUser();
             IRequest client = new DirectRequest();
             var request = await client.GetRequestAsync(@"api/Quests");
             var response = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
@@ -86,7 +86,7 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
         [HttpGet]
         public async Task<ActionResult> AddStage(int id)
         {
-            user = this.GetUser();
+            var user = this.GetUser();
             IRequest client = new DirectRequest();
             var request = await client.GetRequestAsync(@"api/Quests");
             var response = await request.Content.ReadAsAsync<IEnumerable<Quest>>();
@@ -137,19 +137,19 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
         //    return result;
         //}
 
-        private bool IsAutherize()
-        {
-            return Session["UserInfo"] == null ? false : true;
-        }
+        //private bool IsAutherize()
+        //{
+        //    return Session["UserInfo"] == null ? false : true;
+        //}
 
-        private UserProfileVM GetUser()
-        {
-            if (this.IsAutherize())
-            {
-                this.user = (UserProfileVM)Session["UserInfo"];
-            }
-            return user;
-        }
+        //private UserProfileVM GetUser()
+        //{
+        //    if (this.IsAutherize())
+        //    {
+        //        this.user = (UserProfileVM)Session["UserInfo"];
+        //    }
+        //    return user;
+        //}
 
     }
 }
