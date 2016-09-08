@@ -17,16 +17,6 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
 {
     public class OperationsController : AuthController
     {
-        IEnumerable<QuestDTO> listUserQuest = new List<QuestDTO>();
-
-        public OperationsController() : base()
-        {
-            var user = this.GetUser();
-
-            this.listUserQuest = UserQuestFill(user).Result;
-        }
-
-
         // GET: Admin/Operations
         public ActionResult Index()
         {
@@ -34,16 +24,27 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
         }
 
         // GET: Admin/Operations/Add/5
-        public ActionResult AddOperations(int? id)
+        public async Task<ActionResult> AddOperations(int? id)
         {
             if (!this.IsAutherize())
             {
                 return RedirectToAction("Index", "Quests", new { area = "Admin" });
             }
 
-            var stages = listUserQuest.FirstOrDefault( q => q.Id == listUserQuest.SelectMany(x => x.Stages).FirstOrDefault(m => m.Id == id).QuestId).Stages;
+            var user = this.GetUser();
 
-            var modelPrepare = new OperationsVM_n(id);
+            //var listUserQuest = UserQuestFill(user).Result;
+
+            IRequest client = new DirectRequest();
+            var request = await client.GetRequestAsync(@"api/Quests");
+            var response = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
+
+            var stages = response.FirstOrDefault( q => q.Id == response.SelectMany(x => x.Stages).FirstOrDefault(m => m.Id == id).QuestId).Stages;
+
+            var modelPrepare = new OperationsVM();
+
+            modelPrepare.StageId = (int)id;
+
             foreach (var item in stages)
             {
                 modelPrepare.StagesList.Add(item.Id, item.Title);
@@ -53,7 +54,7 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddOperations(OperationsVM_n model)
+        public async Task<ActionResult> AddOperations(OperationsVM model)
         {
             var user = GetUser();
             var client = new AuthRequest(user.Token);
@@ -66,7 +67,6 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
         private async Task<IEnumerable<QuestDTO>> UserQuestFill(UserProfileVM user)
         {
             IEnumerable<QuestDTO> result = new List<QuestDTO>();
-
 
             IRequest client = new DirectRequest();
             var request = await client.GetRequestAsync(@"api/Quests");
