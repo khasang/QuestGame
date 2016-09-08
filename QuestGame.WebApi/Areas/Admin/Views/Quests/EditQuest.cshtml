@@ -44,7 +44,10 @@
                     @foreach (var Item in Model.Stages)
                     {
                         <div class="card" style="margin-bottom: 20px">
-                            <div class="card-img-title" style="background: url(@Item.Content.Image) top no-repeat; background-size: cover; height: 250px;"></div>
+                            @if (@Item.Content.Image != null)
+                            {
+                                <div class="card-img-title" style="background: url(@Item.Content.Image) top no-repeat; background-size: cover; height: 250px;"></div>
+                            }
                             <div class="card-block">
                                 <h4 class="card-title">@Item.Title</h4>
                                 <p class="card-text">@Item.Content.Text</p>
@@ -52,8 +55,6 @@
                             <div class="card-block">
                                 @*<a href="Stages/EditStage/@Item.Id" class="card-link">Редактировать</a>*@
                                 @Html.ActionLink("Редактировать", "EditStage", "Stages", new { id = Item.Id }, new { area = "Admin" })
-
-
                             </div>
                         </div>
                     }

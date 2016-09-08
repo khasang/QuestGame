@@ -11,7 +11,7 @@ namespace QuestGame.Domain.Entities
         public int Id { get; set; }
         public string Description { get; set; }
         public DateTime ModifyDate { get; set; }
-        //public int RedirectToStage { get; set; }
+        public int RedirectToStage { get; set; }
         public int StageId { get; set; }
 
         [JsonIgnore]
