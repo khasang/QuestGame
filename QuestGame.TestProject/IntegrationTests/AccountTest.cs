@@ -92,6 +92,33 @@ namespace QuestGame.TestProject.IntegrationTests
             driver.Close();
         }
 
+        [TestMethod]
+        public void QuestGame_Delete_Success()
+        {
+            //var dr = FirefoxDriver();
+            var driver = new ChromeDriver();
+            driver.Navigate().GoToUrl("http://localhost:9243/Home/Login");
+
+            var login = driver.FindElementById("loginTextBox");
+            login.SendKeys("admin@admin.com");
+
+            var password = driver.FindElementById("passwordTextBox");
+            password.SendKeys("qwerty");
+
+            var button = driver.FindElementById("enterButton");
+            button.Click();
+
+            Thread.Sleep(5000);
+
+            var gameButton = driver.FindElementById("gamePage");
+            gameButton.Click();
+            //попадаем на страницу с квестами
+
+            //Assert.IsTrue(name.Text.Contains("admin@admin.com"));
+
+            driver.Close();
+        }
+
         private string GetRndEmail()
         {
             StringBuilder text = new StringBuilder();

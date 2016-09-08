@@ -107,7 +107,7 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    ViewBag.Message = "Не удалось добавить квест!";
+                    ViewBag.Message = "Не удалось удалить квест!";
                 }
             }
 
