@@ -18,7 +18,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">@Html.DisplayNameFor(n => n)</label>
                     @Html.TextBoxFor(t => t.Title, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(v => v)
+                    @Html.ValidationMessageFor(v => v.Title)
                 </div>
                 <div class="col-sm-4">
                     <div class="pull-right">

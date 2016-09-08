@@ -90,32 +90,28 @@ namespace QuestGame.WebApi.Controllers
             dataManager.Save();
         }
 
-        [HttpDelete]
-        [Route("Delete")]
-        public void Delete(QuestDTO quest)
-        {
-            var model = mapper.Map<QuestDTO, Quest>(quest);
+        //[HttpDelete]
+        //[Route("Delete")]
+        //public void Delete(QuestDTO quest)
+        //{
+        //    var model = mapper.Map<QuestDTO, Quest>(quest);
 
-            // Пока не работает. Нужен Id
-            //dataManager.Quests.Delete(model);
-            //dataManager.Save();
+        //    // Пока не работает. Нужен Id
+        //    //dataManager.Quests.Delete(model);
+        //    //dataManager.Save();
 
-            if (model != null && !string.IsNullOrEmpty(model.Title))
-            {
-                dataManager.Quests.DeleteByTitle(model.Title);
-                dataManager.Save();
-            }
-        }
+        //    if (model != null && !string.IsNullOrEmpty(model.Title))
+        //    {
+        //        dataManager.Quests.DeleteByTitle(model.Title);
+        //        dataManager.Save();
+        //    }
+        //}
 
         [HttpDelete]
         [Route("DelByTitle")]
         public void DelByTitle(QuestFullDTO quest)
         {
             var model = mapper.Map<QuestFullDTO, Quest>(quest);
-
-            // Пока не работает. Нужен Id
-            //dataManager.Quests.Delete(model);
-            //dataManager.Save();
 
             if (model != null && !string.IsNullOrEmpty(model.Title))
             {

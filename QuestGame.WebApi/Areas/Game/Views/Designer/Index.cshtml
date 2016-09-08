@@ -39,7 +39,7 @@
                             <td>
                                 <a href=@Url.Action("Details", "Designer", new { title = quest.Title }, null)><span class="glyphicon glyphicon-info-sign"></span></a>
                                 <a href=@Url.Action("Edit", "Designer", new { title = quest.Title }, null)><span class="glyphicon glyphicon-pencil"></span></a>
-                                <a href=@Url.Action("DeleteQuest", "Designer", new { title = quest.Title }, null)><span class="glyphicon glyphicon-remove-circle"></span></a>                               
+                                <a href=@Url.Action("DeleteQuest", "Designer", new { model = quest.Title }, null)><span class="glyphicon glyphicon-remove-circle"></span></a>                               
                             </td>
                         </tr>
                     }
