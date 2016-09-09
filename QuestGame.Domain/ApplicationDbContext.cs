@@ -73,6 +73,10 @@ namespace QuestGame.Domain
             modelBuilder.Entity<Stage>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Owner).WillCascadeOnDelete(true);
             modelBuilder.Entity<Stage>().HasMany(o => o.Operations).WithRequired(s => s.Stage).WillCascadeOnDelete(true);
 
+            modelBuilder.Entity<Operation>().HasRequired(s => s.Stage).WithMany(o => o.Operations).HasForeignKey(k => k.StageId).WillCascadeOnDelete(true);
+            modelBuilder.Entity<Operation>().HasOptional(s => s.RedirectTo).WithOptionalDependent();
+
+
             base.OnModelCreating(modelBuilder);
         }
 

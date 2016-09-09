@@ -24,7 +24,7 @@ namespace QuestGame.WebApi.Models
         [Display(Name = "Описание действия")]
         public string Description { get; set; }
 
-        public int RedirectToStage { get; set; }
+        public int RedirectToId { get; set; }
 
         public int StageId { get; set; }
 

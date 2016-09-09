@@ -38,7 +38,7 @@
         @if (Model.StagesList.Count > 0)
         {
             <div class="form-group">
-                <select name="RedirectToStage">
+                <select name="RedirectToId">
                     @foreach (var value in Model.StagesList)
                     {
                         <option value="@value.Key">@value.Value</option>
