@@ -90,15 +90,10 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> DeleteQuest(string title)      //public async Task<ActionResult> DeleteQuest(NewQuestViewModel model)
+        public async Task<ActionResult> DeleteQuest(string title)
         {
             if (title == null)
                 return View(title);
-
-            //if (!ModelState.IsValid)
-            //    return View(model);
-
-            //var request = mapper.Map<NewQuestViewModel, QuestDTO>(model);
 
             using (var client = new HttpClient())
             {
@@ -109,7 +104,6 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", SessionUser.Token);
 
                 var response = await client.DeleteAsync(@"api/Quest/DelByTitle?title=" + title);
-                //var response = await client.PostAsJsonAsync(@"api/Quest/DelByTitle", model);
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
@@ -118,6 +112,33 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
             }
 
             return RedirectToAction("Index", "Designer");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Details(string title)      
+        {
+            if (title == null)
+                return View(title);
+
+            using (var client = new HttpClient())
+            {
+
+                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["BaseUrl"]);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("applicatGion/json"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", SessionUser.Token);
+
+                var response = await client.GetAsync(@"api/Quest/Details?title=" + title);
+
+                //var response = await client.DeleteAsync(@"api/Quest/DelByTitle?title=" + title);
+
+                //if (response.StatusCode != HttpStatusCode.OK)
+                //{
+                //    ViewBag.Message = "Не удалось удалить квест!";
+                //}
+            }
+
+            return View();
         }
     }
 }

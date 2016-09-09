@@ -56,6 +56,16 @@ namespace QuestGame.WebApi.Controllers
             return response;
         }
 
+        [HttpGet]
+        [Route("Details")]
+        public /*IEnumerable<StageDTO>*/ /*IHttpActionResult*/int Details(string title)
+        {
+            //var quests = dataManager.Stages.GetAll().ToList();
+
+            //var response = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(quests);
+            return 10;
+        }
+
         [HttpPost]
         [Route("Add")]
         public IHttpActionResult Add(QuestFullDTO quest)
