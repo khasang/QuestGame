@@ -109,13 +109,13 @@ namespace QuestGame.WebApi.Controllers
 
         [HttpDelete]
         [Route("DelByTitle")]
-        public void DelByTitle(QuestFullDTO quest)
+        public void DelByTitle(string title)
         {
-            var model = mapper.Map<QuestFullDTO, Quest>(quest);
+            //var model = mapper.Map<QuestFullDTO, Quest>(title);
 
-            if (model != null && !string.IsNullOrEmpty(model.Title))
+            if (title != null && !string.IsNullOrEmpty(title))
             {
-                dataManager.Quests.DeleteByTitle(model.Title);
+                dataManager.Quests.DeleteByTitle(title);
                 dataManager.Save();
             }
         }

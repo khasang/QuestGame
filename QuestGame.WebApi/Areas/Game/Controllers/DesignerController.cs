@@ -90,15 +90,15 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> DeleteQuest(NewQuestViewModel model)      //public async Task<ActionResult> DeleteQuest(string title)
+        public async Task<ActionResult> DeleteQuest(string title)      //public async Task<ActionResult> DeleteQuest(NewQuestViewModel model)
         {
-            //if (title == null)
-            //    return View(title);
+            if (title == null)
+                return View(title);
 
-            if (!ModelState.IsValid)
-                return View(model);
+            //if (!ModelState.IsValid)
+            //    return View(model);
 
-            var request = mapper.Map<NewQuestViewModel, QuestDTO>(model);
+            //var request = mapper.Map<NewQuestViewModel, QuestDTO>(model);
 
             using (var client = new HttpClient())
             {
@@ -108,8 +108,8 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", SessionUser.Token);
 
-                //var response = await client.DeleteAsync(@"api/Quest/DelByTitle?title=" + title);
-                var response = await client.PostAsJsonAsync(@"api/Quest/DelByTitle", model);
+                var response = await client.DeleteAsync(@"api/Quest/DelByTitle?title=" + title);
+                //var response = await client.PostAsJsonAsync(@"api/Quest/DelByTitle", model);
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
