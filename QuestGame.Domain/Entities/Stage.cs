@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuestGame.Domain.Entities
 {
@@ -17,20 +18,29 @@ namespace QuestGame.Domain.Entities
 
         public int Id { get; set; }
         public string Title { get; set; }
+        public string Tag { get; set; }
         public int? Points { get; set; }
         public bool AllowSkip { get; set; }
         public DateTime ModifyDate { get; set; }
 
+        [JsonIgnore]
+        public virtual Quest Quest { get; set; }
         public int QuestId { get; set; }
 
         [JsonIgnore]
-        public virtual Quest Quest { get; set; }
+        public virtual QuestRoute LastRoute { get; set; }
+        public int? LastRouteId { get; set; }
+
+        //[JsonIgnore]
+        //public virtual QuestRoute Route { get; set; }
+        //public int? RouteId { get; set; }
 
         [Required]
         [JsonIgnore]
         public virtual ContentStage Content { get; set; }
 
         [JsonIgnore]
+        [InverseProperty("Stage")]
         public virtual ICollection<Operation> Operations { get; set; }
     }
 }

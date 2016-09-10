@@ -1,7 +1,9 @@
-﻿using QuestGame.Domain.DTO;
+﻿using QuestGame.Common;
+using QuestGame.Domain.DTO;
 using QuestGame.Domain.Entities;
 using QuestGame.Domain.Implementations;
 using QuestGame.Domain.Interfaces;
+using QuestGame.WebApi.Infrastructura.CustomAutorize;
 using QuestGame.WebApi.Models;
 using QuestGame.WebApi.Models.UserViewModels;
 using System;
@@ -27,24 +29,23 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
         }
 
         // GET: Admin/Quests
+        // [IsUserInfoInSession]
         public async Task<ActionResult> Index()
         {
-            if (!this.IsAutherize())
-            {
-                return RedirectToAction("Login", "Home", new { area = "" });
-            }
-            var user = this.GetUser();
-            IRequest client = new DirectRequest();
-            var request = await client.GetRequestAsync(@"api/Quests");
-            var response = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
-
-            var result = from quest in response where quest.UserId == user.Id select quest;
+            if (!this.IsAutherize()) { return RedirectToAction("Login", "Home", new { area = "" }); }
 
             ViewBag.Title = "Мои квесты";
-            return View(result.OrderByDescending(o => o.AddDate));
 
-            //ViewBag.Title = "Мои квесты";
-            //return View(GetAllUserQuests().Result.OrderByDescending(o => o.AddDate));
+            IEnumerable<QuestDTO> result;
+
+            using (var client = new RequestApi())
+            {
+                var request = await client.GetAsync(@"api/Quests");
+                var response = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
+                result = from quest in response where quest.UserId == GetUser().Id select quest;
+            }
+            
+            return View(result.OrderByDescending(o => o.AddDate));
         }
 
         public ActionResult AddQuest()
@@ -54,7 +55,7 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddQuest( QuestVM model )
+        public async Task<ActionResult> AddQuest(QuestVM model)
         {
             if (model.File != null)
             {
@@ -67,9 +68,10 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
                 model.Image = "http://www.novelupdates.com/img/noimagefound.jpg";
             }
 
-            var user = GetUser();
-            var client = new AuthRequest(user.Token);
-            var response = await client.PostRequestAsync(@"api/Quests/Add", model);
+            using (var client = new RequestApi(GetUser().Token))
+            {
+                var request = await client.PostJsonAsync(@"api/Quests/Add", model);
+            }
 
             return RedirectToAction("Index");
         }
