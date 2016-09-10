@@ -58,12 +58,12 @@ namespace QuestGame.WebApi.Controllers
 
         [HttpGet]
         [Route("Details")]
-        public /*IEnumerable<StageDTO>*/ /*IHttpActionResult*/int Details(string title)
+        public /*IEnumerable<StageDTO>*/ /*IHttpActionResult*/string Details(string title)
         {
             //var quests = dataManager.Stages.GetAll().ToList();
 
             //var response = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(quests);
-            return 10;
+            return title;
         }
 
         [HttpPost]
