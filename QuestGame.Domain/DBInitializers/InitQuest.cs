@@ -46,7 +46,7 @@ namespace QuestGame.Domain.DBInitializers
                     {
                         new Motion { Description = "Description" + rnd.Next(100).ToString() },
                         new Motion { Description = "Description" + rnd.Next(100).ToString() },
-                        new Motion { Description = "Description" + rnd.Next(100).ToString(), NextStage = stage1 }
+                        new Motion { Description = "Description" + rnd.Next(100).ToString(), NextStage = quest.Stages.ElementAt(0) }
                     };
                 }
 
