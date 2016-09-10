@@ -40,11 +40,10 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
 
             using (var client = new RequestApi())
             {
-                var request = await client.GetAsync(@"api/Quests");
-                var response = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
-                result = from quest in response where quest.UserId == GetUser().Id select quest;
+                var request = await client.GetAsync(@"api/Quests/GetByUser?userIdentificator=" + GetUser().Identificator);
+                result = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
             }
-            
+
             return View(result.OrderByDescending(o => o.AddDate));
         }
 

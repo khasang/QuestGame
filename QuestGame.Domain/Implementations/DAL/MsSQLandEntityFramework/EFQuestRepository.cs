@@ -48,6 +48,11 @@ namespace QuestGame.Domain.Implementations
             return db.Quests.Find( (int)id );
         }
 
+        public IEnumerable<Quest> GetByIdentificator(string identificator)
+        {
+            return db.Quests.Where(q => q.User.Identificator == identificator);
+        }
+
         public void Save()
         {
             db.Save();

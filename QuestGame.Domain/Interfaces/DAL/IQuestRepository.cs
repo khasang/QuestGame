@@ -9,5 +9,6 @@ namespace QuestGame.Domain.Interfaces
 {
     public interface IQuestRepository : IRepositoryQG<Quest>
     {
+        IEnumerable<Quest> GetByIdentificator(string identificator);
     }
 }
