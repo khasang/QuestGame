@@ -413,6 +413,7 @@ namespace QuestGame.WebApi.Controllers
             }
 
             var user = mapper.Map<UserRegisterVM, ApplicationUser>(model);
+            user.Identificator = Guid.NewGuid().ToString();
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 

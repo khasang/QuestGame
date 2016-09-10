@@ -19,15 +19,6 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
 {
     public class QuestsController : AuthController
     {
-        //UserProfileVM user  = new UserProfileVM();
-
-        //IEnumerable<QuestDTO> userQuests = new List<QuestDTO>();
-
-        public QuestsController()
-        {
-            //this.userQuests = GetAllUserQuests().Result;
-        }
-
         // GET: Admin/Quests
         // [IsUserInfoInSession]
         public async Task<ActionResult> Index()
@@ -37,6 +28,8 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
             ViewBag.Title = "Мои квесты";
 
             IEnumerable<QuestDTO> result;
+
+            var userr = GetUser();
 
             using (var client = new RequestApi())
             {
@@ -78,8 +71,13 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
         [HttpGet]
         public async Task<ActionResult> RemoveQuest(int id)
         {
-            var client = new DirectRequest();
-            var response = await client.DeleteRequestAsync(@"api/Quests/Del?id=" + id);
+            using (var client = new RequestApi(GetUser().Token))
+            {
+                var request = await client.DeleteAsync(@"api/Quests/Del?id=" + id);
+            }
+
+            //var client = new DirectRequest();
+            //var response = await client.DeleteRequestAsync(@"api/Quests/Del?id=" + id);
 
             return RedirectToAction("Index");
         }

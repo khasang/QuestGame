@@ -46,7 +46,7 @@ namespace QuestGame.WebApi.Controllers
         [Route("GetByUser")]
         public IEnumerable<QuestDTO> GetQuestsByUser(string userIdentificator)
         {
-            var quests = dataManager.Quests.GetByIdentificator(userIdentificator);
+            var quests = dataManager.Quests.GetByIdentificator(userIdentificator).ToList();
             var response = mapper.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(quests);
 
             return response;

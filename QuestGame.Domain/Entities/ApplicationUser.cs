@@ -13,22 +13,17 @@ namespace QuestGame.Domain.Entities
     // Чтобы добавить данные профиля для пользователя, можно добавить дополнительные свойства в класс ApplicationUser. Дополнительные сведения см. по адресу: http://go.microsoft.com/fwlink/?LinkID=317594.
     public class ApplicationUser : IdentityUser
     {
-        private Guid identificator;
+        //private Guid identificator;
 
         public ApplicationUser()
         {
-            this.AddDate = DateTime.Now;
-            this.identificator = Guid.NewGuid();
+            //this.AddDate = DateTime.Now;
+            //this.identificator = Guid.NewGuid();
             this.Quests = new List<Quest>();
             this.QuestsRoutes = new List<QuestRoute>();
         }
 
-        public string Identificator {
-            get
-            { return this.identificator.ToString(); }
-            private set
-            { }
-        }
+        public string Identificator { get; set; }
 
         public string Name { get; set; }
 
@@ -67,7 +62,7 @@ namespace QuestGame.Domain.Entities
             userIdentity.AddClaim(new Claim(ClaimTypes.Country, this.Contry));
             userIdentity.AddClaim(new Claim("Rating", this.Rating.ToString()));
             userIdentity.AddClaim(new Claim("AddDate", this.AddDate.ToString()));
-            userIdentity.AddClaim(new Claim("Identificator", this.Identificator.ToString()));
+            userIdentity.AddClaim(new Claim("Identificator", this.Identificator));
 
             return userIdentity;
         }

@@ -50,7 +50,8 @@ namespace QuestGame.Domain.Implementations
 
         public IEnumerable<Quest> GetByIdentificator(string identificator)
         {
-            return db.Quests.Where(q => q.User.Identificator == identificator);
+            var r = db.Quests.Where(q => q.User.Identificator == identificator);
+            return r;
         }
 
         public void Save()
