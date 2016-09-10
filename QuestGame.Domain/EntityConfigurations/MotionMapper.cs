@@ -21,6 +21,8 @@ namespace QuestGame.Domain.EntityConfigurations
             this.HasRequired(x => x.OwnerStage)
                 .WithMany(x => x.Motions)
                 .HasForeignKey(x => x.OwnerStageId);
+
+            this.HasOptional(x => x.NextStage).WithOptionalDependent();
         }
     }
 }
