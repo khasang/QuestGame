@@ -1,4 +1,5 @@
-﻿using QuestGame.WebApi.Models;
+﻿using QuestGame.Common;
+using QuestGame.WebApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,23 +37,12 @@ namespace QuestGame.WebApi.Controllers
                 View(model);
             }
 
-            using (HttpClient client = new HttpClient())
+            using (var client = new RequestApi())
             {
-                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["BaseUrl"]);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                var response = await client.PostAsJsonAsync(@"api/Account/Register", model);
+                var response = await client.PostJsonAsync(@"api/Account/Register", model);
                 var answer = await response.Content.ReadAsAsync<RegisterResponse>();
 
-                if (answer.Success)
-                {
-                    ViewBag.ErrorMessage = "Пользователь успешно зарегистрирован!";
-                }
-                else
-                {
-                    ViewBag.ErrorMessage = "Ошибка регистрации!";
-                }
+                ViewBag.ErrorMessage = answer.Success ? "Пользователь успешно зарегистрирован!" : "Ошибка регистрации!";
 
                 return RedirectToAction("Index");
             }
@@ -73,26 +63,22 @@ namespace QuestGame.WebApi.Controllers
                 View(model);
             }
 
-            using (HttpClient client = new HttpClient())
+            using (var client = new RequestApi())
             {
-                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["BaseUrl"]);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var response = await client.PostJsonAsync(@"api/Account/LoginUser", model);
 
-                var response = await client.PostAsJsonAsync(@"api/Account/LoginUser", model);
-
-                if (response.StatusCode == HttpStatusCode.BadRequest)
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    ViewBag.ErrorMessage = "Неудачная попытка аутентификации!";
-                    return View();
+                    var answer = await response.Content.ReadAsStringAsync();
+
+                    //Записать токен в сесию
+                    Session["User"] = new UserModel { UserName = model.Email, Token = answer };
+
+                    return RedirectToAction("Index");
                 }
 
-                var answer = await response.Content.ReadAsStringAsync();
-
-                //Записать токен в сесию
-                Session["User"] = new UserModel { UserName = model.Email, Token = answer };
-
-                return RedirectToAction("Index");
+                ViewBag.ErrorMessage = "Неудачная попытка аутентификации!";
+                return View();
             }
         }
 
