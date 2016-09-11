@@ -33,7 +33,7 @@
                     @foreach (var quest in Model)
                     {
                         <tr>
-                            <td>@Html.ActionLink(quest.Title, "Details", new { id = quest.Title }, null)</td>
+                            <td>@Html.ActionLink(quest.Title, "Details", new { title = quest.Title }, null)</td>
                             <td>@quest.Owner</td>
                             <td>@quest.Date</td>
                             <td>

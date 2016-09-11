@@ -50,5 +50,6 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
                 return View(model);
             }
         }
+
     }
 }
