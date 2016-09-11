@@ -60,17 +60,23 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
         // POST: Design/Quests/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(QuestViewModel model)
         {
+            var user = Session["User"] as UserModel;
+            var quest = mapper.Map<QuestViewModel, QuestDTO>(model);
+
             try
             {
-                // TODO: Add insert logic here
+                using (var client = new RequestApi(user.Token))
+                {
+                    var response = client.PostJsonAsync(@"api/Quest/Add", quest);
+                }
 
                 return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return View(model);
             }
         }
 
