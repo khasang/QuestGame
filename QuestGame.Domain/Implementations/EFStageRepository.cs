@@ -46,5 +46,10 @@ namespace QuestGame.Domain.Implementations
         {
             dbContext.EntryObj(item);
         }
+
+        public IEnumerable<Stage> GetStagesByQuestId(int questId)
+        {
+            return dbContext.Stages.Where(c => c.QuestId == questId).ToList();   //
+        }
     }
 }

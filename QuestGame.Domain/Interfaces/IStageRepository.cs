@@ -9,5 +9,6 @@ namespace QuestGame.Domain.Interfaces
 {
     public interface IStageRepository : ICommonRepository<Stage>
     {
+        IEnumerable<Stage> GetStagesByQuestId(int questId);
     }
 }

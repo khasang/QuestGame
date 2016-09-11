@@ -58,5 +58,11 @@ namespace QuestGame.Domain.Implementations
         {
             dbContext.EntryObj(item);
         }
+
+        public int GetIdByTitle(string title)
+        {
+            var quest = dbContext.Quests.FirstOrDefault(x => x.Title == title);
+            return quest.Id;
+        }
     }
 }

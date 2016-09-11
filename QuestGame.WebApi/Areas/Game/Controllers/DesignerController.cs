@@ -130,15 +130,21 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
 
                 var response = await client.GetAsync(@"api/Quest/Details?title=" + title);
 
-                //var response = await client.DeleteAsync(@"api/Quest/DelByTitle?title=" + title);
+                IEnumerable<StageViewModel> model = null;
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = "Неудачный запрос!";
+                }
+                else
+                {
+                    var answer = await response.Content.ReadAsAsync<IEnumerable<StageDTO>>();
 
-                //if (response.StatusCode != HttpStatusCode.OK)
-                //{
-                //    ViewBag.Message = "Не удалось удалить квест!";
-                //}
+                    var stages = mapper.Map<IEnumerable<StageDTO>, IEnumerable<StageViewModel>>(answer);
+                    model = stages;
+                }
+
+                return View(model);
             }
-
-            return View();
         }
     }
 }

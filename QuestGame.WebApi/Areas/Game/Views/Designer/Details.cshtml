@@ -1,0 +1,40 @@
+﻿@model IEnumerable<QuestGame.WebApi.Areas.Game.Models.StageViewModel>
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="row">
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading"><h2>Available stages</h2></div>
+        @{
+            if (Model.Count() == 0)
+            {
+                <p>Нет локаций...</p>
+            }
+            else
+            {
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var stages in Model)
+                        {
+                            <tr>
+                                <td>@Html.ActionLink(stages.Title, "StageDetails", new { id = stages.Title }, null)</td>
+                                <td>@stages.Body</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </div>
+    @Html.ActionLink("Назад", "Index", "MainPage", new { area = "Game" }, new { @class = "btn btn-default" })
+</div>
+
