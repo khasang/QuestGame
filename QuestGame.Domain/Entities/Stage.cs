@@ -27,9 +27,9 @@ namespace QuestGame.Domain.Entities
         public virtual Quest Quest { get; set; }
         public int QuestId { get; set; }
 
-        [JsonIgnore]
-        public virtual QuestRoute LastRoute { get; set; }
-        public int? LastRouteId { get; set; }
+        //[JsonIgnore]
+        //public virtual QuestRoute LastRoute { get; set; }
+        //public int? LastRouteId { get; set; }
 
         //[JsonIgnore]
         //public virtual QuestRoute Route { get; set; }

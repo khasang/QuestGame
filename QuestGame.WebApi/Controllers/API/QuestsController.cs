@@ -53,7 +53,7 @@ namespace QuestGame.WebApi.Controllers
         }
 
         // GET: api/Quests/5
-        [ResponseType(typeof(Quest))]
+        [ResponseType(typeof(QuestDTO))]
         public IHttpActionResult GetQuest(int id)
         {
             var quest = dataManager.Quests.GetByID( id );
@@ -62,7 +62,9 @@ namespace QuestGame.WebApi.Controllers
                 return NotFound();
             }
 
-            return Ok(quest); 
+            var response = mapper.Map<Quest, QuestDTO>(quest);
+
+            return Ok(response); 
         }
 
         // DELETE
@@ -99,6 +101,10 @@ namespace QuestGame.WebApi.Controllers
             var content = mapper.Map<QuestVM, ContentQuest>(questVM);
 
             quest.Content = content;
+            quest.AddDate = DateTime.Now;
+            quest.CountComplite = 0;
+            quest.Rate = 0;
+            quest.ModifyDate = DateTime.Now;
 
             var principal = Thread.CurrentPrincipal;
             var identity = principal.Identity;
@@ -119,19 +125,31 @@ namespace QuestGame.WebApi.Controllers
             return Ok(quest);
         }
 
+
         // Update
+        [HttpPost]
+        [Route("Edit")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult Update(int id, Quest quest)
+        public IHttpActionResult Update(QuestVM questVM)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != quest.Id)
-            {
-                return BadRequest();
-            }
+            var quest = mapper.Map<QuestVM, Quest>(questVM);
+            var content = mapper.Map<QuestVM, ContentQuest>(questVM);
+
+            quest.Content = content;
+            quest.ModifyDate = DateTime.Now;
+
+            var questEntity = dataManager.Quests.GetByID(quest.Id);
+
+            questEntity.ModifyDate = DateTime.Now;
+            //var contentEntity = questEntity.Content;
+            //contentEntity.Image = content.Image;
+            //contentEntity.Text = content.Text;
+            content.ModifyDate = DateTime.Now;
 
             dataManager.Quests.Update(quest);
 
@@ -141,7 +159,7 @@ namespace QuestGame.WebApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                    return NotFound();
+                return NotFound();
             }
 
             return StatusCode(HttpStatusCode.NoContent);

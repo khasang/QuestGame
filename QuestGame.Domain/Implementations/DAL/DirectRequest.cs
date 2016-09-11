@@ -68,6 +68,13 @@ namespace QuestGame.Domain.Implementations
             try
             {
                 response = await client.PostAsync(requestUri, content);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine(ex);
+                System.Diagnostics.Debug.WriteLine("CAUGHT EXCEPTION:");
+
             }
             finally
             {

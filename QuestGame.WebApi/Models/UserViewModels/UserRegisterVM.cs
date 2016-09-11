@@ -31,7 +31,7 @@ namespace QuestGame.WebApi.Models.UserViewModels
         public string Avatar { get; set; }
 
         [Display(Name = "Страна")]
-        public string Contry { get; set; }
+        public string Country { get; set; }
 
         [Display(Name = "Email адрес регистрации")]
         [DataType(DataType.EmailAddress)]

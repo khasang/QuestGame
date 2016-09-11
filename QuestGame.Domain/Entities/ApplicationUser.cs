@@ -33,7 +33,7 @@ namespace QuestGame.Domain.Entities
 
         public string Avatar { get; set; }
 
-        public string Contry { get; set; }
+        public string Country { get; set; }
 
         public int Rating { get; set; }
 
@@ -59,7 +59,7 @@ namespace QuestGame.Domain.Entities
             userIdentity.AddClaim(new Claim(ClaimTypes.Name, this.Name + " " + this.LastName));
             userIdentity.AddClaim(new Claim(ClaimTypes.DateOfBirth, this.Bithday.ToString()));
             userIdentity.AddClaim(new Claim("Avatar", this.Avatar));
-            userIdentity.AddClaim(new Claim(ClaimTypes.Country, this.Contry));
+            userIdentity.AddClaim(new Claim("Country", this.Country));
             userIdentity.AddClaim(new Claim("Rating", this.Rating.ToString()));
             userIdentity.AddClaim(new Claim("AddDate", this.AddDate.ToString()));
             userIdentity.AddClaim(new Claim("Identificator", this.Identificator));

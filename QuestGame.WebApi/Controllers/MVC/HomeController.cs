@@ -16,6 +16,7 @@ using QuestGame.Domain.Interfaces;
 using System.Net;
 using QuestGame.Domain.DTO;
 using QuestGame.WebApi.Models.UserViewModels;
+using QuestGame.Common;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -69,23 +70,28 @@ namespace QuestGame.WebApi.Controllers
             var UserInfo = new UserProfileVM();
 
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+                return RedirectToAction("Login", user);
+            }
 
-                IRequest client = new DirectRequest();
-                var response = await client.PostRequestAsync(@"api/Account/LoginUser", user);
+            using (var client = new RequestApi())
+            {
+                var response = await client.PostJsonAsync(@"api/Account/LoginUser", user);
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     ViewBag.Alerts = await response.Content.ReadAsStringAsync();
                     return View();
                 }
                 token = await response.Content.ReadAsStringAsync();
+            }
 
-                AuthRequest authClient = new AuthRequest(token);
-                authClient.AddUrlParam("Email", user.Email);
-                authClient.AddUrlParam("Password", user.Password);
+            using (var client = new RequestApi(token))
+            {
+                client.AddSendParam("Email", user.Email);
+                client.AddSendParam("Password", user.Password);
 
-                var responseProfile = await authClient.PostAsync(@"api/Account/UserProfile");
+                var responseProfile = await client.PostAsync(@"api/Account/UserProfile");
 
                 if (responseProfile.StatusCode == HttpStatusCode.OK)
                 {
@@ -95,9 +101,7 @@ namespace QuestGame.WebApi.Controllers
 
                     Session["UserInfo"] = UserInfo;
                 }
-
             }
-
             return RedirectToAction("Index");
         }
 
@@ -109,12 +113,6 @@ namespace QuestGame.WebApi.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Test()
-        {
 
-            Console.WriteLine(User.Identity.IsAuthenticated);
-
-            return View();
-        }
     }
 }

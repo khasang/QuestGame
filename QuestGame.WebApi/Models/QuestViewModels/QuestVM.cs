@@ -10,6 +10,9 @@ namespace QuestGame.WebApi.Models
 {
     public class QuestVM
     {
+        [HiddenInput(DisplayValue = false)]
+        public bool Id { get; set; }
+
         [Display(Name = "Опубликовать квест")]
         public bool Active { get; set; }
 

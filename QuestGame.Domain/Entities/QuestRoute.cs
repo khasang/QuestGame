@@ -18,9 +18,9 @@ namespace QuestGame.Domain.Entities
         public virtual Quest Quest { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<Stage> VisitedStages { get; set; }
+        public ICollection<int> VisitedStages { get; set; }
 
         [JsonIgnore]
-        public virtual Stage LastStage { get; set; }
+        public int LastStage { get; set; }
     }
 }

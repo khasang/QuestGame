@@ -61,7 +61,8 @@ namespace QuestGame.Domain.Implementations
 
         public void Update(Quest item)
         {
-           // db.Entry<Quest>(item).State = EntityState.Modified;
+            db.Attach(item);
+           //db.Entry<Quest>(item).State = EntityState.Modified;
         }
     }
 }

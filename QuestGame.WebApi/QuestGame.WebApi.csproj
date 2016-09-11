@@ -333,12 +333,13 @@
     <Content Include="Areas\Admin\Views\Quests\AddQuest.cshtml" />
     <Content Include="Areas\Admin\Views\UserProfile\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Quests\QuestPreview.cshtml" />
-    <Content Include="Areas\Admin\Views\Quests\EditQuest.cshtml" />
+    <Content Include="Areas\Admin\Views\Quests\DesignQuest.cshtml" />
     <Content Include="Areas\Admin\Views\Stages\AddStage.cshtml" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Admin\Views\Stages\EditStage.cshtml" />
     <Content Include="Areas\Admin\Views\Operations\AddOperations.cshtml" />
+    <Content Include="Areas\Admin\Views\Quests\EditQuest.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

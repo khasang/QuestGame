@@ -9,11 +9,6 @@ namespace QuestGame.Domain.Entities
     {
         public Quest()
         {
-            this.Active = true;
-            this.CountComplite = 0;
-            this.Rate = 0;
-            this.AddDate = DateTime.Now;
-            this.ModifyDate = DateTime.Now;
             this.Stages = new List<Stage>();
         }
 

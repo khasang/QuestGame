@@ -24,5 +24,6 @@ namespace QuestGame.Domain.Interfaces
         IDbSet<IdentityRole> GetRoles();
 
         void Save();
+        void Attach(Quest q);
     }
 }

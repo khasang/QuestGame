@@ -39,5 +39,12 @@ namespace QuestGame.Domain.Implementations
             base.SaveChanges();
         }
 
+        public void Attach(Quest q)
+        {
+            this.Attach(q);
+            Save();
+            Console.WriteLine();
+        }
+
     }
 }

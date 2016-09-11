@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Configuration;
 using System.Collections.Generic;
+using QuestGame.Domain.DTO;
 
 namespace QuestGame.Common
 {
@@ -34,13 +35,44 @@ namespace QuestGame.Common
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.token);
         }
 
+
+        #region Прямые запросы  - Не проверен...
+
+        /// <summary>
+        /// Запрос Get (не асинхронный)
+        /// </summary>
+        /// <param name="url запроса"></param>
+        /// <returns></returns>
+        public HttpResponseMessage Get(string requestUri)
+        {
+            return client.GetAsync(requestUri).Result;
+        }
+
+        #endregion
+
         #region Асинхронные запросы
 
+        /// <summary>
+        /// Запрос Get (асинхронный)
+        /// </summary>
+        /// <param name="url запроса"></param>
+        /// <returns>HttpResponseMessage</returns>
         public async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
             return await client.GetAsync(requestUri);
         }
 
+        /// <summary>
+        /// Запрос Get (асинхронный) \ Параметризированный
+        /// </summary>
+        /// <param name="url запроса"></param>
+        public async Task<T> GetAsync<T>(string requestUri)
+        {
+            var request = await client.GetAsync(requestUri);
+            var response = await request.Content.ReadAsAsync<T>();
+            return response;
+        }
+        
         public async Task<HttpResponseMessage> PostAsync(string requestUri)
         {
             var content = new FormUrlEncodedContent(this.sendParams);

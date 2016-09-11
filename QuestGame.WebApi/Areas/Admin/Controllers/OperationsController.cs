@@ -60,7 +60,7 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
             var client = new AuthRequest(user.Token);
             var response = await client.PostRequestAsync(@"api/Operations/Add", model);
 
-            return RedirectToAction("EditStage", "Stages", new { id = model.StageId });
+            return RedirectToAction("DesignStage", "Stages", new { id = model.StageId });
         }
 
 

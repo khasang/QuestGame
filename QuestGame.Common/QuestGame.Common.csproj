@@ -64,11 +64,16 @@
     <Compile Include="Class1.cs" />
     <Compile Include="DirectReguest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestApi.cs" />
+    <Compile Include="HttpClientWrapper\RequestApi.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="HttpClientWrapper\Diagram.cd" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QuestGame.Domain\QuestGame.Domain.csproj">
+      <Project>{505742B2-622D-45A4-81B5-64C9DDAAFF46}</Project>
+      <Name>QuestGame.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

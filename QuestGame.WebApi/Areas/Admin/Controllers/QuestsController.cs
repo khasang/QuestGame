@@ -19,6 +19,7 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
 {
     public class QuestsController : AuthController
     {
+        #region вывод - Мои квесты
         // GET: Admin/Quests
         // [IsUserInfoInSession]
         public async Task<ActionResult> Index()
@@ -29,17 +30,16 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
 
             IEnumerable<QuestDTO> result;
 
-            var userr = GetUser();
-
             using (var client = new RequestApi())
             {
-                var request = await client.GetAsync(@"api/Quests/GetByUser?userIdentificator=" + GetUser().Identificator);
-                result = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
+                result = await client.GetAsync<IEnumerable<QuestDTO>>(@"api/Quests/GetByUser?userIdentificator=" + GetUser().Identificator);
             }
 
             return View(result.OrderByDescending(o => o.AddDate));
         }
+        #endregion
 
+        #region Добавление Квеста
         public ActionResult AddQuest()
         {
             ViewBag.Title = "Добавление квеста";
@@ -52,7 +52,6 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
             if (model.File != null)
             {
                 string fileName = System.IO.Path.GetFileName(model.File.FileName);
-                model.File.SaveAs(Server.MapPath("~/Content/Images/GameContent/" + fileName));
                 model.Image = @"/Content/Images/GameContent/" + fileName;
             }
             else
@@ -62,12 +61,26 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
 
             using (var client = new RequestApi(GetUser().Token))
             {
-                var request = await client.PostJsonAsync(@"api/Quests/Add", model);
+                try
+                {
+                    var request = await client.PostJsonAsync(@"api/Quests/Add", model);
+                    if (model.File != null)
+                    {
+                        string fileName = System.IO.Path.GetFileName(model.File.FileName);
+                        model.File.SaveAs(Server.MapPath("~/Content/Images/GameContent/" + fileName));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
             }
 
             return RedirectToAction("Index");
         }
+        #endregion
 
+        #region Удание Квеста
         [HttpGet]
         public async Task<ActionResult> RemoveQuest(int id)
         {
@@ -76,39 +89,84 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
                 var request = await client.DeleteAsync(@"api/Quests/Del?id=" + id);
             }
 
-            //var client = new DirectRequest();
-            //var response = await client.DeleteRequestAsync(@"api/Quests/Del?id=" + id);
+            return RedirectToAction("Index");
+        }
+        #endregion
+
+        public async Task<ActionResult> EditQuest(int id)
+        {
+            QuestDTO quest;
+
+            ViewBag.Title = "Редактирование квеста";
+
+            using (var client = new RequestApi())
+            {
+                quest = await client.GetAsync<QuestDTO>(@"api/Quests/" + id);
+            }
+
+            return View(quest);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> EditQuest(QuestVM model)
+        {
+            if (model.File != null)
+            {
+                string fileName = System.IO.Path.GetFileName(model.File.FileName);
+                model.Image = @"/Content/Images/GameContent/" + fileName;
+            }
+            else
+            {
+                model.Image = "http://www.novelupdates.com/img/noimagefound.jpg";
+            }
+
+            using (var client = new RequestApi(GetUser().Token))
+            {
+                try
+                {
+                    var request = await client.PostJsonAsync(@"api/Quests/Edit", model);
+                    if (model.File != null)
+                    {
+                        string fileName = System.IO.Path.GetFileName(model.File.FileName);
+                        model.File.SaveAs(Server.MapPath("~/Content/Images/GameContent/" + fileName));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+            }
 
             return RedirectToAction("Index");
         }
 
+        //[HttpGet]
+        //public async Task<ActionResult> AddStage(int id)
+        //{
+        //    var user = this.GetUser();
+        //    IRequest client = new DirectRequest();
+        //    var request = await client.GetRequestAsync(@"api/Quests");
+        //    var response = await request.Content.ReadAsAsync<IEnumerable<Quest>>();
+
+        //    var result = response.FirstOrDefault( q => q.Id == id );
+
+        //    return View(result);
+        //}
+
+        //[HttpGet]
+        //public async Task<ActionResult> QuestPreview(int id)
+        //{
+        //    IRequest client = new DirectRequest();
+        //    var request = await client.GetRequestAsync(@"api/Quests");
+        //    var response = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
+
+        //    var result = response.FirstOrDefault(q => q.Id == id);
+
+        //    return View(result);
+        //}
+
         [HttpGet]
-        public async Task<ActionResult> AddStage(int id)
-        {
-            var user = this.GetUser();
-            IRequest client = new DirectRequest();
-            var request = await client.GetRequestAsync(@"api/Quests");
-            var response = await request.Content.ReadAsAsync<IEnumerable<Quest>>();
-
-            var result = response.FirstOrDefault( q => q.Id == id );
-
-            return View(result);
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> QuestPreview(int id)
-        {
-            IRequest client = new DirectRequest();
-            var request = await client.GetRequestAsync(@"api/Quests");
-            var response = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
-
-            var result = response.FirstOrDefault(q => q.Id == id);
-
-            return View(result);
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> EditQuest(int? id)
+        public async Task<ActionResult> DesignQuest(int? id)
         {
             if (id == null)
             {
@@ -123,32 +181,5 @@ namespace QuestGame.WebApi.Areas.Admin.Controllers
 
             return View(result);
         }
-
-        //private async Task<IEnumerable<QuestDTO>> GetAllUserQuests()
-        //{
-        //    this.user = this.GetUser();
-        //    IRequest client = new DirectRequest();
-        //    var request = await client.GetRequestAsync(@"api/Quests");
-        //    var response = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
-
-        //    var result = from quest in response where quest.UserId == user.Id select quest;
-
-        //    return result;
-        //}
-
-        //private bool IsAutherize()
-        //{
-        //    return Session["UserInfo"] == null ? false : true;
-        //}
-
-        //private UserProfileVM GetUser()
-        //{
-        //    if (this.IsAutherize())
-        //    {
-        //        this.user = (UserProfileVM)Session["UserInfo"];
-        //    }
-        //    return user;
-        //}
-
     }
 }

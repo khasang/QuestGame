@@ -56,7 +56,7 @@ namespace QuestGame.Domain
             })
             .Map(m =>
             {
-                m.Properties(d => new {d.Name, d.LastName, d.Bithday, d.Avatar, d.Contry, d.Rating, d.CountQuestsComplite, d.AddDate });
+                m.Properties(d => new {d.Name, d.LastName, d.Bithday, d.Avatar, d.Country, d.Rating, d.CountQuestsComplite, d.AddDate });
                 m.ToTable("AspNetUsersProfile");
             })
             .Ignore( d=> d.Token );
@@ -67,20 +67,17 @@ namespace QuestGame.Domain
             modelBuilder.Entity<Quest>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Owner).WillCascadeOnDelete(true);
             modelBuilder.Entity<Quest>().HasMany(s => s.Stages).WithRequired(q => q.Quest).WillCascadeOnDelete(true);
 
-            //modelBuilder.Entity<ContentQuest>().HasKey(k => k.OwnerId);
-            //modelBuilder.Entity<ContentStage>().HasKey(k => k.OwnerId);
-
             modelBuilder.Entity<Stage>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Owner).WillCascadeOnDelete(true);
             modelBuilder.Entity<Stage>().HasMany(o => o.Operations).WithRequired(s => s.Stage).WillCascadeOnDelete(true);
-            //modelBuilder.Entity<Stage>().Ignore(r => r.Route);
-            modelBuilder.Entity<Stage>().Ignore(r => r.LastRoute);
 
             modelBuilder.Entity<Operation>().HasRequired(s => s.Stage).WithMany(o => o.Operations).HasForeignKey(k => k.StageId).WillCascadeOnDelete(true);
-            //modelBuilder.Entity<Operation>().HasOptional(s => s.RedirectTo).WithOptionalDependent();
-
 
             base.OnModelCreating(modelBuilder);
         }
 
+        public void Attach(Quest q)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

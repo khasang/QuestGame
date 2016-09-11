@@ -1,66 +1,92 @@
 ﻿@model QuestGame.Domain.DTO.QuestDTO
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "EditQuest";
 }
 
-<div class="row page-header">
-    <h3>Квест</h3>
-    <h1>@Model.Title</h1>
-</div>
+<h2>EditQuest</h2>
 
 
-<div class="row">
-
-    <div class="col-md-12">
-        <div class="panel panel-info">
-            <div class="panel-heading">Описание</div>
-            <div class="panel-body">
-                <div class="col-md-4">
-                    <p class="thumbnail">
-                        <img src="@Model.Content.Image" alt="@Model.Title">
-                    </p>
-                </div>
-                <div class="col-md-8">
-                    <p>@Model.Content.Text</p>
-                </div>
-
-                <div class="col-md-8 col-lg-offset-4">
-                    @Html.ActionLink("Добавить сцену", "AddStage", "Stages", new { id = @Model.Id }, new { @class = "btn btn-primary" })
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-
-@if (Model.Stages.Count > 0)
+@using (Html.BeginForm())
 {
-    <div class="col-md-12">
-        <div class="panel panel-info">
-            <div class="panel-heading">Сцены квеста</div>
-            <div class="panel-body">
-                <div class="card-columns">
-                    @foreach (var Item in Model.Stages)
-                    {
-                        <div class="card" style="margin-bottom: 20px">
-                            @if (@Item.Content.Image != null)
-                            {
-                                <div class="card-img-title" style="background: url(@Item.Content.Image) top no-repeat; background-size: cover; height: 250px;"></div>
-                            }
-                            <div class="card-block">
-                                <h4 class="card-title">@Item.Title</h4>
-                                <p class="card-text">@Item.Content.Text</p>
-                            </div>
-                            <div class="card-block">
-                                @*<a href="Stages/EditStage/@Item.Id" class="card-link">Редактировать</a>*@
-                                @Html.ActionLink("Редактировать", "EditStage", "Stages", new { id = Item.Id }, new { area = "Admin" })
-                            </div>
-                        </div>
-                    }
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>QuestDTO</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Active)
+                    @Html.ValidationMessageFor(model => model.Active, "", new { @class = "text-danger" })
                 </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CountComplite, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CountComplite, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CountComplite, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Rate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Rate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Rate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AddDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AddDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AddDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ModifyDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ModifyDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ModifyDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
