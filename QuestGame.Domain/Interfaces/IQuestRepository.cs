@@ -9,5 +9,6 @@ namespace QuestGame.Domain.Interfaces
 {
     public interface IQuestRepository : ICommonRepository<Quest>
     {
+        IEnumerable<Quest> GetByUser(object id);
     }
 }

@@ -16,6 +16,8 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
 using QuestGame.Common.Interfaces;
 using System.Web;
+using System.Threading;
+using Microsoft.AspNet.Identity;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -52,6 +54,28 @@ namespace QuestGame.WebApi.Controllers
                 Debug.WriteLine(ex.Message);
                 throw;
             }            
+        }
+
+        [HttpGet]
+        [Route("GetByUser")]
+        public IEnumerable<QuestDTO> GetByUser()
+        {
+            var principal = Thread.CurrentPrincipal;
+            var identity = principal.Identity;
+            var id = identity.GetUserId();
+
+            try
+            {
+                var quests = dataManager.Quests.GetByUser(id.ToString()).ToList();
+
+                var response = mapper.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(quests);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                throw;
+            }
         }
 
         [HttpGet]

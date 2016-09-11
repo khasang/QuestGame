@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using QuestGame.Domain.DTO;
+using QuestGame.WebApi.Areas.Design.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,10 @@ namespace QuestGame.WebApi.Mapping.Profiles
     {
         public DTOToViewModelMappingProfile()
         {
-            //CreateMap<QuestDTO, QuestViewModel>();
-            //CreateMap<StageDTO, StageViewModel>();
-            //CreateMap<MotionDTO, MotionViewModel>();
+            CreateMap<QuestDTO, QuestViewModel>();
+            CreateMap<IEnumerable<QuestDTO>, IEnumerable<QuestViewModel>>();
+            CreateMap<StageDTO, StageViewModel>();
+            CreateMap<MotionDTO, MotionViewModel>();
         }
 
         public override string ProfileName

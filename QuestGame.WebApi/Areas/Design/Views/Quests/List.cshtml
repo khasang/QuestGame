@@ -1,4 +1,4 @@
-﻿@model IEnumerable<QuestGame.Domain.DTO.QuestDTO>
+﻿@model IEnumerable<QuestGame.WebApi.Areas.Design.Models.QuestViewModel>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -18,12 +18,6 @@
             @Html.DisplayNameFor(model => model.Date)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Rate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Active)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.Owner)
         </th>
         <th></th>
@@ -38,18 +32,12 @@
             @Html.DisplayFor(modelItem => item.Date)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Rate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Active)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.Owner)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
         </td>
     </tr>
 }

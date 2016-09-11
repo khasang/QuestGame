@@ -1,5 +1,7 @@
-﻿using QuestGame.Common;
+﻿using AutoMapper;
+using QuestGame.Common;
 using QuestGame.Domain.DTO;
+using QuestGame.WebApi.Areas.Design.Models;
 using QuestGame.WebApi.Models;
 using System;
 using System.Collections.Generic;
@@ -12,10 +14,17 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 {
     public class QuestsController : Controller
     {
+        IMapper mapper;
+
+        public QuestsController(IMapper mapper)
+        {
+            this.mapper = mapper;
+        }
+
         // GET: Design/Quests
         public async Task<ActionResult> Index()
         {
-            IEnumerable<QuestDTO> quests = new List<QuestDTO>();
+            IEnumerable<QuestViewModel> questsVM = new List<QuestViewModel>();
 
             ViewBag.Title = "Список доступных квестов";
 
@@ -23,7 +32,8 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
             using (var client = new RequestApi(user.Token)) 
             {
-                quests = await client.GetAsync<IEnumerable<QuestDTO>>(@"api/Quest/GetAll");
+                var quests = await client.GetAsync<IEnumerable<QuestDTO>>(@"api/Quest/GetByUser");
+                //questsVM = mapper.Map<IEnumerable<QuestDTO>, IEnumerable<QuestViewModel>>(quests);
                 return View(quests);
             }
         }

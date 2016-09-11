@@ -42,6 +42,12 @@ namespace QuestGame.Domain.Implementations
             return dbContext.Quests.Find((int)id);
         }
 
+        public IEnumerable<Quest> GetByUser(object id)
+        {
+            var result = dbContext.Quests.Where( q=> q.OwnerId == (string)id);
+            return result;
+        }
+
         public void Update(Quest item)
         {
             dbContext.EntryObj(item);

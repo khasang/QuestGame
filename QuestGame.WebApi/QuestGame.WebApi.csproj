@@ -187,6 +187,9 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Design\Controllers\QuestsController.cs" />
     <Compile Include="Areas\Design\DesignAreaRegistration.cs" />
+    <Compile Include="Areas\Design\Models\MotionViewModel.cs" />
+    <Compile Include="Areas\Design\Models\QuestViewModel.cs" />
+    <Compile Include="Areas\Design\Models\StageViewModel.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
     <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
     <Compile Include="Areas\HelpPage\Controllers\HelpController.cs" />
@@ -278,7 +281,7 @@
     <Content Include="Areas\Design\Views\web.config" />
     <Content Include="Areas\Design\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Design\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\Design\Views\Quests\Index.cshtml" />
+    <Content Include="Areas\Design\Views\Quests\List.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -324,7 +327,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Design\Models\" />
     <Folder Include="Views\Quest\" />
   </ItemGroup>
   <ItemGroup>
