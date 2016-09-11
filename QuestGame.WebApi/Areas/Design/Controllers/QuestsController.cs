@@ -25,16 +25,14 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         public async Task<ActionResult> Index()
         {
             IEnumerable<QuestViewModel> questsVM = new List<QuestViewModel>();
-
             ViewBag.Title = "Список доступных квестов";
-
             var user = Session["User"] as UserModel;
 
             using (var client = new RequestApi(user.Token)) 
             {
                 var quests = await client.GetAsync<IEnumerable<QuestDTO>>(@"api/Quest/GetByUser");
-                //questsVM = mapper.Map<IEnumerable<QuestDTO>, IEnumerable<QuestViewModel>>(quests);
-                return View(quests);
+                questsVM = mapper.Map<IEnumerable<QuestDTO>, IEnumerable<QuestViewModel>>(quests);
+                return View(questsVM);
             }
         }
 

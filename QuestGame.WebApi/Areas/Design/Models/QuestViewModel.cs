@@ -11,6 +11,6 @@ namespace QuestGame.WebApi.Areas.Design.Models
         public string Title { get; set; }
         public DateTime Date { get; set; }
         public string Owner { get; set; }
-        //public ICollection<StageViewModel> Stages { get; set; }
+        public ICollection<StageViewModel> Stages { get; set; }
     }
 }

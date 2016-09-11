@@ -12,6 +12,6 @@ namespace QuestGame.WebApi.Areas.Design.Models
         public string Title { get; set; }
         public string Body { get; set; }
         public int Point { get; set; }
-        //public ICollection<MotionViewModel> Motions { get; set; }
+        public ICollection<MotionViewModel> Motions { get; set; }
     }
 }

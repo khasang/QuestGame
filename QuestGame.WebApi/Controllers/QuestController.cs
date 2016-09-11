@@ -18,6 +18,7 @@ using QuestGame.Common.Interfaces;
 using System.Web;
 using System.Threading;
 using Microsoft.AspNet.Identity;
+using QuestGame.WebApi.Areas.Design.Models;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -69,6 +70,7 @@ namespace QuestGame.WebApi.Controllers
                 var quests = dataManager.Quests.GetByUser(id.ToString()).ToList();
 
                 var response = mapper.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(quests);
+
                 return response;
             }
             catch (Exception ex)
