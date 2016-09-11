@@ -7,7 +7,7 @@ namespace QuestGame.WebApi.Areas.Design.Models
 {
     public class StageViewModel
     {
-        int Id { get; set; }
+        public int Id { get; set; }
         public string Tag { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }

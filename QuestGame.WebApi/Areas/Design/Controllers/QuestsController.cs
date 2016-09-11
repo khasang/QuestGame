@@ -37,9 +37,19 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         }
 
         // GET: Design/Quests/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View();
+            ViewBag.Title = "Details";
+
+            var user = Session["User"] as UserModel;
+
+            using (var client = new RequestApi(user.Token))
+            {
+                var quest = await client.GetAsync<QuestDTO>(@"api/Quest/GetById?id=" + id);
+                var questVM = mapper.Map<QuestDTO, QuestViewModel>(quest);
+
+                return View(questVM);
+            }
         }
 
         // GET: Design/Quests/Create
