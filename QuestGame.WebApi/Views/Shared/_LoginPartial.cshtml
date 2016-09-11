@@ -1,7 +1,7 @@
 ﻿@{
     var user = Session["User"] as QuestGame.WebApi.Models.UserModel;
 
-    if (user != null)
+    @*if (user != null)
     {
         <ul class="nav navbar-nav navbar-right">
             <li>
@@ -18,5 +18,29 @@
             <li>@Html.ActionLink("Регистрация", "Register", "Home", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
             <li>@Html.ActionLink("Выполнить вход", "Login", "Home", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
         </ul>
-    }
+    }*@
+}
+
+
+@if (user != null)
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">@user.UserName<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li>@*@Html.ActionLink("Профиль", "Index", "UserProfile", new { area = "Admin" }, null)*@</li>
+                <li>@Html.ActionLink("Мои Квесты", "Index", "Quests", new { area = "Design" }, null)</li>
+                <li class="divider"></li>
+                <li>@Html.ActionLink("Выход", "LogOff", "Home", new { area = "" }, null)</li>
+            </ul>
+        </li>
+        <li>@Html.ActionLink("Выход", "LogOff", "Home", new { area = "" }, null)</li>
+    </ul>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Регистрация", "Register", "Home", new { area = "" }, null)</li>
+        <li>@Html.ActionLink("Авторизация", "Login", "Home", new { area = "" }, null)</li>
+    </ul>
 }
