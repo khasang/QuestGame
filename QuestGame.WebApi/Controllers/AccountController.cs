@@ -365,41 +365,32 @@ namespace QuestGame.WebApi.Controllers
                     Content = new StringContent("Invalid user data")
                 };
             }
-            
-            using (HttpClient client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["BaseUrl"]);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                
-                var requestParams = new Dictionary<string, string>
-                {
-                    { "grant_type", "password" },
-                    { "username", model.Email },
-                    { "password", model.Password }
-                };
 
-                var content = new FormUrlEncodedContent(requestParams);
-                var response = await client.PostAsync("Token", content);
+            using (var client = new RequestApi())
+            {
+                client.AddSendParam("grant_type", "password");
+                client.AddSendParam("username", model.Email);
+                client.AddSendParam("password", model.Password);
+
+                var response = await client.PostAsync("Token");
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    return new HttpResponseMessage
-                    {
-                        StatusCode = HttpStatusCode.BadRequest
-                    };
+                    return new HttpResponseMessage { StatusCode = HttpStatusCode.BadRequest };
                 }
 
                 var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
                 var authToken = responseData["access_token"];
 
                 logger.Information("| Login | {@user}", model);
+
                 return new HttpResponseMessage()
                 {
                     Content = new StringContent(authToken),
                     StatusCode = HttpStatusCode.OK
-                };                
+                };
             }
+            
         }
 
         // POST api/Account/RegisterExternal
