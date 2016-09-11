@@ -126,12 +126,22 @@ namespace QuestGame.WebApi.Controllers
             dataManager.Save();
         }
 
+        //[HttpDelete]
+        //[Route("Delete")]
+        //public void Delete(QuestDTO quest)
+        //{
+        //    var model = mapper.Map<QuestDTO, Quest>(quest);
+        //    dataManager.Quests.Delete(model);
+        //    dataManager.Save();
+        //}
+
         [HttpDelete]
         [Route("Delete")]
-        public void Delete(QuestDTO quest)
+        public void Delete(int id)
         {
-            var model = mapper.Map<QuestDTO, Quest>(quest);
-            dataManager.Quests.Delete(model);
+            var quest = dataManager.Quests.GetById(id);
+
+            dataManager.Quests.Delete(quest);
             dataManager.Save();
         }
     }    

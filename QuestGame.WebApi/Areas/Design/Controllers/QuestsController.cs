@@ -96,26 +96,20 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             }
         }
 
+
         // GET: Design/Quests/Delete/5
-        public ActionResult Delete(int id)
+        [HttpGet]
+        public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            var user = Session["User"] as UserModel;
+
+            using (var client = new RequestApi(user.Token))
+            {
+                var quest = await client.DeleteAsync(@"api/Quest/Delete?id=" + id);
+            }
+
+            return RedirectToAction("Index");
         }
 
-        // POST: Design/Quests/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }
