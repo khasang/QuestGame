@@ -13,6 +13,7 @@ namespace QuestGame.Domain.DTO
         public string Title { get; set; }
         public string Body { get; set; }
         public int Point { get; set; }
+        public int QuestId { get; set; }
         public ICollection<MotionDTO> Motions { get; set; }
     }
 }

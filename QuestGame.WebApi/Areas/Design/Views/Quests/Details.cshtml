@@ -38,8 +38,11 @@
             <dd>
                 @Html.DisplayFor(model => model.Owner)
             </dd>
+        </dl>
 
-        </dl>    </div>
+        <p>@Html.ActionLink("Добавить сцену", "Create", "Stage", new { id = Model.Id }, new { area = "Design" }) </p>
+
+    </div>
 </div>
 
 
@@ -50,7 +53,6 @@
             <h3 class="panel-title">Сцены</h3>
         </div>
         <div class="panel-body">
-
             <table class="table">
                 <tr>
                     <th>
@@ -86,7 +88,7 @@
                         <td>
                             @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                             @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                            @Html.ActionLink("Delete", "Delete", "Stage", new { id = item.Id }, new { area = "Design"} )
+                            @Html.ActionLink("Delete", "Delete", "Stage", new { id = item.Id }, new { area = "Design" })
                         </td>
                     </tr>
                 }
@@ -97,7 +99,7 @@
         </div>
     </div>
 }
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
