@@ -87,7 +87,7 @@
                         </td>
                         <td>
                             @Html.ActionLink("Edit", "Edit", "Stage", new { id = item.Id }, new { area = "Design" }) |
-                            @*@Html.ActionLink("Details", "Details", new { id = item.Id }) |*@
+                            @Html.ActionLink("Details", "Details", "Stage", new { id = item.Id }, new { area = "Design" }) |
                             @Html.ActionLink("Delete", "Delete", "Stage", new { id = item.Id }, new { area = "Design" })
                         </td>
                     </tr>

@@ -28,9 +28,19 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         }
 
         // GET: Design/Stage/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View();
+            ViewBag.Title = "Details";
+
+            var user = Session["User"] as UserModel;
+
+            using (var client = new RequestApi(user.Token))
+            {
+                var stage = await client.GetAsync<StageDTO>(@"api/Stage/GetById?id=" + id);
+                var stageVM = mapper.Map<StageDTO, StageViewModel>(stage);
+
+                return View(stageVM);
+            }
         }
 
         // GET: Design/Stage/Create
