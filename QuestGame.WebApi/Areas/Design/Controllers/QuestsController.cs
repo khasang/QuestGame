@@ -63,7 +63,10 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         public async Task<ActionResult> Create(QuestViewModel model)
         {
             var user = Session["User"] as UserModel;
+
             var quest = mapper.Map<QuestViewModel, QuestDTO>(model);
+            quest.Owner = user.UserName;
+            quest.Date = DateTime.Now;
 
             try
             {
