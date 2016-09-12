@@ -26,6 +26,27 @@ namespace QuestGame.WebApi.Controllers
             this.mapper = mapper;
         }
 
+        [HttpGet]
+        [Route("GetById")]
+        public StageDTO GetById(int id)
+        {
+            var stage = dataManager.Stages.GetById(id);
+            var response = mapper.Map<Stage, StageDTO>(stage);
+
+            return response;
+        }
+
+
+        [HttpPut]
+        [Route("Update")]
+        public void Update(StageDTO model)
+        {
+            var stageOriginal = dataManager.Stages.GetById(model.Id);
+            var stageResult = mapper.Map<StageDTO, Stage>(model, stageOriginal);
+
+            dataManager.Stages.Update(stageResult);
+            dataManager.Save();
+        }
 
         [HttpPost]
         [Route("Add")]

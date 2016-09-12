@@ -288,6 +288,7 @@
     <Content Include="Areas\Design\Views\Quests\Create.cshtml" />
     <Content Include="Areas\Design\Views\Quests\Edit.cshtml" />
     <Content Include="Areas\Design\Views\Stage\Create.cshtml" />
+    <Content Include="Areas\Design\Views\Stage\Edit.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

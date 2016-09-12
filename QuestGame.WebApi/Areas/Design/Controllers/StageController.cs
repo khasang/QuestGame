@@ -81,24 +81,38 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         }
 
         // GET: Design/Stage/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var user = Session["User"] as UserModel;
+
+            using (var client = new RequestApi(user.Token))
+            {
+                var stage = await client.GetAsync<StageDTO>(@"api/Stage/GetById?id=" + id);
+                var stageVM = mapper.Map<StageDTO, StageViewModel>(stage);
+
+                return View(stageVM);
+            }
         }
 
         // POST: Design/Stage/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public async Task<ActionResult> Edit(StageViewModel model)
         {
+            var user = Session["User"] as UserModel;
+            var stage = mapper.Map<StageViewModel, StageDTO>(model);
+
             try
             {
-                // TODO: Add update logic here
+                using (var client = new RequestApi(user.Token))
+                {
+                    var response = await client.PutJsonAsync(@"api/Stage/Update", stage);
+                }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Quests", new { id = stage.QuestId});
             }
             catch
             {
-                return View();
+                return View(model);
             }
         }
 

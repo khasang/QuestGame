@@ -121,22 +121,12 @@ namespace QuestGame.WebApi.Controllers
         [Route("Update")]
         public void Update(QuestDTO model)
         {
-            var quest = dataManager.Quests.GetById(model.Id);
+            var questOriginal = dataManager.Quests.GetById(model.Id);
+            var questResult = mapper.Map<QuestDTO, Quest>(model, questOriginal);
 
-            quest.Title = model.Title;
-
-            dataManager.Quests.Update(quest);
+            dataManager.Quests.Update(questResult);
             dataManager.Save();
         }
-
-        //[HttpDelete]
-        //[Route("Delete")]
-        //public void Delete(QuestDTO quest)
-        //{
-        //    var model = mapper.Map<QuestDTO, Quest>(quest);
-        //    dataManager.Quests.Delete(model);
-        //    dataManager.Save();
-        //}
 
         [HttpDelete]
         [Route("Delete")]
