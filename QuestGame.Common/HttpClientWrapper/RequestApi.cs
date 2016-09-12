@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Configuration;
 using System.Collections.Generic;
+using System.Web;
 
 namespace QuestGame.Common
 {
@@ -89,7 +90,21 @@ namespace QuestGame.Common
 
         public async Task<HttpResponseMessage> PostJsonAsync<T>(string requestUri, T value)
         {
-            return await client.PostAsJsonAsync(requestUri, value);
+            try
+            {
+                var result = await client.PostAsJsonAsync(requestUri, value);
+                result.EnsureSuccessStatusCode();
+                return result;
+            }
+            catch (HttpException ex)
+            {
+                Console.WriteLine(ex);
+
+                return new HttpResponseMessage {
+                    StatusCode = System.Net.HttpStatusCode.BadRequest
+                };
+            }
+
         }
 
         #endregion

@@ -60,7 +60,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
         // POST: Design/Quests/Create
         [HttpPost]
-        public ActionResult Create(QuestViewModel model)
+        public async Task<ActionResult> Create(QuestViewModel model)
         {
             var user = Session["User"] as UserModel;
             var quest = mapper.Map<QuestViewModel, QuestDTO>(model);
@@ -69,7 +69,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             {
                 using (var client = new RequestApi(user.Token))
                 {
-                    var response = client.PostJsonAsync(@"api/Quest/Add", quest);
+                    var response = await client.PostJsonAsync(@"api/Quest/Add", quest);
                 }
 
                 return RedirectToAction("Index");
