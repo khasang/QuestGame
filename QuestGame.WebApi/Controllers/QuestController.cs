@@ -119,10 +119,13 @@ namespace QuestGame.WebApi.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public void Update(QuestDTO quest)
+        public void Update(QuestDTO model)
         {
-            var model = mapper.Map<QuestDTO, Quest>(quest);
-            dataManager.Quests.Update(model);
+            var quest = dataManager.Quests.GetById(model.Id);
+
+            quest.Title = model.Title;
+
+            dataManager.Quests.Update(quest);
             dataManager.Save();
         }
 

@@ -98,13 +98,33 @@ namespace QuestGame.Common
             }
             catch (HttpException ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.Message);
 
                 return new HttpResponseMessage {
-                    StatusCode = System.Net.HttpStatusCode.BadRequest
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Content = new StringContent(ex.Message)
                 };
             }
+        }
 
+        public async Task<HttpResponseMessage> PutJsonAsync<T>(string requestUri, T value)
+        {
+            try
+            {
+                var result = await client.PutAsJsonAsync(requestUri, value);
+                result.EnsureSuccessStatusCode();
+                return result;
+            }
+            catch (HttpException ex)
+            {
+                Console.WriteLine(ex.Message);
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Content = new StringContent(ex.Message)
+                };
+            }
         }
 
         #endregion

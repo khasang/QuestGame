@@ -28,7 +28,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             ViewBag.Title = "Список доступных квестов";
             var user = Session["User"] as UserModel;
 
-            using (var client = new RequestApi(user.Token)) 
+            using (var client = new RequestApi(user.Token))
             {
                 var quests = await client.GetAsync<IEnumerable<QuestDTO>>(@"api/Quest/GetByUser");
                 questsVM = mapper.Map<IEnumerable<QuestDTO>, IEnumerable<QuestViewModel>>(quests);
@@ -81,24 +81,39 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         }
 
         // GET: Design/Quests/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var user = Session["User"] as UserModel;
+
+            using (var client = new RequestApi(user.Token))
+            {
+                var quest = await client.GetAsync<QuestDTO>(@"api/Quest/GetById?id=" + id);
+                var questVM = mapper.Map<QuestDTO, QuestViewModel>(quest);
+
+                return View(questVM);
+            }
         }
 
         // POST: Design/Quests/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public async Task<ActionResult> Edit(QuestViewModel model)
         {
+
+            var user = Session["User"] as UserModel;
+            var quest = mapper.Map<QuestViewModel, QuestDTO>(model);
+
             try
             {
-                // TODO: Add update logic here
+                using (var client = new RequestApi(user.Token))
+                {
+                    var response = await client.PutJsonAsync(@"api/Quest/Update", quest);
+                }
 
                 return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return View(model);
             }
         }
 
