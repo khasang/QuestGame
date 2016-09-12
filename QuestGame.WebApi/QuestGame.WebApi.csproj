@@ -186,6 +186,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Design\Controllers\QuestsController.cs" />
+    <Compile Include="Areas\Design\Controllers\StageController.cs" />
     <Compile Include="Areas\Design\DesignAreaRegistration.cs" />
     <Compile Include="Areas\Design\Models\MotionViewModel.cs" />
     <Compile Include="Areas\Design\Models\QuestViewModel.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\QuestController.cs" />
+    <Compile Include="Controllers\StageController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -330,6 +332,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Design\Views\Stage\" />
     <Folder Include="Views\Quest\" />
   </ItemGroup>
   <ItemGroup>
