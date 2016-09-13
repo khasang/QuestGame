@@ -349,6 +349,11 @@ namespace QuestGame.WebApi.Controllers
                 ErrorMessage = result.Errors.ToString()
             };
 
+            if (!result.Succeeded)
+            {
+                return BadRequest();
+            }
+
             logger.Information("| Registration | {@user}", model);
             return Ok(response);
         }
@@ -393,7 +398,7 @@ namespace QuestGame.WebApi.Controllers
                     return new HttpResponseMessage
                     {
                         StatusCode = System.Net.HttpStatusCode.BadRequest,
-                        Content = new StringContent(ex.Message)
+                        Content = new StringContent("Неудачная попытка авторизации")
                     };
                 }               
             }
