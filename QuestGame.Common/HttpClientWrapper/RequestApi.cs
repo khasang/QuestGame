@@ -45,7 +45,19 @@ namespace QuestGame.Common
         /// <returns></returns>
         public HttpResponseMessage Get(string requestUri)
         {
-            return client.GetAsync(requestUri).Result;
+            try
+            {
+                var result = client.GetAsync(requestUri).Result;
+                return result;
+            }
+            catch (HttpException ex)
+            {
+                return new HttpResponseMessage
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Content = new StringContent(ex.Message)
+                };
+            }
         }
 
         #endregion
@@ -59,7 +71,20 @@ namespace QuestGame.Common
         /// <returns>HttpResponseMessage</returns>
         public async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
-            return await client.GetAsync(requestUri);
+            try
+            {
+                var result = await client.GetAsync(requestUri);
+                result.EnsureSuccessStatusCode();
+                return result;
+            }
+            catch (HttpException ex)
+            {
+                return new HttpResponseMessage
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Content = new StringContent(ex.Message)
+                };
+            }
         }
 
         /// <summary>
@@ -68,22 +93,44 @@ namespace QuestGame.Common
         /// <param name="url запроса"></param>
         public async Task<T> GetAsync<T>(string requestUri)
         {
-            var request = await client.GetAsync(requestUri);
-            var response = await request.Content.ReadAsAsync<T>();
-            return response;
+            try
+            {
+                var request = await client.GetAsync(requestUri);
+                var response = await request.Content.ReadAsAsync<T>();
+                return response;
+            }
+            catch (HttpException ex)
+            {
+                return default(T);
+            }
         }
 
         public async Task<HttpResponseMessage> PostAsync(string requestUri)
         {
-            var content = new FormUrlEncodedContent(this.sendParams);
-            return await client.PostAsync(requestUri, content);
+            try
+            {
+                var content = new FormUrlEncodedContent(this.sendParams);
+                var result = await client.PostAsync(requestUri, content);
+                result.EnsureSuccessStatusCode();
+                return result;
+            }
+            catch (HttpException ex)
+            {
+                return new HttpResponseMessage
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Content = new StringContent(ex.Message)
+                };
+            }
         }
 
         public async Task<HttpResponseMessage> DeleteAsync(string requestUri)
         {
             try
             {
-                return await client.DeleteAsync(requestUri);
+                var result = await client.DeleteAsync(requestUri);
+                result.EnsureSuccessStatusCode();
+                return result;
             }
             catch (HttpException ex)
             {
@@ -109,8 +156,6 @@ namespace QuestGame.Common
             }
             catch (HttpException ex)
             {
-                Console.WriteLine(ex.Message);
-
                 return new HttpResponseMessage {
                     StatusCode = System.Net.HttpStatusCode.BadRequest,
                     Content = new StringContent(ex.Message)
@@ -118,6 +163,13 @@ namespace QuestGame.Common
             }
         }
 
+        /// <summary>
+        /// Обновление модели - rest-Update-HttpPut
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="requestUri"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public async Task<HttpResponseMessage> PutJsonAsync<T>(string requestUri, T value)
         {
             try
@@ -128,8 +180,6 @@ namespace QuestGame.Common
             }
             catch (HttpException ex)
             {
-                Console.WriteLine(ex.Message);
-
                 return new HttpResponseMessage
                 {
                     StatusCode = System.Net.HttpStatusCode.BadRequest,
