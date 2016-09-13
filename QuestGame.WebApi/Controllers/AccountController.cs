@@ -372,23 +372,30 @@ namespace QuestGame.WebApi.Controllers
                 client.AddSendParam("username", model.Email);
                 client.AddSendParam("password", model.Password);
 
-                var response = await client.PostAsync("Token");
-
-                if (response.StatusCode != HttpStatusCode.OK)
+                try
                 {
-                    return new HttpResponseMessage { StatusCode = HttpStatusCode.BadRequest };
+                    var response = await client.PostAsync("Token");
+                    response.EnsureSuccessStatusCode();
+
+                    var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
+                    var authToken = responseData["access_token"];
+
+                    logger.Information("| Login | {@user}", model);
+
+                    return new HttpResponseMessage()
+                    {
+                        Content = new StringContent(authToken),
+                        StatusCode = HttpStatusCode.OK
+                    };
                 }
-
-                var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
-                var authToken = responseData["access_token"];
-
-                logger.Information("| Login | {@user}", model);
-
-                return new HttpResponseMessage()
+                catch (Exception ex)
                 {
-                    Content = new StringContent(authToken),
-                    StatusCode = HttpStatusCode.OK
-                };
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = System.Net.HttpStatusCode.BadRequest,
+                        Content = new StringContent(ex.Message)
+                    };
+                }               
             }
             
         }

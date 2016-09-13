@@ -50,7 +50,7 @@ namespace QuestGame.Common
                 var result = client.GetAsync(requestUri).Result;
                 return result;
             }
-            catch (HttpException ex)
+            catch (Exception ex)
             {
                 return new HttpResponseMessage
                 {
@@ -77,7 +77,7 @@ namespace QuestGame.Common
                 result.EnsureSuccessStatusCode();
                 return result;
             }
-            catch (HttpException ex)
+            catch (Exception ex)
             {
                 return new HttpResponseMessage
                 {
@@ -96,10 +96,11 @@ namespace QuestGame.Common
             try
             {
                 var request = await client.GetAsync(requestUri);
+                request.EnsureSuccessStatusCode();
                 var response = await request.Content.ReadAsAsync<T>();
                 return response;
             }
-            catch (HttpException ex)
+            catch (Exception ex)
             {
                 return default(T);
             }
@@ -114,7 +115,7 @@ namespace QuestGame.Common
                 result.EnsureSuccessStatusCode();
                 return result;
             }
-            catch (HttpException ex)
+            catch (Exception ex)
             {
                 return new HttpResponseMessage
                 {
@@ -132,7 +133,7 @@ namespace QuestGame.Common
                 result.EnsureSuccessStatusCode();
                 return result;
             }
-            catch (HttpException ex)
+            catch (Exception ex)
             {
                 return new HttpResponseMessage
                 {
@@ -154,7 +155,7 @@ namespace QuestGame.Common
                 result.EnsureSuccessStatusCode();
                 return result;
             }
-            catch (HttpException ex)
+            catch (Exception ex)
             {
                 return new HttpResponseMessage {
                     StatusCode = System.Net.HttpStatusCode.BadRequest,
@@ -178,7 +179,7 @@ namespace QuestGame.Common
                 result.EnsureSuccessStatusCode();
                 return result;
             }
-            catch (HttpException ex)
+            catch (Exception ex)
             {
                 return new HttpResponseMessage
                 {
