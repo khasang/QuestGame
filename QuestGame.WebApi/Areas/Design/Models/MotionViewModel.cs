@@ -10,6 +10,7 @@ namespace QuestGame.WebApi.Areas.Design.Models
         public int Id { get; set; }
         public string Description { get; set; }
         //public string NextStageTitle { get; set; }
+        public int OwnerStageId { get; set; }
         public int? NextStageId { get; set; }
     }
 }

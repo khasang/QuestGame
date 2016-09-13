@@ -292,6 +292,7 @@
     <Content Include="Areas\Design\Views\Stage\Create.cshtml" />
     <Content Include="Areas\Design\Views\Stage\Edit.cshtml" />
     <Content Include="Areas\Design\Views\Stage\Details.cshtml" />
+    <Content Include="Areas\Design\Views\Motions\Create.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -337,7 +338,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Design\Views\Motions\" />
     <Folder Include="Views\Quest\" />
   </ItemGroup>
   <ItemGroup>

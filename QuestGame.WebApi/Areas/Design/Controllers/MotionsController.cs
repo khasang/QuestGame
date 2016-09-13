@@ -1,4 +1,7 @@
-﻿using QuestGame.Common;
+﻿using AutoMapper;
+using QuestGame.Common;
+using QuestGame.Domain.DTO;
+using QuestGame.WebApi.Areas.Design.Models;
 using QuestGame.WebApi.Models;
 using System;
 using System.Collections.Generic;
@@ -11,6 +14,14 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 {
     public class MotionsController : Controller
     {
+        IMapper mapper;
+
+        public MotionsController(IMapper mapper)
+        {
+            this.mapper = mapper;
+        }
+
+
         // GET: Design/Motions
         public ActionResult Index()
         {
@@ -18,24 +29,49 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         }
 
         // GET: Design/Motions/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create(int id)
         {
-            return View();
+            var user = Session["User"] as UserModel;
+
+            var model = new MotionViewModel();
+
+            try
+            {
+                using (var client = new RequestApi(user.Token))
+                {
+                    var response = await client.GetAsync<MotionDTO>(@"api/Stage/GetById?id=" + id);
+                    model.OwnerStageId = response.Id;
+                    return View(model);
+                }
+            }
+            catch
+            {
+                return RedirectToAction("Index", "Stages", new { id = id});
+            }
         }
 
         // POST: Design/Motions/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public async Task<ActionResult> Create(MotionViewModel model)
         {
+            var user = Session["User"] as UserModel;
+
+            model.Id = 0;
+
+            var motion = mapper.Map<MotionViewModel, MotionDTO>(model);
+
             try
             {
-                // TODO: Add insert logic here
+                using (var client = new RequestApi(user.Token))
+                {
+                    var response = await client.PostJsonAsync(@"api/Motion/Add", motion);
+                }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Stage", new { id = model.OwnerStageId });
             }
             catch
             {
-                return View();
+                return View(model);
             }
         }
 
