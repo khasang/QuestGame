@@ -26,6 +26,15 @@ namespace QuestGame.WebApi.Controllers
             this.mapper = mapper;
         }
 
+        [HttpGet]
+        [Route("GetById")]
+        public MotionDTO GetById(int id)
+        {
+            var motion = dataManager.Motions.GetById(id);
+            var response = mapper.Map<Motion, MotionDTO>(motion);
+
+            return response;
+        }
 
         [HttpPost]
         [Route("Add")]
@@ -44,6 +53,17 @@ namespace QuestGame.WebApi.Controllers
                 Debug.WriteLine(ex.Message);
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
+        }
+
+        [HttpPut]
+        [Route("Update")]
+        public void Update(MotionDTO model)
+        {
+            var motionOriginal = dataManager.Motions.GetById(model.Id);
+            var motionResult = mapper.Map<MotionDTO, Motion>(model, motionOriginal);
+
+            dataManager.Motions.Update(motionResult);
+            dataManager.Save();
         }
 
         [HttpDelete]

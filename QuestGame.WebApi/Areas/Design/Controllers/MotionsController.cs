@@ -75,25 +75,39 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             }
         }
 
-        // GET: Design/Motions/Edit/5
-        public ActionResult Edit(int id)
+
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var user = Session["User"] as UserModel;
+
+            using (var client = new RequestApi(user.Token))
+            {
+                var motion = await client.GetAsync<MotionDTO>(@"api/Motion/GetById?id=" + id);
+                var motionVM = mapper.Map<MotionDTO, MotionViewModel>(motion);
+
+                return View(motionVM);
+            }
         }
 
         // POST: Design/Motions/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public async Task<ActionResult> Edit(MotionViewModel model)
         {
+            var user = Session["User"] as UserModel;
+            var motion = mapper.Map<MotionViewModel, MotionDTO>(model);
+
             try
             {
-                // TODO: Add update logic here
+                using (var client = new RequestApi(user.Token))
+                {
+                    var response = await client.PutJsonAsync(@"api/Motion/Update", motion);
+                }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Stage", new { id = motion.OwnerStageId });
             }
             catch
             {
-                return View();
+                return View(model);
             }
         }
 

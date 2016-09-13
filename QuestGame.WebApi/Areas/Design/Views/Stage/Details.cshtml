@@ -78,8 +78,7 @@
                             @Html.DisplayFor(modelItem => item.Description)
                         </td>
                         <td>
-                            @Html.ActionLink("-Edit", "Edit", "Stage", new { id = item.Id }, new { area = "Design" }) |
-                            @Html.ActionLink("-Details", "Details", new { id = item.Id }) |
+                            @Html.ActionLink("Edit", "Edit", "Motions", new { id = item.Id }, new { area = "Design" }) |
                             @Html.ActionLink("Delete", "Delete", "Motions", new { id = item.Id }, new { area = "Design" })
                         </td>
                     </tr>
