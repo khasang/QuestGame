@@ -81,7 +81,18 @@ namespace QuestGame.Common
 
         public async Task<HttpResponseMessage> DeleteAsync(string requestUri)
         {
-            return await client.DeleteAsync(requestUri);
+            try
+            {
+                return await client.DeleteAsync(requestUri);
+            }
+            catch (HttpException ex)
+            {
+                return new HttpResponseMessage
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadRequest,
+                    Content = new StringContent(ex.Message)
+                };
+            }
         }
 
         #endregion
