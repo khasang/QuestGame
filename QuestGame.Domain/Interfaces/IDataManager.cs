@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using QuestGame.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace QuestGame.Domain.Interfaces
         IUserRepository Users { get; }
         IRoleRepository Roles { get; }
         ApplicationUserManager UserManager { get; }
+        RoleManager<IdentityRole> RoleManager { get; }
 
 
         void Save();

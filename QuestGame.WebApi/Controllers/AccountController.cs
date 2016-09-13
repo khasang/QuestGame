@@ -24,6 +24,7 @@ using System.Net.Http.Headers;
 using QuestGame.Common.Interfaces;
 using QuestGame.Common;
 using System.Diagnostics;
+using QuestGame.Common.Helpers;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -341,6 +342,8 @@ namespace QuestGame.WebApi.Controllers
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
+            IdentityResult toRole = UserManager.AddToRole(user.Id, "user");
+
             var response = new RegisterResponse
             {
                 Success = result.Succeeded,
@@ -366,12 +369,8 @@ namespace QuestGame.WebApi.Controllers
                 };
             }
             
-            using (HttpClient client = new HttpClient())
+            using (var client = RestHelper.Create())
             {
-                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["BaseUrl"]);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                
                 var requestParams = new Dictionary<string, string>
                 {
                     { "grant_type", "password" },
@@ -394,6 +393,7 @@ namespace QuestGame.WebApi.Controllers
                 var authToken = responseData["access_token"];
 
                 logger.Information("| Login | {@user}", model);
+
                 return new HttpResponseMessage()
                 {
                     Content = new StringContent(authToken),

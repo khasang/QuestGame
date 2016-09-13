@@ -14,6 +14,7 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using AutoMapper;
+using QuestGame.Common.Helpers;
 
 namespace QuestGame.WebApi.Areas.Game.Controllers
 {
@@ -26,13 +27,8 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
         // GET: Game/MainPage
         public async Task<ActionResult> Index()
         {
-            using (HttpClient client = new HttpClient())
+            using (var client = RestHelper.Create(SessionUser.Token))
             {
-                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["BaseUrl"]);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", SessionUser.Token);
-
                 var response = await client.GetAsync(@"api/Quest/GetAll");
 
                 IEnumerable<QuestViewModel> model = null;
@@ -43,7 +39,6 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
                 else
                 {
                     var answer = await response.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
-
                     model = mapper.Map<IEnumerable<QuestDTO>, IEnumerable<QuestViewModel>>(answer);
                 }
 

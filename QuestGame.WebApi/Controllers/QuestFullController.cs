@@ -113,6 +113,22 @@ namespace QuestGame.WebApi.Controllers
                 dataManager.Save();
             }
         }
+
+        [HttpDelete]
+        [Route("DelByTitle")]
+        public IHttpActionResult DelByTitle(string title)
+        {
+            try
+            {
+                dataManager.Quests.DeleteByTitle(title);
+                dataManager.Save();
+                return Ok();
+            }
+            catch
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+        }
     }    
 }
 

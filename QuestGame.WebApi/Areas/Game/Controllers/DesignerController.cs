@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using AutoMapper;
+using QuestGame.Common.Helpers;
 
 namespace QuestGame.WebApi.Areas.Game.Controllers
 {
@@ -23,14 +24,9 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
         // GET: Game/Designer
         public async Task<ActionResult> Index()
         {
-            using (HttpClient client = new HttpClient())
+            using (var client = RestHelper.Create(SessionUser.Token))
             {
-                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["BaseUrl"]);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", SessionUser.Token);
-
-                var response = await client.GetAsync(@"api/Quest/GetAll");
+                var response = await client.GetAsync(@"api/QuestFull/GetAll");
 
                 IEnumerable<QuestViewModel> model = null;
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -68,17 +64,10 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var request = mapper.Map<NewQuestViewModel, QuestDTO>(model);
-
-            using (var client = new HttpClient())
+            var request = mapper.Map<NewQuestViewModel, QuestFullDTO>(model);
+            using (var client = RestHelper.Create(SessionUser.Token))
             {
-                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["BaseUrl"]);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", SessionUser.Token);
-
-                var response = await client.PostAsJsonAsync(@"api/Quest", request);
-
+                var response = await client.PostAsJsonAsync(@"api/QuestFull/Add", request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     ViewBag.Message = "Не удалось добавить квест!";
@@ -95,16 +84,9 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
             if (title == null)
                 return View(title);
 
-            using (var client = new HttpClient())
+            using (var client = RestHelper.Create(SessionUser.Token))
             {
-
-                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["BaseUrl"]);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", SessionUser.Token);
-
-                var response = await client.DeleteAsync(@"api/Quest/DelByTitle?title=" + title);
-
+                var response = await client.DeleteAsync(@"api/QuestFull/DelByTitle?title=" + title);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     ViewBag.Message = "Не удалось добавить квест!";

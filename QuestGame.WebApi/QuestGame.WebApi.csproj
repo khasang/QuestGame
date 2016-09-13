@@ -249,6 +249,9 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\dbo.GetQuestsByUserRole.sql" />
+    <Content Include="App_Data\Query1.sql" />
+    <Content Include="App_Data\Query2.sql" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -338,7 +341,6 @@
     <Content Include="Views\Home\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Quest\" />

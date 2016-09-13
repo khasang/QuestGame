@@ -19,7 +19,7 @@ using System.Web;
 
 namespace QuestGame.WebApi.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [RoutePrefix("api/Quest")]
     public class QuestController : ApiController
     {

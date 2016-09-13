@@ -13,7 +13,7 @@ namespace QuestGame.Domain.EntityConfigurations
     {
         public QuestMapper()
         {
-            this.ToTable("Quest");
+            this.ToTable("Quests");
 
             this.Property(m => m.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(m => m.Id).IsRequired();
