@@ -8,6 +8,15 @@
     <h2>@Model.Title</h2>
 </blockquote>
 
+@if (ViewBag.Alert != null)
+{
+    foreach (var alert in ViewBag.Alert)
+    {
+        <div class="alert alert-warning" role="alert">
+            @alert
+        </div>
+    }
+}
 
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -56,7 +65,7 @@
 
 
 
-@if (Model.Motions.Count > 0)
+@if (Model.Motions != null)
 {
     <div class="panel panel-default">
         <div class="panel-heading">
