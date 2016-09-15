@@ -29,6 +29,22 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             return View();
         }
 
+        //// GET: Design/Stage/Details/5
+        //public async Task<ActionResult> Details(int id)
+        //{
+        //    ViewBag.Title = "Details";
+
+        //    var user = Session["User"] as UserModel;
+
+        //    using (var client = new RequestApi(user.Token))
+        //    {
+        //        var stage = await client.GetAsync<StageDTO>(@"api/Stage/GetById?id=" + id);
+        //        var stageVM = mapper.Map<StageDTO, StageViewModel>(stage);
+
+        //        return View(stageVM);
+        //    }
+        //}
+
         // GET: Design/Stage/Details/5
         public async Task<ActionResult> Details(int id)
         {
@@ -38,10 +54,21 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
             using (var client = new RequestApi(user.Token))
             {
-                var stage = await client.GetAsync<StageDTO>(@"api/Stage/GetById?id=" + id);
+                var response = await client.GetAsyncResult<StageDTO>(@"api/Stage/GetById?id=" + 205);
+
+                if (response.ResponseErrors != null)
+                {
+                    var stageFake = new StageViewModel();
+
+                    ViewBag.Alert = response.ResponseErrors;
+                    return View(stageFake);
+                }
+
+                var stage = response.ResponseData;
                 var stageVM = mapper.Map<StageDTO, StageViewModel>(stage);
 
                 return View(stageVM);
+
             }
         }
 

@@ -63,20 +63,13 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Collections.Concurrent" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.IO" />
-    <Reference Include="System.Linq" />
     <Reference Include="System.Management" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Net.Requests" />
-    <Reference Include="System.Reflection" />
-    <Reference Include="System.Runtime" />
-    <Reference Include="System.Runtime.Extensions" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -96,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HttpClientWrapper\RequestApi.cs" />
+    <Compile Include="HttpClientWrapper\RequestApiResult.cs" />
     <Compile Include="Interfaces\ILoggerService.cs" />
     <Compile Include="LoggerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

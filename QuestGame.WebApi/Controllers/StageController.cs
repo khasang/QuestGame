@@ -5,6 +5,7 @@ using QuestGame.Domain.Entities;
 using QuestGame.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -30,10 +31,9 @@ namespace QuestGame.WebApi.Controllers
         [Route("GetById")]
         public StageDTO GetById(int id)
         {
-            var stage = dataManager.Stages.GetById(id);
-            var response = mapper.Map<Stage, StageDTO>(stage);
-
-            return response;
+                var stage = dataManager.Stages.GetById(id);
+                var response = mapper.Map<Stage, StageDTO>(stage);
+                return response;
         }
 
 
