@@ -129,10 +129,10 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
         [HttpPost]
         public async Task<ActionResult> EditQuest(QuestViewModel quest)
         {
-            if(!ModelState.IsValid)
-            {
-                return View(quest);
-            }
+            //if(!ModelState.IsValid)
+            //{
+            //    return View(quest);
+            //}
 
             var model = mapper.Map<QuestViewModel, QuestDTO>(quest);
 

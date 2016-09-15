@@ -21,8 +21,7 @@ namespace QuestGame.Domain.DBInitializers
                 {
                     Title = "Stage1",
                     Body = "Body1",
-                    Point = rnd.Next(5),
-                    Tag = GetGuidValue().ToString()
+                    Point = rnd.Next(5)
                 };
 
                 var quest = new Quest
@@ -35,8 +34,8 @@ namespace QuestGame.Domain.DBInitializers
                     Stages = new List<Stage>
                     {
                         stage1,
-                        new Stage { Title = "Stage2", Body = "Body2", Point = rnd.Next(5), Tag = GetGuidValue().ToString() },
-                        new Stage { Title = "Stage3", Body = "Body3", Point = rnd.Next(5), Tag = GetGuidValue().ToString() }
+                        new Stage { Title = "Stage2", Body = "Body2", Point = rnd.Next(5) },
+                        new Stage { Title = "Stage3", Body = "Body3", Point = rnd.Next(5) }
                     }
                 };
 
@@ -54,14 +53,6 @@ namespace QuestGame.Domain.DBInitializers
             };
 
             dbContext.SaveChanges();
-        }
-
-        private Guid GetGuidValue()
-        {
-            var bytes = new byte[16];
-            for (int i = 0; i < 16; i++)
-                bytes[i] = (byte)rnd.Next(256);
-            return new Guid(bytes);
         }
     }
 }
