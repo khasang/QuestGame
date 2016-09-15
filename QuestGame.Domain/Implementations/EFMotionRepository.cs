@@ -49,7 +49,7 @@ namespace QuestGame.Domain.Implementations
 
         public IEnumerable<Motion> GetMotionsByStageId(int stageId)
         {
-            return dbContext.Motions.Where(c => c.StageId == stageId).ToList();   //
+            return dbContext.Motions.Where(c => c.OwnerStageId == stageId).ToList();   //
         }
     }
 }
