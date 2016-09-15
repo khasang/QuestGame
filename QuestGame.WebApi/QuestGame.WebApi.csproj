@@ -190,7 +190,7 @@
     <Compile Include="Areas\Game\Controllers\DesignerController.cs" />
     <Compile Include="Areas\Game\Controllers\MainPageController.cs" />
     <Compile Include="Areas\Game\GameAreaRegistration.cs" />
-    <Compile Include="Areas\Game\Models\QuestViewModel.cs" />
+    <Compile Include="Areas\Game\Models\QuestViewModels.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
     <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
     <Compile Include="Areas\HelpPage\Controllers\HelpController.cs" />
@@ -297,6 +297,7 @@
     <Content Include="Areas\Game\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Game\Views\web.config" />
     <Content Include="Areas\Game\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Game\Views\Designer\EditQuest.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

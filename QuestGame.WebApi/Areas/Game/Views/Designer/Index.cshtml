@@ -37,9 +37,9 @@
                             <td>@quest.Owner</td>
                             <td>@quest.Date</td>
                             <td>
-                                <a href=@Url.Action("Details", "Designer", new { title = quest.Title }, null)><span class="glyphicon glyphicon-info-sign"></span></a>
-                                <a href=@Url.Action("Edit", "Designer", new { title = quest.Title }, null)><span class="glyphicon glyphicon-pencil"></span></a>
-                                <a href=@Url.Action("DeleteQuest", "Designer", new { title = quest.Title }, null)><span class="glyphicon glyphicon-remove-circle"></span></a>                               
+                                <a href=@Url.Action("Details", "Designer", new { id = quest.Id }, null)><span class="glyphicon glyphicon-info-sign"></span></a>
+                                <a href=@Url.Action("EditQuest", "Designer", new { id = quest.Id }, null)><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a href=@Url.Action("DeleteQuest", "Designer", new { id = quest.Id }, null)><span class="glyphicon glyphicon-remove-circle"></span></a>                               
                             </td>
                         </tr>
                     }

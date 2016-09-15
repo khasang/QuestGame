@@ -56,6 +56,16 @@ namespace QuestGame.WebApi.Controllers
             return response;
         }
 
+        [HttpGet]
+        [Route("GetByTitle")]
+        public QuestFullDTO GetByTitle(string title)
+        {
+            var quest = dataManager.Quests.GetByTitle(title);
+
+            var response = mapper.Map<Quest, QuestFullDTO>(quest);
+            return response;
+        }
+
         [HttpPost]
         [Route("Add")]
         public IHttpActionResult Add(QuestFullDTO quest)

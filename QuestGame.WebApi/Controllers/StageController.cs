@@ -95,13 +95,23 @@ namespace QuestGame.WebApi.Controllers
         [Route("Delete")]
         public void Delete(StageDTO quest)
         {
-            var model = mapper.Map<StageDTO, Quest>(quest);
+            var model = mapper.Map<StageDTO, Stage>(quest);
             
             if (model != null)
             {
                 dataManager.Stages.Delete(model.Id);
                 dataManager.Save();
             }
+        }
+
+        [HttpGet]
+        [Route("GetByQuestId")]
+        public IEnumerable<StageDTO> GetByQuestId(int id)
+        {
+            var stages = dataManager.Stages.GetByQuestId(id);
+            var model = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(stages);
+
+            return model;
         }
     }
 }

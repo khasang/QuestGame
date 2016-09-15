@@ -12,6 +12,7 @@ using System.Web.Configuration;
 using System.Web.Mvc;
 using AutoMapper;
 using QuestGame.Common.Helpers;
+using System.Collections.Specialized;
 
 namespace QuestGame.WebApi.Areas.Game.Controllers
 {
@@ -64,7 +65,7 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var request = mapper.Map<NewQuestViewModel, QuestFullDTO>(model);
+            var request = mapper.Map<NewQuestViewModel, QuestDTO>(model);
             using (var client = RestHelper.Create(SessionUser.Token))
             {
                 var response = await client.PostAsJsonAsync(@"api/QuestFull/Add", request);
@@ -94,6 +95,58 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
             }
 
             return RedirectToAction("Index", "Designer");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> EditQuest(int id)
+        {
+            using(var client = RestHelper.Create(SessionUser.Token))
+            {
+                var questResponse = await client.GetAsync(@"api/Quest/GetById?id=" + id);
+                if (questResponse.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = "Не удалось найти квест!";
+                    return RedirectToAction("Index", "Designer");
+                }
+                var questDTO = await questResponse.Content.ReadAsAsync<QuestDTO>();
+                var questModel = mapper.Map<QuestDTO, QuestViewModel>(questDTO);
+
+                var stageResponse = await client.GetAsync(@"api/Stage/GetByQuestId?id=" + id);
+                if (stageResponse.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = "Не удалось найти квест!";
+                    return RedirectToAction("Index", "Designer");
+                }
+                var stagesDTO = await stageResponse.Content.ReadAsAsync<IEnumerable<StageDTO>>();
+                var stagesModel = mapper.Map<IEnumerable<StageDTO>, IEnumerable<StageViewModel>>(stagesDTO);
+
+                questModel.Stages = stagesModel.ToDictionary(x => x.Id, y => y.Title);
+
+                return View(questModel);
+            }            
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> EditQuest(QuestViewModel quest)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(quest);
+            }
+
+            var model = mapper.Map<QuestViewModel, QuestDTO>(quest);
+
+            using(var client = RestHelper.Create(SessionUser.Token))
+            {
+                var response = await client.PutAsJsonAsync(@"api/Quest/Update", model);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = "Не обновить квест!";
+                    return RedirectToAction("Index", "Designer");
+                }
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

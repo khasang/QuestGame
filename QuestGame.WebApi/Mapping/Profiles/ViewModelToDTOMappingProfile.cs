@@ -14,7 +14,9 @@ namespace QuestGame.WebApi.Mapping.Profiles
         public ViewModelToDTOMappingProfile()
         {
             CreateMap<QuestViewModel, QuestFullDTO>();
+            CreateMap<QuestViewModel, QuestDTO>();
             CreateMap<NewQuestViewModel, QuestFullDTO>();
+            CreateMap<NewQuestViewModel, QuestDTO>();
             CreateMap<StageViewModel, StageFullDTO>();
             CreateMap<MotionViewModel, MotionDTO>();
         }

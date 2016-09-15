@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using QuestGame.WebApi.Areas.Game.Models;
+using System.Collections.Specialized;
 
 namespace QuestGame.WebApi.Mapping.Profiles
 {
@@ -12,14 +13,25 @@ namespace QuestGame.WebApi.Mapping.Profiles
     {
         public DTOToViewModelMappingProfile()
         {
+            CreateMap<QuestFullDTO, QuestViewModel>().ForMember(x => x.Stages, y => y.MapFrom(pr => pr.Stages.Select(n => n.Title)));
             CreateMap<QuestDTO, QuestViewModel>();
-            //CreateMap<StageDTO, StageViewModel>();
-            //CreateMap<MotionDTO, MotionViewModel>();
+            CreateMap<StageDTO, StageViewModel>();
+            CreateMap<MotionDTO, MotionViewModel>();
         }
 
         public override string ProfileName
         {
             get { return "DTOToViewModelMappingProfile"; }
         }
+
+        //private NameValueCollection GetStageViewModel(ICollection<StageFullDTO> stages)
+        //{
+        //    var collection = new NameValueCollection();
+
+        //    foreach (var stage in stages)
+        //    {
+        //        collection.Add(stage.I)
+        //    }
+        //}
     }
 }
