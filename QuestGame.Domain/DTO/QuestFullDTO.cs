@@ -15,6 +15,7 @@ namespace QuestGame.Domain.DTO
         public bool Active { get; set; }
         public string Owner { get; set; }
         public ICollection<StageFullDTO> Stages { get; set; }
+        public string Img { get; set; }
     }
 
     public class StageFullDTO

@@ -1,7 +1,7 @@
-﻿@model IEnumerable<QuestGame.WebApi.Areas.Game.Models.StageViewModel>
+﻿@model IEnumerable<QuestGame.WebApi.Areas.Game.Models.MotionViewModel>
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "StageDetails";
 }
 
 <div class="row">
@@ -23,12 +23,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var stages in Model)
+                        @foreach (var motions in Model)
                         {
                             <tr>
-                                <td>@Html.ActionLink(stages.Title, "StageDetails", new { id = stages.Title }, null)</td>
-                                <a href=@Url.Action("StageDetails", "Designer", new { title = stages.Title }, null)><span class="glyphicon glyphicon-info-sign"></span></a>
-                                <td>@stages.Body</td>
+                                <td>@motions.Description</td>
                             </tr>
                         }
                     </tbody>
@@ -38,4 +36,3 @@
     </div>
     @Html.ActionLink("Назад", "Index", "MainPage", new { area = "Game" }, new { @class = "btn btn-default" })
 </div>
-

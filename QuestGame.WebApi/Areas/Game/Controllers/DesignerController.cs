@@ -146,5 +146,38 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
                 return View(model);
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult> StageDetails(string title)
+        {
+            if (title == null)
+                return View(title);
+
+            using (var client = new HttpClient())
+            {
+
+                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["BaseUrl"]);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("applicatGion/json"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", SessionUser.Token);
+
+                var response = await client.GetAsync(@"api/Quest/StageDetails?title=" + title);
+
+                IEnumerable<MotionViewModel> model = null;
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = "Неудачный запрос!";
+                }
+                else
+                {
+                    var answer = await response.Content.ReadAsAsync<IEnumerable<MotionDTO>>();
+
+                    var stages = mapper.Map<IEnumerable<MotionDTO>, IEnumerable<MotionViewModel>>(answer);
+                    model = stages;
+                }
+
+                return View(model);
+            }
+        }
     }
 }

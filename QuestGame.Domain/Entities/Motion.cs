@@ -20,6 +20,13 @@ namespace QuestGame.Domain.Entities
         public string Description { get; set; }
 
         /// <summary>
+        /// Stage Id
+        /// </summary>
+        public int StageId { get; set; }
+        //[JsonIgnore]
+        public virtual Stage Stage { get; set; }
+
+        /// <summary>
         /// Следующая сцена
         /// </summary>
         public int? NextStageId { get; set; }

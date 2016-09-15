@@ -68,6 +68,18 @@ namespace QuestGame.WebApi.Controllers
             return response;
         }
 
+        [HttpGet]
+        [Route("StageDetails")]
+        public IEnumerable<MotionDTO> StageDetails(string title)
+        {
+            int stageId = dataManager.Stages.GetIdByTitle(title);
+            var motions = dataManager.Motions.GetMotionsByStageId(stageId).ToList();
+
+            var response = mapper.Map<IEnumerable<Motion>, IEnumerable<MotionDTO>>(motions);
+
+            return response;
+        }
+
         [HttpPost]
         [Route("Add")]
         public IHttpActionResult Add(QuestFullDTO quest)

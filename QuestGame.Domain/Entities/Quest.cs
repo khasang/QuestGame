@@ -49,5 +49,11 @@ namespace QuestGame.Domain.Entities
         {
             Stages = new List<Stage>();
         }
+
+        /// <summary>
+        /// Коллекция сцен квеста
+        /// </summary>
+        public string Img { get; set; } 
+
     }
 }

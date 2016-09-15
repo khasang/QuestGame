@@ -295,6 +295,7 @@
     <Content Include="Areas\Game\Views\web.config" />
     <Content Include="Areas\Game\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Game\Views\Designer\Details.cshtml" />
+    <Content Include="Areas\Game\Views\Designer\StageDetails.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

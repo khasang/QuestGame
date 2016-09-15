@@ -15,8 +15,8 @@ namespace QuestGame.WebApi.Mapping.Profiles
         {
             CreateMap<QuestViewModel, QuestDTO>();
             CreateMap<NewQuestViewModel, QuestDTO>();
-            //CreateMap<StageViewModel, StageDTO>();
-            //CreateMap<MotionViewModel, MotionDTO>();
+            CreateMap<StageViewModel, StageDTO>();
+            CreateMap<MotionViewModel, MotionDTO>();
         }
 
         public override string ProfileName
