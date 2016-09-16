@@ -54,7 +54,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
             using (var client = new RequestApi(user.Token))
             {
-                var response = await client.GetAsyncResult<StageDTO>(@"api/Stage/GetById?id=" + 205);
+                var response = await client.GetAsyncResult<StageDTO>(@"api/Stage/GetById?id=" + id);
 
                 if (response.ResponseErrors != null)
                 {
