@@ -42,47 +42,80 @@ namespace QuestGame.WebApi.Controllers
             {
                 return null;
             }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
 
         [HttpPut]
         [Route("Update")]
-        public void Update(StageDTO model)
+        public IHttpActionResult Update(StageDTO model)
         {
-            var stageOriginal = dataManager.Stages.GetById(model.Id);
-            var stageResult = mapper.Map<StageDTO, Stage>(model, stageOriginal);
+            try
+            {
+                var stageOriginal = dataManager.Stages.GetById(model.Id);
+                if (stageOriginal == null) { throw new ObjectNotFoundException(); }
 
-            dataManager.Stages.Update(stageResult);
-            dataManager.Save();
+                var stageResult = mapper.Map<StageDTO, Stage>(model, stageOriginal);
+
+                dataManager.Stages.Update(stageResult);
+                dataManager.Save();
+
+                return Ok();
+            }
+            catch (ObjectNotFoundException ex)
+            {
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
         }
 
         [HttpPost]
         [Route("Add")]
         public IHttpActionResult Add(StageDTO stage)
         {
-            var model = mapper.Map<StageDTO, Stage>(stage);
-
             try
             {
+                var model = mapper.Map<StageDTO, Stage>(stage);
+
                 dataManager.Stages.Add(model);
                 dataManager.Save();
                 return Ok();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return BadRequest();
             }
         }
 
         [HttpDelete]
         [Route("Delete")]
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
-            var stage = dataManager.Stages.GetById(id);
+            try
+            {
+                var stage = dataManager.Stages.GetById(id);
+                if (stage == null) { throw new ObjectNotFoundException(); }
 
-            dataManager.Stages.Delete(stage);
-            dataManager.Save();
+                dataManager.Stages.Delete(stage);
+                dataManager.Save();
+                return Ok(stage);
+            }
+            catch (ObjectNotFoundException ex)
+            {
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+
         }
     }
 }
