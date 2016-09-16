@@ -89,7 +89,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HttpClientWrapper\RequestApi.cs" />
-    <Compile Include="HttpClientWrapper\RequestApiResult.cs" />
     <Compile Include="Interfaces\ILoggerService.cs" />
     <Compile Include="LoggerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -97,6 +96,12 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QuestGame.Domain\QuestGame.Domain.csproj">
+      <Project>{505742B2-622D-45A4-81B5-64C9DDAAFF46}</Project>
+      <Name>QuestGame.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

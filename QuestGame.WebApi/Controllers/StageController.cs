@@ -40,10 +40,12 @@ namespace QuestGame.WebApi.Controllers
             }
             catch (ObjectNotFoundException ex)
             {
+                Console.WriteLine(ex.Message);
                 return null;
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return null;
             }
         }
@@ -67,10 +69,12 @@ namespace QuestGame.WebApi.Controllers
             }
             catch (ObjectNotFoundException ex)
             {
-                return BadRequest();
+                Console.WriteLine(ex.Message);
+                return NotFound();
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return BadRequest();
             }
 
@@ -90,6 +94,7 @@ namespace QuestGame.WebApi.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return BadRequest();
             }
         }
@@ -105,14 +110,16 @@ namespace QuestGame.WebApi.Controllers
 
                 dataManager.Stages.Delete(stage);
                 dataManager.Save();
-                return Ok(stage);
+                return Ok();
             }
             catch (ObjectNotFoundException ex)
             {
-                return BadRequest();
+                Console.WriteLine(ex.Message);
+                return NotFound();
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return BadRequest();
             }
 

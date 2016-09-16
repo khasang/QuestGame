@@ -107,50 +107,6 @@ namespace QuestGame.Common
             }
         }
 
-        public async Task<RequestApiResult> GetAsyncResult<T>(string requestUri)
-        {
-            var resultOk = new RequestApiResult()
-            {
-                Succes = true,
-                Status = System.Net.HttpStatusCode.OK,
-                ResponseErrors = null
-            };
-            var resultBad = new RequestApiResult()
-            {
-                Succes = false,
-                Status = System.Net.HttpStatusCode.BadRequest,
-                ResponseData = default(T)
-            };
-
-            try
-            {
-                var request = await client.GetAsync(requestUri);
-                request.EnsureSuccessStatusCode();
-                var response = await request.Content.ReadAsAsync<T>();
-
-                if (response == null)
-                {
-                    throw new ArgumentException("Ошибка получения объекта. Воможно он удален, либо отсутствует соединение.");
-                }
-
-                resultOk.ResponseData = response;
-
-                return resultOk;
-            }
-            catch (HttpRequestException ex)
-            {
-                resultBad.ResponseErrors.Add(ex.Message);
-                return resultBad;
-            }
-            catch (ArgumentException ex)
-            {
-                resultBad.ResponseErrors.Add(ex.Message);
-
-                return resultBad;
-            }
-
-        }
-
         public async Task<HttpResponseMessage> PostAsync(string requestUri)
         {
             try

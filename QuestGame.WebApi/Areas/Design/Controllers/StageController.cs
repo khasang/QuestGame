@@ -11,11 +11,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using QuestGame.Domain.Entities;
 
 namespace QuestGame.WebApi.Areas.Design.Controllers
 {
     public class StageController : Controller
     {
+        ICollection<string> ErrorsMessage = new List<string>();
+        ICollection<string> InfoMessage = new List<string>();
+        ICollection<string> WarningMessage = new List<string>();
+
         IMapper mapper;
 
         public StageController(IMapper mapper)
@@ -23,74 +28,76 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             this.mapper = mapper;
         }
 
-        // GET: Design/Stage
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        //// GET: Design/Stage/Details/5
-        //public async Task<ActionResult> Details(int id)
-        //{
-        //    ViewBag.Title = "Details";
-
-        //    var user = Session["User"] as UserModel;
-
-        //    using (var client = new RequestApi(user.Token))
-        //    {
-        //        var stage = await client.GetAsync<StageDTO>(@"api/Stage/GetById?id=" + id);
-        //        var stageVM = mapper.Map<StageDTO, StageViewModel>(stage);
-
-        //        return View(stageVM);
-        //    }
-        //}
-
         // GET: Design/Stage/Details/5
-        public async Task<ActionResult> Details(int id)
+        public async Task<ActionResult> Details(int? id)
         {
             ViewBag.Title = "Details";
 
             var user = Session["User"] as UserModel;
 
+            if (id == null)
+            {
+                ErrorsMessage.Add("Неправильный запрос");
+                return Redirect(Request.UrlReferrer.PathAndQuery);
+            }
+
             using (var client = new RequestApi(user.Token))
             {
-                var response = await client.GetAsyncResult<StageDTO>(@"api/Stage/GetById?id=" + id);
-
-                if (response.ResponseErrors != null)
+                try
                 {
-                    var stageFake = new StageViewModel();
+                    var response = await client.GetAsync(@"api/Stage/GetById?id=" + id);
+                    response.EnsureSuccessStatusCode();
 
-                    ViewBag.Alert = response.ResponseErrors;
-                    return View(stageFake);
+                    var stage = response.Content.ReadAsAsync<StageDTO>().Result;
+                    if (stage == null)
+                    {
+                        ErrorsMessage.Add("ТАкого квеста не существует");
+                        return Redirect(Request.UrlReferrer.PathAndQuery);
+                    }
+
+                    var stageVM = mapper.Map<StageDTO, StageViewModel>(stage);
+
+                    return View(stageVM);
                 }
-
-                var stage = response.ResponseData;
-                var stageVM = mapper.Map<StageDTO, StageViewModel>(stage);
-
-                return View(stageVM);
-
+                catch (Exception ex)
+                {
+                    ErrorsMessage.Add("Неправильный запрос");
+                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                }
             }
         }
 
         // GET: Design/Stage/Create
-        public async Task<ActionResult> Create(int id)
+        public async Task<ActionResult> Create(int? id) // Приходит id квеста владельца
         {
             var user = Session["User"] as UserModel;
 
+            if (id == null)
+            {
+                ErrorsMessage.Add("Неправильный запрос");
+                return Redirect(Request.UrlReferrer.PathAndQuery);
+            }
+
             var model = new StageViewModel();
 
-            try
+            using (var client = new RequestApi(user.Token))
             {
-                using (var client = new RequestApi(user.Token))
+                try
                 {
-                    var response = await client.GetAsync<QuestDTO>(@"api/Quest/GetById?id=" + id);
-                    model.QuestId = response.Id;
+                    var response = await client.GetAsync(@"api/Quest/GetById?id=" + id);
+                    response.EnsureSuccessStatusCode();
+                    var quest = response.Content.ReadAsAsync<QuestDTO>().Result;
+
+                    model.QuestId = quest.Id;
                     return View(model);
                 }
-            }
-            catch
-            {
-                return View(model);
+                catch (Exception ex)
+                {
+                    ErrorsMessage.Add("Невозможно получить владельца. Ошибка сервера.");
+                    ErrorsMessage.Add(ex.Message);
+
+                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                }
             }
         }
 
@@ -100,36 +107,63 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         {
             var user = Session["User"] as UserModel;
 
+            if (!ModelState.IsValid)
+            {
+                ErrorsMessage.Add("Данные введены не верно либо не полностью.");
+                return View(model);
+            }
+
             model.Id = 0;
 
             var stage = mapper.Map<StageViewModel, StageDTO>(model);
 
-            try
+            using (var client = new RequestApi(user.Token))
             {
-                using (var client = new RequestApi(user.Token))
+                try
                 {
                     var response = await client.PostJsonAsync(@"api/Stage/Add", stage);
+                    return RedirectToAction("Details", "Quests", new { id = model.QuestId });
                 }
-
-                return RedirectToAction("Details", "Quests", new { id = model.QuestId});
-            }
-            catch
-            {
-                return View(model);
+                catch (Exception ex)
+                {
+                    ErrorsMessage.Add("Неправильный запрос");
+                    ErrorsMessage.Add(ex.Message);
+                    return View(model);
+                }
             }
         }
 
         // GET: Design/Stage/Edit/5
-        public async Task<ActionResult> Edit(int id)
+        public async Task<ActionResult> Edit(int? id)
         {
             var user = Session["User"] as UserModel;
 
+            if (id == null)
+            {
+                ErrorsMessage.Add("Неправильный запрос");
+                return Redirect(Request.UrlReferrer.PathAndQuery);
+            }
+
             using (var client = new RequestApi(user.Token))
             {
-                var stage = await client.GetAsync<StageDTO>(@"api/Stage/GetById?id=" + id);
-                var stageVM = mapper.Map<StageDTO, StageViewModel>(stage);
+                try
+                {
+                    var response = await client.GetAsync(@"api/Stage/GetById?id=" + id);
+                    response.EnsureSuccessStatusCode();
+                    var stage = response.Content.ReadAsAsync<StageDTO>().Result;
 
-                return View(stageVM);
+                    var stageVM = mapper.Map<StageDTO, StageViewModel>(stage);
+
+                    return View(stageVM);
+                }
+                catch (Exception ex)
+                {
+                    ErrorsMessage.Add("Сцена не обновлена. Ошибка сервера.");
+                    ErrorsMessage.Add(ex.Message);
+
+                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                }
+
             }
         }
 
@@ -138,35 +172,65 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         public async Task<ActionResult> Edit(StageViewModel model)
         {
             var user = Session["User"] as UserModel;
-            var stage = mapper.Map<StageViewModel, StageDTO>(model);
 
-            try
+            if (!ModelState.IsValid)
             {
-                using (var client = new RequestApi(user.Token))
-                {
-                    var response = await client.PutJsonAsync(@"api/Stage/Update", stage);
-                }
-
-                return RedirectToAction("Details", "Quests", new { id = stage.QuestId});
-            }
-            catch
-            {
+                ErrorsMessage.Add("Данные введены не верно либо не полностью.");
                 return View(model);
             }
+
+            var stage = mapper.Map<StageViewModel, StageDTO>(model);
+
+            using (var client = new RequestApi(user.Token))
+            {
+                try
+                {
+                    var response = await client.PutJsonAsync(@"api/Stage/Update", stage);
+                    response.EnsureSuccessStatusCode();
+                    InfoMessage.Add("Сцена успешно обновлена!");
+
+                    return RedirectToAction("Details", "Quests", new { id = model.QuestId });
+                }
+                catch (Exception ex)
+                {
+                    ErrorsMessage.Add("Сцена не обновлена. Ошибка сервера.");
+                    ErrorsMessage.Add(ex.Message);
+
+                    return View(model);
+                }
+            }
+
         }
 
         // POST: Design/Stage/Delete/5
         [HttpGet]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int? id)
         {
             var user = Session["User"] as UserModel;
 
-            using (var client = new RequestApi(user.Token))
+            if (id == null)
             {
-                var response = await client.DeleteAsync(@"api/Stage/Delete?id=" + id);
+                ErrorsMessage.Add("Неправильный запрос");
+                return Redirect(Request.UrlReferrer.PathAndQuery);
             }
 
-            return RedirectToAction("Index", "Quests");
+            using (var client = new RequestApi(user.Token))
+            {
+                try
+                {
+                    var response = await client.DeleteAsync(@"api/Stage/Delete?id=" + id);
+                    response.EnsureSuccessStatusCode();
+                    InfoMessage.Add("Сцена успешно удалена!");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    ErrorsMessage.Add("Сцена не удалена.");
+                    ErrorsMessage.Add(ex.Message);
+                }
+            }
+
+            return Redirect(Request.UrlReferrer.PathAndQuery);
         }
     }
 }

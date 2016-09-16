@@ -294,6 +294,7 @@
     <Content Include="Areas\Design\Views\Stage\Details.cshtml" />
     <Content Include="Areas\Design\Views\Motions\Create.cshtml" />
     <Content Include="Areas\Design\Views\Motions\Edit.cshtml" />
+    <Content Include="ClassDiagram1.cd" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
