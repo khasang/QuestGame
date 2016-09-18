@@ -13,6 +13,7 @@ namespace QuestGame.Domain.Entities
             this.Points = 0;
             this.AllowSkip = false;
             this.Operations = new List<Operation>();
+            this.Routes = new List<QuestRoute>();
             this.ModifyDate = DateTime.Now;
         }
 
@@ -27,13 +28,8 @@ namespace QuestGame.Domain.Entities
         public virtual Quest Quest { get; set; }
         public int QuestId { get; set; }
 
-        //[JsonIgnore]
-        //public virtual QuestRoute LastRoute { get; set; }
-        //public int? LastRouteId { get; set; }
-
-        //[JsonIgnore]
-        //public virtual QuestRoute Route { get; set; }
-        //public int? RouteId { get; set; }
+        [JsonIgnore]
+        public ICollection<QuestRoute> Routes { get; set; }
 
         [Required]
         [JsonIgnore]

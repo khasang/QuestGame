@@ -48,32 +48,54 @@ namespace QuestGame.Domain
         {
             modelBuilder.Entity<ApplicationUser>().Map(m =>
             {
-                m.Properties(d => new { d.Email, d.EmailConfirmed, d.PasswordHash,
-                    d.SecurityStamp, d.PhoneNumber, d.PhoneNumberConfirmed, d.TwoFactorEnabled,
-                    d.LockoutEndDateUtc, d.LockoutEnabled, d.AccessFailedCount, d.UserName, d.Identificator
+                m.Properties(d => new
+                {
+                    d.Email,
+                    d.EmailConfirmed,
+                    d.PasswordHash,
+                    d.SecurityStamp,
+                    d.PhoneNumber,
+                    d.PhoneNumberConfirmed,
+                    d.TwoFactorEnabled,
+                    d.LockoutEndDateUtc,
+                    d.LockoutEnabled,
+                    d.AccessFailedCount,
+                    d.UserName,
+                    d.Identificator
                 });
                 m.ToTable("AspNetUsers");
             })
             .Map(m =>
             {
-                m.Properties(d => new {d.Name, d.LastName, d.Bithday, d.Avatar, d.Country, d.Rating, d.CountQuestsComplite, d.AddDate });
+                m.Properties(d => new { d.Name, d.LastName, d.Bithday, d.Avatar, d.Country, d.Rating, d.CountQuestsComplite, d.AddDate });
                 m.ToTable("AspNetUsersProfile");
             })
-            .Ignore( d=> d.Token );
+            .Ignore(d => d.Token);
 
             //modelBuilder.Entity<ApplicationUser>().HasMany(s => s.QuestsRoutes).WithRequired(q => q.User).WillCascadeOnDelete(true);
             modelBuilder.Entity<ApplicationUser>().HasMany(s => s.Quests).WithRequired(q => q.User).WillCascadeOnDelete(true);
 
             modelBuilder.Entity<Quest>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Owner).WillCascadeOnDelete(true);
-            modelBuilder.Entity<Quest>().HasMany(s => s.Stages).WithRequired(q => q.Quest).WillCascadeOnDelete(true);
+            modelBuilder.Entity<Quest>().HasMany(s => s.Stages).WithRequired(q => q.Quest).WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Stage>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Owner).WillCascadeOnDelete(true);
             modelBuilder.Entity<Stage>().HasMany(o => o.Operations).WithRequired(s => s.Stage).WillCascadeOnDelete(true);
 
             modelBuilder.Entity<Operation>().HasRequired(s => s.Stage).WithMany(o => o.Operations).HasForeignKey(k => k.StageId).WillCascadeOnDelete(true);
 
-            modelBuilder.Entity<QuestRoute>().HasMany(o => o.VisitedStages).WithOptional().WillCascadeOnDelete(false);
+            //modelBuilder.Entity<QuestRoute>().HasMany(o => o.VisitedStages).WithOptional().WillCascadeOnDelete(false);
             modelBuilder.Entity<QuestRoute>().HasRequired(r => r.LastStage).WithRequiredDependent().WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<QuestRoute>()
+                .HasMany(s => s.VisitedStages)
+                .WithMany(q => q.Routes)
+                .Map( m =>
+                {
+                    m.ToTable("VisitedStages");
+                    m.MapLeftKey("QuestRouteId");
+                    m.MapRightKey("StageId");
+                }
+           );
 
             base.OnModelCreating(modelBuilder);
         }

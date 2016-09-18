@@ -5,6 +5,11 @@ namespace QuestGame.Domain.Entities
 {
     public class QuestRoute
     {
+        public QuestRoute()
+        {
+            this.VisitedStages = new List<Stage>();
+        }
+
         public int Id { get; set; }
         public System.DateTime? ModifyDate { get; set; }
 
@@ -17,7 +22,7 @@ namespace QuestGame.Domain.Entities
         public int QuestId { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<Stage> VisitedStages { get; set; }
+        public ICollection<Stage> VisitedStages { get; set; }
 
         [JsonIgnore]
         public virtual Stage LastStage { get; set; }
