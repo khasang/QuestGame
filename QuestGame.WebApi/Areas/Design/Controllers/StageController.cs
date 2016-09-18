@@ -36,7 +36,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var request = mapper.Map<NewItemViewModel, QuestDTO>(model);
+            var request = mapper.Map<NewItemViewModel, StageDTO>(model);
             request.Owner = SessionUser.UserName;
 
             using (var client = RestHelper.Create(SessionUser.Token))
@@ -65,13 +65,13 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 var stageAnswer = await stageResponse.Content.ReadAsAsync<StageDTO>();
                 var stageModel = mapper.Map<StageDTO, StageViewModel>(stageAnswer);
 
-                var motionResponse = await client.GetAsync(ApiMethods.StageGetByQuestId + id);
+                var motionResponse = await client.GetAsync(ApiMethods.MotionGetByStageId + id);
                 if (motionResponse.StatusCode != HttpStatusCode.OK)
                 {
                     ViewBag.Message = ErrorMessages.MotionNotFound;
                     return RedirectToAction("Index", "Quest");
                 }
-                var answer = await stageResponse.Content.ReadAsAsync<IEnumerable<MotionDTO>>();
+                var answer = await motionResponse.Content.ReadAsAsync<IEnumerable<MotionDTO>>();
                 var model = mapper.Map<IEnumerable<MotionDTO>, IEnumerable<MotionViewModel>>(answer);
 
                 stageModel.Motions = model.ToDictionary(x => x.Id, y => y.Description);
