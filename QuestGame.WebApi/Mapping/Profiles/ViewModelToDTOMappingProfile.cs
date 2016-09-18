@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using QuestGame.WebApi.Areas.Game.Models;
+using QuestGame.WebApi.Areas.Design.Models;
 
 namespace QuestGame.WebApi.Mapping.Profiles
 {
@@ -15,8 +16,8 @@ namespace QuestGame.WebApi.Mapping.Profiles
         {
             CreateMap<QuestViewModel, QuestFullDTO>();
             CreateMap<QuestViewModel, QuestDTO>();
-            CreateMap<NewQuestViewModel, QuestFullDTO>();
-            CreateMap<NewQuestViewModel, QuestDTO>();
+            CreateMap<NewItemViewModel, QuestFullDTO>();
+            CreateMap<NewItemViewModel, QuestDTO>();
             CreateMap<StageViewModel, StageFullDTO>();
             CreateMap<MotionViewModel, MotionDTO>();
         }

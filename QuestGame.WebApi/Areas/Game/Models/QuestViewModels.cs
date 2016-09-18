@@ -65,14 +65,4 @@ namespace QuestGame.WebApi.Areas.Game.Models
 
         public int NextStageId { get; set; }
     }
-
-    public class NewQuestViewModel
-    {
-        [Required]
-        [Display(Name = "Название")]
-        public string Title { get; set; }
-
-        [Display(Name = "Автор")]
-        public string Owner { get; set; }
-    }
 }

@@ -18,6 +18,7 @@
                     <tr>
                         <th>Название</th>
                         <th>Атор</th>
+                        <th>Рейтинг</th>
                         <th>Дата создания</th>
                     </tr>
                 </thead>
@@ -27,6 +28,7 @@
                         <tr>
                             <td>@Html.ActionLink(quest.Title, "Details", new { id = quest.Title }, null)</td>
                             <td>@quest.Owner</td>
+                            <td>@quest.Rate</td>
                             <td>@quest.Date</td>
                         </tr>
                     }

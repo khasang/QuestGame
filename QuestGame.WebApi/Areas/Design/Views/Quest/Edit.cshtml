@@ -10,7 +10,7 @@
         <div class="panel-heading"><h2>Редактирование квеста</h2></div>
         <div class="panel-body">
             
-            @using (Html.BeginForm("EditQuest", "Designer", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            @using (Html.BeginForm("Edit", "Quest", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true)
@@ -18,7 +18,8 @@
                 @Html.HiddenFor(x => x.Stages)
                 @Html.HiddenFor(x => x.Owner)
                 @Html.HiddenFor(x => x.Rate)
-                                
+                @Html.HiddenFor(x => x.Date)
+
                 <div class="form-group">
                     <label class="col-sm-2 control-label">@Html.DisplayNameFor(n => n.Title)</label>
                     @Html.EditorFor(t => t.Title, new { @class = "form-control" })
@@ -26,8 +27,7 @@
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">@Html.DisplayNameFor(n => n.Date)</label>
-                    @Html.EditorFor(t => t.Date, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(v => v.Date)
+                    @Html.DisplayTextFor(t => t.Date)
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">@Html.DisplayNameFor(n => n.Owner)</label>
@@ -48,13 +48,9 @@
                         <a href=@Url.Action("Stages", "Designer", new { title = stage }, null) class="list-group-item">@stage.Value</a>
                     }
                 </div>
-                <div class="col-sm-4">
-                    <div class="pull-right">
-                        <div class="btn-group">
-                            <input type="submit" class="btn btn-primary" value="Сохранить" />
-                            @Html.ActionLink("Отменить", "Index", "Designer", new { @class = "btn btn-default" })
-                        </div>
-                    </div>
+                <div class="btn-group">
+                    <input type="submit" class="btn btn-primary" value="Сохранить" />
+                    <a class="btn btn-default" href="@ViewBag.ReturnUrl">Назад</a>
                 </div>
             }
         </div>

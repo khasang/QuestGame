@@ -51,6 +51,15 @@ namespace QuestGame.WebApi.Controllers
             return model;
         }
 
+        [HttpGet]
+        [Route("GetByQuestId")]
+        public IEnumerable<StageDTO> GetByQuestId(int id)
+        {
+            var stage = dataManager.Stages.GetByQuestId(id);
+            var model = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(stage);
+            return model;
+        }
+
         [HttpPost]
         [Route("Add")]
         public IHttpActionResult Add(StageDTO stage)
@@ -102,16 +111,6 @@ namespace QuestGame.WebApi.Controllers
                 dataManager.Stages.Delete(model.Id);
                 dataManager.Save();
             }
-        }
-
-        [HttpGet]
-        [Route("GetByQuestId")]
-        public IEnumerable<StageDTO> GetByQuestId(int id)
-        {
-            var stages = dataManager.Stages.GetByQuestId(id);
-            var model = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(stages);
-
-            return model;
         }
     }
 }

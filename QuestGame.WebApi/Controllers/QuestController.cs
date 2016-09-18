@@ -56,6 +56,26 @@ namespace QuestGame.WebApi.Controllers
             return response;
         }
 
+        [HttpGet]
+        [Route("GetByActive")]
+        public IEnumerable<QuestDTO> GetByActive()
+        {
+            var quest = dataManager.Quests.GetByActive().ToList();
+
+            var response = mapper.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(quest);
+            return response;
+        }
+
+        [HttpGet]
+        [Route("GetByUserName")]
+        public IEnumerable<QuestDTO> GetByUserName(string userName)
+        {
+            var quest = dataManager.Quests.GetByUserName(userName).ToList();
+
+            var response = mapper.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(quest);
+            return response;
+        }
+
         [HttpPost]
         [Route("Add")]
         public IHttpActionResult Add(QuestDTO quest)
@@ -87,7 +107,15 @@ namespace QuestGame.WebApi.Controllers
 
             model.Owner = owner;
             dataManager.Quests.Update(model);
-            dataManager.Save();
+            try
+            {
+                dataManager.Save();
+                
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
             return Ok();
         }
 

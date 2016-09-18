@@ -33,21 +33,31 @@ namespace QuestGame.WebApi.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public IEnumerable<StageDTO> GetAll()
+        public IEnumerable<MotionDTO> GetAll()
         {
-            var stages = dataManager.Stages.GetAll().ToList();
+            var stages = dataManager.Motions.GetAll().ToList();
 
-            var model = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(stages);
+            var model = mapper.Map<IEnumerable<Motion>, IEnumerable<MotionDTO>>(stages);
             return model;
         }
 
         [HttpGet]
         [Route("GetById")]
-        public StageDTO GetById(int id)
+        public MotionDTO GetById(int id)
         {
-            var stage = dataManager.Stages.GetById(id);
+            var stage = dataManager.Motions.GetById(id);
 
-            var model = mapper.Map<Stage, StageDTO>(stage);
+            var model = mapper.Map<Motion, MotionDTO>(stage);
+            return model;
+        }
+
+        [HttpGet]
+        [Route("GetByStageId")]
+        public IEnumerable<MotionDTO> GetByStageId(int id)
+        {
+            var stage = dataManager.Motions.GetByStageId(id);
+
+            var model = mapper.Map<IEnumerable<Motion>, IEnumerable<MotionDTO>>(stage);
             return model;
         }
 

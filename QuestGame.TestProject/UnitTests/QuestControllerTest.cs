@@ -128,7 +128,7 @@ namespace QuestGame.TestProject.UnitTests
             var controller = new QuestFullController(dataManagerMoq.Object, mapperMock.Object, loggerMock.Object);
 
             // act
-            controller.Add(new QuestFullDTO
+            controller.Create(new QuestFullDTO
             {
                 Id = 10,
                 Title = "test",

@@ -15,6 +15,7 @@ using System.Web.Configuration;
 using System.Web.Mvc;
 using AutoMapper;
 using QuestGame.Common.Helpers;
+using QuestGame.WebApi.Constants;
 
 namespace QuestGame.WebApi.Areas.Game.Controllers
 {
@@ -29,12 +30,12 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
         {
             using (var client = RestHelper.Create(SessionUser.Token))
             {
-                var response = await client.GetAsync(@"api/Quest/GetAll");
+                var response = await client.GetAsync(ApiMethods.QuestGetByActive);
 
                 IEnumerable<QuestViewModel> model = null;
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    ViewBag.Message = "Неудачный запрос!";
+                    ViewBag.Message = ErrorMessages.BadRequest;
                 }
                 else
                 {

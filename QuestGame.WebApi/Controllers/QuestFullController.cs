@@ -16,6 +16,8 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
 using QuestGame.Common.Interfaces;
 using System.Web;
+using System.Web.Configuration;
+using System.IO;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -67,8 +69,8 @@ namespace QuestGame.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("Add")]
-        public IHttpActionResult Add(QuestFullDTO quest)
+        [Route("Create")]
+        public IHttpActionResult Create(QuestFullDTO quest)
         {
             var model = mapper.Map<QuestFullDTO, Quest>(quest);
 
@@ -137,6 +139,87 @@ namespace QuestGame.WebApi.Controllers
             catch
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+        }
+
+        [HttpDelete]
+        [Route("DelById")]
+        public IHttpActionResult DelById(int id)
+        {
+            try
+            {
+                dataManager.Quests.Delete(id);
+                dataManager.Save();
+                return Ok();
+            }
+            catch
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+        }
+
+        /// <summary>
+        /// Загрузка файлов
+        /// </summary>
+        [HttpPost]
+        [Route("UploadFile")]
+        public IHttpActionResult UploadFile()
+        {
+            try
+            {
+                UploadFile(Request.Content);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        private void UploadFile(HttpContent content)
+        {
+            if (!content.IsMimeMultipartContent())
+            {
+                throw new Exception();
+            }
+
+            var provider = new MultipartFormDataStreamProvider(WebConfigurationManager.AppSettings["pathToFiles"]);
+
+            content.ReadAsMultipartAsync(provider).Wait();
+
+            if (provider.FileData.Count == 1)
+            {
+                var file = new FileInfo(provider.FileData[0].LocalFileName);
+
+                if (file.Length != 0)
+                {
+                    string name = provider.FileData[0].Headers.ContentDisposition.FileName.Trim('"');
+                    int pos = name.LastIndexOfAny(new[] { '\\', '/' }) + 1;
+                    name = file.DirectoryName + Path.DirectorySeparatorChar + name.Substring(pos);
+
+                    if (File.Exists(name))
+                        throw new Exception("Сертификат с таким имененем уже загружен");
+                    else
+                    {
+                        try
+                        {
+                            file.MoveTo(name);
+                        }
+                        catch (Exception)
+                        {
+                            throw new Exception("Файл сертификата поврежден");
+                        }
+                    }
+                }
+            }
+            else
+                throw new Exception("Доступна одновременная загрузка только одного сертификата");
+
+            //если какие-либо ошибки то удаляем загруженные файлы
+            foreach (var fileData in provider.FileData)
+            {
+                File.Delete(fileData.LocalFileName);
             }
         }
     }    

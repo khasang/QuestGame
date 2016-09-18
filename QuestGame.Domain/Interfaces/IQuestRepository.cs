@@ -10,6 +10,8 @@ namespace QuestGame.Domain.Interfaces
     public interface IQuestRepository : ICommonRepository<Quest>
     {
         Quest GetByTitle(string title);
+        IEnumerable<Quest> GetByActive();
+        IEnumerable<Quest> GetByUserName(string userName);
         void DeleteByTitle(string title);
     }
 }

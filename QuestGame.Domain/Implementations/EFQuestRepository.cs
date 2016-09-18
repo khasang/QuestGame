@@ -32,6 +32,16 @@ namespace QuestGame.Domain.Implementations
             return dbContext.Quests.FirstOrDefault(x => x.Title == title);
         }
 
+        public IEnumerable<Quest> GetByActive()
+        {
+            return dbContext.Quests.Where(x => x.Active);
+        }
+
+        public IEnumerable<Quest> GetByUserName(string userName)
+        {
+            return dbContext.Quests.Where(x => x.Owner.UserName == userName);
+        }
+
         public void Add(Quest item)
         {
             dbContext.Quests.Add(item);

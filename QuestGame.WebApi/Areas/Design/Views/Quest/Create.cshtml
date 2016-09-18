@@ -1,4 +1,4 @@
-﻿@model QuestGame.WebApi.Areas.Game.Models.NewQuestViewModel
+﻿@model QuestGame.WebApi.Areas.Design.Models.NewItemViewModel
 
 @{
     ViewBag.Title = "AddQuest";
@@ -9,22 +9,21 @@
         <div class="panel-heading"><h2>Добавление квеста</h2></div>
         <div class="panel-body">
 
-            @using (Html.BeginForm("AddQuest", "Designer", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            @using (Html.BeginForm("Create", "Quest", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true)
-                @Html.Hidden("Owner")
 
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">@Html.DisplayNameFor(n => n)</label>
+                    <label class="col-sm-2 control-label">@Html.DisplayNameFor(n => n.Title)</label>
                     @Html.TextBoxFor(t => t.Title, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(v => v)
+                    @Html.ValidationMessageFor(v => v.Title)
                 </div>
                 <div class="col-sm-4">
                     <div class="pull-right">
                         <div class="btn-group">
                             <input type="submit" class="btn btn-primary" value="Сохранить" />
-                            @Html.ActionLink("Отменить", "Index", "Designer", new { @class = "btn btn-default" })
+                            @Html.ActionLink("Отменить", "Index", "Quest", new { area = "Design" }, new { @class = "btn btn-default" })
                         </div>
                     </div>
                 </div>
