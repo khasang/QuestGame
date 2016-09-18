@@ -45,7 +45,7 @@
                 <div class="list-group">
                     @foreach (var stage in @Model.Stages)
                     {
-                        <a href=@Url.Action("Stages", "Designer", new { title = stage }, null) class="list-group-item">@stage.Value</a>
+                        <a href=@Url.Action("Edit", "Stage", new { id = stage.Key }, null) class="list-group-item">@stage.Value</a>
                     }
                 </div>
                 <div class="btn-group">

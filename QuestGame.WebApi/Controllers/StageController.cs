@@ -61,8 +61,8 @@ namespace QuestGame.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("Add")]
-        public IHttpActionResult Add(StageDTO stage)
+        [Route("Create")]
+        public IHttpActionResult Create(StageDTO stage)
         {
             try
             {
@@ -86,10 +86,19 @@ namespace QuestGame.WebApi.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public void Update(StageDTO stage)
+        public IHttpActionResult Update(StageDTO stage)
         {
             var stageEntity = dataManager.Stages.GetById(stage.Id);
-            var model = mapper.Map<StageDTO, Stage>(stage, stageEntity);
+
+            Stage model = null;
+            try
+            {
+                model = mapper.Map<StageDTO, Stage>(stage, stageEntity);
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
 
             var owner = dataManager.Quests.GetById(stage.QuestId);
             if (owner == null)
@@ -98,19 +107,20 @@ namespace QuestGame.WebApi.Controllers
             model.Quest = owner;
             dataManager.Stages.Update(model);
             dataManager.Save();
+            return Ok();
         }
 
         [HttpDelete]
         [Route("Delete")]
-        public void Delete(StageDTO quest)
+        public IHttpActionResult Delete(StageDTO quest)
         {
-            var model = mapper.Map<StageDTO, Stage>(quest);
-            
-            if (model != null)
-            {
-                dataManager.Stages.Delete(model.Id);
-                dataManager.Save();
-            }
+            var model = mapper.Map<StageDTO, Stage>(quest);            
+            if (model == null)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            dataManager.Stages.Delete(model.Id);
+            dataManager.Save();
+            return Ok();
         }
     }
 }

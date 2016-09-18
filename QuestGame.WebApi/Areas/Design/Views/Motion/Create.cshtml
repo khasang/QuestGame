@@ -1,15 +1,15 @@
 ﻿@model QuestGame.WebApi.Areas.Design.Models.NewItemViewModel
 
 @{
-    ViewBag.Title = "Create Quest";
+    ViewBag.Title = "Create Motion";
 }
 
 <div class="row">
     <div class="panel panel-default">
-        <div class="panel-heading"><h2>Добавление квеста</h2></div>
+        <div class="panel-heading"><h2>Добавление действия</h2></div>
         <div class="panel-body">
 
-            @using (Html.BeginForm("Create", "Quest", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            @using (Html.BeginForm("Create", "Motion", new { id = ViewBag.StageId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true)
@@ -23,7 +23,7 @@
                     <div class="pull-right">
                         <div class="btn-group">
                             <input type="submit" class="btn btn-primary" value="Сохранить" />
-                            @Html.ActionLink("Отменить", "Index", "Quest", new { area = "Design" }, new { @class = "btn btn-default" })
+                            @Html.ActionLink("Отменить", "Edit", "Stage", new { area = "Design", id = ViewBag.StageId }, new { @class = "btn btn-default" })
                         </div>
                     </div>
                 </div>

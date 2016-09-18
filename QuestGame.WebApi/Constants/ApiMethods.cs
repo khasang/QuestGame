@@ -30,12 +30,17 @@ namespace QuestGame.WebApi.Constants
 
         public const string StageGetByQuestId = @"api/Stage/GetByQuestId?id=";
         public const string StageGetById = @"api/Stage/GetById?id=";
+        public const string StageCreate = @"api/Stage/Create";
+        public const string StageUpdate = @"api/Stage/Update";
 
         #endregion
 
         #region MotionController
 
         public const string MotionGetByStageId = @"api/Motion/GetByStageId?id=";
+        public const string MotionGetById = @"api/Motion/GetById?id=";
+        public const string MotionCreate = @"api/Motion/Create";
+        public const string MotionUpdate = @"api/Motion/Update";
 
         #endregion
     }

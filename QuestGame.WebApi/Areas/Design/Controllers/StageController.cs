@@ -24,24 +24,25 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         { }
 
         [HttpGet]
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
+            ViewBag.QuestId = id;
             return View(new NewItemViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(NewItemViewModel model)
+        public async Task<ActionResult> Create(NewItemViewModel model, int id)
         {
             if (!ModelState.IsValid)
-                return View(model);
+                return View(id);
 
-            var request = mapper.Map<NewItemViewModel, StageDTO>(model);
-            request.Owner = SessionUser.UserName;
+            var stage = mapper.Map<NewItemViewModel, StageDTO>(model);
+            stage.QuestId = id;
 
             using (var client = RestHelper.Create(SessionUser.Token))
             {
-                var response = await client.PostAsJsonAsync(ApiMethods.QuestFullCreate, request);
+                var response = await client.PostAsJsonAsync(ApiMethods.StageCreate, stage);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     ViewBag.Message = ErrorMessages.QuestNotCreate;
@@ -49,7 +50,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 }
             }
 
-            return RedirectToAction("Index", "Quest");
+            return RedirectToAction("Edit", "Quest", id);
         }
 
         public async Task<ActionResult> Details(int id)
@@ -78,6 +79,65 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
                 return View(stageModel);
             }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                ViewBag.Message = ErrorMessages.StageNotFound;
+                return RedirectToAction("Index", "Designer");
+            }
+
+            using (var client = RestHelper.Create(SessionUser.Token))
+            {
+                var stageResponse = await client.GetAsync(ApiMethods.StageGetById + id);
+                if (stageResponse.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = ErrorMessages.StageNotFound;
+                    return RedirectToAction("Edit", "Quest", id);
+                }
+                var stageDTO = await stageResponse.Content.ReadAsAsync<StageDTO>();
+                var stageModel = mapper.Map<StageDTO, StageViewModel>(stageDTO);
+
+                var motionResponse = await client.GetAsync(ApiMethods.MotionGetByStageId + id);
+                if (motionResponse.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = ErrorMessages.QuestNotFound;
+                    return RedirectToAction("Index", "Designer");
+                }
+                var motionDTO = await motionResponse.Content.ReadAsAsync<IEnumerable<MotionDTO>>();
+                var motionModel = mapper.Map<IEnumerable<MotionDTO>, IEnumerable<MotionViewModel>>(motionDTO);
+
+                stageModel.Motions = motionModel.ToDictionary(x => x.Id, y => y.Description);
+
+                ViewBag.ReturnUrl = HttpContext.Request.UrlReferrer.AbsolutePath;
+                return View(stageModel);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Edit(StageViewModel quest, string returnUrl)
+        {
+            //if(!ModelState.IsValid)
+            //{
+            //    ViewBag.ReturnUrl = returnUrl;
+            //    return View(quest);
+            //}
+
+            var model = mapper.Map<StageViewModel, StageDTO>(quest);
+
+            using (var client = RestHelper.Create(SessionUser.Token))
+            {
+                var response = await client.PutAsJsonAsync(ApiMethods.StageUpdate, model);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = ErrorMessages.StageNotUpdate;
+                }
+            }
+
+            return RedirectToLocal(returnUrl);
         }
     }
 }

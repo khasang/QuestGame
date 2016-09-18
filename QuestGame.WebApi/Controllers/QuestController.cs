@@ -107,15 +107,7 @@ namespace QuestGame.WebApi.Controllers
 
             model.Owner = owner;
             dataManager.Quests.Update(model);
-            try
-            {
-                dataManager.Save();
-                
-            }
-            catch(Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
+            dataManager.Save();
             return Ok();
         }
 
@@ -130,9 +122,7 @@ namespace QuestGame.WebApi.Controllers
             //dataManager.Save();
 
             if (model == null || string.IsNullOrEmpty(model.Title))
-            {
-                BadRequest();
-            }
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
 
             dataManager.Quests.DeleteByTitle(model.Title);
             dataManager.Save();

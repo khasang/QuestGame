@@ -48,6 +48,10 @@ namespace QuestGame.WebApi.Areas.Game.Models
         [Display(Name = "Тело")]
         public string Body { get; set; }
 
+        [Display(Name = "Бонус")]
+        public int Point { get; set; }
+        public int QuestId { get; set; }
+
         public IDictionary<int, string> Motions { get; set; }
 
         public StageViewModel()

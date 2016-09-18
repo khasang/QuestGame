@@ -87,7 +87,7 @@ namespace QuestGame.WebApi.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public void Update(MotionDTO motion)
+        public IHttpActionResult Update(MotionDTO motion)
         {
             var motionEntity = dataManager.Motions.GetById(motion.Id);
             var model = mapper.Map<MotionDTO, Motion>(motion, motionEntity);
@@ -99,19 +99,21 @@ namespace QuestGame.WebApi.Controllers
             model.OwnerStage = owner;
             dataManager.Motions.Update(model);
             dataManager.Save();
+            return Ok();
         }
 
         [HttpDelete]
         [Route("Delete")]
-        public void Delete(MotionDTO motion)
+        public IHttpActionResult Delete(MotionDTO motion)
         {
             var model = mapper.Map<MotionDTO, Motion>(motion);
 
-            if (model != null)
-            {
-                dataManager.Motions.Delete(model.Id);
-                dataManager.Save();
-            }
+            if (model == null)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            dataManager.Motions.Delete(model.Id);
+            dataManager.Save();
+            return Ok();
         }
     }
 }

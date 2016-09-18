@@ -1,0 +1,54 @@
+﻿@model QuestGame.WebApi.Areas.Game.Models.StageViewModel
+
+@{
+    ViewBag.Title = "Edit Stage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2>Редактирование сцены</h2>
+        </div>
+        <div class="panel-body">
+            @using (Html.BeginForm("Edit", "Stage", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(x => x.Id)
+                @Html.HiddenFor(x => x.Motions)
+                @Html.HiddenFor(x => x.QuestId)
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">@Html.DisplayNameFor(n => n.Title)</label>
+                    @Html.EditorFor(t => t.Title, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(v => v.Title)
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">@Html.DisplayNameFor(n => n.Body)</label>
+                    @Html.EditorFor(t => t.Body)
+                    @Html.ValidationMessageFor(v => v.Body)
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">@Html.DisplayNameFor(n => n.Point)</label>
+                    @Html.EditorFor(t => t.Point)
+                    @Html.ValidationMessageFor(v => v.Point)
+                </div>
+                <div class="list-group">
+                    @foreach (var motion in @Model.Motions)
+                    {
+                        <a href=@Url.Action("Edit", "Motion", new { id = motion.Key }, null) class="list-group-item">@motion.Value</a>
+                    }
+                </div>
+                <div class="btn-group">
+                    <input type="submit" class="btn btn-primary" value="Сохранить" />
+                    <a class="btn btn-default" href="@ViewBag.ReturnUrl">Назад</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@*@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
