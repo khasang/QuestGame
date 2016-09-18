@@ -8,6 +8,12 @@
     <h2>@Model.Title</h2>
 </blockquote>
 
+@if (Session["ErrorException"] != null)
+{
+    <h1>ОШИБКА</h1>
+}
+
+
 @if (ViewBag.Alert != null)
 {
     foreach (var alert in ViewBag.Alert)

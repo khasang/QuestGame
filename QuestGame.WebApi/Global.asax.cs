@@ -29,5 +29,34 @@ namespace QuestGame.WebApi
             DependencyResolver.SetResolver(ninjectResolver); // MVC
             GlobalConfiguration.Configuration.DependencyResolver = ninjectResolver; // Web API
         }
+
+        //protected void Application_Error(Object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        //ловим последнее возникшее исключение
+        //        Exception lastError = Server.GetLastError();
+
+        //        if (lastError != null)
+        //        {
+        //            //Записываем непосредственно исключение, вызвавшее данное, в
+        //            //Session для дальнейшего использования
+        //            Session["ErrorException"] = lastError.InnerException;
+        //        }
+
+        //        // Обнуление ошибки на сервере
+        //        Server.ClearError();
+
+        //        // Перенаправление на свою страницу отображения ошибки
+        //        Response.Redirect(Request.UrlReferrer.PathAndQuery);                
+        //    }
+        //    catch (Exception)
+        //    {
+        //        // если мы всёже приходим сюда - значит обработка исключения 
+        //        // сама сгенерировала исключение, мы ничего не делаем, чтобы
+        //        // не создать бесконечный цикл
+        //        Response.Write("К сожалению произошла критическая ошибка. Нажмите кнопку 'Назад' в браузере и попробуйте ещё раз. ");
+        //    }
+        //}
     }
 }

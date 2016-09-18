@@ -41,6 +41,8 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         {
             ViewBag.Title = "Details";
 
+            ViewBag.Alert = Session["SomeErrors"];
+
             var user = Session["User"] as UserModel;
 
             using (var client = new RequestApi(user.Token))

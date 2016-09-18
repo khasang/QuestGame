@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using QuestGame.Domain.Entities;
+using QuestGame.WebApi.Infrastructure;
 
 namespace QuestGame.WebApi.Areas.Design.Controllers
 {
@@ -28,6 +29,8 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             this.mapper = mapper;
         }
 
+
+        [NotFoundException]
         // GET: Design/Stage/Details/5
         public async Task<ActionResult> Details(int? id)
         {
@@ -43,27 +46,32 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
             using (var client = new RequestApi(user.Token))
             {
-                try
-                {
-                    var response = await client.GetAsync(@"api/Stage/GetById?id=" + id);
+                //try
+                //{
+                    var response = await client.GetAsync(@"api/Stage/GetById?id=" + 200);
                     response.EnsureSuccessStatusCode();
 
                     var stage = response.Content.ReadAsAsync<StageDTO>().Result;
                     if (stage == null)
                     {
                         ErrorsMessage.Add("ТАкого квеста не существует");
-                        return Redirect(Request.UrlReferrer.PathAndQuery);
+
+                        throw new Exception("Нет такого");
+
+                        //return Redirect(Request.UrlReferrer.PathAndQuery);
                     }
 
                     var stageVM = mapper.Map<StageDTO, StageViewModel>(stage);
 
                     return View(stageVM);
-                }
-                catch (Exception ex)
-                {
-                    ErrorsMessage.Add("Неправильный запрос");
-                    return Redirect(Request.UrlReferrer.PathAndQuery);
-                }
+                //}
+                //catch (Exception ex)
+                //{
+                //    ErrorsMessage.Add("Неправильный запрос");
+
+                //    var r = Session["ErrorException"];
+                //    return Redirect(Request.UrlReferrer.PathAndQuery);
+                //}
             }
         }
 
