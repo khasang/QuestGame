@@ -75,7 +75,6 @@ namespace QuestGame.WebApi.Controllers
             }
         }
 
-
         [HttpGet]
         [Route("GetByUser")]
         public IEnumerable<QuestDTO> GetQuestsByUser(string userIdentificator)
@@ -97,21 +96,23 @@ namespace QuestGame.WebApi.Controllers
         // Add
         [HttpPost]
         [Route("Add")]
-        public IHttpActionResult AddQuest(QuestVM questVM)
+        public IHttpActionResult AddQuest([FromBody] QuestDTO model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var quest = mapper.Map<QuestVM, Quest>(questVM);
-            var content = mapper.Map<QuestVM, ContentQuest>(questVM);
+            var quest = mapper.Map<QuestDTO, Quest>(model);
+            var content = mapper.Map<ContentDTO, ContentQuest>(model.Content);
 
-            quest.Content = content;
             quest.AddDate = DateTime.Now;
+            quest.ModifyDate = DateTime.Now;
             quest.CountComplite = 0;
             quest.Rate = 0;
-            quest.ModifyDate = DateTime.Now;
+
+            content.ModifyDate = DateTime.Now;
+            quest.Content = content;
 
             var principal = Thread.CurrentPrincipal;
             var identity = principal.Identity;
@@ -145,7 +146,7 @@ namespace QuestGame.WebApi.Controllers
         [HttpPost]
         [Route("Edit")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult Update(QuestDTO model)
+        public IHttpActionResult Update([FromBody] QuestDTO model)
         {
             if (!ModelState.IsValid)
             {
@@ -172,33 +173,30 @@ namespace QuestGame.WebApi.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-
-        // DELETE
         [HttpDelete]
-        [Route("Del")]
-        public IHttpActionResult DeleteQuest(int id)
+        [Route("Delete")]
+        public IHttpActionResult Delete(int id)
         {
-            Quest quest = dataManager.Quests.GetByID(id);
-
-            if (quest == null)
+            try
             {
-                return NotFound();
+                var quest = dataManager.Quests.GetByID(id);
+                if (quest == null) { throw new ObjectNotFoundException(); }
+
+                dataManager.Stages.Delete(quest);
+                dataManager.Save();
+                return Ok();
             }
-
-            dataManager.ContentQuest.Delete(quest.Content);
-
-            dataManager.Quests.Delete(quest);
-            dataManager.Save();
-
-            return Ok();
+            catch (ObjectNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, String.Format("Элемент не найден")));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("Данные не удалены")));
+            }
         }
-
-
-
-
-
-
-
 
     }
 }

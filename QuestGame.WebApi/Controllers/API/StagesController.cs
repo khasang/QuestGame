@@ -77,17 +77,22 @@ namespace QuestGame.WebApi.Controllers
         // Add
         [HttpPost]
         [Route("Add")]
-        public IHttpActionResult AddStage(StageVM stageVM)
+        public IHttpActionResult AddStage([FromBody] StageDTO model)
         {
-            if (!ModelState.IsValid || stageVM == null)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var stage = mapper.Map<StageVM, Stage>(stageVM);
-            var content = mapper.Map<StageVM, ContentStage>(stageVM);
+            var stage = mapper.Map<StageDTO, Stage>(model);
+            var content = mapper.Map<ContentDTO, ContentStage>(model.Content);
+
+            content.ModifyDate = DateTime.Now;
 
             stage.Content = content;
+            stage.ModifyDate = DateTime.Now;
+            stage.Points = 0;
+            stage.AllowSkip = false;
 
             try
             {
@@ -105,7 +110,7 @@ namespace QuestGame.WebApi.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public IHttpActionResult Update(StageDTO model)
+        public IHttpActionResult Update([FromBody] StageDTO model)
         {
             try
             {
@@ -147,7 +152,7 @@ namespace QuestGame.WebApi.Controllers
             catch (ObjectNotFoundException ex)
             {
                 Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("Элемент не найден")));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, String.Format("Элемент не найден")));
             }
             catch (Exception ex)
             {
