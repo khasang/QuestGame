@@ -2,8 +2,8 @@
 	@roleName nvarchar(100)
 AS
 	SELECT * 
-	FROM Quests
-	WHERE Quests.OwnerId IN
+	FROM Quest
+	WHERE Quest.OwnerId IN
 		(SELECT u.UserId
 		FROM AspNetUserRoles u
 		INNER JOIN AspNetRoles

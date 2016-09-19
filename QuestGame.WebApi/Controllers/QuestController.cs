@@ -16,6 +16,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
 using QuestGame.Common.Interfaces;
 using System.Web;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -60,12 +63,48 @@ namespace QuestGame.WebApi.Controllers
         [Route("Details")]
         public IEnumerable<StageDTO> Details(string title)
         {
-            int questId = dataManager.Quests.GetIdByTitle(title);
-            var stages = dataManager.Stages.GetStagesByQuestId(questId).ToList();
 
-            var response = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(stages);
+            //______________________________________________________________________________________________________________________
+            //Нужно ли открывать соединение? как возвращать id интовый???
 
-            return response;
+            //var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
+            //using (var connection = new SqlConnection(connectionString))
+            //{
+            //    try
+            //    {
+            //        connection.Open();
+            //    }
+            //    catch (SqlException ex)
+            //    {
+            //        Console.WriteLine(ex.Message);
+            //        throw;
+            //    }
+            //    Console.WriteLine("Подключение открыто");
+
+            //    var procedureName = "GetIdByQuestTitle";
+            //    var command = new SqlCommand(procedureName, connection);
+
+            //    command.CommandType = CommandType.StoredProcedure;
+
+            //    var param = new SqlParameter
+            //    {
+            //        ParameterName = "title",
+            //        Value = title
+            //    };
+
+            //    command.Parameters.Add(param);
+            //    var questId = command.ExecuteReader();
+                //______________________________________________________________________________________________________________________
+
+
+                //int questId = dataManager.Quests.GetIdByTitle(title);                          //заменить метод GetIdByTitle на хранимую процедуру и вызвать ее тут же
+                var stages = dataManager.Stages.GetStagesByQuestId(questId).ToList();
+
+                var response = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(stages);
+
+                return response;
+            }
         }
 
         [HttpGet]

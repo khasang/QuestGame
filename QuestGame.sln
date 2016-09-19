@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuestGame.WebApi", "QuestGa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuestGame.TestProject", "QuestGame.TestProject\QuestGame.TestProject.csproj", "{3FA33229-C57F-4BCE-9FF6-D20B419360BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdoNetExample", "AdoNetExample\AdoNetExample.csproj", "{215500AC-2874-488D-A231-C5648BC85980}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{3FA33229-C57F-4BCE-9FF6-D20B419360BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FA33229-C57F-4BCE-9FF6-D20B419360BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FA33229-C57F-4BCE-9FF6-D20B419360BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{215500AC-2874-488D-A231-C5648BC85980}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{215500AC-2874-488D-A231-C5648BC85980}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{215500AC-2874-488D-A231-C5648BC85980}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{215500AC-2874-488D-A231-C5648BC85980}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

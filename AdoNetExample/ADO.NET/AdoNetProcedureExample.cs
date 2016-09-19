@@ -32,8 +32,6 @@ namespace QuestGame.WebApi.ADO.NET
 
                     command.CommandType = CommandType.StoredProcedure;
 
-                    //var param = new SqlParameter("roleName", "admin");
-
                     var param = new SqlParameter
                     {
                         ParameterName = "rolename",
