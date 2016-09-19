@@ -220,17 +220,17 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\MotionController.cs" />
-    <Compile Include="Controllers\QuestController.cs" />
-    <Compile Include="Controllers\StageController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Controllers\API\AccountController.cs" />
+    <Compile Include="Controllers\MVC\HomeController.cs" />
+    <Compile Include="Controllers\API\MotionController.cs" />
+    <Compile Include="Controllers\API\QuestController.cs" />
+    <Compile Include="Controllers\API\StageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\AuthUserActionFilter.cs" />
     <Compile Include="Infrastructure\FilterExceptionNotFound.cs" />
+    <Compile Include="Infrastructure\Messages\WebApiMessages.cs" />
     <Compile Include="Infrastructure\NinjectConfig.cs" />
     <Compile Include="Mapping\AutoMapperConfiguration.cs" />
     <Compile Include="Mapping\Profiles\DTOToEntitylMappingProfile.cs" />
