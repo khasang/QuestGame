@@ -18,6 +18,7 @@ using QuestGame.WebApi.Mappings;
 using QuestGame.WebApi.Models;
 using Microsoft.AspNet.Identity;
 using System.Net.Http;
+using System.Data.Entity.Core;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -36,18 +37,49 @@ namespace QuestGame.WebApi.Controllers
         // GET: api/Stages
         public IEnumerable<StageDTO> GetStages()
         {
-            var stages = dataManager.Stages.GetAll().ToList();
-            var response = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(stages);
+            try
+            {
+                var stages = dataManager.Stages.GetAll().ToList();
+                var response = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(stages);
 
-            return response;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("Ошибка получения данных")));
+            }           
+        }
+
+        [HttpGet]
+        [Route("GetById")]
+        public StageDTO GetById(int id)
+        {
+            try
+            {
+                var stage = dataManager.Stages.GetByID(id);
+                if (stage == null) { throw new ObjectNotFoundException(); }
+                var response = mapper.Map<Stage, StageDTO>(stage);
+                return response;
+            }
+            catch (ObjectNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("Элемент не найден")));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("Ошибка получения данных")));
+            }
         }
 
         // Add
         [HttpPost]
         [Route("Add")]
-        public IHttpActionResult AddStage( StageVM stageVM )
+        public IHttpActionResult AddStage(StageVM stageVM)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || stageVM == null)
             {
                 return BadRequest(ModelState);
             }
@@ -57,12 +89,71 @@ namespace QuestGame.WebApi.Controllers
 
             stage.Content = content;
 
-            dataManager.Stages.Add(stage);
-            dataManager.Save();
+            try
+            {
+                dataManager.Stages.Add(stage);
+                dataManager.Save();
 
-            return Ok(stage);
+                return Ok(stage);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("Ошибка сохранения данных")));
+            }
         }
 
+        [HttpPut]
+        [Route("Update")]
+        public IHttpActionResult Update(StageDTO model)
+        {
+            try
+            {
+                var stageOriginal = dataManager.Stages.GetByID(model.Id);
+                if (stageOriginal == null) { throw new ObjectNotFoundException(); }
 
+                var stageResult = mapper.Map<StageDTO, Stage>(model, stageOriginal);
+
+                dataManager.Stages.Update(stageResult);
+                dataManager.Save();
+
+                return Ok();
+            }
+            catch (ObjectNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("Элемент не найден")));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("Данные не обновлены")));
+            }
+        }
+
+        [HttpDelete]
+        [Route("Delete")]
+        public IHttpActionResult Delete(int id)
+        {
+            try
+            {
+                var stage = dataManager.Stages.GetByID(id);
+                if (stage == null) { throw new ObjectNotFoundException(); }
+
+                dataManager.Stages.Delete(stage);
+                dataManager.Save();
+                return Ok();
+            }
+            catch (ObjectNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("Элемент не найден")));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("Данные не удалены")));
+            }
+        }
     }
 }

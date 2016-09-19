@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
 using QuestGame.Domain.Interfaces;
+using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace QuestGame.Domain
 {
@@ -76,7 +77,7 @@ namespace QuestGame.Domain
             modelBuilder.Entity<ApplicationUser>().HasMany(s => s.Quests).WithRequired(q => q.User).WillCascadeOnDelete(true);
 
             modelBuilder.Entity<Quest>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Owner).WillCascadeOnDelete(true);
-            modelBuilder.Entity<Quest>().HasMany(s => s.Stages).WithRequired(q => q.Quest).WillCascadeOnDelete(false);
+            modelBuilder.Entity<Quest>().HasMany(s => s.Stages).WithRequired(q => q.Quest).WillCascadeOnDelete(true);
 
             modelBuilder.Entity<Stage>().HasRequired(s => s.Content).WithRequiredPrincipal(ss => ss.Owner).WillCascadeOnDelete(true);
             modelBuilder.Entity<Stage>().HasMany(o => o.Operations).WithRequired(s => s.Stage).WillCascadeOnDelete(true);
@@ -85,6 +86,8 @@ namespace QuestGame.Domain
 
             //modelBuilder.Entity<QuestRoute>().HasMany(o => o.VisitedStages).WithOptional().WillCascadeOnDelete(false);
             modelBuilder.Entity<QuestRoute>().HasRequired(r => r.LastStage).WithRequiredDependent().WillCascadeOnDelete(false);
+
+            modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
 
             modelBuilder.Entity<QuestRoute>()
                 .HasMany(s => s.VisitedStages)
