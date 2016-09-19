@@ -72,20 +72,8 @@ namespace QuestGame.Common
         /// <returns>HttpResponseMessage</returns>
         public async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
-            try
-            {
                 var result = await client.GetAsync(requestUri);
-                result.EnsureSuccessStatusCode();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return new HttpResponseMessage
-                {
-                    StatusCode = System.Net.HttpStatusCode.BadRequest,
-                    Content = new StringContent(ex.Message)
-                };
-            }
+                return result;            
         }
 
         /// <summary>

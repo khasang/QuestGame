@@ -49,32 +49,29 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
             using (var client = new RequestApi(user.Token))
             {
-                //try
-                //{
+                try
+                {
                     var response = await client.GetAsync(@"api/Stage/GetById?id=" + 200);
                     response.EnsureSuccessStatusCode();
 
                     var stage = response.Content.ReadAsAsync<StageDTO>().Result;
-                    if (stage == null)
-                    {
-                        ErrorsMessage.Add("ТАкого квеста не существует");
-
-                        throw new Exception("Нет такого");
-
-                        //return Redirect(Request.UrlReferrer.PathAndQuery);
-                    }
-
                     var stageVM = mapper.Map<StageDTO, StageViewModel>(stage);
 
                     return View(stageVM);
-                //}
-                //catch (Exception ex)
-                //{
-                //    ErrorsMessage.Add("Неправильный запрос");
+                }
+                catch (HttpRequestException ex)
+                {
+                    return Redirect(Request.UrlReferrer.PathAndQuery);
 
-                //    var r = Session["ErrorException"];
-                //    return Redirect(Request.UrlReferrer.PathAndQuery);
-                //}
+                    Console.WriteLine("asd");
+                }
+                catch (Exception ex)
+                {
+                    ErrorsMessage.Add("Неправильный запрос");
+
+                    var r = Session["ErrorException"];
+                    return Redirect(Request.UrlReferrer.PathAndQuery);
+                }
             }
         }
 
