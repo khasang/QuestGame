@@ -229,6 +229,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\AuthUserActionFilter.cs" />
     <Compile Include="Infrastructure\FilterExceptionNotFound.cs" />
     <Compile Include="Infrastructure\NinjectConfig.cs" />
     <Compile Include="Mapping\AutoMapperConfiguration.cs" />

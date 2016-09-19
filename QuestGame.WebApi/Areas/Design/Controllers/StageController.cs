@@ -16,11 +16,14 @@ using QuestGame.WebApi.Infrastructure;
 
 namespace QuestGame.WebApi.Areas.Design.Controllers
 {
+
     public class StageController : Controller
     {
         ICollection<string> ErrorsMessage = new List<string>();
         ICollection<string> InfoMessage = new List<string>();
         ICollection<string> WarningMessage = new List<string>();
+
+        UserModel user = new UserModel();
 
         IMapper mapper;
 
@@ -141,6 +144,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             }
         }
 
+        [NotFoundException]
         // GET: Design/Stage/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
