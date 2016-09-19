@@ -98,13 +98,12 @@ namespace QuestGame.WebApi.Controllers
                 //______________________________________________________________________________________________________________________
 
 
-                //int questId = dataManager.Quests.GetIdByTitle(title);                          //заменить метод GetIdByTitle на хранимую процедуру и вызвать ее тут же
+                int questId = dataManager.Quests.GetIdByTitle(title);                          //заменить метод GetIdByTitle на хранимую процедуру и вызвать ее тут же
                 var stages = dataManager.Stages.GetStagesByQuestId(questId).ToList();
 
                 var response = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(stages);
 
                 return response;
-            }
         }
 
         [HttpGet]
