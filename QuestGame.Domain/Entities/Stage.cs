@@ -10,11 +10,8 @@ namespace QuestGame.Domain.Entities
     {
         public Stage()
         {
-            this.Points = 0;
-            this.AllowSkip = false;
             this.Operations = new List<Operation>();
             this.Routes = new List<QuestRoute>();
-            this.ModifyDate = DateTime.Now;
         }
 
         public int Id { get; set; }

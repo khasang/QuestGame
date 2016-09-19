@@ -263,7 +263,6 @@
     <Compile Include="Controllers\API\QuestsController.cs" />
     <Compile Include="Controllers\MVC\HomeController.cs" />
     <Compile Include="Controllers\MVC\RegisterController.cs" />
-    <Compile Include="Controllers\API\ValuesController.cs" />
     <Compile Include="Controllers\MVC\QuestsController.cs" />
     <Compile Include="Areas\Admin\Controllers\UserProfileController.cs" />
     <Compile Include="Global.asax.cs">

@@ -68,7 +68,7 @@ namespace QuestGame.WebApi.Controllers.API
         // Add
         [HttpPost]
         [Route("Add")]
-        public IHttpActionResult AddOperation(OperationDTO model)
+        public IHttpActionResult AddOperation([FromBody] OperationDTO model)
         {
             if (!ModelState.IsValid)
             {
@@ -93,7 +93,7 @@ namespace QuestGame.WebApi.Controllers.API
 
         [HttpPut]
         [Route("Update")]
-        public IHttpActionResult Update(OperationDTO model)
+        public IHttpActionResult Update([FromBody] OperationDTO model)
         {
             try
             {
