@@ -18,6 +18,7 @@ using QuestGame.WebApi.Mappings;
 using QuestGame.WebApi.Models;
 using Microsoft.AspNet.Identity;
 using System.Net.Http;
+using System.Data.Entity.Core;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -27,7 +28,7 @@ namespace QuestGame.WebApi.Controllers
         IDataManager dataManager;
         IMapper mapper;
 
-        public QuestsController( IDataManager dataManager, IMapper mapper)
+        public QuestsController(IDataManager dataManager, IMapper mapper)
         {
             this.dataManager = dataManager;
             this.mapper = mapper;
@@ -36,61 +37,67 @@ namespace QuestGame.WebApi.Controllers
         // GET: api/Quests
         public IEnumerable<QuestDTO> GetQuests()
         {
-            var quests = dataManager.Quests.GetAll().ToList();
-            var response = mapper.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(quests);
+            try
+            {
+                var quests = dataManager.Quests.GetAll().ToList();
+                var response = mapper.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(quests);
 
-            return response;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("Ошибка получения данных")));
+            }
         }
+
+
+        [HttpGet]
+        [Route("GetById")]
+        public QuestDTO GetById(int id)
+        {
+            try
+            {
+                var quest = dataManager.Quests.GetByID(id);
+                if (quest == null) { throw new ObjectNotFoundException(); }
+                var response = mapper.Map<Quest, QuestDTO>(quest);
+                return response;
+            }
+            catch (ObjectNotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, String.Format("Элемент не найден")));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("Ошибка получения данных")));
+            }
+        }
+
 
         [HttpGet]
         [Route("GetByUser")]
         public IEnumerable<QuestDTO> GetQuestsByUser(string userIdentificator)
         {
-            var quests = dataManager.Quests.GetByIdentificator(userIdentificator).ToList();
-            var response = mapper.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(quests);
-
-            return response;
-        }
-
-        // GET: api/Quests/5
-        [ResponseType(typeof(QuestDTO))]
-        public IHttpActionResult GetQuest(int id)
-        {
-            var quest = dataManager.Quests.GetByID( id );
-            if (quest == null)
+            try
             {
-                return NotFound();
+                var quests = dataManager.Quests.GetByIdentificator(userIdentificator).ToList();
+                var response = mapper.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(quests);
+
+                return response;
             }
-
-            var response = mapper.Map<Quest, QuestDTO>(quest);
-
-            return Ok(response); 
-        }
-
-        // DELETE
-        [HttpDelete]
-        [Route("Del")]
-        public IHttpActionResult DeleteQuest(int id)
-        {
-            Quest quest = dataManager.Quests.GetByID(id);
-
-            if (quest == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                Console.WriteLine(ex.Message);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("Ошибка получения данных")));
             }
-
-            dataManager.ContentQuest.Delete( quest.Content );
-
-            dataManager.Quests.Delete( quest );
-            dataManager.Save();
-
-            return Ok();
         }
 
         // Add
         [HttpPost]
         [Route("Add")]
-        public IHttpActionResult AddQuest( QuestVM questVM )
+        public IHttpActionResult AddQuest(QuestVM questVM)
         {
             if (!ModelState.IsValid)
             {
@@ -119,39 +126,39 @@ namespace QuestGame.WebApi.Controllers
                 return BadRequest();
             }
 
-            dataManager.Quests.Add(quest);
-            dataManager.Save();
+            try
+            {
+                dataManager.Quests.Add(quest);
+                dataManager.Save();
 
-            return Ok(quest);
+                return Ok(quest);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, String.Format("Ошибка сохранения данных")));
+            }
+
         }
-
 
         // Update
         [HttpPost]
         [Route("Edit")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult Update(QuestVM questVM)
+        public IHttpActionResult Update(QuestDTO model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var quest = mapper.Map<QuestVM, Quest>(questVM);
-            var content = mapper.Map<QuestVM, ContentQuest>(questVM);
+            var questEntity = dataManager.Quests.GetByID(model.Id);
+            if (questEntity == null) { throw new ObjectNotFoundException(); }
+            var questResult = mapper.Map<QuestDTO, Quest>(model, questEntity);
 
-            quest.Content = content;
-            quest.ModifyDate = DateTime.Now;
+            questResult.ModifyDate = DateTime.Now;
 
-            var questEntity = dataManager.Quests.GetByID(quest.Id);
-
-            questEntity.ModifyDate = DateTime.Now;
-            //var contentEntity = questEntity.Content;
-            //contentEntity.Image = content.Image;
-            //contentEntity.Text = content.Text;
-            content.ModifyDate = DateTime.Now;
-
-            dataManager.Quests.Update(quest);
+            dataManager.Quests.Update(questResult);
 
             try
             {
@@ -164,6 +171,32 @@ namespace QuestGame.WebApi.Controllers
 
             return StatusCode(HttpStatusCode.NoContent);
         }
+
+
+        // DELETE
+        [HttpDelete]
+        [Route("Del")]
+        public IHttpActionResult DeleteQuest(int id)
+        {
+            Quest quest = dataManager.Quests.GetByID(id);
+
+            if (quest == null)
+            {
+                return NotFound();
+            }
+
+            dataManager.ContentQuest.Delete(quest.Content);
+
+            dataManager.Quests.Delete(quest);
+            dataManager.Save();
+
+            return Ok();
+        }
+
+
+
+
+
 
 
 
