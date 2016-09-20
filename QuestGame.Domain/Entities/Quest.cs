@@ -34,6 +34,8 @@ namespace QuestGame.Domain.Entities
         /// </summary>
         public bool Active { get; set; }
 
+        public string Image { get; set; }
+
         /// <summary>
         /// Внешний ключ, указывающий на автора квеста
         /// </summary>
