@@ -13,6 +13,7 @@ namespace QuestGame.WebApi.Mappings
             return new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<EntityToDTO>();
+                cfg.AddProfile<DTOtoEntity>();
                 cfg.AddProfile<ViewModelsToEntity>();
             }).CreateMapper();
         }

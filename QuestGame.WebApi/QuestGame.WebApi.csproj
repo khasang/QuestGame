@@ -272,6 +272,7 @@
     <Compile Include="Infrastructura\CustomAutorize\IsUserInfoInSession.cs" />
     <Compile Include="Infrastructura\Ninject.cs" />
     <Compile Include="Mappings\AutoMapperConfig.cs" />
+    <Compile Include="Mappings\DTOtoEntity.cs" />
     <Compile Include="Mappings\EntityToDTO.cs" />
     <Compile Include="Mappings\ViewModelsToEntity.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
