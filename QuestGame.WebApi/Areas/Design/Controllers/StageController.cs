@@ -139,5 +139,41 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
             return RedirectToLocal(returnUrl);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> Delete(int? id)
+        {
+            if (id == null)
+                return View(id);
+
+            using (var client = RestHelper.Create(SessionUser.Token))
+            {
+                var response = await client.GetAsync(ApiMethods.StageGetById + id);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = ErrorMessages.StageNotFound;
+                }
+                var answer = await response.Content.ReadAsAsync<StageDTO>();
+                var quests = mapper.Map<StageDTO, StageViewModel>(answer);
+
+                ViewBag.ReturnUrl = HttpContext.Request.UrlReferrer.AbsolutePath;
+                return View(quests);
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ConfirmDelete(int id, string returnUrl)
+        {
+            using (var client = RestHelper.Create(SessionUser.Token))
+            {
+                var response = await client.DeleteAsync(ApiMethods.StageDelById + id);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = ErrorMessages.StageNotDelete;
+                }
+            }
+
+            return RedirectToLocal(returnUrl);
+        }
     }
 }

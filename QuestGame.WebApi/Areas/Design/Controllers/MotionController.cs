@@ -77,39 +77,39 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         {
             if (id == null)
             {
-                ViewBag.Message = ErrorMessages.StageNotFound;
+                ViewBag.Message = ErrorMessages.BadRequest;
                 return RedirectToAction("Index", "Designer");
             }
 
             using (var client = RestHelper.Create(SessionUser.Token))
             {
-                var stageResponse = await client.GetAsync(ApiMethods.StageGetById + id);
-                if (stageResponse.StatusCode != HttpStatusCode.OK)
-                {
-                    ViewBag.Message = ErrorMessages.StageNotFound;
-                    return RedirectToAction("Edit", "Quest", id);
-                }
-                var stageDTO = await stageResponse.Content.ReadAsAsync<StageDTO>();
-                var stageModel = mapper.Map<StageDTO, StageViewModel>(stageDTO);
-
-                var motionResponse = await client.GetAsync(ApiMethods.MotionGetByStageId + id);
+                var motionResponse = await client.GetAsync(ApiMethods.MotionGetById + id);
                 if (motionResponse.StatusCode != HttpStatusCode.OK)
                 {
-                    ViewBag.Message = ErrorMessages.QuestNotFound;
-                    return RedirectToAction("Index", "Designer");
+                    ViewBag.Message = ErrorMessages.MotionNotFound;
+                    return RedirectToAction("Index", "Quest");
                 }
-                var motionDTO = await motionResponse.Content.ReadAsAsync<IEnumerable<MotionDTO>>();
-                var motionModel = mapper.Map<IEnumerable<MotionDTO>, IEnumerable<MotionViewModel>>(motionDTO);
+                var motionDTO = await motionResponse.Content.ReadAsAsync<MotionDTO>();
+                var motionModel = mapper.Map<MotionDTO, MotionViewModel>(motionDTO);
 
-                stageModel.Motions = motionModel.ToDictionary(x => x.Id, y => y.Description);
+                //var motionResponse = await client.GetAsync(ApiMethods.MotionGetByStageId + id);
+                //if (motionResponse.StatusCode != HttpStatusCode.OK)
+                //{
+                //    ViewBag.Message = ErrorMessages.QuestNotFound;
+                //    return RedirectToAction("Index", "Designer");
+                //}
+                //var motionDTO = await motionResponse.Content.ReadAsAsync<IEnumerable<MotionDTO>>();
+                //var motionModel = mapper.Map<IEnumerable<MotionDTO>, IEnumerable<MotionViewModel>>(motionDTO);
+
+                //stageModel.Motions = motionModel.ToDictionary(x => x.Id, y => y.Description);
 
                 ViewBag.ReturnUrl = HttpContext.Request.UrlReferrer.AbsolutePath;
-                return View(stageModel);
+                return View(motionModel);
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(StageViewModel quest, string returnUrl)
+        public async Task<ActionResult> Edit(MotionViewModel quest, string returnUrl)
         {
             //if(!ModelState.IsValid)
             //{
@@ -117,14 +117,50 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             //    return View(quest);
             //}
 
-            var model = mapper.Map<StageViewModel, StageDTO>(quest);
+            var model = mapper.Map<MotionViewModel, MotionDTO>(quest);
 
             using (var client = RestHelper.Create(SessionUser.Token))
             {
-                var response = await client.PutAsJsonAsync(ApiMethods.StageUpdate, model);
+                var response = await client.PutAsJsonAsync(ApiMethods.MotionUpdate, model);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    ViewBag.Message = ErrorMessages.StageNotUpdate;
+                    ViewBag.Message = ErrorMessages.MotionNotUpdate;
+                }
+            }
+
+            return RedirectToLocal(returnUrl);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Delete(int? id)
+        {
+            if (id == null)
+                return View(id);
+
+            using (var client = RestHelper.Create(SessionUser.Token))
+            {
+                var response = await client.GetAsync(ApiMethods.MotionGetById + id);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = ErrorMessages.MotionNotFound;
+                }
+                var answer = await response.Content.ReadAsAsync<MotionDTO>();
+                var quests = mapper.Map<MotionDTO, MotionViewModel>(answer);
+
+                ViewBag.ReturnUrl = HttpContext.Request.UrlReferrer.AbsolutePath;
+                return View(quests);
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ConfirmDelete(int id, string returnUrl)
+        {
+            using (var client = RestHelper.Create(SessionUser.Token))
+            {
+                var response = await client.DeleteAsync(ApiMethods.MotionDelById + id);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = ErrorMessages.MotionNotDelete;
                 }
             }
 

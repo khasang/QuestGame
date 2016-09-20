@@ -35,29 +35,54 @@ namespace QuestGame.WebApi.Controllers
         [Route("GetAll")]
         public IEnumerable<StageDTO> GetAll()
         {
-            var stages = dataManager.Stages.GetAll().ToList();
-
-            var model = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(stages);
-            return model;
+            try
+            {
+                var stages = dataManager.Stages.GetAll().ToList();
+                var model = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(stages);
+                return model;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Stage | GetAll | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
         }
 
         [HttpGet]
         [Route("GetById")]
         public StageDTO GetById(int id)
         {
-            var stage = dataManager.Stages.GetById(id);
-
-            var model = mapper.Map<Stage, StageDTO>(stage);
-            return model;
+            try
+            {
+                var stage = dataManager.Stages.GetById(id);
+                var model = mapper.Map<Stage, StageDTO>(stage);
+                return model;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Stage | GetById | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
         }
 
         [HttpGet]
         [Route("GetByQuestId")]
         public IEnumerable<StageDTO> GetByQuestId(int id)
         {
-            var stage = dataManager.Stages.GetByQuestId(id);
-            var model = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(stage);
-            return model;
+            try
+            {
+                var stage = dataManager.Stages.GetByQuestId(id);
+                var model = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(stage);
+                return model;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Stage | GetByQuestId | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
         }
 
         [HttpPost]
@@ -80,6 +105,7 @@ namespace QuestGame.WebApi.Controllers
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+                logger.Error("Stage | Create | ", ex.ToString());
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
         }
@@ -104,10 +130,19 @@ namespace QuestGame.WebApi.Controllers
             if (owner == null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            model.Quest = owner;
-            dataManager.Stages.Update(model);
-            dataManager.Save();
-            return Ok();
+            try
+            {
+                model.Quest = owner;
+                dataManager.Stages.Update(model);
+                dataManager.Save();
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Stage | Update | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            } 
         }
 
         [HttpDelete]
@@ -118,9 +153,39 @@ namespace QuestGame.WebApi.Controllers
             if (model == null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            dataManager.Stages.Delete(model.Id);
-            dataManager.Save();
-            return Ok();
+            try
+            {
+                dataManager.Stages.Delete(model.Id);
+                dataManager.Save();
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Stage | Delete | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            } 
+        }
+
+        [HttpDelete]
+        [Route("DelById")]
+        public IHttpActionResult DelById(int? id)
+        {
+            if (id == null)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                        
+            try
+            {
+                dataManager.Stages.Delete(id);
+                dataManager.Save();
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Stage | DelById | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }            
         }
     }
 }

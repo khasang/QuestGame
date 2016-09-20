@@ -32,7 +32,7 @@ namespace QuestGame.WebApi.Constants
         public const string StageGetById = @"api/Stage/GetById?id=";
         public const string StageCreate = @"api/Stage/Create";
         public const string StageUpdate = @"api/Stage/Update";
-
+        public const string StageDelById = @"api/Stage/DelById?id=";
         #endregion
 
         #region MotionController
@@ -41,6 +41,7 @@ namespace QuestGame.WebApi.Constants
         public const string MotionGetById = @"api/Motion/GetById?id=";
         public const string MotionCreate = @"api/Motion/Create";
         public const string MotionUpdate = @"api/Motion/Update";
+        public const string MotionDelById = @"api/Motion/DelById?id=";
 
         #endregion
     }
