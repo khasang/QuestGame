@@ -93,6 +93,12 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             //quest.Owner = user.UserName;
             quest.Date = DateTime.Now;
 
+            if (model.File != null)
+            {
+                string fileName = System.IO.Path.GetFileName(model.File.FileName);
+                quest.Image = fileName;
+            }
+
             using (var client = new RequestApi(user.Token))
             {
                 try
