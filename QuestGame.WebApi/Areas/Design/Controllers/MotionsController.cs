@@ -6,6 +6,7 @@ using QuestGame.WebApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -39,14 +40,19 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             {
                 using (var client = new RequestApi(user.Token))
                 {
-                    var response = await client.GetAsync<MotionDTO>(@"api/Stage/GetById?id=" + id);
-                    model.OwnerStageId = response.Id;
+                    var request = await client.GetAsync(@"api/Stage/GetById?id=" + id);
+                    request.EnsureSuccessStatusCode();
+
+                    var motion = await request.Content.ReadAsAsync<MotionDTO>();
+
+                    model.OwnerStageId = motion.Id;
                     return View(model);
                 }
             }
-            catch
+            catch (HttpRequestException ex)
             {
-                return RedirectToAction("Index", "Stages", new { id = id});
+                Console.WriteLine(ex.Message);
+                return RedirectToAction("Index", "Stages", new { id = id });
             }
         }
 
@@ -54,24 +60,31 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(MotionViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             var user = Session["User"] as UserModel;
 
             model.Id = 0;
 
             var motion = mapper.Map<MotionViewModel, MotionDTO>(model);
 
-            try
+            using (var client = new RequestApi(user.Token))
             {
-                using (var client = new RequestApi(user.Token))
+                try
                 {
-                    var response = await client.PostJsonAsync(@"api/Motion/Add", motion);
-                }
+                    var request = await client.PostJsonAsync(@"api/Motion/Add", motion);
+                    request.EnsureSuccessStatusCode();
 
-                return RedirectToAction("Details", "Stage", new { id = model.OwnerStageId });
-            }
-            catch
-            {
-                return View(model);
+                    return RedirectToAction("Details", "Stage", new { id = model.OwnerStageId });
+                }
+                catch (HttpRequestException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return View(model);
+                }
             }
         }
 
@@ -82,10 +95,21 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
             using (var client = new RequestApi(user.Token))
             {
-                var motion = await client.GetAsync<MotionDTO>(@"api/Motion/GetById?id=" + id);
-                var motionVM = mapper.Map<MotionDTO, MotionViewModel>(motion);
+                try
+                {
+                    var request = await client.GetAsync(@"api/Motion/GetById?id=" + id);
+                    request.EnsureSuccessStatusCode();
 
-                return View(motionVM);
+                    var motion = await request.Content.ReadAsAsync<MotionDTO>();
+                    var motionVM = mapper.Map<MotionDTO, MotionViewModel>(motion);
+
+                    return View(motionVM);
+                }
+                catch (HttpRequestException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return RedirectToAction("Index", "Stages", new { id = id });
+                }
             }
         }
 
@@ -93,21 +117,28 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         [HttpPost]
         public async Task<ActionResult> Edit(MotionViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             var user = Session["User"] as UserModel;
             var motion = mapper.Map<MotionViewModel, MotionDTO>(model);
 
-            try
+            using (var client = new RequestApi(user.Token))
             {
-                using (var client = new RequestApi(user.Token))
+                try
                 {
-                    var response = await client.PutJsonAsync(@"api/Motion/Update", motion);
-                }
+                    var request = await client.PutJsonAsync(@"api/Motion/Update", motion);
+                    request.EnsureSuccessStatusCode();
 
-                return RedirectToAction("Details", "Stage", new { id = motion.OwnerStageId });
-            }
-            catch
-            {
-                return View(model);
+                    return RedirectToAction("Details", "Stage", new { id = motion.OwnerStageId });
+                }
+                catch (HttpRequestException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return View(model);
+                }
             }
         }
 
@@ -118,9 +149,16 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
             using (var client = new RequestApi(user.Token))
             {
-                var quest = await client.DeleteAsync(@"api/Motion/Delete?id=" + id);
+                try
+                {
+                    var request = await client.DeleteAsync(@"api/Motion/Delete?id=" + id);
+                    request.EnsureSuccessStatusCode();
+                }
+                catch (HttpRequestException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
-
             return RedirectToAction("Index", "Quests");
         }
     }

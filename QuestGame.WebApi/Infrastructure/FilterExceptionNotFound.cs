@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 
@@ -12,7 +13,7 @@ namespace QuestGame.WebApi.Infrastructure
         public void OnException(ExceptionContext filterContext)
         {
             if (!filterContext.ExceptionHandled &&
-                    filterContext.Exception != null)
+                    filterContext.Exception is HttpRequestException)
             {
                 filterContext.HttpContext.Session["SomeErrors"] = "Ошибка из фильтра Ошибок";
                 filterContext.Result = new RedirectResult(filterContext.HttpContext.Request.UrlReferrer.PathAndQuery);

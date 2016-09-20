@@ -16,42 +16,27 @@ using QuestGame.WebApi.Infrastructure;
 
 namespace QuestGame.WebApi.Areas.Design.Controllers
 {
-
+    [NotFoundException]
     public class StageController : Controller
     {
-        ICollection<string> ErrorsMessage = new List<string>();
-        ICollection<string> InfoMessage = new List<string>();
-        ICollection<string> WarningMessage = new List<string>();
-
-        UserModel user = new UserModel();
-
         IMapper mapper;
 
         public StageController(IMapper mapper)
         {
             this.mapper = mapper;
         }
-
-
-        [NotFoundException]
+        
         // GET: Design/Stage/Details/5
         public async Task<ActionResult> Details(int? id)
         {
             ViewBag.Title = "Details";
-
             var user = Session["User"] as UserModel;
-
-            if (id == null)
-            {
-                ErrorsMessage.Add("Неправильный запрос");
-                return Redirect(Request.UrlReferrer.PathAndQuery);
-            }
 
             using (var client = new RequestApi(user.Token))
             {
                 try
                 {
-                    var response = await client.GetAsync(@"api/Stage/GetById?id=" + 200);
+                    var response = await client.GetAsync(@"api/Stage/GetById?id=" + id);
                     response.EnsureSuccessStatusCode();
 
                     var stage = response.Content.ReadAsAsync<StageDTO>().Result;
@@ -62,31 +47,15 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 catch (HttpRequestException ex)
                 {
                     Console.WriteLine(ex.Message);
-                    return Redirect(Request.UrlReferrer.PathAndQuery);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-
-                    ErrorsMessage.Add("Неправильный запрос");
-
-                    var r = Session["ErrorException"];
-                    return Redirect(Request.UrlReferrer.PathAndQuery);
                 }
             }
+            return Redirect(Request.UrlReferrer.PathAndQuery);
         }
 
         // GET: Design/Stage/Create
         public async Task<ActionResult> Create(int? id) // Приходит id квеста владельца
         {
             var user = Session["User"] as UserModel;
-
-            if (id == null)
-            {
-                ErrorsMessage.Add("Неправильный запрос");
-                return Redirect(Request.UrlReferrer.PathAndQuery);
-            }
-
             var model = new StageViewModel();
 
             using (var client = new RequestApi(user.Token))
@@ -100,11 +69,9 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                     model.QuestId = quest.Id;
                     return View(model);
                 }
-                catch (Exception ex)
+                catch (HttpRequestException ex)
                 {
-                    ErrorsMessage.Add("Невозможно получить владельца. Ошибка сервера.");
-                    ErrorsMessage.Add(ex.Message);
-
+                    Console.WriteLine(ex.Message);
                     return Redirect(Request.UrlReferrer.PathAndQuery);
                 }
             }
@@ -114,13 +81,12 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(StageViewModel model)
         {
-            var user = Session["User"] as UserModel;
-
             if (!ModelState.IsValid)
             {
-                ErrorsMessage.Add("Данные введены не верно либо не полностью.");
                 return View(model);
             }
+
+            var user = Session["User"] as UserModel;
 
             model.Id = 0;
 
@@ -131,12 +97,13 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 try
                 {
                     var response = await client.PostJsonAsync(@"api/Stage/Add", stage);
+                    response.EnsureSuccessStatusCode();
+
                     return RedirectToAction("Details", "Quests", new { id = model.QuestId });
                 }
-                catch (Exception ex)
+                catch (HttpRequestException ex)
                 {
-                    ErrorsMessage.Add("Неправильный запрос");
-                    ErrorsMessage.Add(ex.Message);
+                    Console.WriteLine(ex.Message);
                     return View(model);
                 }
             }
@@ -148,32 +115,23 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         {
             var user = Session["User"] as UserModel;
 
-            if (id == null)
-            {
-                ErrorsMessage.Add("Неправильный запрос");
-                return Redirect(Request.UrlReferrer.PathAndQuery);
-            }
-
             using (var client = new RequestApi(user.Token))
             {
                 try
                 {
                     var response = await client.GetAsync(@"api/Stage/GetById?id=" + id);
                     response.EnsureSuccessStatusCode();
-                    var stage = response.Content.ReadAsAsync<StageDTO>().Result;
 
+                    var stage = response.Content.ReadAsAsync<StageDTO>().Result;
                     var stageVM = mapper.Map<StageDTO, StageViewModel>(stage);
 
                     return View(stageVM);
                 }
-                catch (Exception ex)
+                catch (HttpRequestException ex)
                 {
-                    ErrorsMessage.Add("Сцена не обновлена. Ошибка сервера.");
-                    ErrorsMessage.Add(ex.Message);
-
+                    Console.WriteLine(ex.Message);
                     return Redirect(Request.UrlReferrer.PathAndQuery);
                 }
-
             }
         }
 
@@ -181,13 +139,12 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         [HttpPost]
         public async Task<ActionResult> Edit(StageViewModel model)
         {
-            var user = Session["User"] as UserModel;
-
             if (!ModelState.IsValid)
             {
-                ErrorsMessage.Add("Данные введены не верно либо не полностью.");
                 return View(model);
             }
+
+            var user = Session["User"] as UserModel;
 
             var stage = mapper.Map<StageViewModel, StageDTO>(model);
 
@@ -197,15 +154,12 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 {
                     var response = await client.PutJsonAsync(@"api/Stage/Update", stage);
                     response.EnsureSuccessStatusCode();
-                    InfoMessage.Add("Сцена успешно обновлена!");
 
                     return RedirectToAction("Details", "Quests", new { id = model.QuestId });
                 }
-                catch (Exception ex)
+                catch (HttpRequestException ex)
                 {
-                    ErrorsMessage.Add("Сцена не обновлена. Ошибка сервера.");
-                    ErrorsMessage.Add(ex.Message);
-
+                    Console.WriteLine(ex.Message);
                     return View(model);
                 }
             }
@@ -217,29 +171,18 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         public async Task<ActionResult> Delete(int? id)
         {
             var user = Session["User"] as UserModel;
-
-            if (id == null)
-            {
-                ErrorsMessage.Add("Неправильный запрос");
-                return Redirect(Request.UrlReferrer.PathAndQuery);
-            }
-
             using (var client = new RequestApi(user.Token))
             {
                 try
                 {
                     var response = await client.DeleteAsync(@"api/Stage/Delete?id=" + id);
                     response.EnsureSuccessStatusCode();
-                    InfoMessage.Add("Сцена успешно удалена!");
                 }
-                catch (Exception ex)
+                catch (HttpRequestException ex)
                 {
                     Console.WriteLine(ex.Message);
-                    ErrorsMessage.Add("Сцена не удалена.");
-                    ErrorsMessage.Add(ex.Message);
                 }
             }
-
             return Redirect(Request.UrlReferrer.PathAndQuery);
         }
     }

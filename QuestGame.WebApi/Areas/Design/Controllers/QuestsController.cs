@@ -6,6 +6,7 @@ using QuestGame.WebApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -24,15 +25,24 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         // GET: Design/Quests
         public async Task<ActionResult> Index()
         {
-            IEnumerable<QuestViewModel> questsVM = new List<QuestViewModel>();
             ViewBag.Title = "Список доступных квестов";
+            IEnumerable<QuestViewModel> questsVM = new List<QuestViewModel>();
             var user = Session["User"] as UserModel;
 
             using (var client = new RequestApi(user.Token))
             {
-                var quests = await client.GetAsync<IEnumerable<QuestDTO>>(@"api/Quest/GetByUser");
+                try
+                {
+                    var request = await client.GetAsync(@"api/Quest/GetByUser");
+                    request.EnsureSuccessStatusCode();
 
-                questsVM = mapper.Map<IEnumerable<QuestDTO>, IEnumerable<QuestViewModel>>(quests);
+                    var quests = await request.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
+                    questsVM = mapper.Map<IEnumerable<QuestDTO>, IEnumerable<QuestViewModel>>(quests);
+                }
+                catch (HttpRequestException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
                 return View(questsVM);
             }
         }
@@ -41,17 +51,24 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         public async Task<ActionResult> Details(int id)
         {
             ViewBag.Title = "Details";
-
-            ViewBag.Alert = Session["SomeErrors"];
-
             var user = Session["User"] as UserModel;
 
             using (var client = new RequestApi(user.Token))
             {
-                var quest = await client.GetAsync<QuestDTO>(@"api/Quest/GetById?id=" + id);
-                var questVM = mapper.Map<QuestDTO, QuestViewModel>(quest);
+                try
+                {
+                    var request = await client.GetAsync(@"api/Quest/GetById?id=" + id);
+                    request.EnsureSuccessStatusCode();
 
-                return View(questVM);
+                    var quest = await request.Content.ReadAsAsync<QuestDTO>();
+                    var questVM = mapper.Map<QuestDTO, QuestViewModel>(quest);
+                    return View(questVM);
+                }
+                catch (HttpRequestException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return View();
+                }
             }
         }
 
@@ -65,24 +82,29 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(QuestViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             var user = Session["User"] as UserModel;
 
             var quest = mapper.Map<QuestViewModel, QuestDTO>(model);
-            quest.Owner = user.UserName;
+            //quest.Owner = user.UserName;
             quest.Date = DateTime.Now;
 
-            try
+            using (var client = new RequestApi(user.Token))
             {
-                using (var client = new RequestApi(user.Token))
+                try
                 {
-                    var response = await client.PostJsonAsync(@"api/Quest/Add", quest);
+                    var request = await client.PostJsonAsync(@"api/Quest/Add", quest);
+                    request.EnsureSuccessStatusCode();
                 }
-
+                catch (HttpRequestException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
                 return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View(model);
             }
         }
 
@@ -93,10 +115,21 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
             using (var client = new RequestApi(user.Token))
             {
-                var quest = await client.GetAsync<QuestDTO>(@"api/Quest/GetById?id=" + id);
-                var questVM = mapper.Map<QuestDTO, QuestViewModel>(quest);
+                try
+                {
+                    var request = await client.GetAsync(@"api/Quest/GetById?id=" + id);
+                    request.EnsureSuccessStatusCode();
 
-                return View(questVM);
+                    var quest = await request.Content.ReadAsAsync<QuestDTO>();
+                    var questVM = mapper.Map<QuestDTO, QuestViewModel>(quest);
+
+                    return View(questVM);
+                }
+                catch (HttpRequestException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return RedirectToAction("Index");
+                }
             }
         }
 
@@ -104,25 +137,28 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         [HttpPost]
         public async Task<ActionResult> Edit(QuestViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
             var user = Session["User"] as UserModel;
             var quest = mapper.Map<QuestViewModel, QuestDTO>(model);
 
-            try
+            using (var client = new RequestApi(user.Token))
             {
-                using (var client = new RequestApi(user.Token))
+                try
                 {
-                    var response = await client.PutJsonAsync(@"api/Quest/Update", quest);
+                    var request = await client.PutJsonAsync(@"api/Quest/Update", quest);
+                    request.EnsureSuccessStatusCode();
                 }
-
-                return RedirectToAction("Index");
+                catch (HttpRequestException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
-            catch
-            {
-                return View(model);
-            }
+            return RedirectToAction("Index");
         }
-
 
         // GET: Design/Quests/Delete/5
         [HttpGet]
@@ -132,9 +168,16 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
             using (var client = new RequestApi(user.Token))
             {
-                var quest = await client.DeleteAsync(@"api/Quest/Delete?id=" + id);
+                try
+                {
+                    var request = await client.DeleteAsync(@"api/Quest/Delete?id=" + id);
+                    request.EnsureSuccessStatusCode();
+                }
+                catch (HttpRequestException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
-
             return RedirectToAction("Index");
         }
 
