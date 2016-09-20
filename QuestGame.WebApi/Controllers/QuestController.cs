@@ -69,6 +69,7 @@ namespace QuestGame.WebApi.Controllers
 
             //var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
+
             //using (var connection = new SqlConnection(connectionString))
             //{
             //    try
