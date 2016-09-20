@@ -91,6 +91,7 @@
     <Compile Include="HttpClientWrapper\RequestApi.cs" />
     <Compile Include="Interfaces\ILoggerService.cs" />
     <Compile Include="LoggerService.cs" />
+    <Compile Include="Messages\MessageString.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

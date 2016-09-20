@@ -61,12 +61,13 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 }
                 catch (HttpRequestException ex)
                 {
+                    Console.WriteLine(ex.Message);
                     return Redirect(Request.UrlReferrer.PathAndQuery);
-
-                    Console.WriteLine("asd");
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine(ex.Message);
+
                     ErrorsMessage.Add("Неправильный запрос");
 
                     var r = Session["ErrorException"];

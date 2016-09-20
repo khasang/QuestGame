@@ -39,97 +39,33 @@ namespace QuestGame.Common
 
         #region Прямые запросы  - Не проверен...
 
-        /// <summary>
-        /// Запрос Get (не асинхронный)
-        /// </summary>
-        /// <param name="url запроса"></param>
-        /// <returns></returns>
         public HttpResponseMessage Get(string requestUri)
         {
-            try
-            {
-                var result = client.GetAsync(requestUri).Result;
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return new HttpResponseMessage
-                {
-                    StatusCode = System.Net.HttpStatusCode.BadRequest,
-                    Content = new StringContent(ex.Message)
-                };
-            }
+            var result = client.GetAsync(requestUri).Result;
+            return result;
         }
 
         #endregion
 
         #region Асинхронные запросы
 
-        /// <summary>
-        /// Запрос Get (асинхронный)
-        /// </summary>
-        /// <param name="url запроса"></param>
-        /// <returns>HttpResponseMessage</returns>
         public async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
-                var result = await client.GetAsync(requestUri);
-                return result;            
-        }
-
-        /// <summary>
-        /// Запрос Get (асинхронный) \ Параметризированный
-        /// </summary>
-        /// <param name="url запроса"></param>
-        public async Task<T> GetAsync<T>(string requestUri)
-        {
-            try
-            {
-                var request = await client.GetAsync(requestUri);
-                request.EnsureSuccessStatusCode();
-                var response = await request.Content.ReadAsAsync<T>();
-                return response;
-            }
-            catch (Exception ex)
-            {
-                return default(T);
-            }
+            var result = await client.GetAsync(requestUri);
+            return result;
         }
 
         public async Task<HttpResponseMessage> PostAsync(string requestUri)
         {
-            try
-            {
-                var content = new FormUrlEncodedContent(this.sendParams);
-                var result = await client.PostAsync(requestUri, content);
-                result.EnsureSuccessStatusCode();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return new HttpResponseMessage
-                {
-                    StatusCode = System.Net.HttpStatusCode.BadRequest,
-                    Content = new StringContent(ex.Message)
-                };
-            }
+            var content = new FormUrlEncodedContent(this.sendParams);
+            var result = await client.PostAsync(requestUri, content);
+            return result;
         }
 
         public async Task<HttpResponseMessage> DeleteAsync(string requestUri)
         {
-            try
-            {
-                var result = await client.DeleteAsync(requestUri);
-                result.EnsureSuccessStatusCode();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return new HttpResponseMessage
-                {
-                    StatusCode = System.Net.HttpStatusCode.BadRequest,
-                    Content = new StringContent(ex.Message)
-                };
-            }
+            var result = await client.DeleteAsync(requestUri);
+            return result;
         }
 
         #endregion
@@ -138,45 +74,14 @@ namespace QuestGame.Common
 
         public async Task<HttpResponseMessage> PostJsonAsync<T>(string requestUri, T value)
         {
-            try
-            {
-                var result = await client.PostAsJsonAsync(requestUri, value);
-                result.EnsureSuccessStatusCode();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return new HttpResponseMessage
-                {
-                    StatusCode = System.Net.HttpStatusCode.BadRequest,
-                    Content = new StringContent(ex.Message)
-                };
-            }
+            var result = await client.PostAsJsonAsync(requestUri, value);
+            return result;
         }
 
-        /// <summary>
-        /// Обновление модели - rest-Update-HttpPut
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="requestUri"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public async Task<HttpResponseMessage> PutJsonAsync<T>(string requestUri, T value)
         {
-            try
-            {
-                var result = await client.PutAsJsonAsync(requestUri, value);
-                result.EnsureSuccessStatusCode();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return new HttpResponseMessage
-                {
-                    StatusCode = System.Net.HttpStatusCode.BadRequest,
-                    Content = new StringContent(ex.Message)
-                };
-            }
+            var result = await client.PutAsJsonAsync(requestUri, value);
+            return result;
         }
 
         #endregion

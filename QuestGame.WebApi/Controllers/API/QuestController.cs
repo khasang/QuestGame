@@ -1,26 +1,17 @@
 ﻿using AutoMapper;
-using Newtonsoft.Json;
-using QuestGame.Domain;
 using QuestGame.Domain.DTO;
 using QuestGame.Domain.Entities;
 using QuestGame.Domain.Interfaces;
-using QuestGame.WebApi.Mapping;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System.Data.Entity;
-using QuestGame.Common.Interfaces;
-using System.Web;
 using System.Threading;
 using Microsoft.AspNet.Identity;
-using QuestGame.WebApi.Areas.Design.Models;
-using QuestGame.WebApi.Infrastructure.Messages;
 using System.Data.Entity.Core;
+using QuestGame.Common;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -51,7 +42,7 @@ namespace QuestGame.WebApi.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, WebApiMessages.ErrorReadData));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, MessageString.ErrorReadData));
             }
         }
 
@@ -72,7 +63,7 @@ namespace QuestGame.WebApi.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, WebApiMessages.ErrorReadData));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, MessageString.ErrorReadData));
             }
         }
 
@@ -90,12 +81,12 @@ namespace QuestGame.WebApi.Controllers
             catch (ObjectNotFoundException ex)
             {
                 Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, WebApiMessages.ErrorNotFound));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, MessageString.ErrorNotFound));
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, WebApiMessages.ErrorReadData));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, MessageString.ErrorReadData));
             }
         }
 
@@ -126,7 +117,7 @@ namespace QuestGame.WebApi.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, WebApiMessages.ErrorSaveData));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, MessageString.ErrorSaveData));
             }
         }
 
@@ -147,12 +138,12 @@ namespace QuestGame.WebApi.Controllers
             catch (ObjectNotFoundException ex)
             {
                 Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, WebApiMessages.ErrorNotFound));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, MessageString.ErrorNotFound));
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, WebApiMessages.ErrorSaveData));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, MessageString.ErrorSaveData));
             }
         }
 
@@ -171,12 +162,12 @@ namespace QuestGame.WebApi.Controllers
             catch (ObjectNotFoundException ex)
             {
                 Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, WebApiMessages.ErrorNotFound));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, MessageString.ErrorNotFound));
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, WebApiMessages.ErrorSaveData));
+                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, MessageString.ErrorSaveData));
             }
 
         }

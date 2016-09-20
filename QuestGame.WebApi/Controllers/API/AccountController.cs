@@ -395,6 +395,7 @@ namespace QuestGame.WebApi.Controllers
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine(ex.Message);
                     return new HttpResponseMessage
                     {
                         StatusCode = System.Net.HttpStatusCode.BadRequest,

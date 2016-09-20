@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace QuestGame.WebApi.Infrastructure.Messages
+namespace QuestGame.Common
 {
     public class MessageString
     {

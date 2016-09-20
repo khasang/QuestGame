@@ -47,7 +47,7 @@ namespace QuestGame.TestProject.UnitTests
         public void Quest_GetAll_Count3()
         {
             // arrange
-            var controller = new QuestController(dataManagerMoq.Object, mapperMock.Object, loggerMock.Object);
+            var controller = new QuestController(dataManagerMoq.Object, mapperMock.Object);
 
             // act
             var result = controller.GetAll();
@@ -64,7 +64,7 @@ namespace QuestGame.TestProject.UnitTests
         public void Quest_GetById_Title1()
         {
             // arrange
-            var controller = new QuestController(dataManagerMoq.Object, mapperMock.Object, loggerMock.Object);
+            var controller = new QuestController(dataManagerMoq.Object, mapperMock.Object);
 
             // act
             var result = controller.GetById(1);

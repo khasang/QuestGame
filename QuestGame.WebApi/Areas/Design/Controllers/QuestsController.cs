@@ -31,6 +31,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             using (var client = new RequestApi(user.Token))
             {
                 var quests = await client.GetAsync<IEnumerable<QuestDTO>>(@"api/Quest/GetByUser");
+
                 questsVM = mapper.Map<IEnumerable<QuestDTO>, IEnumerable<QuestViewModel>>(quests);
                 return View(questsVM);
             }
