@@ -167,7 +167,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 }
             }
 
-            return RedirectToLocal(returnUrl);
+            return RedirectToAction("Details", "Quest", new { id = quest.Id });
         }
 
         public async Task<ActionResult> Details(int id)

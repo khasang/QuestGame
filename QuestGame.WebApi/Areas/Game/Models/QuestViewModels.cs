@@ -50,8 +50,8 @@ namespace QuestGame.WebApi.Areas.Game.Models
 
         [Display(Name = "Бонус")]
         public int Point { get; set; }
-        public int QuestId { get; set; }
 
+        public int QuestId { get; set; }
         public IDictionary<int, string> Motions { get; set; }
 
         public StageViewModel()
@@ -67,6 +67,8 @@ namespace QuestGame.WebApi.Areas.Game.Models
         [Display(Name = "Описание")]
         public string Description { get; set; }
 
-        public int NextStageId { get; set; }
+        public int OwnerStageId { get; set; }
+
+        public int? NextStageId { get; set; }
     }
 }

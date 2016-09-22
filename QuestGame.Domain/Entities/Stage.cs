@@ -42,10 +42,14 @@ namespace QuestGame.Domain.Entities
         /// </summary>
         [InverseProperty("OwnerStage")]
         public virtual ICollection<Motion> Motions { get; set; }
+
+        [InverseProperty("NextStage")]
+        public virtual ICollection<Motion> MotionComeFrom { get; set; }
         
         public Stage()
         {
             Motions = new List<Motion>();
+            MotionComeFrom = new List<Motion>();
         }
     }
 }

@@ -93,8 +93,6 @@ namespace QuestGame.WebApi.Controllers
             {
                 var model = mapper.Map<StageDTO, Stage>(stage);
                 var owner = dataManager.Quests.GetById(stage.QuestId);
-                if (owner == null)
-                    throw new HttpResponseException(HttpStatusCode.BadRequest);
 
                 model.Quest = owner;
 
@@ -114,24 +112,13 @@ namespace QuestGame.WebApi.Controllers
         [Route("Update")]
         public IHttpActionResult Update(StageDTO stage)
         {
-            var stageEntity = dataManager.Stages.GetById(stage.Id);
-
-            Stage model = null;
             try
             {
-                model = mapper.Map<StageDTO, Stage>(stage, stageEntity);
-            }
-            catch(Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
+                var stageEntity = dataManager.Stages.GetById(stage.Id);
+                var model = mapper.Map<StageDTO, Stage>(stage, stageEntity);
 
-            var owner = dataManager.Quests.GetById(stage.QuestId);
-            if (owner == null)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                var owner = dataManager.Quests.GetById(stage.QuestId);
 
-            try
-            {
                 model.Quest = owner;
                 dataManager.Stages.Update(model);
                 dataManager.Save();
@@ -149,12 +136,9 @@ namespace QuestGame.WebApi.Controllers
         [Route("Delete")]
         public IHttpActionResult Delete(StageDTO quest)
         {
-            var model = mapper.Map<StageDTO, Stage>(quest);            
-            if (model == null)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
-
             try
             {
+                var model = mapper.Map<StageDTO, Stage>(quest);
                 dataManager.Stages.Delete(model.Id);
                 dataManager.Save();
                 return Ok();
@@ -171,9 +155,6 @@ namespace QuestGame.WebApi.Controllers
         [Route("DelById")]
         public IHttpActionResult DelById(int? id)
         {
-            if (id == null)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
-                        
             try
             {
                 dataManager.Stages.Delete(id);

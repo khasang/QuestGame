@@ -29,7 +29,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         public ActionResult Create(int id)
         {
             ViewBag.StageId = id;
-            return View(new NewItemViewModel());
+            return View(new NewItemViewModel { Title = string.Empty });
         }
 
         [HttpPost]
@@ -40,7 +40,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 return View(id);
 
             var motion = mapper.Map<NewItemViewModel, MotionDTO>(model);
-            motion.StageId = id;
+            motion.OwnerStageId = id;
 
             using (var client = RestHelper.Create(SessionUser.Token))
             {
@@ -52,7 +52,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 }
             }
 
-            return RedirectToAction("Edit", "Stage", id);
+            return RedirectToAction("Edit", "Stage", new { id = id });
         }
 
         public async Task<ActionResult> Details(int id)
@@ -68,6 +68,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 var motionAnswer = await motionResponse.Content.ReadAsAsync<MotionDTO>();
                 var motionModel = mapper.Map<MotionDTO, MotionViewModel>(motionAnswer);
 
+                ViewBag.ReturnUrl = HttpContext.Request.UrlReferrer.AbsolutePath;
                 return View(motionModel);
             }
         }
@@ -91,17 +92,6 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 }
                 var motionDTO = await motionResponse.Content.ReadAsAsync<MotionDTO>();
                 var motionModel = mapper.Map<MotionDTO, MotionViewModel>(motionDTO);
-
-                //var motionResponse = await client.GetAsync(ApiMethods.MotionGetByStageId + id);
-                //if (motionResponse.StatusCode != HttpStatusCode.OK)
-                //{
-                //    ViewBag.Message = ErrorMessages.QuestNotFound;
-                //    return RedirectToAction("Index", "Designer");
-                //}
-                //var motionDTO = await motionResponse.Content.ReadAsAsync<IEnumerable<MotionDTO>>();
-                //var motionModel = mapper.Map<IEnumerable<MotionDTO>, IEnumerable<MotionViewModel>>(motionDTO);
-
-                //stageModel.Motions = motionModel.ToDictionary(x => x.Id, y => y.Description);
 
                 ViewBag.ReturnUrl = HttpContext.Request.UrlReferrer.AbsolutePath;
                 return View(motionModel);

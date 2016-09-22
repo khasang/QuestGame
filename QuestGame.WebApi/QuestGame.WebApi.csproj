@@ -318,6 +318,7 @@
     <Content Include="Areas\Design\Views\Motion\Details.cshtml" />
     <Content Include="Areas\Design\Views\Stage\Delete.cshtml" />
     <Content Include="Areas\Design\Views\Motion\Delete.cshtml" />
+    <Content Include="Areas\Design\Views\Stage\Index.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />

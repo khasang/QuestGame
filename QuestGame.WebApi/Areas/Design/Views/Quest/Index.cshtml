@@ -11,8 +11,8 @@
         <div class="panel-heading"><h2>Квесты</h2></div>
         <div class="panel-body">
             <div class="btn btn-group">
-                @Html.ActionLink("Добавить новый", "Create", "Quest", new { @class = "btn btn-primary btn-lg" })
-                @Html.ActionLink("Назад", "Index", "MainPage", new { area = "Game" }, new { @class = "btn btn-default btn-lg" })
+                @Html.ActionLink("Добавить квест", "Create", "Quest", new { @class = "btn btn-primary" })
+                @Html.ActionLink("Назад", "Index", "MainPage", new { area = "Game" }, new { @class = "btn btn-default" })
             </div>
         </div>
         @{ 
@@ -36,7 +36,7 @@
                     @foreach (var quest in Model)
                     {
                         <tr>
-                            <td>@Html.ActionLink(quest.Title, "Details", new { id = quest.Title }, null)</td>
+                            <td>@Html.ActionLink(quest.Title, "Details", new { id = quest.Id }, null)</td>
                             <td>@quest.Date</td>
                             <td>@quest.Rate</td>
                             <td>@Html.Active(quest.Active)</td>

@@ -9,9 +9,8 @@
     <div class="panel-heading">
         <div class="panel-heading"><h2>Подробно</h2></div>
         <div class="btn-group">
-            @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary btn-lg" })
-            @*@Html.ActionLink("Назад", "Index", null, new { @class = "btn btn-default btn-lg" })*@
-            <a class="btn btn-default btn-lg" href="@ViewBag.ReturnUrl">Назад</a>
+            @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Назад", "Details", "Stage", new { id = Model.OwnerStageId }, new { @class = "btn btn-default" })
         </div>
     </div>
     <div class="panel-body">

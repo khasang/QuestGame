@@ -21,10 +21,13 @@ namespace QuestGame.Domain.EntityConfigurations
 
             this.HasMany(x => x.Motions)
                 .WithRequired(x => x.OwnerStage)
-                .HasForeignKey(x => x.OwnerStageId);
+                .HasForeignKey(x => x.OwnerStageId)
+                .WillCascadeOnDelete(true);
 
-            this.HasRequired(x => x.Quest)
-                .WithMany(x => x.Stages);
+            this.HasMany(s => s.MotionComeFrom)
+                .WithOptional(m => m.NextStage)
+                .HasForeignKey(m => m.NextStageId)
+                .WillCascadeOnDelete(false);
         }
     }
 }

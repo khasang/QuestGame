@@ -23,6 +23,27 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             : base(mapper)
         { }
 
+        public async Task<ActionResult> Index(int? id)
+        {
+            using (var client = RestHelper.Create(SessionUser.Token))
+            {
+                var response = await client.GetAsync(ApiMethods.StageGetByQuestId + id);
+
+                IEnumerable<StageViewModel> model = null;
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = ErrorMessages.BadRequest;
+                }
+                else
+                {
+                    var answer = await response.Content.ReadAsAsync<IEnumerable<StageDTO>>();
+                    model = mapper.Map<IEnumerable<StageDTO>, IEnumerable<StageViewModel>>(answer);
+                }
+
+                return View(model);
+            }
+        }
+
         [HttpGet]
         public ActionResult Create(int id)
         {
@@ -39,6 +60,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
             var stage = mapper.Map<NewItemViewModel, StageDTO>(model);
             stage.QuestId = id;
+            stage.Body = string.Empty;
 
             using (var client = RestHelper.Create(SessionUser.Token))
             {
@@ -50,7 +72,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 }
             }
 
-            return RedirectToAction("Edit", "Quest", id);
+            return RedirectToAction("Edit", "Quest", new { id = id });
         }
 
         public async Task<ActionResult> Details(int id)
@@ -137,7 +159,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 }
             }
 
-            return RedirectToLocal(returnUrl);
+            return RedirectToAction("Details", "Stage", new { id = model.Id });
         }
 
         [HttpGet]

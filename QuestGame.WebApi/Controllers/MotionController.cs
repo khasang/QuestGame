@@ -35,30 +35,54 @@ namespace QuestGame.WebApi.Controllers
         [Route("GetAll")]
         public IEnumerable<MotionDTO> GetAll()
         {
-            var stages = dataManager.Motions.GetAll().ToList();
-
-            var model = mapper.Map<IEnumerable<Motion>, IEnumerable<MotionDTO>>(stages);
-            return model;
+            try
+            {
+                var stages = dataManager.Motions.GetAll().ToList();
+                var model = mapper.Map<IEnumerable<Motion>, IEnumerable<MotionDTO>>(stages);
+                return model;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Motion | GetAll | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }            
         }
 
         [HttpGet]
         [Route("GetById")]
-        public MotionDTO GetById(int id)
+        public MotionDTO GetById(int? id)
         {
-            var stage = dataManager.Motions.GetById(id);
-
-            var model = mapper.Map<Motion, MotionDTO>(stage);
-            return model;
+            try
+            {
+                var motion = dataManager.Motions.GetById(id);
+                var model = mapper.Map<Motion, MotionDTO>(motion);
+                return model;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Motion | GetById | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
         }
 
         [HttpGet]
         [Route("GetByStageId")]
-        public IEnumerable<MotionDTO> GetByStageId(int id)
+        public IEnumerable<MotionDTO> GetByStageId(int? id)
         {
-            var stage = dataManager.Motions.GetByStageId(id);
-
-            var model = mapper.Map<IEnumerable<Motion>, IEnumerable<MotionDTO>>(stage);
-            return model;
+            try
+            {
+                var stage = dataManager.Motions.GetByStageId(id);
+                var model = mapper.Map<IEnumerable<Motion>, IEnumerable<MotionDTO>>(stage);
+                return model;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Motion | GetByStageId | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }            
         }
 
         [HttpPost]
@@ -69,8 +93,6 @@ namespace QuestGame.WebApi.Controllers
             {
                 var model = mapper.Map<MotionDTO, Motion>(motion);
                 var owner = dataManager.Stages.GetById(model.OwnerStageId);
-                if (owner == null)
-                    throw new HttpResponseException(HttpStatusCode.BadRequest);
 
                 model.OwnerStage = owner;
 
@@ -81,6 +103,30 @@ namespace QuestGame.WebApi.Controllers
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+                logger.Error("Motion | Add | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+        }
+
+        [HttpPost]
+        [Route("Create")]
+        public IHttpActionResult Create(MotionDTO motion)
+        {
+            try
+            {
+                var model = mapper.Map<MotionDTO, Motion>(motion);
+                var owner = dataManager.Stages.GetById(motion.OwnerStageId);
+
+                model.OwnerStage = owner;
+
+                dataManager.Motions.Add(model);
+                dataManager.Save();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Motion | Create | ", ex.ToString());
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
         }
@@ -89,31 +135,59 @@ namespace QuestGame.WebApi.Controllers
         [Route("Update")]
         public IHttpActionResult Update(MotionDTO motion)
         {
-            var motionEntity = dataManager.Motions.GetById(motion.Id);
-            var model = mapper.Map<MotionDTO, Motion>(motion, motionEntity);
+            try
+            {
+                var motionEntity = dataManager.Motions.GetById(motion.Id);
+                var model = mapper.Map<MotionDTO, Motion>(motion, motionEntity);
+                model.NextStageId = model.NextStageId == 0 ? null : model.NextStageId;
 
-            var owner = dataManager.Stages.GetById(motion.StageId);
-            if (owner == null)
+                dataManager.Motions.Update(model);
+                dataManager.Save();
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Motion | Update | ", ex.ToString());
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
-
-            model.OwnerStage = owner;
-            dataManager.Motions.Update(model);
-            dataManager.Save();
-            return Ok();
+            }            
         }
 
         [HttpDelete]
         [Route("Delete")]
         public IHttpActionResult Delete(MotionDTO motion)
         {
-            var model = mapper.Map<MotionDTO, Motion>(motion);
-
-            if (model == null)
+            try
+            {
+                var model = mapper.Map<MotionDTO, Motion>(motion);
+                dataManager.Motions.Delete(model.Id);
+                dataManager.Save();
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Motion | Delete | ", ex.ToString());
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }            
+        }
 
-            dataManager.Motions.Delete(model.Id);
-            dataManager.Save();
-            return Ok();
+        [HttpDelete]
+        [Route("DelById")]
+        public IHttpActionResult DelById(int? id)
+        {
+            try
+            {
+                dataManager.Motions.Delete(id);
+                dataManager.Save();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Motion | DelById | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
         }
     }
 }
