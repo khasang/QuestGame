@@ -1,0 +1,34 @@
+﻿@model QuestGame.WebApi.Areas.Design.Models.NewItemViewModel
+
+@{
+    ViewBag.Title = "Create Stage";
+}
+
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading"><h2>Добавление сцены</h2></div>
+        <div class="panel-body">
+
+            @using (Html.BeginForm("Create", "Stage", new { id = ViewBag.QuestId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">@Html.DisplayNameFor(n => n.Title)</label>
+                    @Html.TextBoxFor(t => t.Title, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(v => v.Title)
+                </div>
+                <div class="col-sm-4">
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <input type="submit" class="btn btn-primary" value="Сохранить" />
+                            @Html.ActionLink("Отменить", "Edit", "Quest", new { area = "Design", id = ViewBag.QuestId }, new { @class = "btn btn-default" })
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

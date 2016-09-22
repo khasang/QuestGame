@@ -15,8 +15,15 @@ namespace QuestGame.Domain.DBInitializers
         {
             var owner = dbContext.Users.FirstOrDefault(x => x.Email == "admin@admin.com");
 
-            for (int i = 0; i < 3; i++) // Quest
+            for (var i = 0; i < 3; i++) // Quest
             {
+                var stage1 = new Stage
+                {
+                    Title = "Stage1",
+                    Body = "Body1",
+                    Point = rnd.Next(5)
+                };
+
                 var quest = new Quest
                 {
                     Title = "Title" + i,
@@ -26,9 +33,9 @@ namespace QuestGame.Domain.DBInitializers
                     Owner = owner,
                     Stages = new List<Stage>
                     {
-                        new Stage { Title = "Stage1", Body = "Body1", Point = rnd.Next(5), Tag = GetGuidValue().ToString() },
-                        new Stage { Title = "Stage2", Body = "Body2", Point = rnd.Next(5), Tag = GetGuidValue().ToString() },
-                        new Stage { Title = "Stage3", Body = "Body3", Point = rnd.Next(5), Tag = GetGuidValue().ToString() }
+                        stage1,
+                        new Stage { Title = "Stage2", Body = "Body2", Point = rnd.Next(5) },
+                        new Stage { Title = "Stage3", Body = "Body3", Point = rnd.Next(5) }
                     }
                 };
 
@@ -38,7 +45,7 @@ namespace QuestGame.Domain.DBInitializers
                     {
                         new Motion { Description = "Description" + rnd.Next(100).ToString() },
                         new Motion { Description = "Description" + rnd.Next(100).ToString() },
-                        new Motion { Description = "Description" + rnd.Next(100).ToString() }
+                        new Motion { Description = "Description" + rnd.Next(100).ToString(), NextStage = quest.Stages.ElementAt(0) }
                     };
                 }
 
@@ -46,14 +53,6 @@ namespace QuestGame.Domain.DBInitializers
             };
 
             dbContext.SaveChanges();
-        }
-
-        private Guid GetGuidValue()
-        {
-            var bytes = new byte[16];
-            for (int i = 0; i < 16; i++)
-                bytes[i] = (byte)rnd.Next(256);
-            return new Guid(bytes);
         }
     }
 }

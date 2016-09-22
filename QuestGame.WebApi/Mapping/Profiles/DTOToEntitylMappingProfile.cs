@@ -13,11 +13,12 @@ namespace QuestGame.WebApi.Mapping.Profiles
     {
         public DTOToEntitylMappingProfile()
         {
-            CreateMap<QuestDTO, Quest>()
-                .ForMember(x => x.Owner, y => y.Ignore());
+            CreateMap<QuestFullDTO, Quest>().ForMember(x => x.Owner, y => y.Ignore());
+            CreateMap<QuestDTO, Quest>().ForMember(x => x.Owner, y => y.Ignore());
+            CreateMap<StageFullDTO, Stage>();
             CreateMap<StageDTO, Stage>();
-            CreateMap<MotionDTO, Motion>()
-                .ForMember(x => x.OwnerStage, y => y.Ignore());
+            CreateMap<MotionDTO, Motion>();
+            CreateMap<UserProfileDTO, UserProfile>();
         }
 
         public override string ProfileName

@@ -1,0 +1,57 @@
+﻿@model QuestGame.WebApi.Areas.Game.Models.StageViewModel
+@using QuestGame.WebApi.Helpers
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-heading"><h2>Подробно</h2></div>
+        <div class="btn-group">
+            @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Назад", "Details", "Quest", new { id = Model.QuestId }, new { @class = "btn btn-default" })
+        </div>
+    </div>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Title)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Title)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Body)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Body)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Point)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Point)
+            </dd>  
+        </dl>
+
+    </div>
+</div>
+
+@if (Model.Motions.Count > 0)
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-heading"><h2>Действия</h2></div>
+        </div>
+        <div class="panel-body">
+            <div class="list-group">
+                @foreach (var motion in @Model.Motions)
+                {
+                    <a href=@Url.Action("Details", "Motion", new { id = motion.Key }, null) class="list-group-item">@motion.Value</a>
+                }
+            </div>
+        </div>
+    </div>
+}
+

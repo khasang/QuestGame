@@ -13,7 +13,6 @@ namespace QuestGame.Domain.EntityConfigurations
         public UserProfileMapper()
         {
             this.HasKey(x => x.UserId);
-            //this.HasRequired(x => x.User).WithOptional(x => x.UserProfile);
         }
     }
 }

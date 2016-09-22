@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using QuestGame.WebApi.Areas.Game.Models;
+using System.Collections.Specialized;
 
 namespace QuestGame.WebApi.Mapping.Profiles
 {
@@ -11,9 +13,10 @@ namespace QuestGame.WebApi.Mapping.Profiles
     {
         public DTOToViewModelMappingProfile()
         {
-            //CreateMap<QuestDTO, QuestViewModel>();
-            //CreateMap<StageDTO, StageViewModel>();
-            //CreateMap<MotionDTO, MotionViewModel>();
+            CreateMap<QuestFullDTO, QuestViewModel>().ForMember(x => x.Stages, y => y.MapFrom(pr => pr.Stages.Select(n => n.Title)));
+            CreateMap<QuestDTO, QuestViewModel>();
+            CreateMap<StageDTO, StageViewModel>();
+            CreateMap<MotionDTO, MotionViewModel>();
         }
 
         public override string ProfileName

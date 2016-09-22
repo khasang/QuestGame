@@ -1,0 +1,55 @@
+﻿@model IEnumerable<QuestGame.WebApi.Areas.Game.Models.QuestViewModel>
+@using QuestGame.WebApi.Helpers;
+
+@{
+    ViewBag.Title = "Design";
+}
+
+<div class="row">
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading"><h2>Квесты</h2></div>
+        <div class="panel-body">
+            <div class="btn btn-group">
+                @Html.ActionLink("Добавить квест", "Create", "Quest", new { @class = "btn btn-primary" })
+                @Html.ActionLink("Назад", "Index", "MainPage", new { area = "Game" }, new { @class = "btn btn-default" })
+            </div>
+        </div>
+        @{ 
+            if(Model.Count() == 0)
+            {
+                <p>Нет созданных Вами квестов...</p>
+            }
+            else
+            {
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(x => x.Title)</th>
+                            <th>@Html.DisplayNameFor(x => x.Date)</th>
+                            <th>@Html.DisplayNameFor(x => x.Rate)</th>
+                            <th>@Html.DisplayNameFor(x => x.Active)</th>
+                            <th>Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var quest in Model)
+                    {
+                        <tr>
+                            <td>@Html.ActionLink(quest.Title, "Details", new { id = quest.Id }, null)</td>
+                            <td>@quest.Date</td>
+                            <td>@quest.Rate</td>
+                            <td>@Html.Active(quest.Active)</td>
+                            <td>
+                                <a href=@Url.Action("Details", "Quest", new { id = quest.Id }, null)><span class="glyphicon glyphicon-info-sign"></span></a>
+                                <a href=@Url.Action("Edit", "Quest", new { id = quest.Id }, null)><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a href=@Url.Action("Delete", "Quest", new { id = quest.Id }, null)><span class="glyphicon glyphicon-remove-circle"></span></a>                               
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            }
+        }        
+    </div>    
+</div>

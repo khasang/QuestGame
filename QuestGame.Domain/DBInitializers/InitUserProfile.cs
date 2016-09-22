@@ -15,16 +15,12 @@ namespace QuestGame.Domain.DBInitializers
 
             var profile = new UserProfile
             {
-                Birthday  = DateTime.Now,
+                Birthday  = DateTime.Now - new TimeSpan(10000, 0, 0, 0, 0),
                 Sex = true,
                 User = owner
             };
 
-            //dbContext.UserProfiles.Add(profile);
-
-            owner.UserProfile = profile;
-            dbContext.Entry(owner).State = System.Data.Entity.EntityState.Modified;
-
+            dbContext.UserProfiles.Add(profile);
             dbContext.SaveChanges();
         }
     }

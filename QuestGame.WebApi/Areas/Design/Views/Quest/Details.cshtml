@@ -1,0 +1,74 @@
+﻿@model QuestGame.WebApi.Areas.Game.Models.QuestViewModel
+@using QuestGame.WebApi.Helpers
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-heading"><h2>Подробно</h2></div>
+        <div class="btn-group">
+            @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Назад", "Index", null, new { @class = "btn btn-default" })            
+        </div>
+    </div>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Title)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Title)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Owner)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Owner)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Date)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Date)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Rate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Rate)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Active)
+            </dt>
+            <dd>
+                @Html.Active(Model.Active)
+            </dd>
+            <dt>
+                Кол-во сцен
+            </dt>
+            <dd>
+                @Model.Stages.Count()
+            </dd>     
+        </dl>        
+    </div>   
+</div>
+
+@if (Model.Stages.Count > 0)
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-heading"><h2>Сцены</h2></div>
+        </div>
+        <div class="panel-body">
+            <div class="list-group">
+                @foreach (var stage in @Model.Stages)
+                {
+                    <a href=@Url.Action("Details", "Stage", new { id = stage.Key }, null) class="list-group-item">@stage.Value</a>
+                }
+            </div>
+        </div>
+    </div>
+}
+

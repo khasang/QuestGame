@@ -13,7 +13,7 @@ namespace QuestGame.Domain.EntityConfigurations
     {
         public MotionMapper()
         {
-            this.ToTable("Motion");
+            this.ToTable("Motions");
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.Id).IsRequired();
             this.Property(x => x.Description).IsRequired();

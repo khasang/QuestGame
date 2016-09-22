@@ -13,16 +13,16 @@ namespace QuestGame.Domain.EntityConfigurations
     {
         public QuestMapper()
         {
-            this.ToTable("Quest");
+            this.ToTable("Quests");
 
             this.Property(m => m.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(m => m.Id).IsRequired();
             this.Property(m => m.Title).IsRequired();
             this.Property(m => m.Date).IsRequired();
 
-            this.HasMany(x => x.Stages)
-                .WithRequired(x => x.Quest)
-                .HasForeignKey(x => x.QuestId);
+            //this.HasMany(x => x.Stages)
+            //    .WithRequired(x => x.Quest)
+            //    .HasForeignKey(x => x.QuestId);
         }
     }
 }

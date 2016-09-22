@@ -43,40 +43,80 @@ namespace QuestGame.WebApi.Controllers
             try
             {
                 var quests = dataManager.Quests.GetAll().ToList();
-
-                var response = mapper.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(quests);           
+                var response = mapper.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(quests);
                 return response;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                throw;
-            }            
+                logger.Error("Quest | GetAll | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
         }
 
         [HttpGet]
         [Route("GetById")]
-        public QuestDTO GetById(int id)
+        public QuestDTO GetById(int? id)
         {
-            var quest = dataManager.Quests.GetById(id);
-            var response = mapper.Map<Quest, QuestDTO>(quest);
+            try
+            {
+                var quest = dataManager.Quests.GetById(id);
+                var response = mapper.Map<Quest, QuestDTO>(quest);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Quest | GetById | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+            
+        }
 
-            return response;
+        [HttpGet]
+        [Route("GetByActive")]
+        public IEnumerable<QuestDTO> GetByActive()
+        {
+            try
+            {
+                var quest = dataManager.Quests.GetByActive().ToList();
+                var response = mapper.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(quest);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Quest | GetByActive | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetByUserName")]
+        public IEnumerable<QuestDTO> GetByUserName(string userName)
+        {
+            try
+            {
+                var quest = dataManager.Quests.GetByUserName(userName).ToList();
+                var response = mapper.Map<IEnumerable<Quest>, IEnumerable<QuestDTO>>(quest);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Quest | GetByUserName | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
         }
 
         [HttpPost]
         [Route("Add")]
         public IHttpActionResult Add(QuestDTO quest)
         {
-            var model = mapper.Map<QuestDTO, Quest>(quest);
-
             try
             {
-                //var owner = dataManager.UserManager.FindByNameAsync(quest.Owner);
+                var model = mapper.Map<QuestDTO, Quest>(quest);
                 var owner = dataManager.Users.GetAll().FirstOrDefault(x => x.UserName == quest.Owner);
-                if (owner == null)
-                    throw new HttpResponseException(HttpStatusCode.BadRequest);
-
                 model.Owner = owner;
                 model.Date = DateTime.Now;
 
@@ -84,31 +124,56 @@ namespace QuestGame.WebApi.Controllers
                 dataManager.Save();
                 return Ok();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+                logger.Error("Quest | Add | ", ex.ToString());
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
-            }
+            }            
         }
 
         [HttpPut]
         [Route("Update")]
-        public void Update(QuestDTO quest)
+        public IHttpActionResult Update(QuestDTO quest)
         {
-            var model = mapper.Map<QuestDTO, Quest>(quest);
-            dataManager.Quests.Update(model);
-            dataManager.Save();
+            try
+            {
+                var questEntity = dataManager.Quests.GetById(quest.Id);
+                var model = mapper.Map<QuestDTO, Quest>(quest, questEntity);
+
+                var owner = dataManager.Users.GetAll().FirstOrDefault(x => x.UserName == quest.Owner);
+                model.Owner = owner;
+                dataManager.Quests.Update(model);
+                dataManager.Save();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Quest | Update | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }            
         }
 
         [HttpDelete]
         [Route("Delete")]
-        public void Delete(QuestDTO quest)
+        public IHttpActionResult Delete(QuestDTO quest)
         {
-            var model = mapper.Map<QuestDTO, Quest>(quest);
-            dataManager.Quests.Delete(model);
-            dataManager.Save();
+            try
+            {
+                var model = mapper.Map<QuestDTO, Quest>(quest);
+                dataManager.Quests.Delete(model);
+                dataManager.Save();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Quest | Delete | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }             
         }
-    }    
+    }
 }
 
-    
+

@@ -1,0 +1,96 @@
+﻿@model QuestGame.WebApi.Areas.Game.Models.QuestViewModel
+
+@{
+    ViewBag.Title = "EditQuest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading"><h2>Редактирование квеста</h2></div>
+        <div class="panel-body">
+            
+            @using (Html.BeginForm("Edit", "Quest", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(x => x.Id)
+                @Html.HiddenFor(x => x.Stages)
+                @Html.HiddenFor(x => x.Owner)
+                @Html.HiddenFor(x => x.Rate)
+                @Html.HiddenFor(x => x.Date)
+
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(n => n.Title)
+                    </dt>
+                    <dd>
+                        @Html.EditorFor(t => t.Title, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(v => v.Title)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(n => n.Date)
+                    </dt>
+                    <dd>
+                        @Html.DisplayTextFor(t => t.Date)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(n => n.Owner)
+                    </dt>
+                    <dd>
+                        @Html.DisplayTextFor(n => n.Owner)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(n => n.Rate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayTextFor(n => n.Rate)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(n => n.Active)
+                    </dt>
+                    <dd>
+                        @Html.CheckBoxFor(t => t.Active, new { @class = "checkbox" })
+                        @Html.ValidationMessageFor(v => v.Active)
+                    </dd>
+                    <dt>
+                        Кол-во сцен
+                    </dt>
+                    <dd>
+                        @Model.Stages.Count()
+                    </dd>
+                </dl>
+                <div class="list-group">
+                    @Html.ActionLink("Добавить сцену", "Create", "Stage", new { area = "Design", id = @Model.Id }, new { @class = "btn btn-primary" })
+                </div>
+                <table class="table">
+                    <tr>
+                        <th>Название сцены</th>
+                        <th>Меню</th>
+                    </tr>
+                    @foreach (var stage in Model.Stages)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => stage.Value)
+                            </td>
+                            <td>
+                                <a href=@Url.Action("Details", "Stage", new { id = stage.Key }, null)><span class="glyphicon glyphicon-info-sign"></span></a>
+                                <a href=@Url.Action("Edit", "Stage", new { id = stage.Key }, null)><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a href=@Url.Action("Delete", "Stage", new { id = stage.Key }, null)><span class="glyphicon glyphicon-remove-circle"></span></a>
+                            </td>
+                        </tr>
+                    }
+                </table>
+                <div class="btn-group">
+                    <input type="submit" class="btn btn-primary" value="Сохранить" />
+                    @Html.ActionLink("Назад", "Details", "Quest", new { area = "Design", id = @Model.Id }, new { @class = "btn btn-default" })
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

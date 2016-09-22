@@ -8,11 +8,10 @@ namespace QuestGame.Domain.DTO
 {
     public class StageDTO
     {
-        int Id { get; set; }
-        public string Tag { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
         public int Point { get; set; }
-        public ICollection<MotionDTO> Motions { get; set; }
+        public int QuestId { get; set; }
     }
 }

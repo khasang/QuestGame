@@ -9,5 +9,6 @@ namespace QuestGame.Domain.Interfaces
 {
     public interface IMotionRepository : ICommonRepository<Motion>
     {
+        IEnumerable<Motion> GetByStageId(object id);
     }
 }

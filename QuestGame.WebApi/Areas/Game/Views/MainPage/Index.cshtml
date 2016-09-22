@@ -1,0 +1,40 @@
+﻿@model IEnumerable<QuestGame.WebApi.Areas.Game.Models.QuestViewModel>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Quest Game</h2>
+
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Доступные квесты</h3>
+        </div>
+        <div class="panel-body">
+            <p>Здессь список квестов</p>
+            
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Атор</th>
+                        <th>Рейтинг</th>
+                        <th>Дата создания</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var quest in Model)
+                    {
+                        <tr>
+                            <td>@Html.ActionLink(quest.Title, "Details", new { id = quest.Title }, null)</td>
+                            <td>@quest.Owner</td>
+                            <td>@quest.Rate</td>
+                            <td>@quest.Date</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @Html.ActionLink("Назад", "Index", "Home", new { area = "" }, new { @class = "btn btn-default" })
+        </div>
+    </div>
+</div>

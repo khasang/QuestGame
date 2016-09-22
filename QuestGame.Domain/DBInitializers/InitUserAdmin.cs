@@ -14,21 +14,21 @@ namespace QuestGame.Domain.DBInitializers
     {
         public void Initialization(ApplicationDbContext dbContext)
         {
-            UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(dbContext));
-            RoleManager<IdentityRole> roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(dbContext));
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(dbContext));
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(dbContext));
 
-            ApplicationUser user = new ApplicationUser()
+            var user = new ApplicationUser()
             {
                 UserName = "admin@admin.com",
                 Email = "admin@admin.com",
                 EmailConfirmed = true
             };
 
-            IdentityRole role = new IdentityRole("admin");
+            roleManager.Create(new IdentityRole("admin"));
+            roleManager.Create(new IdentityRole("user"));
 
-            userManager.Create(user, "qwerty");
-            roleManager.Create(role);
-            userManager.AddToRole(user.Id, role.Name);
+            userManager.Create(user, "qwerty");            
+            userManager.AddToRole(user.Id, "admin");
         }
     }
 }

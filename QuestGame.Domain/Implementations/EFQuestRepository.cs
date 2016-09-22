@@ -17,6 +17,31 @@ namespace QuestGame.Domain.Implementations
             this.dbContext = dbContext;
         }
 
+        public IEnumerable<Quest> GetAll()
+        {
+            return dbContext.Quests;
+        }
+
+        public Quest GetById(object id)
+        {
+            return dbContext.Quests.Find((int)id);
+        }
+
+        public Quest GetByTitle(string title)
+        {
+            return dbContext.Quests.FirstOrDefault(x => x.Title == title);
+        }
+
+        public IEnumerable<Quest> GetByActive()
+        {
+            return dbContext.Quests.Where(x => x.Active);
+        }
+
+        public IEnumerable<Quest> GetByUserName(string userName)
+        {
+            return dbContext.Quests.Where(x => x.Owner.UserName == userName);
+        }
+
         public void Add(Quest item)
         {
             dbContext.Quests.Add(item);
@@ -29,17 +54,14 @@ namespace QuestGame.Domain.Implementations
 
         public void Delete(Quest item)
         {
-            dbContext.Quests.Remove(item);
+            var q = dbContext.Quests.Remove(item);
         }
 
-        public IEnumerable<Quest> GetAll()
+        public void DeleteByTitle(string title)
         {
-            return dbContext.Quests;
-        }
-
-        public Quest GetById(object id)
-        {
-            return dbContext.Quests.Find((int)id);
+            var quest = dbContext.Quests.FirstOrDefault(x => x.Title == title);
+            if (quest != null)
+                Delete(quest);          
         }
 
         public void Update(Quest item)

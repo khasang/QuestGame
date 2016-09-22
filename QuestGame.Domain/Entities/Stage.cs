@@ -16,11 +16,6 @@ namespace QuestGame.Domain.Entities
         public int Id { get; set; }
 
         /// <summary>
-        /// Идентификатор сцены
-        /// </summary>
-        public string Tag { get; set; }
-
-        /// <summary>
         /// Название сцены
         /// </summary>
         public string Title { get; set; }
@@ -47,10 +42,14 @@ namespace QuestGame.Domain.Entities
         /// </summary>
         [InverseProperty("OwnerStage")]
         public virtual ICollection<Motion> Motions { get; set; }
+
+        [InverseProperty("NextStage")]
+        public virtual ICollection<Motion> MotionComeFrom { get; set; }
         
         public Stage()
         {
             Motions = new List<Motion>();
+            MotionComeFrom = new List<Motion>();
         }
     }
 }

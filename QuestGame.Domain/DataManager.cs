@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using QuestGame.Domain.Entities;
 using QuestGame.Domain.Implementations;
 using QuestGame.Domain.Interfaces;
@@ -15,12 +16,12 @@ namespace QuestGame.Domain
     {
         IApplicationDbContext dbContext;
 
+        RoleManager<IdentityRole> roleManager;
         ApplicationUserManager userManager;
         IQuestRepository questRepository;
         IStageRepository stageRepository;
         IMotionRepository motionRrepository;
-        IUserRepository userRepository;
-        
+        IUserRepository userRepository;        
         IRoleRepository roleRepository;
 
         public DataManager(IApplicationDbContext dbContext)
@@ -94,9 +95,21 @@ namespace QuestGame.Domain
             {
                 if (userManager == null)
                 {
-                    userManager = new ApplicationUserManager(new UserStore<ApplicationUser>((DbContext)(dbContext)));
+                    userManager = new ApplicationUserManager(new UserStore<ApplicationUser>((DbContext)dbContext));
                 }
                 return userManager;
+            }
+        }
+
+        public RoleManager<IdentityRole> RoleManager
+        {
+            get
+            {
+                if (roleManager == null)
+                {
+                    roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>((DbContext)dbContext));
+                }
+                return roleManager;
             }
         }
 
@@ -107,7 +120,7 @@ namespace QuestGame.Domain
 
         private bool disposed = false;
 
-        public virtual void Dispose(bool disposing)
+        public void Dispose(bool disposing)
         {
             if(!this.disposed)
             {

@@ -12,9 +12,12 @@ namespace QuestGame.WebApi.Mapping.Profiles
     {
         public EntityToDTOMappingProfile()
         {
+            CreateMap<Quest, QuestFullDTO>().ForMember(x => x.Owner, y => y.MapFrom(pr => pr.Owner.UserName));
             CreateMap<Quest, QuestDTO>().ForMember(x => x.Owner, y => y.MapFrom(pr => pr.Owner.UserName));
             CreateMap<Stage, StageDTO>();
-            CreateMap<Motion, MotionDTO>();//.ForMember(x => x.NextStage, y => y.MapFrom(pr => pr.NextStage.Tag));
+            CreateMap<Stage, StageFullDTO>();
+            CreateMap<Motion, MotionDTO>();
+            CreateMap<UserProfile, UserProfileDTO>();
         }
     }
 }
