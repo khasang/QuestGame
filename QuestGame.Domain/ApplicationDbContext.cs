@@ -35,7 +35,6 @@ namespace QuestGame.Domain
 
         public void EntryObj<T>(T entity) where T : class
         {
-            //base.Set<T>().Attach(entity);
             base.Entry(entity).State = EntityState.Modified;
         }
 

@@ -25,6 +25,27 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             : base(mapper)
         { }
 
+        public async Task<ActionResult> Index(int? id)
+        {
+            using (var client = RestHelper.Create(SessionUser.Token))
+            {
+                var response = await client.GetAsync(ApiMethods.MotionGetByStageId + id);
+
+                IEnumerable<MotionViewModel> model = null;
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = ErrorMessages.BadRequest;
+                }
+                else
+                {
+                    var answer = await response.Content.ReadAsAsync<IEnumerable<MotionDTO>>();
+                    model = mapper.Map<IEnumerable<MotionDTO>, IEnumerable<MotionViewModel>>(answer);
+                }
+
+                return View(model);
+            }
+        }
+
         [HttpGet]
         public ActionResult Create(int id)
         {

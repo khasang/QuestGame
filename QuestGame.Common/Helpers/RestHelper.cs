@@ -46,7 +46,7 @@ namespace QuestGame.Common.Helpers
             }
             catch (Exception ex)
             {
-                throw new Exception(string.Format("Ошибка загрузки файла: {0}", ex.Message));
+                throw new Exception(string.Format("Ошибка загрузки файла: {0}", ex.ToString()));
             }
         }
     }

@@ -23,15 +23,5 @@ namespace QuestGame.WebApi.Mapping.Profiles
         {
             get { return "DTOToViewModelMappingProfile"; }
         }
-
-        //private NameValueCollection GetStageViewModel(ICollection<StageFullDTO> stages)
-        //{
-        //    var collection = new NameValueCollection();
-
-        //    foreach (var stage in stages)
-        //    {
-        //        collection.Add(stage.I)
-        //    }
-        //}
     }
 }

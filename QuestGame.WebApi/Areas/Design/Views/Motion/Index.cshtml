@@ -1,0 +1,52 @@
+﻿@model IEnumerable<QuestGame.WebApi.Areas.Game.Models.MotionViewModel>
+@using QuestGame.WebApi.Helpers;
+
+@{
+    ViewBag.Title = "Design";
+}
+
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading"><h2>Действия</h2></div>
+        <div class="panel-body">
+            <div class="btn btn-group">
+                @Html.ActionLink("Добавить действие", "Create", "Motion", new { @class = "btn btn-primary" })
+                @Html.ActionLink("Назад", "Index", "Stage", new { area = "Game" }, new { @class = "btn btn-default" })
+            </div>
+        </div>
+        @{
+            if (Model.Count() == 0)
+            {
+                <p>У этой сцены пока нет действий...</p>
+            }
+            else
+            {
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(x => x.Description)</th>
+                            <th>@Html.DisplayNameFor(x => x.OwnerStageId)</th>
+                            <th>@Html.DisplayNameFor(x => x.NextStageId)</th>
+                            <th>Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var motion in Model)
+                        {
+                            <tr>
+                                <td>@Html.ActionLink(motion.Description, "Details", new { id = motion.Id }, null)</td>
+                                <td>@motion.OwnerStageId</td>
+                                <td>@motion.NextStageId</td>
+                                <td>
+                                    <a href=@Url.Action("Details", "Stage", new { id = motion.Id }, null)><span class="glyphicon glyphicon-info-sign"></span></a>
+                                    <a href=@Url.Action("Edit", "Stage", new { id = motion.Id }, null)><span class="glyphicon glyphicon-pencil"></span></a>
+                                    <a href=@Url.Action("Delete", "Stage", new { id = motion.Id }, null)><span class="glyphicon glyphicon-remove-circle"></span></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+    </div>
+</div>

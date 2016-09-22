@@ -22,9 +22,7 @@ namespace QuestGame.TestProject.UnitTests
 
         Mock<ILoggerService> loggerMock;
         Mock<IDataManager> dataManagerMoq;
-        Mock<IMapper> mapperMock;
-
-        
+        Mock<IMapper> mapperMock;        
 
         [TestInitialize]
         public void TestInitialize()
