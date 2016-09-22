@@ -50,6 +50,8 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         // GET: Design/Quests/Details/5
         public async Task<ActionResult> Details(int id)
         {
+            ViewBag.Errors = TempData["Errors"];
+
             ViewBag.Title = "Details";
             var user = Session["User"] as UserModel;
 

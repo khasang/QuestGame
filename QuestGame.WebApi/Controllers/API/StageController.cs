@@ -54,6 +54,7 @@ namespace QuestGame.WebApi.Controllers
                 var stage = dataManager.Stages.GetById(id);
                 if (stage == null) { throw new ObjectNotFoundException(); }
                 var response = mapper.Map<Stage, StageDTO>(stage);
+
                 return response;
             }
             catch (ObjectNotFoundException ex)

@@ -13,6 +13,7 @@ using System.Web;
 using System.Web.Mvc;
 using QuestGame.Domain.Entities;
 using QuestGame.WebApi.Infrastructure;
+using System.Net;
 
 namespace QuestGame.WebApi.Areas.Design.Controllers
 {
@@ -25,31 +26,24 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         {
             this.mapper = mapper;
         }
-        
+
         // GET: Design/Stage/Details/5
         public async Task<ActionResult> Details(int? id)
         {
             ViewBag.Title = "Details";
+            ViewBag.Errors = TempData["Errors"];
             var user = Session["User"] as UserModel;
 
             using (var client = new RequestApi(user.Token))
             {
-                try
-                {
-                    var response = await client.GetAsync(@"api/Stage/GetById?id=" + id);
-                    response.EnsureSuccessStatusCode();
+                var response = await client.GetAsync(@"api/Stage/GetById?id=" + id);
+                response.EnsureSuccessStatusCode();
 
-                    var stage = response.Content.ReadAsAsync<StageDTO>().Result;
-                    var stageVM = mapper.Map<StageDTO, StageViewModel>(stage);
+                var stage = response.Content.ReadAsAsync<StageDTO>().Result;
+                var stageVM = mapper.Map<StageDTO, StageViewModel>(stage);
 
-                    return View(stageVM);
-                }
-                catch (HttpRequestException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+                return View(stageVM);
             }
-            return Redirect(Request.UrlReferrer.PathAndQuery);
         }
 
         // GET: Design/Stage/Create
@@ -57,6 +51,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         {
             var user = Session["User"] as UserModel;
             var model = new StageViewModel();
+            ViewBag.Errors = TempData["Errors"];
 
             using (var client = new RequestApi(user.Token))
             {
@@ -85,6 +80,8 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             {
                 return View(model);
             }
+
+            ViewBag.Errors = TempData["Errors"];
 
             var user = Session["User"] as UserModel;
 
@@ -115,6 +112,9 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         {
             var user = Session["User"] as UserModel;
 
+            ViewBag.Errors = TempData["Errors"];
+
+
             using (var client = new RequestApi(user.Token))
             {
                 try
@@ -139,6 +139,9 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         [HttpPost]
         public async Task<ActionResult> Edit(StageViewModel model)
         {
+            ViewBag.Errors = TempData["Errors"];
+
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -170,6 +173,9 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         [HttpGet]
         public async Task<ActionResult> Delete(int? id)
         {
+            ViewBag.Errors = TempData["Errors"];
+
+
             var user = Session["User"] as UserModel;
             using (var client = new RequestApi(user.Token))
             {
@@ -180,10 +186,27 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 }
                 catch (HttpRequestException ex)
                 {
+                    var v = HttpContext.AllErrors;
+
                     Console.WriteLine(ex.Message);
                 }
             }
             return Redirect(Request.UrlReferrer.PathAndQuery);
         }
+
+
+        //protected override void OnException(ExceptionContext filterContext)
+        //{
+        //    filterContext.ExceptionHandled = true;
+
+        //    // Redirect on error:
+        //    filterContext.Result = RedirectToAction("Index", "Error");
+
+        //    // OR set the result without redirection:
+        //    filterContext.Result = new ViewResult
+        //    {
+        //        ViewName = "~/Views/Error/Index.cshtml"
+        //    };
+        //}
     }
 }

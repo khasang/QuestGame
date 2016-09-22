@@ -8,20 +8,9 @@
     <h2>@Model.Title</h2>
 </blockquote>
 
-@if (Session["ErrorException"] != null)
+@if (ViewBag.Errors != null)
 {
-    <h1>ОШИБКА</h1>
-}
-
-
-@if (ViewBag.Alert != null)
-{
-    foreach (var alert in ViewBag.Alert)
-    {
-        <div class="alert alert-warning" role="alert">
-            @alert
-        </div>
-    }
+    <div class="alert alert-danger" role="alert">@ViewBag.Errors</div>
 }
 
 <div class="panel panel-default">

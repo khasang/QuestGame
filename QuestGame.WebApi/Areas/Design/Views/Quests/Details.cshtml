@@ -9,14 +9,10 @@
 </blockquote>
 
 
-
-@if (Session["SomeErrors"] != null)
+@if (ViewBag.Errors != null)
 {
-    <h1>@Session["SomeErrors"]</h1>
-    Session["SomeErrors"] = null;
+    <div class="alert alert-danger" role="alert">@ViewBag.Errors</div>
 }
-
-
 
 <div class="panel panel-default">
     <div class="panel-heading">

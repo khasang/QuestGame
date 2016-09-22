@@ -185,6 +185,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Design\Controllers\BaseController.cs" />
     <Compile Include="Areas\Design\Controllers\MotionsController.cs" />
     <Compile Include="Areas\Design\Controllers\QuestsController.cs" />
     <Compile Include="Areas\Design\Controllers\StageController.cs" />
@@ -340,6 +341,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Design\Views\Base\" />
     <Folder Include="Views\Quest\" />
   </ItemGroup>
   <ItemGroup>

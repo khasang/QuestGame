@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuestGame.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -12,12 +13,12 @@ namespace QuestGame.WebApi.Infrastructure
     {
         public void OnException(ExceptionContext filterContext)
         {
-            if (!filterContext.ExceptionHandled &&
-                    filterContext.Exception is HttpRequestException)
+            if (!filterContext.ExceptionHandled && filterContext.Exception is HttpRequestException)
             {
-                filterContext.HttpContext.Session["SomeErrors"] = "Ошибка из фильтра Ошибок";
-                filterContext.Result = new RedirectResult(filterContext.HttpContext.Request.UrlReferrer.PathAndQuery);
+                filterContext.Controller.TempData["Errors"] = filterContext.Exception.Message;
                 filterContext.ExceptionHandled = true;
+
+                filterContext.Result = new RedirectResult(filterContext.HttpContext.Request.UrlReferrer.AbsolutePath);
             }
         }
     }
