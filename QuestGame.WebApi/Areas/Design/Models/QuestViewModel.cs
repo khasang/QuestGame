@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -21,6 +22,13 @@ namespace QuestGame.WebApi.Areas.Design.Models
 
         [HiddenInput(DisplayValue = false)]
         public string Owner { get; set; }
+
+        [JsonIgnore]
+        [Display(Name = "Картинка для описания")]
+        public HttpPostedFileBase File { get; set; }
+
+        [HiddenInput(DisplayValue = false)]
+        public string Image { get; set; }
 
         public ICollection<StageViewModel> Stages { get; set; }
     }
