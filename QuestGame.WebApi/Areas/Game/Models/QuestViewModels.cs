@@ -70,5 +70,7 @@ namespace QuestGame.WebApi.Areas.Game.Models
         public int OwnerStageId { get; set; }
 
         public int? NextStageId { get; set; }
+
+        public string Image { get; set; }
     }
 }

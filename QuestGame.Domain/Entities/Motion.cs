@@ -20,6 +20,11 @@ namespace QuestGame.Domain.Entities
         public string Description { get; set; }
 
         /// <summary>
+        /// Изображение действия
+        /// </summary>
+        public string Image { get; set; }
+
+        /// <summary>
         /// Следующая сцена
         /// </summary>
         public int? NextStageId { get; set; }
