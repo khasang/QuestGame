@@ -52,15 +52,13 @@ namespace QuestGame.WebApi.Controllers
             try
             {
                 var stage = dataManager.Stages.GetById(id);
-                if (stage == null) { throw new ObjectNotFoundException(); }
+                if (stage == null)
+                {
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, MessageString.ErrorNotFound));
+                }
                 var response = mapper.Map<Stage, StageDTO>(stage);
 
                 return response;
-            }
-            catch (ObjectNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, MessageString.ErrorNotFound));
             }
             catch (Exception ex)
             {
@@ -103,7 +101,10 @@ namespace QuestGame.WebApi.Controllers
             try
             {
                 var stageOriginal = dataManager.Stages.GetById(model.Id);
-                if (stageOriginal == null) { throw new ObjectNotFoundException(); }
+                if (stageOriginal == null)
+                {
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, MessageString.ErrorNotFound));
+                }
 
                 var stageResult = mapper.Map<StageDTO, Stage>(model, stageOriginal);
 
@@ -111,11 +112,6 @@ namespace QuestGame.WebApi.Controllers
                 dataManager.Save();
 
                 return Ok();
-            }
-            catch (ObjectNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, MessageString.ErrorNotFound));
             }
             catch (Exception ex)
             {
@@ -132,16 +128,14 @@ namespace QuestGame.WebApi.Controllers
             try
             {
                 var stage = dataManager.Stages.GetById(id);
-                if (stage == null) { throw new ObjectNotFoundException(); }
+                if (stage == null)
+                {
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, MessageString.ErrorNotFound));
+                }
 
                 dataManager.Stages.Delete(stage);
                 dataManager.Save();
                 return Ok();
-            }
-            catch (ObjectNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, MessageString.ErrorNotFound));
             }
             catch (Exception ex)
             {

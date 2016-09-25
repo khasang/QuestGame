@@ -33,6 +33,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         public async Task<ActionResult> Create(int id)
         {
             var user = Session["User"] as UserModel;
+            ViewBag.Errors = TempData["Errors"];
 
             var model = new MotionViewModel();
 
@@ -64,6 +65,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             {
                 return View(model);
             }
+            ViewBag.Errors = TempData["Errors"];
 
             var user = Session["User"] as UserModel;
 
@@ -92,6 +94,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         public async Task<ActionResult> Edit(int id)
         {
             var user = Session["User"] as UserModel;
+            ViewBag.Errors = TempData["Errors"];
 
             using (var client = new RequestApi(user.Token))
             {
@@ -121,6 +124,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             {
                 return View(model);
             }
+            ViewBag.Errors = TempData["Errors"];
 
             var user = Session["User"] as UserModel;
             var motion = mapper.Map<MotionViewModel, MotionDTO>(model);
@@ -146,6 +150,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var user = Session["User"] as UserModel;
+            ViewBag.Errors = TempData["Errors"];
 
             using (var client = new RequestApi(user.Token))
             {

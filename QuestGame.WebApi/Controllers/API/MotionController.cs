@@ -35,14 +35,12 @@ namespace QuestGame.WebApi.Controllers
             try
             {
                 var motion = dataManager.Motions.GetById(id);
-                if (motion == null) { throw new ObjectNotFoundException(); }
+                if (motion == null)
+                {
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, MessageString.ErrorNotFound));
+                }
                 var response = mapper.Map<Motion, MotionDTO>(motion);
                 return response;
-            }
-            catch (ObjectNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, MessageString.ErrorNotFound));
             }
             catch (Exception ex)
             {
@@ -87,17 +85,15 @@ namespace QuestGame.WebApi.Controllers
             try
             {
                 var motionOriginal = dataManager.Motions.GetById(model.Id);
-                if (motionOriginal == null) { throw new ObjectNotFoundException(); }
+                if (motionOriginal == null)
+                {
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, MessageString.ErrorNotFound));
+                }
                 var motionResult = mapper.Map<MotionDTO, Motion>(model, motionOriginal);
 
                 dataManager.Motions.Update(motionResult);
                 dataManager.Save();
                 return Ok();
-            }
-            catch (ObjectNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, MessageString.ErrorNotFound));
             }
             catch (Exception ex)
             {
@@ -113,17 +109,15 @@ namespace QuestGame.WebApi.Controllers
             try
             {
                 var motion = dataManager.Motions.GetById(id);
-                if (motion == null) { throw new ObjectNotFoundException(); }
+                if (motion == null)
+                {
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, MessageString.ErrorNotFound));
+                }
 
                 dataManager.Motions.Delete(motion);
                 dataManager.Save();
 
                 return Ok(motion);
-            }
-            catch (ObjectNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, MessageString.ErrorNotFound));
             }
             catch (Exception ex)
             {

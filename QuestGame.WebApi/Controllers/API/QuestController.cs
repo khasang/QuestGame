@@ -74,14 +74,12 @@ namespace QuestGame.WebApi.Controllers
             try
             {
                 var quest = dataManager.Quests.GetById(id);
-                if (quest == null) { throw new ObjectNotFoundException(); }
+                if (quest == null)
+                {
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, MessageString.ErrorNotFound));
+                }
                 var response = mapper.Map<Quest, QuestDTO>(quest);
                 return response;
-            }
-            catch (ObjectNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, MessageString.ErrorNotFound));
             }
             catch (Exception ex)
             {
@@ -128,17 +126,15 @@ namespace QuestGame.WebApi.Controllers
             try
             {
                 var questOriginal = dataManager.Quests.GetById(model.Id);
-                if (questOriginal == null) { throw new ObjectNotFoundException(); }
+                if (questOriginal == null)
+                {
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, MessageString.ErrorNotFound));
+                }
 
                 var questResult = mapper.Map<QuestDTO, Quest>(model, questOriginal);
 
                 dataManager.Quests.Update(questResult);
                 dataManager.Save();
-            }
-            catch (ObjectNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, MessageString.ErrorNotFound));
             }
             catch (Exception ex)
             {
@@ -154,15 +150,13 @@ namespace QuestGame.WebApi.Controllers
             try
             {
                 var quest = dataManager.Quests.GetById(id);
-                if (quest == null) { throw new ObjectNotFoundException(); }
+                if (quest == null)
+                {
+                    throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound, MessageString.ErrorNotFound));
+                }
 
                 dataManager.Quests.Delete(quest);
                 dataManager.Save();
-            }
-            catch (ObjectNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, MessageString.ErrorNotFound));
             }
             catch (Exception ex)
             {

@@ -25,6 +25,8 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         // GET: Design/Quests
         public async Task<ActionResult> Index()
         {
+            ViewBag.Errors = TempData["Errors"];
+
             ViewBag.Title = "Список доступных квестов";
             IEnumerable<QuestViewModel> questsVM = new List<QuestViewModel>();
             var user = Session["User"] as UserModel;
@@ -89,6 +91,8 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 return View(model);
             }
 
+            ViewBag.Errors = TempData["Errors"];
+
             var user = Session["User"] as UserModel;
 
             var quest = mapper.Map<QuestViewModel, QuestDTO>(model);
@@ -120,6 +124,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         public async Task<ActionResult> Edit(int id)
         {
             var user = Session["User"] as UserModel;
+            ViewBag.Errors = TempData["Errors"];
 
             using (var client = new RequestApi(user.Token))
             {
@@ -150,6 +155,8 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 return View(model);
             }
 
+            ViewBag.Errors = TempData["Errors"];
+
             var user = Session["User"] as UserModel;
             var quest = mapper.Map<QuestViewModel, QuestDTO>(model);
 
@@ -173,6 +180,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var user = Session["User"] as UserModel;
+            ViewBag.Errors = TempData["Errors"];
 
             using (var client = new RequestApi(user.Token))
             {
