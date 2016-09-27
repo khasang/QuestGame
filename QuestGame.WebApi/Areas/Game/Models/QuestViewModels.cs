@@ -72,5 +72,9 @@ namespace QuestGame.WebApi.Areas.Game.Models
         public int? NextStageId { get; set; }
 
         public string Image { get; set; }
+
+        public byte[] ImageData { get; set; }
+
+        public string ImageMimeType { get; set; }
     }
 }

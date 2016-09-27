@@ -25,6 +25,16 @@ namespace QuestGame.Domain.Entities
         public string Image { get; set; }
 
         /// <summary>
+        /// данные картинки
+        /// </summary>
+        public byte[] ImageData { get; set; }
+
+        /// <summary>
+        /// тип картинки
+        /// </summary>
+        public string ImageMimeType { get; set; }
+
+        /// <summary>
         /// Следующая сцена
         /// </summary>
         public int? NextStageId { get; set; }

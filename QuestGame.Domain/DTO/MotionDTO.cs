@@ -13,5 +13,7 @@ namespace QuestGame.Domain.DTO
         public int? NextStageId { get; set; }
         public int OwnerStageId { get; set; }
         public string Image { get; set; }
+        public byte[] ImageData { get; set; }
+        public string ImageMimeType { get; set; }
     }
 }
