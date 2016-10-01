@@ -1,0 +1,48 @@
+﻿@model QuestGame.WebMVC.Areas.Game.Models.MotionViewModel
+
+@{
+    ViewBag.Title = "Edit Motion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2>Редактирование действия</h2>
+        </div>
+        <div class="panel-body">
+            @using (Html.BeginForm("Edit", "Motion", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                @Html.HiddenFor(x => x.Id)
+                @Html.HiddenFor(x => x.OwnerStageId)
+
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(n => n.Description)
+                    </dt>
+                    <dd>
+                        @Html.EditorFor(t => t.Description, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(v => v.Description)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(n => n.NextStageId)
+                    </dt>
+                    <dd>
+                        @Html.EditorFor(t => t.NextStageId)
+                        @Html.ValidationMessageFor(v => v.NextStageId)
+                    </dd>
+                </dl>
+                <div class="btn-group">
+                    <input type="submit" class="btn btn-primary" value="Сохранить" />
+                    <a class="btn btn-default" href="@ViewBag.ReturnUrl">Назад</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+}
