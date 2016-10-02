@@ -17,7 +17,8 @@ namespace QuestGame.Domain.EntityConfigurations
                 .HasForeignKey(x => x.OwnerId);
 
             this.HasOptional(x => x.UserProfile)
-                .WithRequired(x => x.User);
+                .WithRequired(x => x.User)
+                .WillCascadeOnDelete(true);
         }
     }
 }

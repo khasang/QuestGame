@@ -13,10 +13,9 @@ namespace QuestGame.Domain.Entities
     public class ApplicationUser : IdentityUser
     {
 
-        public string Name { get; set; }
-        public string LastName { get; set; }
+        public string NickName { get; set; }
 
-        public int UserProfileId { get; set; }
+        //public int UserProfileId { get; set; }
         public virtual UserProfile UserProfile { get; set; }
 
         /// <summary>
@@ -35,7 +34,7 @@ namespace QuestGame.Domain.Entities
             var userIdentity = await manager.CreateIdentityAsync(this, authenticationType);
             // Здесь добавьте настраиваемые утверждения пользователя
 
-            userIdentity.AddClaim(new Claim(ClaimTypes.Name, this.Name + " " + this.LastName));
+            userIdentity.AddClaim(new Claim(ClaimTypes.Name, this.NickName));
 
             return userIdentity;
         }

@@ -10,13 +10,9 @@ namespace QuestGame.Domain.Entities
 {
     public class UserProfile
     {
-        public DateTime? Birthday { get; set; }
-        public bool? Sex { get; set; }
         public string avatarUrl { get; set; }
-
-        public string Region { get; set; }
-        public int? Rating { get; set; }
-        public int? CountCompliteQuests { get; set; }
+        public int Rating { get; set; }
+        public int CountCompliteQuests { get; set; }
         public DateTime? InviteDate { get; set; }
 
         public string UserId { get; set; }
