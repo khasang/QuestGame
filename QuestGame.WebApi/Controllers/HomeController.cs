@@ -34,7 +34,7 @@ namespace QuestGame.WebApi.Controllers
         {
             if (!ModelState.IsValid)
             {
-                View(model);
+                return View(model);
             }
 
             using (var client = RestHelper.Create())
