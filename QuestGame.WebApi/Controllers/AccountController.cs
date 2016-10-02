@@ -25,6 +25,8 @@ using QuestGame.Common.Interfaces;
 using QuestGame.Common;
 using System.Diagnostics;
 using QuestGame.Common.Helpers;
+using AutoMapper;
+using QuestGame.Domain.DTO;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -35,9 +37,11 @@ namespace QuestGame.WebApi.Controllers
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
         private ILoggerService logger = LoggerService.Create();
+        IMapper mapper;
 
-        public AccountController()
+        public AccountController(IMapper mapper)
         {
+            this.mapper = mapper;
         }
 
         public AccountController(ApplicationUserManager userManager,
@@ -60,6 +64,20 @@ namespace QuestGame.WebApi.Controllers
         }
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
+
+
+        [Route("GetUserById")]
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<UserDTO> GetUser(string id)
+        {
+            ApplicationUser user = await UserManager.FindByIdAsync(id);
+
+            var result = mapper.Map<ApplicationUser, UserDTO>(user);
+
+            return result;
+        }
+
 
         // GET api/Account/UserInfo
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
