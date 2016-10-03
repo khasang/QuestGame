@@ -5,39 +5,56 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>UserInfo</h2>
+<h2>Профиль пользователя</h2>
 
-<div>
-    <h4>UserViewModel</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.NickName)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.NickName)
-        </dd>
+<div class="row" style="margin-top:50px">
+    <div class="col-sm-4" style="text-align:right">
+        <img src="@Model.UserProfile.avatarUrl" class="img-thumbnail img-circle pull-xs-right" alt="Cinque Terre" width="200">
+    </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-
-    </dl>
+    <div class="col-sm-8">
+        <div style="margin-top:43px"><h1>@Model.NickName</h1></div>
+        <div><h3>@Model.Email</h3></div>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+<div class="row bs-callout bs-callout-warning" style="margin-top:30px">
+    <div class="col-sm-12">
+        <div class="col-sm-3">
+            <div>Рейтинг пользователя</div>
+            <div>@Model.UserProfile.Rating</div>
+        </div>
+        <div class="col-sm-3">
+            <div>Пройдено квестов</div>
+            <div>@Model.UserProfile.CountCompliteQuests</div>
+        </div>
+        <div class="col-sm-3">
+            <div>Создано квестов</div>
+            <div>###</div>
+        </div>
+        <div class="col-sm-3">
+            <div>Дата регистрации</div>
+            <div>@Model.UserProfile.InviteDate</div>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin-top:30px">
+    <div class="col-sm-12">
+        Квесты
+    </div>
+</div>
+
+
+<style>
+.bs-callout-warning {
+    background-color: #fcf8f2;
+    border-color: #f0ad4e;
+}
+.bs-callout {
+    margin: 20px 0;
+    padding: 20px;
+    border-left: 3px solid #f0ad4e;
+}
+</style>
