@@ -12,6 +12,9 @@ namespace QuestGame.Domain.EntityConfigurations
     {
         public ApplicationUserMapper()
         {
+            this.Property(p => p.NickName)
+                    .IsOptional();
+
             this.HasMany(x => x.Quests)
                 .WithRequired(x => x.Owner)
                 .HasForeignKey(x => x.OwnerId);

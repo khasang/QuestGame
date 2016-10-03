@@ -1,4 +1,7 @@
-﻿using QuestGame.Common.Helpers;
+﻿using AutoMapper;
+using QuestGame.Common.Helpers;
+using QuestGame.Domain.DTO;
+using QuestGame.WebApi.Constants;
 using QuestGame.WebApi.Models;
 using System;
 using System.Collections.Generic;
@@ -15,6 +18,13 @@ namespace QuestGame.WebApi.Controllers
 {
     public class HomeController : Controller
     {
+        IMapper mapper;
+
+        public HomeController(IMapper mapper) 
+        {
+            this.mapper = mapper;
+        }
+
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";
@@ -86,6 +96,20 @@ namespace QuestGame.WebApi.Controllers
                 Session["User"] = new UserModel { UserName = model.Email, Token = answer };
 
                 return RedirectToAction("Index");
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> UserInfo(string name)
+        {
+            using (var client = RestHelper.Create())
+            {
+                var response = await client.GetAsync(ApiMethods.UserGetByName + name);
+                var answer = await response.Content.ReadAsAsync<UserDTO>();
+
+                var model = mapper.Map<UserDTO, UserViewModel>(answer);
+
+                return View(model);
             }
         }
 

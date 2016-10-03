@@ -66,12 +66,12 @@ namespace QuestGame.WebApi.Controllers
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
 
-        [Route("GetUserById")]
+        [Route("GetUserByName")]
         [AllowAnonymous]
-        [HttpPost]
-        public async Task<UserDTO> GetUser(string id)
+        [HttpGet]
+        public async Task<UserDTO> GetUser(string name)
         {
-            ApplicationUser user = await UserManager.FindByIdAsync(id);
+            ApplicationUser user = await UserManager.FindByNameAsync(name);
 
             var result = mapper.Map<ApplicationUser, UserDTO>(user);
 

@@ -5,7 +5,7 @@
     {
         <ul class="nav navbar-nav navbar-right">
             <li>
-                @Html.ActionLink("Здравствуйте, " + user.UserName + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", id = "userName" })
+                @Html.ActionLink("Здравствуйте, " + user.UserName + "!", "UserInfo", "Home", new { area = "", name = user.UserName }, new { @class = "btn btn btn-primary" })
             </li>
             <li>
                 @Html.ActionLink("Выйти", "LogOff")

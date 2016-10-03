@@ -34,7 +34,7 @@ namespace QuestGame.Domain.Entities
             var userIdentity = await manager.CreateIdentityAsync(this, authenticationType);
             // Здесь добавьте настраиваемые утверждения пользователя
 
-            userIdentity.AddClaim(new Claim(ClaimTypes.Name, this.NickName));
+            //userIdentity.AddClaim(new Claim(ClaimTypes.Name, this.NickName));
 
             return userIdentity;
         }
