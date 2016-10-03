@@ -1,7 +1,6 @@
 ﻿@model QuestGame.WebApi.Models.UserViewModel
 
 @{
-    ViewBag.Title = "UserInfo";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -13,10 +12,19 @@
         <img src="@Model.UserProfile.avatarUrl" class="img-thumbnail img-circle pull-xs-right" alt="Cinque Terre" width="200">
     </div>
 
-    <div class="col-sm-8">
-        <div style="margin-top:43px"><h1>@Model.NickName</h1></div>
-        <div><h3>@Model.Email</h3></div>
-    </div>
+    @if (Model.NickName != null)
+    {
+        <div class="col-sm-8">
+            <div style="margin-top:43px"><h1>@Model.NickName</h1></div>
+            <div><h3>@Model.Email</h3></div>
+        </div>
+    }
+    else
+    {
+        <div class="col-sm-8">
+            <div style="margin-top:43px"><h1>@Model.Email</h1></div>
+        </div>
+    }
 </div>
 
 <div class="row bs-callout bs-callout-warning" style="margin-top:30px">
@@ -42,19 +50,52 @@
 
 <div class="row" style="margin-top:30px">
     <div class="col-sm-12">
-        Квесты
+        <div class="card-columns card-columns-quests">
+            @foreach (var Item in Model.Quests)
+            {
+                <div class="card card_quest" style="margin-bottom: 20px">
+                    <div class="card-img-title"
+                         style="background: url('http://beautylook.pro/upload/medialibrary/98f/4%20(3).jpg') top no-repeat; background-size: cover; height: 250px;"></div>
+                    <div class="card-block">
+                        <h4 class="card-title">@Item.Title</h4>
+                        <p class="card-text">Описание Описание Описание Описание Описание Описание Описание </p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            Рейтинг -
+                            @for (var i = 1; i <= 5; i++)
+                            {
+                                if (i <= Item.Rate)
+                                {
+                            <span>&#9733</span>
+                                }
+                                else
+                                {
+                            <span>&#9734</span>
+                                }
+                            }
+                        </li>
+                        <li class="list-group-item"><a href="Quests/QuestPreview/@Item.Id" class="card-link">Подробное описание</a></li>
+                    </ul>
+                    <div class="card-block">
+                        <a href="Quests/RemoveQuest/@Item.Id" class="card-link">Играть</a>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 </div>
 
 
 <style>
-.bs-callout-warning {
-    background-color: #fcf8f2;
-    border-color: #f0ad4e;
-}
-.bs-callout {
-    margin: 20px 0;
-    padding: 20px;
-    border-left: 3px solid #f0ad4e;
-}
+   .bs-callout-warning {
+       background-color: #fcf8f2;
+       border-color: #f0ad4e;
+   }
+
+   .bs-callout {
+       margin: 20px 0;
+       padding: 20px;
+       border-left: 3px solid #f0ad4e;
+   }
 </style>

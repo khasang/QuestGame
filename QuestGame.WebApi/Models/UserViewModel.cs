@@ -1,4 +1,6 @@
-﻿using System;
+﻿using QuestGame.Domain.DTO;
+using QuestGame.WebApi.Areas.Game.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -21,5 +23,8 @@ namespace QuestGame.WebApi.Models
         public string Email { get; set; }
 
         public UserProfileViewModel UserProfile { get; set; }
+
+        public IEnumerable<UserQuestsViewModel> Quests { get; set; }
+
     }
 }

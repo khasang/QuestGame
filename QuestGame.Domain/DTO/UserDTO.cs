@@ -15,5 +15,7 @@ namespace QuestGame.Domain.DTO
         //public string Token { get; set; }
 
         public UserProfileDTO UserProfile { get; set; }
+
+        public IEnumerable<QuestDTO> Quests { get; set; }
     }
 }
