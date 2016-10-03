@@ -1,11 +1,10 @@
 ﻿@model QuestGame.WebApi.Models.RegisterViewModel
 
 @{
-    ViewBag.Title = "Register";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Register</h2>
+<h2>Регистрация нового пользователя</h2>
 
 @using (Html.BeginForm("Register", "Home", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
 {
@@ -16,9 +15,9 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         <div class="col-sm-6">
-            <div class="panel panel-info">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h4>Введите регистрационные данные<br>(это важно)</h4>
+                    <h4>Введите регистрационные данные</h4>
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
@@ -49,9 +48,9 @@
         </div>
 
         <div class="col-sm-6">
-            <div class="panel panel-info">
+            <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4>Расскажите о себе подробнее<br>(необязательные поля)</h4>
+                    <h4>Расскажите о себе подробнее</h4>
                 </div>
                 <div class="panel-body">
                     <div class="col-sm-12">
