@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using QuestGame.Common.Helpers;
+using QuestGame.Domain.DTO;
+using QuestGame.WebApi.Areas.Game.Models;
 using QuestGame.WebApi.Constants;
 using QuestGame.WebApi.Models;
 using System;
@@ -15,7 +17,7 @@ using System.Web.Mvc;
 
 namespace QuestGame.WebApi.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : Controller  //:BaseController
     {
         //public HomeController(IMapper mapper)
         //    : base(mapper)
@@ -42,6 +44,7 @@ namespace QuestGame.WebApi.Controllers
 
             //    return View(model);
                 return View();
+            //}
         }
 
         public ActionResult Register()
