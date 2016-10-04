@@ -20,7 +20,7 @@ namespace QuestGame.WebApi.Controllers
     {
         IMapper mapper;
 
-        public HomeController(IMapper mapper) 
+        public HomeController(IMapper mapper)
         {
             this.mapper = mapper;
         }
@@ -109,7 +109,30 @@ namespace QuestGame.WebApi.Controllers
 
                 var model = mapper.Map<UserDTO, UserViewModel>(answer);
 
+                model.UserProfile.avatarUrl = "http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
+
                 return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UserInfoEdit(UserViewModel model)
+        {
+            var user = mapper.Map<UserViewModel, UserDTO>(model);
+
+            var currentUser = Session["User"] as UserModel;
+
+            using (var client = RestHelper.Create(currentUser.Token))
+            {
+                var response = await client.PostAsJsonAsync(@"api/Account/EditUserByName", user);
+
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    ViewBag.ErrorMessage = "Неудачная попытка аутентификации!";
+                }
+
+                return RedirectToAction("UserInfo", new { name = model.UserName });
             }
         }
 
@@ -118,5 +141,5 @@ namespace QuestGame.WebApi.Controllers
             Session["User"] = null;
             return View("Index");
         }
-    }    
+    }
 }

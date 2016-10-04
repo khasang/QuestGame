@@ -27,6 +27,7 @@ using System.Diagnostics;
 using QuestGame.Common.Helpers;
 using AutoMapper;
 using QuestGame.Domain.DTO;
+using QuestGame.Domain.Interfaces;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -37,11 +38,13 @@ namespace QuestGame.WebApi.Controllers
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
         private ILoggerService logger = LoggerService.Create();
+        IDataManager dataManager;
         IMapper mapper;
 
-        public AccountController(IMapper mapper)
+        public AccountController(IMapper mapper, IDataManager dataManager)
         {
             this.mapper = mapper;
+            this.dataManager = dataManager;
         }
 
         public AccountController(ApplicationUserManager userManager,
@@ -76,6 +79,26 @@ namespace QuestGame.WebApi.Controllers
             var result = mapper.Map<ApplicationUser, UserDTO>(user);
 
             return result;
+        }
+
+
+        [Route("EditUserByName")]
+        [HttpPost]
+        public async Task<IHttpActionResult> EditUser(UserDTO model)
+        {
+            ApplicationUser user = await UserManager.FindByNameAsync(model.UserName);
+            var userResult = mapper.Map<UserDTO, ApplicationUser>(model, user);
+
+            try
+            {
+                var result = await UserManager.UpdateAsync(userResult);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }            
+
+            return Ok();
         }
 
 
