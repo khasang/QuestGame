@@ -20,7 +20,17 @@ namespace QuestGame.Domain.DBInitializers
                 User = owner
             };
 
+            var owner2 = dbContext.Users.FirstOrDefault(x => x.Email == "Dane@gmail.com");
+
+            var profile2 = new UserProfile
+            {
+                Birthday = DateTime.Now - new TimeSpan(10000, 0, 0, 150, 50),
+                Sex = true,
+                User = owner2
+            };
+
             dbContext.UserProfiles.Add(profile);
+            dbContext.UserProfiles.Add(profile2);
             dbContext.SaveChanges();
         }
     }

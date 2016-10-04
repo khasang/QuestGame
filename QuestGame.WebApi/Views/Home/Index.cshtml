@@ -1,24 +1,106 @@
-﻿<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>ASP.NET Web API is a framework that makes it easy to build HTTP services that reach
-        a broad range of clients, including browsers and mobile devices. ASP.NET Web API
-        is an ideal platform for building RESTful applications on the .NET Framework.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301870">Learn more &raquo;</a></p>
+﻿@model IEnumerable<QuestGame.WebApi.Areas.Game.Models.QuestViewModel>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/Content/HomeJS/background.js")
+@Styles.Render("~/Content/HomeCSS/Home.css")
+<div id="backgroundPicture">
+    <div class ="opacited" id="playGame">
+        <br />
+        <br />
+        @{
+            var user = Session["User"] as QuestGame.WebApi.Models.UserModel;
+            if (user != null)
+            {
+                @Html.ActionLink("Play Game", "Index", "MainPage", new { area = "Game" }, htmlAttributes: new { @class = "btn btn-primary btn-lg" })
+            }
+            else
+            {
+                @Html.ActionLink("Выполнить вход", "Login", "Home", routeValues: null, htmlAttributes: new { @class = "btn btn-primary btn-lg" })
+            }
+        }
+        <br />
+        <br />
+        <p>Quest Game - Квестовая игра, выполненная при помощи технологий ASP.NET Web API и MVC</p>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301871">Learn more &raquo;</a></p>
+    <div id="center">
+        <div id="news" class="opacited">
+            <br />
+            <b>Новости</b>
+        </div>
+        <div id="topQuests" class="opacited">
+            <br />
+            <b>&nbsp;&nbsp; Популярные квесты:</b>
+            <br />
+            <br />
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Рейтинг</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @*@foreach (var quest in Model)
+                    {
+                        <tr>
+                            <td>@Html.ActionLink(quest.Title, "Details", new { id = quest.Title }, null)</td>
+                            <td>@quest.Rate</td>
+                        </tr>
+                    }*@
+                    <tr>
+                        <th>1</th>
+                        <th>9</th>
+                    </tr>
+                    <tr>
+                        <th>2</th>
+                        <th>6</th>
+                    </tr>
+                    <tr>
+                        <th>5</th>
+                        <th>6</th>
+                    </tr>
+                    <tr>
+                        <th>4</th>
+                        <th>2</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="topPlayers" class="opacited">
+            <br />
+            <b>&nbsp;&nbsp;&nbsp;Топ игроков:</b>
+            <br />
+            <br />
+            <table class="table table-hover table-bordered" style="font-size:12px;">
+                <thead>
+                    <tr>
+                        <th>Имя игрока</th>
+                        <th>Уровень</th>
+                    </tr>
+                </thead>
+                <tbody>
+            
+                    <tr>
+                        <th>admin</th>
+                        <th>12</th>
+                    </tr>
+                    <tr>
+                        <th>Dane</th>
+                        <th>7</th>
+                    </tr>
+                    <tr>
+                        <th>Вася</th>
+                        <th>4</th>
+                    </tr>
+                    <tr>
+                        <th>Валера</th>
+                        <th>2</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301872">Learn more &raquo;</a></p>
+    <div id="developers" class="opacited">
+        <br />
+        <b>Разработчики:</b>
     </div>
 </div>

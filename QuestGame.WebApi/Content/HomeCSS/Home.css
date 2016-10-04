@@ -1,0 +1,69 @@
+body {
+    font-size:18px;
+}
+
+#backgroundPicture {
+    background:url(../../Content/HomeIMG/HomeBackground3.jpg) repeat-x 0 100% fixed; 
+    position:relative; 
+    animation: background 1000s linear infinite;
+    border-top:3px solid #41197C;
+    -webkit-animation: background 1000s linear infinite; 
+}   
+@keyframes background {
+    from { background-position: -5000% 100%, 0 0;}
+    to { background-position: 0 100%, 0 0; }
+   }
+   @-webkit-keyframes background {
+    from { background-position: -5000% 100%, 0 0;}
+    to { background-position: 0 100%, 0 0; }
+   }
+   .opacited {
+       background-color:#EEEEEE;
+       opacity:0.65;
+       font-family:Georgia;
+   }
+   #playGame {
+       width:100%;
+        height:20%;
+        text-align: center;
+   }
+   #center {
+       width:100%; 
+       height:65%; 
+       padding-top:10%; 
+       padding-bottom:5%
+   }
+   #news {
+       border-radius: 10px;
+       position:absolute;
+       width:15%; 
+       height:35%;   
+       left:0; 
+       display: inline-block; 
+       margin-left:2%;
+       text-align: center;
+   }
+   #topQuests {
+       border-radius: 10px;
+       position:absolute;
+       width:60%; 
+       height:45%;   
+       left:50%; 
+       margin-left:-30%; 
+       display: inline-block; 
+       margin-right:10%;
+   }
+   #topPlayers {
+       border-radius: 10px;
+       position:absolute;
+       width:15%; 
+       height:35%;   
+       right:0;
+       display: inline-block; 
+       margin-right:2%
+   }
+   #developers {
+       width:100%; 
+       height:15%;
+       text-align: center;
+   }
