@@ -13,6 +13,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting.Web;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using QuestGame.WebApi;
+using QuestGame.TestProject.Constants;
 
 namespace QuestGame.TestProject.IntegrationTests
 {
@@ -20,76 +21,71 @@ namespace QuestGame.TestProject.IntegrationTests
     public class AccountTest
     {
         private static Random rnd = new Random();
+        private const string baseUrl = @"http://localhost:9243/";
 
         [TestMethod]
         public void QuestGame_Authorize_Success()
         {
-            //var dr = FirefoxDriver();
-            var driver = new ChromeDriver();
-            driver.Navigate().GoToUrl("http://localhost:9243/Home/Login");
+            using (var driver = new ChromeDriver())
+            {
+                driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
+                driver.Navigate().GoToUrl(baseUrl + WebMethods.HomeLogin);
 
-            var login = driver.FindElementById("loginTextBox");
-            login.SendKeys("admin@admin.com");
+                var login = driver.FindElementById("loginTextBox");
+                login.SendKeys("admin@admin.com");
 
-            var password = driver.FindElementById("passwordTextBox");
-            password.SendKeys("qwerty");
+                var password = driver.FindElementById("passwordTextBox");
+                password.SendKeys("qwerty");
 
-            var button = driver.FindElementById("enterButton");
-            button.Click();
+                var button = driver.FindElementById("enterButton");
+                button.Click();
 
-            Thread.Sleep(5000);
+                var name = driver.FindElementById("userName");
 
-            var name = driver.FindElementById("userName");
-
-            Assert.IsTrue(name.Text.Contains("admin@admin.com"));
-
-            driver.Close();
+                Assert.IsTrue(name.Text.Contains("admin@admin.com"));
+            } 
         }
 
         [TestMethod]
         public void QuestGame_Registration_Succes()
         {
             var rndEmail = GetRndEmail();
+            const string password = "qwerty";
 
-            var driver = new ChromeDriver();
-            driver.Navigate().GoToUrl("http://localhost:9243/Home/Register");
+            using (var driver = new ChromeDriver())
+            {
+                driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
+                driver.Navigate().GoToUrl(baseUrl + WebMethods.HomeRegister);
 
-            // Регистрация
+                // Регистрация     
+                var loginElement = driver.FindElementById("Email");
+                loginElement.SendKeys(rndEmail);
 
-            var login = driver.FindElementById("Email");
-            login.SendKeys(rndEmail);
+                var passwordElement = driver.FindElementById("Password");
+                passwordElement.SendKeys(password);
 
-            var password = driver.FindElementById("Password");
-            password.SendKeys("qwerty");
+                var confirmPassword = driver.FindElementById("ConfirmPassword");
+                confirmPassword.SendKeys(password);
 
-            var confirmPassword = driver.FindElementById("ConfirmPassword");
-            confirmPassword.SendKeys("qwerty");
+                var button = driver.FindElementById("registerButton");
+                button.Click();
 
-            var button = driver.FindElementById("registerButton");
-            button.Click();
+                // Логинимся
+                driver.Navigate().GoToUrl(baseUrl + WebMethods.HomeLogin);
 
-            Thread.Sleep(5000);
+                var login1 = driver.FindElementById("loginTextBox");
+                login1.SendKeys(rndEmail);
 
-            // Логинимся
+                var password1 = driver.FindElementById("passwordTextBox");
+                password1.SendKeys("qwerty");
 
-            driver.Navigate().GoToUrl("http://localhost:9243/Home/Login");
+                var button1 = driver.FindElementById("enterButton");
+                button1.Click();
 
-            var login1 = driver.FindElementById("loginTextBox");
-            login1.SendKeys(rndEmail);
+                var name = driver.FindElementById("userName");
 
-            var password1 = driver.FindElementById("passwordTextBox");
-            password1.SendKeys("qwerty");
-
-            var button1 = driver.FindElementById("enterButton");
-            button1.Click();
-
-            Thread.Sleep(5000);
-
-            var name = driver.FindElementById("userName");
-
-            Assert.IsTrue(name.Text.Contains(rndEmail));
-
-            driver.Close();
+                Assert.IsTrue(name.Text.Contains(rndEmail));   
+            }                     
         }
 
         private string GetRndEmail()
