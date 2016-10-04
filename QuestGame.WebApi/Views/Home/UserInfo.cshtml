@@ -39,8 +39,7 @@
             </div>
 
             <div class="col-sm-8">
-                @if (Model.NickName != null)
-                {
+
                     <div class="form-group" style="margin-top:43px">
                         @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "hidden" } })
 
@@ -56,11 +55,7 @@
                     </div>
 
                     <div><h3>@Model.Email</h3></div>
-                }
-                else
-                {
-                    <div style="margin-top:43px"><h1>@Model.Email</h1></div>
-                }
+
                 <div>
                     <input id="btnEditAccept" type="submit" value="Сохранить" class="btn btn-success" />
                     <a id="btnEditCancel" class="btn btn-warning" href="#">Отменить</a>
@@ -125,7 +120,8 @@
                     </ul>
                     <div class="card-block">
                         <a href="#" class="card-link btn btn-primary">Играть</a>
-                        <a href="#" class="card-link btn btn-default">Редактировать</a>
+                        @*@Html.ActionLink("Редактировать", "Edit", "Quest",null,null,null, new { area = "Design" }, new { id = Item.Id})*@
+                        <a href="/Design/Quest/Edit?id=@Item.Id" class="card-link btn btn-default">Редактировать</a>
                     </div>
                 </div>
             </div>

@@ -129,7 +129,7 @@ namespace QuestGame.WebApi.Controllers
 
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    ViewBag.ErrorMessage = "Неудачная попытка аутентификации!";
+                    ViewBag.ErrorMessage = "Неудачная попытка редактирования!";
                 }
 
                 return RedirectToAction("UserInfo", new { name = model.UserName });
