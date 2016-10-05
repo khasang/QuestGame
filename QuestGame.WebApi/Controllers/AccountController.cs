@@ -69,25 +69,30 @@ namespace QuestGame.WebApi.Controllers
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
 
-        [Route("GetUserByName")]
+        [Route("GetUserProfile")]
         [AllowAnonymous]
         [HttpGet]
-        public async Task<UserDTO> GetUser(string name)
+        public async Task<ApplicationUserDTO> GetUser(string name)
         {
-            ApplicationUser user = await UserManager.FindByNameAsync(name);
-
-            var result = mapper.Map<ApplicationUser, UserDTO>(user);
-
-            return result;
+            try
+            {
+                ApplicationUser user = await UserManager.FindByNameAsync(name);
+                var result = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
         }
 
 
-        [Route("EditUserByName")]
+        [Route("EditUserProfile")]
         [HttpPost]
-        public async Task<IHttpActionResult> EditUser(UserDTO model)
+        public async Task<IHttpActionResult> EditUser(ApplicationUserDTO model)
         {
             ApplicationUser user = await UserManager.FindByNameAsync(model.UserName);
-            var userResult = mapper.Map<UserDTO, ApplicationUser>(model, user);
+            var userResult = mapper.Map<ApplicationUserDTO, ApplicationUser>(model, user);
 
             try
             {
@@ -96,7 +101,7 @@ namespace QuestGame.WebApi.Controllers
             catch (Exception ex)
             {
                 return InternalServerError();
-            }            
+            }
 
             return Ok();
         }
@@ -176,7 +181,7 @@ namespace QuestGame.WebApi.Controllers
 
             IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
-            
+
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
@@ -309,9 +314,9 @@ namespace QuestGame.WebApi.Controllers
             if (hasRegistered)
             {
                 Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-                
-                 ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
-                    OAuthDefaults.AuthenticationType);
+
+                ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
+                   OAuthDefaults.AuthenticationType);
                 ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
                     CookieAuthenticationDefaults.AuthenticationType);
 
@@ -413,7 +418,7 @@ namespace QuestGame.WebApi.Controllers
                     Content = new StringContent("Invalid user data")
                 };
             }
-            
+
             using (var client = RestHelper.Create())
             {
                 var requestParams = new Dictionary<string, string>
@@ -443,7 +448,7 @@ namespace QuestGame.WebApi.Controllers
                 {
                     Content = new StringContent(authToken),
                     StatusCode = HttpStatusCode.OK
-                };                
+                };
             }
         }
 
@@ -475,7 +480,7 @@ namespace QuestGame.WebApi.Controllers
                 Body = string.Empty,
                 ErrorMessage = result.Errors.ToString()
             };
-            
+
             return Ok(response);
         }
 
