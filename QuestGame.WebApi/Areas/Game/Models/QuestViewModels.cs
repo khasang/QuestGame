@@ -16,6 +16,8 @@ namespace QuestGame.WebApi.Areas.Game.Models
         [Display(Name = "Название")]
         public string Title { get; set; }
 
+        public string Cover { get; set; }
+
         [Display(Name = "Дата создания")]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]

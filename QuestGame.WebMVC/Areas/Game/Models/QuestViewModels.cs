@@ -15,6 +15,9 @@ namespace QuestGame.WebMVC.Areas.Game.Models
 
         [Display(Name = "Название")]
         public string Title { get; set; }
+        public string Cover { get; set; }
+
+        public HttpPostedFileBase Image { get; set; }
 
         [Display(Name = "Дата создания")]
         [DataType(DataType.Date)]

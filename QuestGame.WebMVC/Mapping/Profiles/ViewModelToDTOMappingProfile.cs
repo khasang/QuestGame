@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace QuestGame.WebApi.Mapping.Profiles
+namespace QuestGame.WebMVC.Mapping.Profiles
 {
     public class ViewModelToDTOMappingProfile : Profile
     {

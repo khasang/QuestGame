@@ -15,6 +15,7 @@ using QuestGame.WebMVC.Constants;
 using QuestGame.WebMVC.Areas.Game.Models;
 using QuestGame.WebMVC.Areas.Design.Models;
 using QuestGame.WebMVC.Controllers;
+using System.Web;
 
 namespace QuestGame.WebMVC.Areas.Design.Controllers
 {
@@ -147,7 +148,7 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(QuestViewModel quest, string returnUrl)
+        public async Task<ActionResult> Edit(QuestViewModel quest, HttpPostedFileBase file, string returnUrl)
         {
             //if(!ModelState.IsValid)
             //{

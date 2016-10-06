@@ -156,6 +156,7 @@
     <Compile Include="Mapping\AutoMapperConfiguration.cs" />
     <Compile Include="Mapping\Profiles\DTOToViewModelMappingProfile.cs" />
     <Compile Include="Mapping\Profiles\ViewModelToDTOMappingProfile.cs" />
+    <Compile Include="Models\FileModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\RegisterResponse.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
@@ -239,6 +240,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Temp\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
