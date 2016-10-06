@@ -3,12 +3,13 @@ using QuestGame.Domain.DTO;
 using QuestGame.Domain.Entities;
 using QuestGame.WebMVC.Areas.Design.Models;
 using QuestGame.WebMVC.Areas.Game.Models;
+using QuestGame.WebMVC.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace QuestGame.WebApi.Mapping.Profiles
+namespace QuestGame.WebMVC.Mapping.Profiles
 {
     public class ViewModelToDTOMappingProfile : Profile
     {
@@ -23,6 +24,9 @@ namespace QuestGame.WebApi.Mapping.Profiles
             CreateMap<StageViewModel, StageFullDTO>();
             CreateMap<StageViewModel, StageDTO>();
             CreateMap<MotionViewModel, MotionDTO>();
+
+            CreateMap<ApplicationUserViewModel, ApplicationUserDTO>();
+            CreateMap<UserProfileViewModel, UserProfileDTO>();
         }
 
         public override string ProfileName

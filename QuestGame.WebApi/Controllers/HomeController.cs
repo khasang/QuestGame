@@ -16,130 +16,130 @@ using System.Web.Mvc;
 
 namespace QuestGame.WebApi.Controllers
 {
-    public class HomeController : Controller
-    {
-        IMapper mapper;
+    //public class HomeController : Controller
+    //{
+    //    IMapper mapper;
 
-        public HomeController(IMapper mapper)
-        {
-            this.mapper = mapper;
-        }
+    //    public HomeController(IMapper mapper)
+    //    {
+    //        this.mapper = mapper;
+    //    }
 
-        public ActionResult Index()
-        {
-            ViewBag.Title = "Home Page";
+    //    public ActionResult Index()
+    //    {
+    //        ViewBag.Title = "Home Page";
 
-            return View();
-        }
+    //        return View();
+    //    }
 
-        public ActionResult Register()
-        {
-            var model = new RegisterViewModel();
-            return View(model);
-        }
+    //    public ActionResult Register()
+    //    {
+    //        var model = new RegisterViewModel();
+    //        return View(model);
+    //    }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+    //    [HttpPost]
+    //    [ValidateAntiForgeryToken]
+    //    public async Task<ActionResult> Register(RegisterViewModel model)
+    //    {
+    //        if (!ModelState.IsValid)
+    //        {
+    //            return View(model);
+    //        }
 
-            using (var client = RestHelper.Create())
-            {
-                var response = await client.PostAsJsonAsync(@"api/Account/Register", model);
-                var answer = await response.Content.ReadAsAsync<RegisterResponse>();
+    //        using (var client = RestHelper.Create())
+    //        {
+    //            var response = await client.PostAsJsonAsync(@"api/Account/Register", model);
+    //            var answer = await response.Content.ReadAsAsync<RegisterResponse>();
 
-                if (answer.Success)
-                {
-                    ViewBag.ErrorMessage = "Пользователь успешно зарегистрирован!";
-                }
-                else
-                {
-                    ViewBag.ErrorMessage = "Ошибка регистрации!";
-                }
+    //            if (answer.Success)
+    //            {
+    //                ViewBag.ErrorMessage = "Пользователь успешно зарегистрирован!";
+    //            }
+    //            else
+    //            {
+    //                ViewBag.ErrorMessage = "Ошибка регистрации!";
+    //            }
 
-                return RedirectToAction("Index");
-            }
-        }
+    //            return RedirectToAction("Index");
+    //        }
+    //    }
 
-        public ActionResult Login(string returnUrl)
-        {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
-        }
+    //    public ActionResult Login(string returnUrl)
+    //    {
+    //        ViewBag.ReturnUrl = returnUrl;
+    //        return View();
+    //    }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                View(model);
-            }
+    //    [HttpPost]
+    //    [ValidateAntiForgeryToken]
+    //    public async Task<ActionResult> Login(LoginViewModel model)
+    //    {
+    //        if (!ModelState.IsValid)
+    //        {
+    //            View(model);
+    //        }
 
-            using (var client = RestHelper.Create())
-            {
-                var response = await client.PostAsJsonAsync(@"api/Account/LoginUser", model);
+    //        using (var client = RestHelper.Create())
+    //        {
+    //            var response = await client.PostAsJsonAsync(@"api/Account/LoginUser", model);
 
-                if (response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    ViewBag.ErrorMessage = "Неудачная попытка аутентификации!";
-                    return View();
-                }
+    //            if (response.StatusCode == HttpStatusCode.BadRequest)
+    //            {
+    //                ViewBag.ErrorMessage = "Неудачная попытка аутентификации!";
+    //                return View();
+    //            }
 
-                var answer = await response.Content.ReadAsStringAsync();
+    //            var answer = await response.Content.ReadAsStringAsync();
 
-                //Записать токен в сесию
-                Session["User"] = new UserModel { UserName = model.Email, Token = answer };
+    //            //Записать токен в сесию
+    //            Session["User"] = new UserModel { UserName = model.Email, Token = answer };
 
-                return RedirectToAction("Index");
-            }
-        }
+    //            return RedirectToAction("Index");
+    //        }
+    //    }
 
-        [HttpGet]
-        public async Task<ActionResult> UserInfo(string name)
-        {
-            using (var client = RestHelper.Create())
-            {
-                var response = await client.GetAsync(ApiMethods.UserGetByName + name);
-                var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
+    //    [HttpGet]
+    //    public async Task<ActionResult> UserInfo(string name)
+    //    {
+    //        using (var client = RestHelper.Create())
+    //        {
+    //            var response = await client.GetAsync(ApiMethods.UserGetByName + name);
+    //            var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
 
-                var model = mapper.Map<ApplicationUserDTO, UserViewModel>(answer);
+    //            var model = mapper.Map<ApplicationUserDTO, UserViewModel>(answer);
 
-                model.UserProfile.avatarUrl = "http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
+    //            model.UserProfile.avatarUrl = "http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
 
-                return View(model);
-            }
-        }
+    //            return View(model);
+    //        }
+    //    }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UserInfoEdit(UserViewModel model)
-        {
-            var user = mapper.Map<UserViewModel, ApplicationUserDTO>(model);
+    //    [HttpPost]
+    //    [ValidateAntiForgeryToken]
+    //    public async Task<ActionResult> UserInfoEdit(UserViewModel model)
+    //    {
+    //        var user = mapper.Map<UserViewModel, ApplicationUserDTO>(model);
 
-            var currentUser = Session["User"] as UserModel;
+    //        var currentUser = Session["User"] as UserModel;
 
-            using (var client = RestHelper.Create(currentUser.Token))
-            {
-                var response = await client.PostAsJsonAsync(@"api/Account/EditUserByName", user);
+    //        using (var client = RestHelper.Create(currentUser.Token))
+    //        {
+    //            var response = await client.PostAsJsonAsync(@"api/Account/EditUserByName", user);
 
-                if (response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    ViewBag.ErrorMessage = "Неудачная попытка редактирования!";
-                }
+    //            if (response.StatusCode == HttpStatusCode.BadRequest)
+    //            {
+    //                ViewBag.ErrorMessage = "Неудачная попытка редактирования!";
+    //            }
 
-                return RedirectToAction("UserInfo", new { name = model.UserName });
-            }
-        }
+    //            return RedirectToAction("UserInfo", new { name = model.UserName });
+    //        }
+    //    }
 
-        public ActionResult LogOff()
-        {
-            Session["User"] = null;
-            return View("Index");
-        }
-    }
+    //    public ActionResult LogOff()
+    //    {
+    //        Session["User"] = null;
+    //        return View("Index");
+    //    }
+    //}
 }

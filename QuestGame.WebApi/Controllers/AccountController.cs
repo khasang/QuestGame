@@ -31,7 +31,7 @@ using QuestGame.Domain.Interfaces;
 
 namespace QuestGame.WebApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
     {
@@ -69,10 +69,10 @@ namespace QuestGame.WebApi.Controllers
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
 
-        [Route("GetUserProfile")]
+        [Route("UserProfile")]
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ApplicationUserDTO> GetUser(string name)
+        public async Task<ApplicationUserDTO> GetUserProfile(string name)
         {
             try
             {
