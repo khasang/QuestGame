@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using QuestGame.Domain.DTO;
 
 namespace QuestGame.WebMVC.Controllers
 {
@@ -79,6 +80,22 @@ namespace QuestGame.WebMVC.Controllers
                 Session["User"] = new UserModel { UserName = model.Email, Token = answer };
 
                 return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> UserProfile(string name)
+        {
+            using (var client = RestHelper.Create())
+            {
+                var response = await client.GetAsync(ApiMethods.UserGetByName + HttpUtility.UrlEncode(name));
+                var answer = await response.Content.ReadAsAsync<UserDTO>();
+
+                //var model = mapper.Map<UserDTO, UserViewModel>(answer);
+
+                //model.UserProfile.avatarUrl = "http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
+
+                return View();
             }
         }
 
