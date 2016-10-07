@@ -82,7 +82,7 @@ namespace QuestGame.WebApi.Controllers
 
             using (var client = RestHelper.Create())
             {
-                var response = await client.PostAsJsonAsync(@"api/Account/LoginUser", model);
+                var response = await client.PostAsJsonAsync(@"api/Account/LoginUserNew", model);
 
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
@@ -90,10 +90,10 @@ namespace QuestGame.WebApi.Controllers
                     return View();
                 }
 
-                var answer = await response.Content.ReadAsStringAsync();
+                var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
 
-                //Записать токен в сесию
-                Session["User"] = new UserModel { UserName = model.Email, Token = answer };
+                //Записать пользователя в сесию
+                Session["User"] = answer;
 
                 return RedirectToAction("Index");
             }

@@ -447,6 +447,61 @@ namespace QuestGame.WebApi.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [Route("LoginUserNew")]
+        public async Task<HttpResponseMessage> LoginUserNew(LoginBindingModel model)
+        {
+            if (model == null)
+            {
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Content = new StringContent("Invalid user data")
+                };
+            }
+
+            using (var client = RestHelper.Create())
+            {
+                var requestParams = new Dictionary<string, string>
+                {
+                    { "grant_type", "password" },
+                    { "username", model.Email },
+                    { "password", model.Password }
+                };
+
+                var content = new FormUrlEncodedContent(requestParams);
+                var response = await client.PostAsync("Token", content);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.BadRequest
+                    };
+                }
+
+                var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
+                var authToken = responseData["access_token"];
+
+                logger.Information("| Login | {@user}", model);
+
+                var user = UserManager.FindByName(model.Email);
+                var userResult = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
+                userResult.Token = authToken;
+
+                return Request.CreateResponse<ApplicationUserDTO>(HttpStatusCode.OK, userResult);
+
+                //return new HttpResponseMessage()
+                //{
+                //    Content = new StringContent(authToken),
+                //    StatusCode = HttpStatusCode.OK
+                //};
+            }
+        }
+
+
+
+
         // POST api/Account/RegisterExternal
         [OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]

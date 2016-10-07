@@ -1,11 +1,18 @@
 ﻿@{
-    var user = Session["User"] as QuestGame.WebApi.Models.UserModel;
+    var user = Session["User"] as QuestGame.Domain.DTO.ApplicationUserDTO;
 
     if (user != null)
     {
         <ul class="nav navbar-nav navbar-right">
             <li>
-                @Html.ActionLink("Здравствуйте, " + user.UserName + "!", "UserInfo", "Home", new { area = "", name = user.UserName }, null)
+                @if (user.NickName != null)
+                {
+                    @Html.ActionLink("Здравствуйте, " + user.NickName + "!", "UserInfo", "Home", new { area = "", name = user.Id }, null)
+                }
+                else
+                {
+                    @Html.ActionLink("Здравствуйте, " + user.UserName + "!", "UserInfo", "Home", new { area = "", name = user.Id }, null)
+                }
             </li>
             <li>
                 @Html.ActionLink("Выйти", "LogOff")
