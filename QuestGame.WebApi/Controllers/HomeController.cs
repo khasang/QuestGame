@@ -84,10 +84,10 @@ namespace QuestGame.WebApi.Controllers
             {
                 var response = await client.PostAsJsonAsync(@"api/Account/LoginUserNew", model);
 
-                if (response.StatusCode == HttpStatusCode.BadRequest)
+                if (response.StatusCode != HttpStatusCode.OK)
                 {
                     ViewBag.ErrorMessage = "Неудачная попытка аутентификации!";
-                    return View();
+                    return View(model);
                 }
 
                 var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
@@ -139,7 +139,7 @@ namespace QuestGame.WebApi.Controllers
         public ActionResult LogOff()
         {
             Session["User"] = null;
-            return View("Index");
+            return RedirectToAction("Index");
         }
     }
 }

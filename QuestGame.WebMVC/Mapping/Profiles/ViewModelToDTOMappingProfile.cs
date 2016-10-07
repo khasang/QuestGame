@@ -3,6 +3,7 @@ using QuestGame.Domain.DTO;
 using QuestGame.Domain.Entities;
 using QuestGame.WebMVC.Areas.Design.Models;
 using QuestGame.WebMVC.Areas.Game.Models;
+using QuestGame.WebMVC.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,15 @@ namespace QuestGame.WebMVC.Mapping.Profiles
             CreateMap<StageViewModel, StageFullDTO>();
             CreateMap<StageViewModel, StageDTO>();
             CreateMap<MotionViewModel, MotionDTO>();
+
+            CreateMap<UserViewModel, ApplicationUserDTO>();
+                //.ForMember(x => x.Id, y => y.Ignore())
+                //.ForMember(x => x.UserName, y => y.Ignore())
+                //.ForMember(x => x.Email, y => y.Ignore())
+                //.ForMember(x => x.Token, y => y.Ignore());
+
+            CreateMap<UserProfileViewModel, UserProfileDTO>();
+                //.ForMember(x => x.UserId, y => y.Ignore());
         }
 
         public override string ProfileName

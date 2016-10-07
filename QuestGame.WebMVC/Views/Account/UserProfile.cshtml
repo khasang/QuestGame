@@ -28,7 +28,7 @@
 </div>
 
 <div id="ProfileEdit" style="display:none; margin-top:50px">
-    @using (Html.BeginForm("UserInfoEdit", "Home", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
+    @using (Html.BeginForm("UserProfileEdit", "Account", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
     {
         @Html.AntiForgeryToken()
         <div class="form-horizontal row">
@@ -41,6 +41,7 @@
             <div class="col-sm-8">
 
                 <div class="form-group" style="margin-top:43px">
+                    @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "hidden" } })
                     @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "hidden" } })
 
                     @Html.EditorFor(model => model.UserProfile.avatarUrl, new { htmlAttributes = new { @class = "hidden" } })

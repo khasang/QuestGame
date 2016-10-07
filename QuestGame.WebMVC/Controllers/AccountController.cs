@@ -95,6 +95,12 @@ namespace QuestGame.WebMVC.Controllers
             }
         }
 
+        public ActionResult LogOff()
+        {
+            Session["User"] = null;
+            return RedirectToAction("Index", "Home");
+        }
+
         [HttpGet]
         public async Task<ActionResult> UserProfile(string id)
         {
@@ -111,10 +117,25 @@ namespace QuestGame.WebMVC.Controllers
             }
         }
 
-        public ActionResult LogOff()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UserProfileEdit(UserViewModel model)
         {
-            Session["User"] = null;
-            return View("Index", "Home");
+            var user = mapper.Map<UserViewModel, ApplicationUserDTO>(model);
+
+            var currentUser = Session["User"] as ApplicationUserDTO;
+
+            using (var client = RestHelper.Create(currentUser.Token))
+            {
+                var response = await client.PostAsJsonAsync(@"api/Account/EditUserByName", user);
+
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    ViewBag.ErrorMessage = "Неудачная попытка редактирования!";
+                }
+
+                return RedirectToAction("UserProfile", new { id = model.Id });
+            }
         }
     }
 }
