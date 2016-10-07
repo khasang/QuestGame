@@ -28,7 +28,7 @@ namespace QuestGame.WebApi.Mapping.Profiles
             CreateMap<RegisterViewModel, ApplicationUser>().ForMember(x => x.UserName, y => y.MapFrom(v => v.Email));
             CreateMap<RegisterViewModel, UserProfile>();
 
-            CreateMap<UserViewModel, ApplicationUserDTO>();
+            CreateMap<UserViewModel, UserDTO>();
             CreateMap<UserProfileViewModel, UserProfileDTO>();
         }
 

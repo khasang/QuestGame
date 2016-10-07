@@ -21,7 +21,7 @@ namespace QuestGame.WebApi.Mapping.Profiles
             CreateMap<StageDTO, StageViewModel>();
             CreateMap<MotionDTO, MotionViewModel>();
 
-            CreateMap<ApplicationUserDTO, UserViewModel>();
+            CreateMap<UserDTO, UserViewModel>();
             CreateMap<UserProfileDTO, UserProfileViewModel>();
         }
 

@@ -97,7 +97,7 @@
     <Compile Include="DTO\QuestDTO.cs" />
     <Compile Include="DTO\QuestFullDTO.cs" />
     <Compile Include="DTO\StageDTO.cs" />
-    <Compile Include="DTO\ApplicationUserDTO.cs" />
+    <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="DTO\UserProfileDTO.cs" />
     <Compile Include="Entities\ApplicationUser.cs" />
     <Compile Include="DBInitializers\InitUserAdmin.cs" />

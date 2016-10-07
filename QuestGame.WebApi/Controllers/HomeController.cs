@@ -105,9 +105,9 @@ namespace QuestGame.WebApi.Controllers
             using (var client = RestHelper.Create())
             {
                 var response = await client.GetAsync(ApiMethods.UserGetByName + name);
-                var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
+                var answer = await response.Content.ReadAsAsync<UserDTO>();
 
-                var model = mapper.Map<ApplicationUserDTO, UserViewModel>(answer);
+                var model = mapper.Map<UserDTO, UserViewModel>(answer);
 
                 model.UserProfile.avatarUrl = "http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
 
@@ -119,7 +119,7 @@ namespace QuestGame.WebApi.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> UserInfoEdit(UserViewModel model)
         {
-            var user = mapper.Map<UserViewModel, ApplicationUserDTO>(model);
+            var user = mapper.Map<UserViewModel, UserDTO>(model);
 
             var currentUser = Session["User"] as UserModel;
 
