@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
-using QuestGame.WebApi.Mapping.Profiles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using QuestGame.WebMVC.Mapping.Profiles;
 
-namespace QuestGame.WebApi.Mapping
+namespace QuestGame.WebMVC.Mapping
 {
     public class AutoMapperConfiguration
     {

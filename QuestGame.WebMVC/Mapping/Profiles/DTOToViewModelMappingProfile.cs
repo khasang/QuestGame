@@ -7,7 +7,7 @@ using System.Web;
 using QuestGame.WebMVC.Areas.Game.Models;
 using System.Collections.Specialized;
 
-namespace QuestGame.WebApi.Mapping.Profiles
+namespace QuestGame.WebMVC.Mapping.Profiles
 {
     public class DTOToViewModelMappingProfile : Profile
     {
