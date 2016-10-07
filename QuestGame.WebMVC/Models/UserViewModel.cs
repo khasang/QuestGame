@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace QuestGame.WebMVC.Models
@@ -19,10 +18,9 @@ namespace QuestGame.WebMVC.Models
         [Display(Name = "Адрес электронной почты")]
         public string Email { get; set; }
 
+        [System.Web.Mvc.HiddenInput(DisplayValue = false)]
+        public bool EmailConfirmed { get; set; }
+
         public UserProfileViewModel UserProfile { get; set; }
-
-        [JsonIgnore]
-        public IEnumerable<UserQuestsViewModel> Quests { get; set; }
-
     }
 }

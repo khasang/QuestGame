@@ -100,14 +100,14 @@ namespace QuestGame.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> UserInfo(string name)
+        public async Task<ActionResult> UserProfile(string id)
         {
             using (var client = RestHelper.Create())
             {
-                var response = await client.GetAsync(ApiMethods.UserGetByName + name);
-                var answer = await response.Content.ReadAsAsync<UserDTO>();
+                var response = await client.GetAsync(ApiMethods.AccontUser + id);
+                var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
 
-                var model = mapper.Map<UserDTO, UserViewModel>(answer);
+                var model = mapper.Map<ApplicationUserDTO, UserViewModel>(answer);
 
                 model.UserProfile.avatarUrl = "http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
 

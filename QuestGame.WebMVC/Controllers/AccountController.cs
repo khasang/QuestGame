@@ -12,10 +12,22 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using QuestGame.Domain.DTO;
 
+
+using AutoMapper;
+
+using System.Web.Configuration;
+
 namespace QuestGame.WebMVC.Controllers
 {
     public class AccountController : Controller
     {
+        IMapper mapper;
+
+        public AccountController(IMapper mapper)
+        {
+            this.mapper = mapper;
+        }
+
         public ActionResult Register()
         {
             var model = new RegisterViewModel();
@@ -74,28 +86,28 @@ namespace QuestGame.WebMVC.Controllers
                     return View();
                 }
 
-                var answer = await response.Content.ReadAsStringAsync();
+                var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
 
-                //Записать токена в сесию
-                Session["User"] = new UserModel { UserName = model.Email, Token = answer };
+                //Записать пользователя в сесию
+                Session["User"] = answer;
 
                 return RedirectToAction("Index", "Home");
             }
         }
 
         [HttpGet]
-        public async Task<ActionResult> UserProfile(string name)
+        public async Task<ActionResult> UserProfile(string id)
         {
             using (var client = RestHelper.Create())
             {
-                var response = await client.GetAsync(ApiMethods.UserGetByName + HttpUtility.UrlEncode(name));
-                var answer = await response.Content.ReadAsAsync<UserDTO>();
+                var response = await client.GetAsync(ApiMethods.AccontUser + id);
+                var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
 
-                //var model = mapper.Map<UserDTO, UserViewModel>(answer);
+                var model = mapper.Map<ApplicationUserDTO, UserViewModel>(answer);
 
-                //model.UserProfile.avatarUrl = "http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
+                model.UserProfile.avatarUrl = "http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
 
-                return View();
+                return View(model);
             }
         }
 

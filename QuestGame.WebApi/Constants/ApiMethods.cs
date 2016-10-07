@@ -47,7 +47,7 @@ namespace QuestGame.WebApi.Constants
 
         #region AccountController
 
-        public const string UserGetByName = @"api/Account/GetUserByName?name=";
+        public const string AccontUser = @"api/Account/GetUser?id=";
 
 
         #endregion

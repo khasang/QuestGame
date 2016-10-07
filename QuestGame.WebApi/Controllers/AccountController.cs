@@ -69,14 +69,14 @@ namespace QuestGame.WebApi.Controllers
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
 
-        [Route("GetUserByName")]
+        [Route("GetUser")]
         [AllowAnonymous]
         [HttpGet]
-        public async Task<UserDTO> GetUser(string name)
+        public async Task<ApplicationUserDTO> GetUser(string id)
         {
-            ApplicationUser user = await UserManager.FindByNameAsync(name);
+            ApplicationUser user = await UserManager.FindByIdAsync(id);
 
-            var result = mapper.Map<ApplicationUser, UserDTO>(user);
+            var result = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
 
             return result;
         }
@@ -401,54 +401,54 @@ namespace QuestGame.WebApi.Controllers
             return Ok(response);
         }
 
+        //[AllowAnonymous]
+        //[Route("LoginUser")]
+        //public async Task<HttpResponseMessage> LoginUser(LoginBindingModel model)
+        //{
+        //    if (model == null)
+        //    {
+        //        return new HttpResponseMessage
+        //        {
+        //            StatusCode = HttpStatusCode.BadRequest,
+        //            Content = new StringContent("Invalid user data")
+        //        };
+        //    }
+            
+        //    using (var client = RestHelper.Create())
+        //    {
+        //        var requestParams = new Dictionary<string, string>
+        //        {
+        //            { "grant_type", "password" },
+        //            { "username", model.Email },
+        //            { "password", model.Password }
+        //        };
+
+        //        var content = new FormUrlEncodedContent(requestParams);
+        //        var response = await client.PostAsync("Token", content);
+
+        //        if (response.StatusCode != HttpStatusCode.OK)
+        //        {
+        //            return new HttpResponseMessage
+        //            {
+        //                StatusCode = HttpStatusCode.BadRequest
+        //            };
+        //        }
+
+        //        var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
+        //        var authToken = responseData["access_token"];
+
+        //        logger.Information("| Login | {@user}", model);
+
+        //        return new HttpResponseMessage()
+        //        {
+        //            Content = new StringContent(authToken),
+        //            StatusCode = HttpStatusCode.OK
+        //        };                
+        //    }
+        //}
+
         [AllowAnonymous]
         [Route("LoginUser")]
-        public async Task<HttpResponseMessage> LoginUser(LoginBindingModel model)
-        {
-            if (model == null)
-            {
-                return new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.BadRequest,
-                    Content = new StringContent("Invalid user data")
-                };
-            }
-            
-            using (var client = RestHelper.Create())
-            {
-                var requestParams = new Dictionary<string, string>
-                {
-                    { "grant_type", "password" },
-                    { "username", model.Email },
-                    { "password", model.Password }
-                };
-
-                var content = new FormUrlEncodedContent(requestParams);
-                var response = await client.PostAsync("Token", content);
-
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    return new HttpResponseMessage
-                    {
-                        StatusCode = HttpStatusCode.BadRequest
-                    };
-                }
-
-                var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
-                var authToken = responseData["access_token"];
-
-                logger.Information("| Login | {@user}", model);
-
-                return new HttpResponseMessage()
-                {
-                    Content = new StringContent(authToken),
-                    StatusCode = HttpStatusCode.OK
-                };                
-            }
-        }
-
-        [AllowAnonymous]
-        [Route("LoginUserNew")]
         public async Task<HttpResponseMessage> LoginUserNew(LoginBindingModel model)
         {
             if (model == null)
@@ -489,13 +489,10 @@ namespace QuestGame.WebApi.Controllers
                 var userResult = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
                 userResult.Token = authToken;
 
-                return Request.CreateResponse<ApplicationUserDTO>(HttpStatusCode.OK, userResult);
+                HttpResponseMessage responseResult = Request.CreateResponse<ApplicationUserDTO>(HttpStatusCode.OK, userResult);
+                responseResult.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-                //return new HttpResponseMessage()
-                //{
-                //    Content = new StringContent(authToken),
-                //    StatusCode = HttpStatusCode.OK
-                //};
+                return responseResult;
             }
         }
 
