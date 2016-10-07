@@ -1,23 +1,28 @@
 ﻿using QuestGame.Common.Helpers;
 using QuestGame.WebMVC.Constants;
 using QuestGame.WebMVC.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using System.Net.Http;
-using AutoMapper;
+using System.Net.Http.Headers;
 using QuestGame.Domain.DTO;
+using AutoMapper;
 
 namespace QuestGame.WebMVC.Controllers
 {
     public class AccountController : Controller
     {
-        IMapper mapper;
+        //IMapper mapper;
 
-        public AccountController(IMapper mapper)
-        {
-            this.mapper = mapper;
-        }
+        //public AccountController(IMapper mapper)
+        //{
+        //    this.mapper = mapper;
+        //}
 
         public ActionResult Register()
         {
@@ -36,7 +41,7 @@ namespace QuestGame.WebMVC.Controllers
 
             using (var client = RestHelper.Create())
             {
-                var response = await client.PostAsJsonAsync(ApiMethods.AccountRegister, model);
+                var response = await client.PostAsJsonAsync(ApiMethods.AccontRegister, model);
                 var answer = await response.Content.ReadAsAsync<RegisterResponse>();
 
                 if (answer.Success)
@@ -97,12 +102,12 @@ namespace QuestGame.WebMVC.Controllers
         {
             using (var client = RestHelper.Create())
             {
-                var response = await client.GetAsync(ApiMethods.AccountUser + name);
-                var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
+                var response = await client.GetAsync(ApiMethods.AccontUser + name);
+                var answer = await response.Content.ReadAsAsync<ApplicationUserViewModel>();
 
-                var model = mapper.Map<ApplicationUserDTO, ApplicationUserViewModel>(answer);
+                //var model = mapper.Map<ApplicationUserDTO, ApplicationUserViewModel>(answer);
 
-                return View(model);
+                return View(answer);
             }
         }
 
@@ -116,7 +121,7 @@ namespace QuestGame.WebMVC.Controllers
 
             using (var client = RestHelper.Create(currentUser.Token))
             {
-                var response = await client.PostAsJsonAsync(ApiMethods.AccountEditUser, model);
+                var response = await client.PostAsJsonAsync(ApiMethods.AccontEditUser, model);
 
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
