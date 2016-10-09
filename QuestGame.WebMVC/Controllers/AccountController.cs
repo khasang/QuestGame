@@ -127,7 +127,7 @@ namespace QuestGame.WebMVC.Controllers
 
             using (var client = RestHelper.Create(currentUser.Token))
             {
-                var response = await client.PostAsJsonAsync(@"api/Account/EditUserByName", user);
+                var response = await client.PostAsJsonAsync(ApiMethods.AccontEditUser, user);
 
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
