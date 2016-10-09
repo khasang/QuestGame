@@ -12,6 +12,8 @@ namespace QuestGame.WebApi.Mapping.Profiles
     {
         public EntityToDTOMappingProfile()
         {
+            CreateMap<ApplicationUser, ApplicationUserDTO>();
+
             CreateMap<Quest, QuestDTO>().ForMember(x => x.Owner, y => y.MapFrom(pr => pr.Owner.UserName));
 
             CreateMap<Stage, StageDTO>();

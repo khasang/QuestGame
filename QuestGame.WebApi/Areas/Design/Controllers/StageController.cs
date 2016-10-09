@@ -32,7 +32,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         {
             ViewBag.Title = "Details";
             ViewBag.Errors = TempData["Errors"];
-            var user = Session["User"] as UserModel;
+            var user = Session["User"] as ApplicationUserDTO;
 
             using (var client = new RequestApi(user.Token))
             {
@@ -49,7 +49,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         // GET: Design/Stage/Create
         public async Task<ActionResult> Create(int? id) // Приходит id квеста владельца
         {
-            var user = Session["User"] as UserModel;
+            var user = Session["User"] as ApplicationUserDTO;
             var model = new StageViewModel();
             ViewBag.Errors = TempData["Errors"];
 
@@ -83,7 +83,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
             ViewBag.Errors = TempData["Errors"];
 
-            var user = Session["User"] as UserModel;
+            var user = Session["User"] as ApplicationUserDTO;
 
             model.Id = 0;
 
@@ -110,7 +110,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         // GET: Design/Stage/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
-            var user = Session["User"] as UserModel;
+            var user = Session["User"] as ApplicationUserDTO;
 
             ViewBag.Errors = TempData["Errors"];
 
@@ -147,7 +147,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 return View(model);
             }
 
-            var user = Session["User"] as UserModel;
+            var user = Session["User"] as ApplicationUserDTO;
 
             var stage = mapper.Map<StageViewModel, StageDTO>(model);
 
@@ -176,7 +176,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             ViewBag.Errors = TempData["Errors"];
 
 
-            var user = Session["User"] as UserModel;
+            var user = Session["User"] as ApplicationUserDTO;
             using (var client = new RequestApi(user.Token))
             {
                 try

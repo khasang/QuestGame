@@ -15,11 +15,11 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 {
     public class BaseController : Controller
     {
-        UserModel user;
+        Domain.DTO.ApplicationUserDTO user;
 
         public BaseController()
         {
-            user = Session["User"] as UserModel;
+            user = Session["User"] as Domain.DTO.ApplicationUserDTO;
         }
 
     }

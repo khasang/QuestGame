@@ -1,4 +1,5 @@
 ﻿using QuestGame.Common;
+using QuestGame.Domain.DTO;
 using QuestGame.WebApi.Models;
 using System;
 using System.Collections.Generic;
@@ -69,10 +70,10 @@ namespace QuestGame.WebApi.Controllers
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    var answer = await response.Content.ReadAsStringAsync();
+                    var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
 
-                    //Записать токен в сесию
-                    Session["User"] = new UserModel { UserName = model.Email, Token = answer };
+                    //Записать пользователя в сесию
+                    Session["User"] = answer;
 
                     return RedirectToAction("Index");
                 }

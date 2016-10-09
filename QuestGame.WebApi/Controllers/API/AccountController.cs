@@ -24,6 +24,8 @@ using System.Net.Http.Headers;
 using QuestGame.Common.Interfaces;
 using QuestGame.Common;
 using System.Diagnostics;
+using AutoMapper;
+using QuestGame.Domain.DTO;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -35,8 +37,11 @@ namespace QuestGame.WebApi.Controllers
         private ApplicationUserManager _userManager;
         private ILoggerService logger = LoggerService.Create();
 
-        public AccountController()
+        IMapper mapper;
+
+        public AccountController(IMapper mapper)
         {
+            this.mapper = mapper;
         }
 
         public AccountController(ApplicationUserManager userManager,
@@ -387,11 +392,12 @@ namespace QuestGame.WebApi.Controllers
 
                     logger.Information("| Login | {@user}", model);
 
-                    return new HttpResponseMessage()
-                    {
-                        Content = new StringContent(authToken),
-                        StatusCode = HttpStatusCode.OK
-                    };
+                    var user = await UserManager.FindByNameAsync(model.Email);
+
+                    var userResult = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
+                    userResult.Token = authToken;
+
+                    return Request.CreateResponse<ApplicationUserDTO>(HttpStatusCode.OK, userResult);
                 }
                 catch (Exception ex)
                 {

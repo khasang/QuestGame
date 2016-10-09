@@ -29,7 +29,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
             ViewBag.Title = "Список доступных квестов";
             IEnumerable<QuestViewModel> questsVM = new List<QuestViewModel>();
-            var user = Session["User"] as UserModel;
+            var user = Session["User"] as Domain.DTO.ApplicationUserDTO;
 
             using (var client = new RequestApi(user.Token))
             {
@@ -55,7 +55,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             ViewBag.Errors = TempData["Errors"];
 
             ViewBag.Title = "Details";
-            var user = Session["User"] as UserModel;
+            var user = Session["User"] as Domain.DTO.ApplicationUserDTO;
 
             using (var client = new RequestApi(user.Token))
             {
@@ -93,7 +93,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
             ViewBag.Errors = TempData["Errors"];
 
-            var user = Session["User"] as UserModel;
+            var user = Session["User"] as Domain.DTO.ApplicationUserDTO;
 
             var quest = mapper.Map<QuestViewModel, QuestDTO>(model);
             //quest.Owner = user.UserName;
@@ -123,7 +123,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         // GET: Design/Quests/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var user = Session["User"] as UserModel;
+            var user = Session["User"] as Domain.DTO.ApplicationUserDTO;
             ViewBag.Errors = TempData["Errors"];
 
             using (var client = new RequestApi(user.Token))
@@ -157,7 +157,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
 
             ViewBag.Errors = TempData["Errors"];
 
-            var user = Session["User"] as UserModel;
+            var user = Session["User"] as Domain.DTO.ApplicationUserDTO;
             var quest = mapper.Map<QuestViewModel, QuestDTO>(model);
 
             using (var client = new RequestApi(user.Token))
@@ -179,7 +179,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         [HttpGet]
         public async Task<ActionResult> Delete(int id)
         {
-            var user = Session["User"] as UserModel;
+            var user = Session["User"] as Domain.DTO.ApplicationUserDTO;
             ViewBag.Errors = TempData["Errors"];
 
             using (var client = new RequestApi(user.Token))
