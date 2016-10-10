@@ -86,7 +86,10 @@ namespace QuestGame.WebApi.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> EditUser(UserDTO model)
         {
-            ApplicationUser user = await UserManager.FindByNameAsync(model.UserName);
+            ApplicationUser user = await UserManager.FindByIdAsync(model.Id);
+
+            //ApplicationUser user = await UserManager.FindByNameAsync(model.UserName);
+
             var userResult = mapper.Map<UserDTO, ApplicationUser>(model, user);
 
             try
