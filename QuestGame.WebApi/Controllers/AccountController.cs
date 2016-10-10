@@ -82,7 +82,7 @@ namespace QuestGame.WebApi.Controllers
         }
 
 
-        [Route("EditUserByName")]
+        [Route("EditUser")]
         [HttpPost]
         public async Task<IHttpActionResult> EditUser(UserDTO model)
         {
