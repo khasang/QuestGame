@@ -28,6 +28,8 @@ using QuestGame.Common.Helpers;
 using AutoMapper;
 using QuestGame.Domain.DTO;
 using QuestGame.Domain.Interfaces;
+using System.Net.Mail;
+using System.Threading;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -84,13 +86,13 @@ namespace QuestGame.WebApi.Controllers
 
         [Route("EditUser")]
         [HttpPost]
-        public async Task<IHttpActionResult> EditUser(UserDTO model)
+        public async Task<IHttpActionResult> EditUser(ApplicationUserDTO model)
         {
             ApplicationUser user = await UserManager.FindByIdAsync(model.Id);
 
             //ApplicationUser user = await UserManager.FindByNameAsync(model.UserName);
 
-            var userResult = mapper.Map<UserDTO, ApplicationUser>(model, user);
+            var userResult = mapper.Map<ApplicationUserDTO, ApplicationUser>(model, user);
 
             try
             {
@@ -99,7 +101,7 @@ namespace QuestGame.WebApi.Controllers
             catch (Exception ex)
             {
                 return InternalServerError();
-            }            
+            }
 
             return Ok();
         }
@@ -179,7 +181,7 @@ namespace QuestGame.WebApi.Controllers
 
             IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
-            
+
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
@@ -312,9 +314,9 @@ namespace QuestGame.WebApi.Controllers
             if (hasRegistered)
             {
                 Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-                
-                 ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
-                    OAuthDefaults.AuthenticationType);
+
+                ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
+                   OAuthDefaults.AuthenticationType);
                 ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
                     CookieAuthenticationDefaults.AuthenticationType);
 
@@ -386,11 +388,14 @@ namespace QuestGame.WebApi.Controllers
             var profile = mapper.Map<RegisterViewModel, UserProfile>(model);
             user.UserProfile = profile;
 
-            //var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
-
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
             IdentityResult toRole = UserManager.AddToRole(user.Id, "user");
+
+            if (result.Succeeded)
+            {
+                SendAuthEmail(user.Id);
+            }
 
             var response = new RegisterResponse
             {
@@ -404,51 +409,69 @@ namespace QuestGame.WebApi.Controllers
             return Ok(response);
         }
 
-        //[AllowAnonymous]
-        //[Route("LoginUser")]
-        //public async Task<HttpResponseMessage> LoginUser(LoginBindingModel model)
-        //{
-        //    if (model == null)
-        //    {
-        //        return new HttpResponseMessage
-        //        {
-        //            StatusCode = HttpStatusCode.BadRequest,
-        //            Content = new StringContent("Invalid user data")
-        //        };
-        //    }
-            
-        //    using (var client = RestHelper.Create())
-        //    {
-        //        var requestParams = new Dictionary<string, string>
-        //        {
-        //            { "grant_type", "password" },
-        //            { "username", model.Email },
-        //            { "password", model.Password }
-        //        };
+        [HttpGet]
+        [Route("SendAuthEmail")]
+        public IHttpActionResult SendAuthEmail(string id)
+        {
+            SmtpClient smtp = new SmtpClient("smtp.yandex.ru", 465);
+            smtp.Credentials = new NetworkCredential("kloder", "vfhbirf");
+            smtp.EnableSsl = true;
+            MailMessage Message = new MailMessage();
+            Message.From = new MailAddress("kloder@yandex.ru");
+            Message.To.Add(new MailAddress("kloder@mail.ru"));
+            Message.Subject = "Подтверждение регистрации на QuestGame";
+            Message.Body = string.Format("Для завершения регистрации перейдите по ссылке:" +
+                        "<a href=\"localhost:25092\\Account\\ConfirmEmail?key\"" + id +
+                        " title=\"Подтвердить регистрацию\">Подтвердить регистрацию</a>");
+            Message.IsBodyHtml = true;
 
-        //        var content = new FormUrlEncodedContent(requestParams);
-        //        var response = await client.PostAsync("Token", content);
+            try
+            {
+                smtp.Send(Message);
+                return Ok();
+            }
+            catch (SmtpException)
+            {
+                return InternalServerError();
+            }
+        }
 
-        //        if (response.StatusCode != HttpStatusCode.OK)
-        //        {
-        //            return new HttpResponseMessage
-        //            {
-        //                StatusCode = HttpStatusCode.BadRequest
-        //            };
-        //        }
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("ConfirmEmail")]
+        public async Task<HttpResponseMessage> ConfirmEmail(string id)
+        {
+            var user = await UserManager.FindByIdAsync(id);
 
-        //        var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
-        //        var authToken = responseData["access_token"];
+            if (user == null)
+            {
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                };
+            }
 
-        //        logger.Information("| Login | {@user}", model);
+            user.EmailConfirmed = true;
 
-        //        return new HttpResponseMessage()
-        //        {
-        //            Content = new StringContent(authToken),
-        //            StatusCode = HttpStatusCode.OK
-        //        };                
-        //    }
-        //}
+            try
+            {
+                await UserManager.UpdateAsync(user);
+            }
+            catch (Exception ex)
+            {
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                };
+            }
+
+            return new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent("Email подтвержден")
+            };
+
+        }
 
         [AllowAnonymous]
         [Route("LoginUser")]
@@ -499,9 +522,6 @@ namespace QuestGame.WebApi.Controllers
             }
         }
 
-
-
-
         // POST api/Account/RegisterExternal
         [OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
@@ -530,7 +550,7 @@ namespace QuestGame.WebApi.Controllers
                 Body = string.Empty,
                 ErrorMessage = result.Errors.ToString()
             };
-            
+
             return Ok(response);
         }
 

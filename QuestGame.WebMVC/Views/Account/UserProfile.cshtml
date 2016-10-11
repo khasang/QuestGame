@@ -6,6 +6,18 @@
 
 <h2>Профиль пользователя</h2>
 
+@if (!Model.EmailConfirmed)
+{
+
+    <div class="alert alert-danger">
+        <div class="row">
+            <div class="col-sm-8">Email не подтвержден. Чтобы воспользоваться всеми функциями системы — завершите регистрацию. <br /> Проверьте Вашу почту или вышлите письмо подтверждения повторно.</div>
+            <div class="col-sm-4" style="margin-top: 5px">
+                <a id="btnSendEmail" class="btn btn-warning" href="/Account/SendEmail?id=@Model.Id">Подтвердить email</a>
+            </div>
+        </div>
+    </div>
+}
 
 <div id="Profile" class="row" style="margin-top:50px">
     <div class="col-sm-4" style="text-align:right">

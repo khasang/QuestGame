@@ -104,6 +104,9 @@ namespace QuestGame.WebMVC.Controllers
         [HttpGet]
         public async Task<ActionResult> UserProfile(string id)
         {
+            var currentUser = Session["User"] as ApplicationUserDTO;
+
+
             using (var client = RestHelper.Create())
             {
                 var response = await client.GetAsync(ApiMethods.AccontUser + id);
@@ -135,6 +138,64 @@ namespace QuestGame.WebMVC.Controllers
                 }
 
                 return RedirectToAction("UserProfile", new { id = model.Id });
+            }
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult> SendEmail(string id)
+        {
+            var currentUser = Session["User"] as ApplicationUserDTO;
+
+            using (var client = RestHelper.Create(currentUser.Token))
+            {
+                var response = await client.GetAsync(@"/api/Account/SendAuthEmail?id=" + id);
+
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.BadRequest:
+                        ViewBag.Message = "Данные не корректны";
+                        break;
+                    case HttpStatusCode.InternalServerError:
+                        ViewBag.Message = "Возникла ошибка. Попробуйте еще раз";
+                        break;
+                    case HttpStatusCode.OK:
+                        ViewBag.Message = "Письмо подтверждения отправлено. Проверьте почту.!";
+                        break;
+                }
+
+                return View();
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<ActionResult> ConfirmEmail(string key)
+        {
+            var currentUser = Session["User"] as ApplicationUserDTO;
+
+            using (var client = RestHelper.Create())
+            {
+                var response = await client.GetAsync(@"/api/Account/ConfirmEmail?id=" + key);
+
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.NotFound:
+                        ViewBag.Message = "Пользователь не найден";
+                        break;
+                    case HttpStatusCode.BadRequest:
+                        ViewBag.Message = "Данные не корректны";
+                        break;
+                    case HttpStatusCode.InternalServerError:
+                        ViewBag.Message = "Возникла ошибка. Попробуйте еще раз";
+                        break;
+                    case HttpStatusCode.OK:
+                        currentUser.EmailConfirmed = true;
+                        ViewBag.Message = "Email успешно подтвержден!";
+                        break;
+                }
+
+                return View();
             }
         }
     }

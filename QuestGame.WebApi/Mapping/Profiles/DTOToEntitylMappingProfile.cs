@@ -13,6 +13,13 @@ namespace QuestGame.WebApi.Mapping.Profiles
     {
         public DTOToEntitylMappingProfile()
         {
+            CreateMap<ApplicationUserDTO, ApplicationUser>()
+                .ForMember(x => x.Id, y => y.Ignore())
+                .ForMember(x => x.Email, y => y.Ignore())
+                .ForMember(x => x.EmailConfirmed, y => y.Ignore())
+                .ForMember(x => x.UserName, y => y.Ignore())
+                .ForMember(x => x.Quests, y => y.Ignore());
+
             CreateMap<UserDTO, ApplicationUser>()
                 .ForMember(x => x.Id, y => y.Ignore())
                 .ForMember(x => x.Email, y => y.Ignore())
