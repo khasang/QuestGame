@@ -1,5 +1,4 @@
-﻿using QuestGame.Common.Helpers;
-using QuestGame.WebMVC.Constants;
+﻿using QuestGame.WebMVC.Constants;
 using QuestGame.WebMVC.Models;
 using System;
 using System.Collections.Generic;
@@ -10,11 +9,22 @@ using System.Web;
 using System.Web.Mvc;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Web.Configuration;
+using QuestGame.WebMVC.Helpers;
 
 namespace QuestGame.WebMVC.Controllers
 {
     public class AccountController : Controller
     {
+        protected string WebApiServiceUrl
+        {
+            get
+            {
+                return WebConfigurationManager.AppSettings[DefaultParams.WebApiServiceUrlNameKey];
+            }
+        }
+
+
         public ActionResult Register()
         {
             var model = new RegisterViewModel();
@@ -85,7 +95,7 @@ namespace QuestGame.WebMVC.Controllers
         public ActionResult LogOff()
         {
             Session["User"] = null;
-            return View("Index", "Home");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

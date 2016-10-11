@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using QuestGame.Common.Helpers;
 using QuestGame.WebMVC.Attributes;
 using QuestGame.WebMVC.Constants;
+using QuestGame.WebMVC.Helpers;
 using QuestGame.WebMVC.Models;
 using System;
 using System.Collections.Generic;
@@ -22,6 +22,14 @@ namespace QuestGame.WebMVC.Controllers
         public BaseController(IMapper mapper)
         {
             this.mapper = mapper;
+        }
+
+        protected string WebApiServiceUrl
+        {
+            get
+            {
+                return WebConfigurationManager.AppSettings[DefaultParams.WebApiServiceUrlNameKey];
+            }
         }
 
         protected UserModel SessionUser

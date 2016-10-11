@@ -145,6 +145,7 @@
     <Compile Include="Areas\Game\Models\QuestViewModels.cs" />
     <Compile Include="Attributes\CustomAuthorizeAttribute.cs" />
     <Compile Include="Constants\ApiMethods.cs" />
+    <Compile Include="Constants\DefaultParams.cs" />
     <Compile Include="Constants\ErrorMessages.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -153,6 +154,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ActiveHelper.cs" />
+    <Compile Include="Helpers\RestHelper.cs" />
     <Compile Include="Mapping\AutoMapperConfiguration.cs" />
     <Compile Include="Mapping\Profiles\DTOToViewModelMappingProfile.cs" />
     <Compile Include="Mapping\Profiles\ViewModelToDTOMappingProfile.cs" />
