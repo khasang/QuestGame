@@ -26,6 +26,12 @@ namespace QuestGame.WebApi.Controllers
                 return View();
         }
 
+        public ActionResult LandingPage()
+        {
+            ViewBag.Title = "Landing Page";
+            return View("~/Views/Home/LandingPage.cshtml");
+        }
+
         public ActionResult Register()
         {
             var model = new RegisterViewModel();

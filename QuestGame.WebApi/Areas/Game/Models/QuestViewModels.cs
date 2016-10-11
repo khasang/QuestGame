@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace QuestGame.WebApi.Areas.Game.Models
 {
-    public class QuestViewModel
+    public class QuestViewModels
     {
         public int Id { get; set; }
 
@@ -32,7 +32,7 @@ namespace QuestGame.WebApi.Areas.Game.Models
 
         public IDictionary<int, string> Stages { get; set; }
 
-        public QuestViewModel()
+        public QuestViewModels()
         {
             Stages = new Dictionary<int, string>();
         }

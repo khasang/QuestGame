@@ -32,7 +32,7 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
             {
                 var response = await client.GetAsync(ApiMethods.QuestGetByActive);
 
-                IEnumerable<QuestViewModel> model = null;
+                IEnumerable<QuestViewModels> model = null;
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     ViewBag.Message = ErrorMessages.BadRequest;
@@ -40,7 +40,7 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
                 else
                 {
                     var answer = await response.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
-                    model = mapper.Map<IEnumerable<QuestDTO>, IEnumerable<QuestViewModel>>(answer);
+                    model = mapper.Map<IEnumerable<QuestDTO>, IEnumerable<QuestViewModels>>(answer);
                 }
 
                 return View(model);

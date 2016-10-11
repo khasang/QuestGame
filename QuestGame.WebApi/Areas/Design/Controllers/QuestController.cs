@@ -31,7 +31,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             {
                 var response = await client.GetAsync(ApiMethods.QuestGetUserName + SessionUser.UserName);
 
-                IEnumerable<QuestViewModel> model = null;
+                IEnumerable<QuestViewModels> model = null;
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     ViewBag.Message = ErrorMessages.BadRequest;
@@ -39,7 +39,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                 else
                 {
                     var answer = await response.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
-                    model = mapper.Map<IEnumerable<QuestDTO>, IEnumerable<QuestViewModel>>(answer);
+                    model = mapper.Map<IEnumerable<QuestDTO>, IEnumerable<QuestViewModels>>(answer);
                 }                                      
                 
                 return View(model);
@@ -89,7 +89,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                     ViewBag.Message = ErrorMessages.QuestNotFound;
                 }
                 var answer = await response.Content.ReadAsAsync<QuestDTO>();
-                var quests = mapper.Map<QuestDTO, QuestViewModel>(answer);
+                var quests = mapper.Map<QuestDTO, QuestViewModels>(answer);
 
                 return View(quests);
             }
@@ -128,7 +128,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                     return RedirectToAction("Index", "Designer");
                 }
                 var questDTO = await questResponse.Content.ReadAsAsync<QuestDTO>();
-                var questModel = mapper.Map<QuestDTO, QuestViewModel>(questDTO);
+                var questModel = mapper.Map<QuestDTO, QuestViewModels>(questDTO);
 
                 var stageResponse = await client.GetAsync(ApiMethods.StageGetByQuestId + id);
                 if (stageResponse.StatusCode != HttpStatusCode.OK)
@@ -147,7 +147,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(QuestViewModel quest, string returnUrl)
+        public async Task<ActionResult> Edit(QuestViewModels quest, string returnUrl)
         {
             //if(!ModelState.IsValid)
             //{
@@ -155,7 +155,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
             //    return View(quest);
             //}
 
-            var model = mapper.Map<QuestViewModel, QuestDTO>(quest);
+            var model = mapper.Map<QuestViewModels, QuestDTO>(quest);
 
             using(var client = RestHelper.Create(SessionUser.Token))
             {
@@ -181,7 +181,7 @@ namespace QuestGame.WebApi.Areas.Design.Controllers
                     return RedirectToAction("Index", "Quest");
                 }
                 var questAnswer = await questResponse.Content.ReadAsAsync<QuestDTO>();
-                var questModel = mapper.Map<QuestDTO, QuestViewModel>(questAnswer);
+                var questModel = mapper.Map<QuestDTO, QuestViewModels>(questAnswer);
 
                 var stageResponse = await client.GetAsync(ApiMethods.StageGetByQuestId + id);
                 if (stageResponse.StatusCode != HttpStatusCode.OK)

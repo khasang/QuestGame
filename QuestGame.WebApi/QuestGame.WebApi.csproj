@@ -266,6 +266,13 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Files\about\vidg.jpg" />
+    <Content Include="Content\Files\about\play.jpg" />
+    <Content Include="Content\Files\about\top.jpg" />
+    <Content Include="Content\Files\about\write.jpg" />
+    <Content Include="Content\Files\Photos\Ilya.png" />
+    <Content Include="Content\Files\Photos\Ruslan.png" />
+    <Content Include="Content\Files\Photos\Vladimir.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -361,10 +368,10 @@
     <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Home\LandingPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Content\Files\" />
     <Folder Include="Content\Temp\" />
   </ItemGroup>
   <ItemGroup>

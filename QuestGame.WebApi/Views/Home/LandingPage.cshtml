@@ -1,0 +1,144 @@
+﻿@{
+    Layout = "";
+}
+@{
+    ViewBag.Title = "View";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/HomeCSS/LandingPage.css")
+    @Scripts.Render("~/Content/HomeJS/backgroundLP.js")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Главная", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    @*<li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
+                        <li>@Html.ActionLink("API", "Index", "Help", new {area = ""}, null)</li>*@
+                    @{
+                        if (Session["User"] != null)
+                        {
+                            <li>@Html.ActionLink("Play Game", "Index", "MainPage", new { area = "Game" }, null)</li>
+                        }
+                    }
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div>
+        <div id="firstBlock" class="fullPage">
+            <br />
+            <div id="logo">Quest Game</div>
+            <br />
+            <div id="mini-text">браузерная квестовая игра</div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <input type="button" value="Начать игру!" id="startButton" onclick="location.href='@Url.Action("Index","Home")'" />
+        </div>
+        <div id="secondBlock" class="fullPage">
+            <br />
+            <div id="titleNew">Разработчики</div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <div class="containerPhotos">
+                <div class="boxPhotos">
+                    <div><img src="~/Content/Files/Photos/Ilya.png" width="200" height="200"/> <br /> <div id="devName">Илья Иджян</div></div>
+                    <div><img src="~/Content/Files/Photos/Ruslan.png" width="200" height="200" /><br /> <div id="devName">Руслан Лихобаба</div></div>
+                    <div><img src="~/Content/Files/Photos/Vladimir.png" width="200" height="200" /><br /> <div id="devName">Владимир Новоженов</div></div>
+                </div>
+            </div>
+        </div>
+        <div id="thirdBlock" class="fullPage">
+            <br />
+            <div id="titleNew">Особенности игры</div>
+            <br />
+            <br />
+            <div class="containerAbout">
+                <div class="boxAbout">
+                    <div><div id="micro-text">Примите участие во <br /> множестве увлекательных историй</div></div>
+                    <div><img src="~/Content/Files/about/play.jpg" width="200" height="100" /></div>
+                </div>
+            </div>
+            <br />
+            <div class="containerAbout">
+                <div class="boxAbout">
+                    <div><img src="~/Content/Files/about/write.jpg" width="200" height="100" /></div>
+                    <div><div id="micro-text">Создайте собственную историю</div></div>
+                </div>
+            </div>
+            <br />
+            <div class="containerAbout">
+                <div class="boxAbout">
+                    <div><div id="micro-text">Синхронизируйте свой аккаунт <br />в социальных сетях с игрой</div></div>
+                    <div>войти с помощью <br /><img src="~/Content/Files/about/vidg.jpg" width="200" height="50" /></div>
+                </div>
+            </div>
+            <br />
+            <div class="containerAbout">
+                <div class="boxAbout">
+                    <div><img src="~/Content/Files/about/top.jpg" width="200" height="100" /></div>
+                    <div><div id="micro-text">Возглавьте таблицу лидеров <br /> и соревнуйтесь с друзьями</div></div>
+                </div>
+            </div>
+        </div>
+        <div id="fouthBlock" class="fullPage">
+            <br />
+            <div id="titleNew">О движке игры</div>
+            <br />
+            <div id="micro-text">
+                Были использованы и применены следующие технология и решения:
+                <br />
+                <br />
+                    <div id="markers">
+                        <ul>
+                            <li>Asp.Net MVC</li>
+                            <li>Asp.Net WebApi</li>
+                            <li>Entity Framwork</li>
+                            <li>Ninject</li>
+                            <li>MS SQL</li>
+                            <li>Паттерны проектирования (UoW, Repository)</li>
+                            <li>Dependency InjectionI и Inversion of Control</li>
+                            <li>Особое внимание уделено тестированию. <br />
+                                Использованные при этом библиотеки: MS TEST и Selenium</li>
+                        </ul> 
+                    </div>       
+            </div>
+        </div>
+        <footer>
+             <br />
+             <div id="micro-text">Расскажи друзьям о нашем проекте &nbsp;  &nbsp; &nbsp; &nbsp;<img src="~/Content/Files/about/vidg.jpg" width="150" height="37" /></div>   
+        </footer>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</body>
+</html>
+
+
