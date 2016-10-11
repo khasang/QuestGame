@@ -30,40 +30,48 @@ body {
    #center {
        width:100%; 
        height:65%; 
-       padding-top:10%; 
+       padding-top:5%; 
        padding-bottom:5%
    }
    #news {
        border-radius: 10px;
        position:absolute;
        width:15%; 
-       height:35%;   
+       height:70%;   
        left:0; 
        display: inline-block; 
        margin-left:2%;
        text-align: center;
    }
-   #topQuests {
-       border-radius: 10px;
+   #centralBlock {
        position:absolute;
        width:60%; 
-       height:45%;   
+       height:70%; 
        left:50%; 
-       margin-left:-30%; 
-       display: inline-block; 
+       margin-left:-30%;
+       display: inline-block;
        margin-right:10%;
+       text-align:center;
    }
+   #topQuests {
+       border-radius: 10px;
+       height: 75%;
+   }
+   #ButtonQuests {
+    border-radius: 10px;
+    margin-top: 5%;
+    height: 18.5%;
+    width:100%;
+    color: white;
+    font-size: 20px;
+    background-color: #331122;
+}
    #topPlayers {
        border-radius: 10px;
        position:absolute;
        width:15%; 
-       height:35%;   
+       height:70%;   
        right:0;
        display: inline-block; 
        margin-right:2%
-   }
-   #developers {
-       width:100%; 
-       height:15%;
-       text-align: center;
    }

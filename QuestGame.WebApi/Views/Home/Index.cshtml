@@ -6,57 +6,58 @@
     <div class ="opacited" id="playGame">
         <br />
         <br />
-        @{
-            var user = Session["User"] as QuestGame.WebApi.Models.UserModel;
-            if (user != null)
-            {
-                @Html.ActionLink("Play Game", "Index", "MainPage", new { area = "Game" }, htmlAttributes: new { @class = "btn btn-primary btn-lg" })
-            }
-            else
-            {
-                @Html.ActionLink("Выполнить вход", "Login", "Home", routeValues: null, htmlAttributes: new { @class = "btn btn-primary btn-lg" })
-            }
-        }
-        <br />
-        <br />
-        <p>Quest Game - Квестовая игра, выполненная при помощи технологий ASP.NET Web API и MVC</p>
+        Зазывалка
     </div>
     <div id="center">
         <div id="news" class="opacited">
             <br />
             <b>Новости</b>
         </div>
-        <div id="topQuests" class="opacited">
-            <br />
-            <b>&nbsp;&nbsp; Популярные квесты:</b>
-            <br />
-            <br />
-            <table class="table table-hover table-bordered">
-                <thead>
-                    <tr>
-                        <th>Название</th>
-                        <th>Рейтинг</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>1</th>
-                        <th>9</th>
-                    </tr>
-                    <tr>
-                        <th>2</th>
-                        <th>6</th>
-                    </tr>
-                    <tr>
-                        <th>5</th>
-                        <th>6</th>
-                    </tr>
-                    <tr>
-                        <th>4</th>
-                        <th>2</th>
-                    </tr>
-                </tbody>
-            </table>
+        <div id="centralBlock">
+            <div id="topQuests" class="opacited">
+                <br />
+                <b>&nbsp;&nbsp; Популярные квесты:</b>
+                <br />
+                <br />
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Рейтинг</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>1</th>
+                            <th>9</th>
+                        </tr>
+                        <tr>
+                            <th>2</th>
+                            <th>6</th>
+                        </tr>
+                        <tr>
+                            <th>5</th>
+                            <th>6</th>
+                        </tr>
+                        <tr>
+                            <th>4</th>
+                            <th>2</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            @{
+                var user = Session["User"] as QuestGame.WebApi.Models.UserModel;
+                if (user != null)
+                {
+                    <input type="button" value="Список всех квестов" class="opacited" id="ButtonQuests" onclick="location.href='@Url.Action("Index", "MainPage", new { area = "Game" })'" />
+                }
+                else
+                {
+                    <input type="button" value="Войти" class="opacited" id="ButtonQuests" onclick="location.href='@Url.Action("Login","Home")'" />
+                }
+            }
+            
         </div>
         <div id="topPlayers" class="opacited">
             <br />
@@ -91,9 +92,5 @@
                 </tbody>
             </table>
         </div>
-    </div>
-    <div id="developers" class="opacited">
-        <br />
-        <b>Разработчики:</b>
     </div>
 </div>
