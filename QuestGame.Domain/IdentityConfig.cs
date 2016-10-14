@@ -11,6 +11,15 @@ using System.Threading.Tasks;
 
 namespace QuestGame.Domain
 {
+    public class EmailService : IIdentityMessageService
+    {
+        public Task SendAsync(IdentityMessage message)
+        {
+            // Подключите здесь службу электронной почты для отправки сообщения электронной почты.
+            return Task.FromResult(0);
+        }
+    }
+
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
@@ -36,6 +45,14 @@ namespace QuestGame.Domain
                 RequireLowercase = false,
                 RequireUppercase = false,
             };
+
+            manager.RegisterTwoFactorProvider("Код из сообщения", new EmailTokenProvider<ApplicationUser>
+            {
+                Subject = "Код безопасности",
+                BodyFormat = "Ваш код безопасности: {0}"
+            });
+            manager.EmailService = new EmailService();
+
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
