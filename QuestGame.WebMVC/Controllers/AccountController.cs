@@ -55,9 +55,10 @@ namespace QuestGame.WebMVC.Controllers
                 else
                 {
                     ViewBag.ErrorMessage = ErrorMessages.AccountFailRegister;
+                    return RedirectToAction("Index", "Home");
                 }
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("SendEmail");
             }
         }
 
@@ -145,38 +146,52 @@ namespace QuestGame.WebMVC.Controllers
         [HttpGet]
         public async Task<ActionResult> SendEmail(string id)
         {
-            var currentUser = Session["User"] as ApplicationUserDTO;
+            string emailToken;
 
-            using (var client = RestHelper.Create(currentUser.Token))
+            using (var client = RestHelper.Create())
             {
-                var response = await client.GetAsync(@"/api/Account/SendAuthEmail?id=" + id);
+                var response = await client.GetAsync(@"/api/Account/GetEmailToken?id=" + id);
 
-                switch (response.StatusCode)
+                if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    case HttpStatusCode.BadRequest:
-                        ViewBag.Message = "Данные не корректны";
-                        break;
-                    case HttpStatusCode.InternalServerError:
-                        ViewBag.Message = "Возникла ошибка. Попробуйте еще раз";
-                        break;
-                    case HttpStatusCode.OK:
-                        ViewBag.Message = "Письмо подтверждения отправлено. Проверьте почту.!";
-                        break;
+                    return RedirectToAction("Index", "Home");
                 }
 
-                return View();
+                emailToken = await response.Content.ReadAsAsync<string>();
             }
+
+            var param = new Dictionary<string, string>();
+
+            var callbackUrl = Url.Action("ConfirmUserEmail", "Account", new { userId = id, code = HttpUtility.UrlEncode(emailToken) }, protocol: Request.Url.Scheme);
+
+            var emailBody = "Для завершения регистрации перейдите по ссылке:: <a href=\"" + callbackUrl + "\">завершить регистрацию</a>";
+
+            param.Add("userId", id);
+            param.Add("subject", "Подтверждение email");
+            param.Add("body", emailBody);
+
+            using (var client = RestHelper.Create())
+            {
+                var response = await client.PostAsJsonAsync(@"api/Account/SendEmailToken", param);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+
+            ViewBag.Message = "На почту отправлено сообщение";
+
+            return View();
         }
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult> ConfirmEmail(string key)
+        public async Task<ActionResult> ConfirmEmail(string userId, string emailToken)
         {
-            var currentUser = Session["User"] as ApplicationUserDTO;
-
             using (var client = RestHelper.Create())
             {
-                var response = await client.GetAsync(@"/api/Account/ConfirmEmail?id=" + key);
+                var response = await client.GetAsync(@"/api/Account/ConfirmEmail?id=" + userId + "&emailToken=" + emailToken);
 
                 switch (response.StatusCode)
                 {
@@ -190,7 +205,11 @@ namespace QuestGame.WebMVC.Controllers
                         ViewBag.Message = "Возникла ошибка. Попробуйте еще раз";
                         break;
                     case HttpStatusCode.OK:
-                        currentUser.EmailConfirmed = true;
+                        var currentUser = Session["User"] as ApplicationUserDTO;
+                        if (currentUser != null)
+                        {
+                            currentUser.EmailConfirmed = true;
+                        }                        
                         ViewBag.Message = "Email успешно подтвержден!";
                         break;
                 }

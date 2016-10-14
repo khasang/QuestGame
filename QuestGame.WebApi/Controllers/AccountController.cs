@@ -392,16 +392,11 @@ namespace QuestGame.WebApi.Controllers
 
             IdentityResult toRole = UserManager.AddToRole(user.Id, "user");
 
-            if (result.Succeeded)
-            {
-                SendAuthEmail(user.Id);
-            }
-
             var response = new RegisterResponse
             {
                 Success = result.Succeeded,
                 Status = result.Succeeded.ToString(),
-                Body = string.Empty,
+                Body = user.Id,
                 ErrorMessage = result.Errors.ToString()
             };
 
@@ -409,68 +404,66 @@ namespace QuestGame.WebApi.Controllers
             return Ok(response);
         }
 
+        [AllowAnonymous]
         [HttpGet]
-        [Route("SendAuthEmail")]
-        public IHttpActionResult SendAuthEmail(string id)
+        [Route("GetEmailToken")]
+        public async Task<string> GetEmailToken(string id)
         {
-            SmtpClient smtp = new SmtpClient("smtp.yandex.ru", 465);
-            smtp.Credentials = new NetworkCredential("kloder", "vfhbirf");
-            smtp.EnableSsl = true;
-            MailMessage Message = new MailMessage();
-            Message.From = new MailAddress("kloder@yandex.ru");
-            Message.To.Add(new MailAddress("kloder@mail.ru"));
-            Message.Subject = "Подтверждение регистрации на QuestGame";
-            Message.Body = string.Format("Для завершения регистрации перейдите по ссылке:" +
-                        "<a href=\"localhost:25092\\Account\\ConfirmEmail?key\"" + id +
-                        " title=\"Подтвердить регистрацию\">Подтвердить регистрацию</a>");
-            Message.IsBodyHtml = true;
+            try
+            {
+                var emailToken = await UserManager.GenerateEmailConfirmationTokenAsync(id);
+                return emailToken;
+            }
+            catch (SmtpException ex)
+            {
+                return null;
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("SendEmailToken")]
+        public IHttpActionResult SendEmailToken(Dictionary<string, string> parameters)
+        {
+            var userid = parameters["userId"];
+            var subject = parameters["subject"];
+            var body = parameters["body"];
 
             try
             {
-                smtp.Send(Message);
+                UserManager.SendEmail(userid, subject, body);
                 return Ok();
             }
-            catch (SmtpException)
+            catch (SmtpException ex)
             {
-                return InternalServerError();
+                return BadRequest();
             }
         }
 
         [AllowAnonymous]
         [HttpGet]
         [Route("ConfirmEmail")]
-        public async Task<HttpResponseMessage> ConfirmEmail(string id)
+        public async Task<HttpResponseMessage> ConfirmEmail(string id, string emailToken)
         {
-            var user = await UserManager.FindByIdAsync(id);
 
-            if (user == null)
+            using (var client = RestHelper.Create())
             {
+                var result = await UserManager.ConfirmEmailAsync(id, emailToken);
+
+                if (!result.Succeeded)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.InternalServerError,
+                    };
+                }
+
                 return new HttpResponseMessage
                 {
-                    StatusCode = HttpStatusCode.NotFound,
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("Email подтвержден")
                 };
             }
-
-            user.EmailConfirmed = true;
-
-            try
-            {
-                await UserManager.UpdateAsync(user);
-            }
-            catch (Exception ex)
-            {
-                return new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.InternalServerError,
-                };
-            }
-
-            return new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent("Email подтвержден")
-            };
-
         }
 
         [AllowAnonymous]
