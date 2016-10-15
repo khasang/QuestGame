@@ -162,7 +162,7 @@ namespace QuestGame.WebMVC.Controllers
 
             var param = new Dictionary<string, string>();
 
-            var callbackUrl = Url.Action("ConfirmUserEmail", "Account", new { userId = id, code = HttpUtility.UrlEncode(emailToken) }, protocol: Request.Url.Scheme);
+            var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = id, code = HttpUtility.UrlEncode(emailToken) }, protocol: Request.Url.Scheme);
 
             var emailBody = "Для завершения регистрации перейдите по ссылке:: <a href=\"" + callbackUrl + "\">завершить регистрацию</a>";
 
@@ -187,11 +187,11 @@ namespace QuestGame.WebMVC.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult> ConfirmEmail(string userId, string emailToken)
+        public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
             using (var client = RestHelper.Create())
             {
-                var response = await client.GetAsync(@"/api/Account/ConfirmEmail?id=" + userId + "&emailToken=" + emailToken);
+                var response = await client.GetAsync(@"/api/Account/ConfirmEmail?id=" + userId + "&code=" + code);
 
                 switch (response.StatusCode)
                 {

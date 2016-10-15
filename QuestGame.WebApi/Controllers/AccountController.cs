@@ -443,12 +443,12 @@ namespace QuestGame.WebApi.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("ConfirmEmail")]
-        public async Task<HttpResponseMessage> ConfirmEmail(string id, string emailToken)
+        public async Task<HttpResponseMessage> ConfirmEmail(string id, string code)
         {
 
             using (var client = RestHelper.Create())
             {
-                var result = await UserManager.ConfirmEmailAsync(id, emailToken);
+                var result = await UserManager.ConfirmEmailAsync(id, code);
 
                 if (!result.Succeeded)
                 {
