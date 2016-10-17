@@ -71,10 +71,10 @@ namespace QuestGame.WebApi.Controllers
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
 
-        [Route("GetUser")]
+        [Route("GetUserById")]
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ApplicationUserDTO> GetUser(string id)
+        public async Task<ApplicationUserDTO> GetUserById(string id)
         {
             ApplicationUser user = await UserManager.FindByIdAsync(id);
 
