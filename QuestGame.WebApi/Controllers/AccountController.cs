@@ -83,6 +83,18 @@ namespace QuestGame.WebApi.Controllers
             return result;
         }
 
+        [Route("GetUserByEmail")]
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<ApplicationUserDTO> GetUserByEmail(string email)
+        {
+            ApplicationUser user = await UserManager.FindByEmailAsync(email);
+
+            var result = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
+
+            return result;
+        }
+
 
         [Route("EditUser")]
         [HttpPost]
@@ -200,6 +212,29 @@ namespace QuestGame.WebApi.Controllers
             }
 
             IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+
+            return Ok();
+        }
+
+
+        // POST api/Account/ResetPassword
+        [AllowAnonymous]
+        [Route("ResetPassword")]
+        public async Task<IHttpActionResult> ResetPassword(SetPasswordBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            //IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
+
+            var result = await UserManager.ResetPasswordAsync(model.Id, model.ResetToken, model.NewPassword);
 
             if (!result.Succeeded)
             {
@@ -426,9 +461,50 @@ namespace QuestGame.WebApi.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet]
+        [Route("GetResetToken")]
+        public async Task<HttpResponseMessage> GetResetToken(string id)
+        {
+            try
+            {
+                var resetToken = await UserManager.GeneratePasswordResetTokenAsync(id);
+
+                return Request.CreateResponse<string>(HttpStatusCode.OK, resetToken, new MediaTypeHeaderValue("application/json"));
+
+            }
+            catch (Exception ex)
+            {
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+        }
+
+        [AllowAnonymous]
         [HttpPost]
         [Route("SendEmailToken")]
         public IHttpActionResult SendEmailToken(Dictionary<string, string> parameters)
+        {
+            var userid = parameters["userId"];
+            var subject = parameters["subject"];
+            var body = parameters["body"];
+
+            try
+            {
+                UserManager.SendEmail(userid, subject, body);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("SendResetToken")]
+        public IHttpActionResult SendResetToken(Dictionary<string, string> parameters)
         {
             var userid = parameters["userId"];
             var subject = parameters["subject"];

@@ -70,6 +70,12 @@ namespace QuestGame.WebApi.Models
 
     public class SetPasswordBindingModel
     {
+        [System.Web.Mvc.HiddenInput(DisplayValue = false)]
+        public string Id { get; set; }
+
+        [System.Web.Mvc.HiddenInput(DisplayValue = false)]
+        public string ResetToken { get; set; }
+
         [Required]
         [StringLength(100, ErrorMessage = "Значение {0} должно содержать не менее {2} символов.", MinimumLength = 6)]
         [DataType(DataType.Password)]

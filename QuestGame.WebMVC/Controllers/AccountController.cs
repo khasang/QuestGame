@@ -110,7 +110,7 @@ namespace QuestGame.WebMVC.Controllers
 
             using (var client = RestHelper.Create())
             {
-                var response = await client.GetAsync(ApiMethods.AccontUser + id);
+                var response = await client.GetAsync(ApiMethods.AccontUserById + id);
                 var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
 
                 var model = mapper.Map<ApplicationUserDTO, UserViewModel>(answer);
@@ -141,7 +141,6 @@ namespace QuestGame.WebMVC.Controllers
                 return RedirectToAction("UserProfile", new { id = model.Id });
             }
         }
-
 
         [HttpGet]
         public async Task<ActionResult> SendEmail(string id)
@@ -218,6 +217,102 @@ namespace QuestGame.WebMVC.Controllers
 
                 return View("ConfirmEmail");
             }
+        }
+
+        [HttpGet]
+        public ActionResult ResetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ResetPassword(ResetPasswordBindModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            using (var client = RestHelper.Create())
+            {
+                var response = await client.GetAsync(ApiMethods.AccontUserByEmail + model.Email);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = ErrorMessages.BadRequest;
+                    return View(model);
+                }
+
+                var user = await response.Content.ReadAsAsync<ApplicationUserDTO>();
+
+                response = await client.GetAsync(@"api/Account/GetResetToken?id=" + user.Id);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = ErrorMessages.BadRequest;
+                    return View(model);
+                }
+
+                var code = await response.Content.ReadAsAsync<string>();
+
+                // Подготовить письмо
+                var callbackUrl = Url.Action("NewPassword", "Account", new { userId = user.Id, code = HttpUtility.UrlEncode(code) }, protocol: Request.Url.Scheme);
+                var emailBody = "Для сброса пароля перейдите по ссылке: <a href=\"" + callbackUrl + "\">сброс пароля</a>";
+
+                var param = new Dictionary<string, string>();
+                param.Add("userId", user.Id);
+                param.Add("subject", "Сброс пароля");
+                param.Add("body", emailBody);
+
+                response = await client.PostAsJsonAsync(@"api/Account/SendResetToken", param);
+            }
+
+            ViewBag.Title = "Сброс пароля";
+            ViewBag.Message = "Письмо смены пароля отправлено. Чтобы сменить пароль пройдите по ссылке из письма.";
+
+            return View("ActionResultInfo");
+        }
+
+        [HttpGet]
+        public ActionResult NewPassword(string userId, string code)
+        {
+            if (userId == null || String.IsNullOrWhiteSpace(code))
+            {
+                ViewBag.Message = "Данные пользователя не корректны";
+                return View("ResetPassword");
+            }
+
+            var model = new SetPasswordBindingModel();
+            model.Id = userId;
+            model.ResetToken = HttpUtility.UrlDecode(code);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> NewPassword(SetPasswordBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Message = "Данные не корректны";
+                return View(model);
+            }
+
+            using (var client = RestHelper.Create())
+            {
+                var response = await client.PostAsJsonAsync(@"api/Account/ResetPassword", model);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = ErrorMessages.BadRequest;
+                    return View(model);
+                }
+            }
+
+            ViewBag.Title = "Сброс пароля";
+            ViewBag.Message = "Пароль успешно изменен!";
+
+            return View("ActionResultInfo");
         }
     }
 }
