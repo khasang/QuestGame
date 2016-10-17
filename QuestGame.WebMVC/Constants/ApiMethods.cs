@@ -52,6 +52,11 @@ namespace QuestGame.WebMVC.Constants
         public const string AccontUser = @"api/Account/GetUser?id=";
         public const string AccontEditUser = @"api/Account/EditUser";
 
+        public const string AccontEmailToken = @"/api/Account/GetEmailToken?id=";
+        public const string AccontSendEmailToken = @"api/Account/SendEmailToken";
+        public const string AccontConfirmEmail = @"/api/Account/ConfirmEmail?id=";
+
+        
         #endregion
 
         public const string BaseUploadFile = @"api/UploadFile";

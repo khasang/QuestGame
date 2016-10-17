@@ -151,11 +151,11 @@ namespace QuestGame.WebMVC.Controllers
             // Получить токен
             using (var client = RestHelper.Create())
             {
-                var response = await client.GetAsync(@"/api/Account/GetEmailToken?id=" + id);
+                var response = await client.GetAsync(ApiMethods.AccontEmailToken + id);
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    ViewBag.Message = "Не удалось получить код подтверждения, возможно сервер не доступен. Попробуйте еще раз позднее.<br/> Чтобы повторить письмо с подтверждением - перейдите в Ваш профиль пользователя.";
+                    ViewBag.Message = ErrorMessages.AccountConfirmEmailError;
                     return View("ConfirmEmail");
                 }
 
@@ -164,7 +164,7 @@ namespace QuestGame.WebMVC.Controllers
 
             // Подготовить письмо
             var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = id, code = HttpUtility.UrlEncode(emailToken) }, protocol: Request.Url.Scheme);
-            var emailBody = "Для завершения регистрации перейдите по ссылке:: <a href=\"" + callbackUrl + "\">завершить регистрацию</a>";
+            var emailBody = "Для завершения регистрации перейдите по ссылке: <a href=\"" + callbackUrl + "\">завершить регистрацию</a>";
 
             using (var client = RestHelper.Create())
             {
@@ -172,13 +172,12 @@ namespace QuestGame.WebMVC.Controllers
                 param.Add("userId", id);
                 param.Add("subject", "Подтверждение email");
                 param.Add("body", emailBody);
-                var content = new FormUrlEncodedContent(param);
 
-                var response = await client.PostAsJsonAsync(@"api/Account/SendEmailToken", param);
+                var response = await client.PostAsJsonAsync(ApiMethods.AccontSendEmailToken, param);
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    ViewBag.Message = "Не удалось отправить код подтверждения, возможно сервер не доступен. Попробуйте еще раз позднее.<br/> Чтобы повторить письмо с подтверждением - перейдите в Ваш профиль пользователя.";
+                    ViewBag.Message = ErrorMessages.AccountConfirmEmailError;
                     return View("ConfirmEmail");
                 }
             }
@@ -194,18 +193,18 @@ namespace QuestGame.WebMVC.Controllers
         {
             using (var client = RestHelper.Create())
             {
-                var response = await client.GetAsync(@"/api/Account/ConfirmEmail?id=" + userId + "&code=" + code);
+                var response = await client.GetAsync(ApiMethods.AccontConfirmEmail + userId + "&code=" + code);
 
                 switch (response.StatusCode)
                 {
                     case HttpStatusCode.NotFound:
-                        ViewBag.Message = "Пользователь не найден";
+                        ViewBag.Message = ErrorMessages.AccountUserNotFound;
                         break;
                     case HttpStatusCode.BadRequest:
-                        ViewBag.Message = "Данные не корректны";
+                        ViewBag.Message = ErrorMessages.BadRequest;
                         break;
                     case HttpStatusCode.InternalServerError:
-                        ViewBag.Message = "Возникла ошибка. Попробуйте еще раз";
+                        ViewBag.Message = ErrorMessages.InternalServerError;
                         break;
                     case HttpStatusCode.OK:
                         var currentUser = Session["User"] as ApplicationUserDTO;
