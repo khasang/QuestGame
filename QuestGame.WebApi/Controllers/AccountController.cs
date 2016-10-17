@@ -407,16 +407,21 @@ namespace QuestGame.WebApi.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("GetEmailToken")]
-        public async Task<string> GetEmailToken(string id)
+        public async Task<HttpResponseMessage> GetEmailToken(string id)
         {
             try
             {
                 var emailToken = await UserManager.GenerateEmailConfirmationTokenAsync(id);
-                return emailToken;
+
+                return Request.CreateResponse<string>(HttpStatusCode.OK, emailToken, new MediaTypeHeaderValue("application/json"));
+
             }
-            catch (SmtpException ex)
+            catch (Exception ex)
             {
-                return null;
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
             }
         }
 
@@ -434,7 +439,7 @@ namespace QuestGame.WebApi.Controllers
                 UserManager.SendEmail(userid, subject, body);
                 return Ok();
             }
-            catch (SmtpException ex)
+            catch (Exception ex)
             {
                 return BadRequest();
             }

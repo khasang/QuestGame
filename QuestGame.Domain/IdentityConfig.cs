@@ -48,13 +48,34 @@ namespace QuestGame.Domain
     {
         public Task SendAsync(IdentityMessage message)
         {
-            using (FileStream fstream = new FileStream(@"e:\Temp\QGemails.html", FileMode.OpenOrCreate))
+            //using (FileStream fstream = new FileStream(@"e:\Temp\QGemails.html", FileMode.OpenOrCreate))
+            //{
+            //    byte[] array = System.Text.Encoding.Default.GetBytes(message.Body);
+            //    fstream.Write(array, 0, array.Length);
+            //}
+
+            using (var client = new SmtpClient())
             {
-                byte[] array = System.Text.Encoding.Default.GetBytes(message.Body);
-                fstream.Write(array, 0, array.Length);
+                client.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
+                client.PickupDirectoryLocation = @"d:\Temp\";
+                client.EnableSsl = false;
+
+                var mail = new MailMessage("robot@questgame.ru", message.Destination);
+                mail.Subject = message.Subject;
+                mail.Body = message.Body;
+                mail.IsBodyHtml = true;
+
+                try
+                {
+                    client.Send(mail);
+                }
+                catch (SmtpException ex)
+                {
+                    throw;
+                }
             }
 
-            return Task.FromResult(0);
+                return Task.FromResult(0);
         }
     }
 

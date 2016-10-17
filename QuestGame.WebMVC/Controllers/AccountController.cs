@@ -58,7 +58,7 @@ namespace QuestGame.WebMVC.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
-                return RedirectToAction("SendEmail");
+                return RedirectToAction("SendEmail", new { id = answer.Body });
             }
         }
 
@@ -148,41 +148,44 @@ namespace QuestGame.WebMVC.Controllers
         {
             string emailToken;
 
+            // Получить токен
             using (var client = RestHelper.Create())
             {
                 var response = await client.GetAsync(@"/api/Account/GetEmailToken?id=" + id);
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    return RedirectToAction("Index", "Home");
+                    ViewBag.Message = "Не удалось получить код подтверждения, возможно сервер не доступен. Попробуйте еще раз позднее.<br/> Чтобы повторить письмо с подтверждением - перейдите в Ваш профиль пользователя.";
+                    return View("ConfirmEmail");
                 }
 
                 emailToken = await response.Content.ReadAsAsync<string>();
             }
 
-            var param = new Dictionary<string, string>();
-
+            // Подготовить письмо
             var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = id, code = HttpUtility.UrlEncode(emailToken) }, protocol: Request.Url.Scheme);
-
             var emailBody = "Для завершения регистрации перейдите по ссылке:: <a href=\"" + callbackUrl + "\">завершить регистрацию</a>";
-
-            param.Add("userId", id);
-            param.Add("subject", "Подтверждение email");
-            param.Add("body", emailBody);
 
             using (var client = RestHelper.Create())
             {
+                var param = new Dictionary<string, string>();
+                param.Add("userId", id);
+                param.Add("subject", "Подтверждение email");
+                param.Add("body", emailBody);
+                var content = new FormUrlEncodedContent(param);
+
                 var response = await client.PostAsJsonAsync(@"api/Account/SendEmailToken", param);
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    return RedirectToAction("Index", "Home");
+                    ViewBag.Message = "Не удалось отправить код подтверждения, возможно сервер не доступен. Попробуйте еще раз позднее.<br/> Чтобы повторить письмо с подтверждением - перейдите в Ваш профиль пользователя.";
+                    return View("ConfirmEmail");
                 }
             }
 
-            ViewBag.Message = "На почту отправлено сообщение";
+            ViewBag.Message = "На почту отправлено сообщение. Пройдите по ссылке из письма, чтобы закончить регистрацию.";
 
-            return View();
+            return View("ConfirmEmail");
         }
 
         [AllowAnonymous]
@@ -214,7 +217,7 @@ namespace QuestGame.WebMVC.Controllers
                         break;
                 }
 
-                return View();
+                return View("ConfirmEmail");
             }
         }
     }
