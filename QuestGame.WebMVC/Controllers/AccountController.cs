@@ -245,7 +245,7 @@ namespace QuestGame.WebMVC.Controllers
 
                 var user = await response.Content.ReadAsAsync<ApplicationUserDTO>();
 
-                response = await client.GetAsync(@"api/Account/GetResetToken?id=" + user.Id);
+                response = await client.GetAsync(ApiMethods.AccontResetToken + user.Id);
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
@@ -264,12 +264,11 @@ namespace QuestGame.WebMVC.Controllers
                 param.Add("subject", "Сброс пароля");
                 param.Add("body", emailBody);
 
-                response = await client.PostAsJsonAsync(@"api/Account/SendResetToken", param);
+                response = await client.PostAsJsonAsync(ApiMethods.AccontSendResetToken, param);
             }
 
             ViewBag.Title = "Сброс пароля";
             ViewBag.Message = "Письмо смены пароля отправлено. Чтобы сменить пароль пройдите по ссылке из письма.";
-
             return View("ActionResultInfo");
         }
 
@@ -294,13 +293,13 @@ namespace QuestGame.WebMVC.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Message = "Данные не корректны";
+                ViewBag.Message = ErrorMessages.BadRequest;
                 return View(model);
             }
 
             using (var client = RestHelper.Create())
             {
-                var response = await client.PostAsJsonAsync(@"api/Account/ResetPassword", model);
+                var response = await client.PostAsJsonAsync(ApiMethods.AccontResetPassword, model);
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
@@ -311,7 +310,6 @@ namespace QuestGame.WebMVC.Controllers
 
             ViewBag.Title = "Сброс пароля";
             ViewBag.Message = "Пароль успешно изменен!";
-
             return View("ActionResultInfo");
         }
     }
