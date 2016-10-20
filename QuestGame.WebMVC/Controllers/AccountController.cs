@@ -219,5 +219,39 @@ namespace QuestGame.WebMVC.Controllers
                 return View("ConfirmEmail");
             }
         }
+
+
+        [HttpGet]
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var currentUser = Session["User"] as ApplicationUserDTO;
+
+            var param = mapper.Map<ChangePasswordViewModel, ChangePasswordDTO>(model);
+
+            using (var client = RestHelper.Create(currentUser.Token))
+            {
+                var response = await client.PostAsJsonAsync(@"api/Account/ChangePassword", param);
+
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    ViewBag.ErrorMessage = "Неудачная попытка редактирования!";
+                }
+            }
+
+            return RedirectToAction("UserProfile", new { id = currentUser.Id });
+        }
+
     }
+
 }
