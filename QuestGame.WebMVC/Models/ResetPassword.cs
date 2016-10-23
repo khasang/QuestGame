@@ -2,14 +2,14 @@
 
 namespace QuestGame.WebMVC.Models
 {
-    public class ResetPasswordBindModel
+    public class ResetPasswordModel
     {
         [Required]
         [Display(Name = "Адрес электронной почты")]
         public string Email { get; set; }
     }
 
-    public class SetPasswordBindingModel
+    public class ResetPasswordRequestModel
     {
         [System.Web.Mvc.HiddenInput(DisplayValue = false)]
         public string Id { get; set; }

@@ -225,7 +225,7 @@ namespace QuestGame.WebApi.Controllers
         // POST api/Account/ResetPassword
         [AllowAnonymous]
         [Route("ResetPassword")]
-        public async Task<IHttpActionResult> ResetPassword(SetPasswordBindingModel model)
+        public async Task<IHttpActionResult> ResetPassword(ResetPasswordDTO model)
         {
             if (!ModelState.IsValid)
             {

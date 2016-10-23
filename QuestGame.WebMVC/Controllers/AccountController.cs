@@ -226,7 +226,7 @@ namespace QuestGame.WebMVC.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> ResetPassword(ResetPasswordBindModel model)
+        public async Task<ActionResult> ResetPassword(ResetPasswordModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -281,7 +281,7 @@ namespace QuestGame.WebMVC.Controllers
                 return View("ResetPassword");
             }
 
-            var model = new SetPasswordBindingModel();
+            var model = new ResetPasswordRequestModel();
             model.Id = userId;
             model.ResetToken = HttpUtility.UrlDecode(code);
 
@@ -289,7 +289,7 @@ namespace QuestGame.WebMVC.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> NewPassword(SetPasswordBindingModel model)
+        public async Task<ActionResult> NewPassword(ResetPasswordRequestModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -299,7 +299,8 @@ namespace QuestGame.WebMVC.Controllers
 
             using (var client = RestHelper.Create())
             {
-                var response = await client.PostAsJsonAsync(ApiMethods.AccontResetPassword, model);
+                var modelDTO = mapper.Map<ResetPasswordRequestModel, ResetPasswordDTO>(model);
+                var response = await client.PostAsJsonAsync(ApiMethods.AccontResetPassword, modelDTO);
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {

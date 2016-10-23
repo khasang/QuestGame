@@ -25,6 +25,8 @@ namespace QuestGame.WebMVC.Mapping.Profiles
             CreateMap<StageViewModel, StageDTO>();
             CreateMap<MotionViewModel, MotionDTO>();
 
+            CreateMap<ResetPasswordRequestModel, ResetPasswordDTO>();
+
             CreateMap<UserViewModel, ApplicationUserDTO>();
                 //.ForMember(x => x.Id, y => y.Ignore())
                 //.ForMember(x => x.UserName, y => y.Ignore())
