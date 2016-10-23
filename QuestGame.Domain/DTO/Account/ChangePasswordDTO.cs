@@ -13,6 +13,5 @@ namespace QuestGame.Domain.DTO
         public string OldPassword { get; set; }
         [Required]
         public string NewPassword { get; set; }
-        public string ConfirmPassword { get; set; }
     }
 }
