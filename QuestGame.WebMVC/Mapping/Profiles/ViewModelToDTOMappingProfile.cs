@@ -34,7 +34,9 @@ namespace QuestGame.WebMVC.Mapping.Profiles
                 //.ForMember(x => x.Token, y => y.Ignore());
 
             CreateMap<UserProfileViewModel, UserProfileDTO>();
-                //.ForMember(x => x.UserId, y => y.Ignore());
+            //.ForMember(x => x.UserId, y => y.Ignore());
+
+            CreateMap<ChangePasswordViewModel, ChangePasswordDTO>();
         }
 
         public override string ProfileName

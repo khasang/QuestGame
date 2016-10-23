@@ -183,16 +183,20 @@ namespace QuestGame.WebApi.Controllers
         }
 
         // POST api/Account/ChangePassword
+        [HttpPost]
         [Route("ChangePassword")]
-        public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
+        public async Task<IHttpActionResult> ChangePassword(ChangePasswordDTO model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
-                model.NewPassword);
+            var principal = Thread.CurrentPrincipal;
+            var identity = principal.Identity;
+            var userId = identity.GetUserId();
+
+            var result = await UserManager.ChangePasswordAsync(userId, model.OldPassword, model.NewPassword);
 
             if (!result.Succeeded)
             {
@@ -201,6 +205,8 @@ namespace QuestGame.WebApi.Controllers
 
             return Ok();
         }
+
+
 
         // POST api/Account/SetPassword
         [Route("SetPassword")]
