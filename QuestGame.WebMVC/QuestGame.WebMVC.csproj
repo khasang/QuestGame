@@ -146,7 +146,18 @@
     <Compile Include="Areas\Game\Models\QuestViewModels.cs" />
     <Compile Include="Attributes\CustomAuthorizeAttribute.cs" />
     <Compile Include="Constants\ApiMethods.cs" />
+    <Compile Include="Constants\InfoMessages.cs" />
     <Compile Include="Constants\ErrorMessages.cs" />
+    <Compile Include="Content\MailTemplate\ConfirmEmailTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConfirmEmailTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Content\MailTemplate\PasswordResetTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PasswordResetTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -172,6 +183,16 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\MailTemplate\ConfirmEmailTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <CustomToolNamespace>QuestGame.WebMVC</CustomToolNamespace>
+      <LastGenOutput>ConfirmEmailTemplate.cs</LastGenOutput>
+    </Content>
+    <Content Include="Content\MailTemplate\PasswordResetTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>PasswordResetTemplate.cs</LastGenOutput>
+      <CustomToolNamespace>QuestGame.WebMVC</CustomToolNamespace>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -264,6 +285,9 @@
       <Project>{505742b2-622d-45a4-81b5-64c9ddaaff46}</Project>
       <Name>QuestGame.Domain</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

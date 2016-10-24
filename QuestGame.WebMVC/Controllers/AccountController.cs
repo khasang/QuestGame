@@ -162,15 +162,16 @@ namespace QuestGame.WebMVC.Controllers
             }
 
             // Подготовить письмо
-            var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = id, code = HttpUtility.UrlEncode(emailToken) }, protocol: Request.Url.Scheme);
-            var emailBody = "Для завершения регистрации перейдите по ссылке: <a href=\"" + callbackUrl + "\">завершить регистрацию</a>";
+            var email = new ConfirmEmailTemplate {
+                ActionUrl = Url.Action("ConfirmEmail", "Account", new { userId = id, code = HttpUtility.UrlEncode(emailToken) }, protocol: Request.Url.Scheme)
+            };
 
             using (var client = RestHelper.Create())
             {
                 var param = new Dictionary<string, string>();
                 param.Add("userId", id);
                 param.Add("subject", "Подтверждение email");
-                param.Add("body", emailBody);
+                param.Add("body", email.TransformText());
 
                 var response = await client.PostAsJsonAsync(ApiMethods.AccontSendEmailToken, param);
 
@@ -181,7 +182,7 @@ namespace QuestGame.WebMVC.Controllers
                 }
             }
 
-            ViewBag.Message = "На почту отправлено сообщение. Пройдите по ссылке из письма, чтобы закончить регистрацию.";
+            ViewBag.Message = InfoMessages.EmailSendConfirm;
 
             return View("ConfirmEmail");
         }
@@ -256,19 +257,20 @@ namespace QuestGame.WebMVC.Controllers
                 var code = await response.Content.ReadAsAsync<string>();
 
                 // Подготовить письмо
-                var callbackUrl = Url.Action("NewPassword", "Account", new { userId = user.Id, code = HttpUtility.UrlEncode(code) }, protocol: Request.Url.Scheme);
-                var emailBody = "Для сброса пароля перейдите по ссылке: <a href=\"" + callbackUrl + "\">сброс пароля</a>";
+                var email = new PasswordResetTemplate {
+                    ActionUrl = Url.Action("NewPassword", "Account", new { userId = user.Id, code = HttpUtility.UrlEncode(code) }, protocol: Request.Url.Scheme)
+                };
 
                 var param = new Dictionary<string, string>();
                 param.Add("userId", user.Id);
                 param.Add("subject", "Сброс пароля");
-                param.Add("body", emailBody);
+                param.Add("body", email.TransformText());
 
                 response = await client.PostAsJsonAsync(ApiMethods.AccontSendResetToken, param);
             }
 
             ViewBag.Title = "Сброс пароля";
-            ViewBag.Message = "Письмо смены пароля отправлено. Чтобы сменить пароль пройдите по ссылке из письма.";
+            ViewBag.Message = InfoMessages.PasswordSendToken;
             return View("ActionResultInfo");
         }
 
@@ -277,8 +279,9 @@ namespace QuestGame.WebMVC.Controllers
         {
             if (userId == null || String.IsNullOrWhiteSpace(code))
             {
-                ViewBag.Message = "Данные пользователя не корректны";
-                return View("ResetPassword");
+                ViewBag.Title = "Сброс пароля";
+                ViewBag.Message = ErrorMessages.AccountUserNotFound;
+                return View("ActionResultInfo");
             }
 
             var model = new ResetPasswordRequestModel();
@@ -293,7 +296,7 @@ namespace QuestGame.WebMVC.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Message = ErrorMessages.BadRequest;
+                ViewBag.Message = ErrorMessages.InternalServerError;
                 return View(model);
             }
 
@@ -310,7 +313,7 @@ namespace QuestGame.WebMVC.Controllers
             }
 
             ViewBag.Title = "Сброс пароля";
-            ViewBag.Message = "Пароль успешно изменен!";
+            ViewBag.Message = InfoMessages.PasswordConfirmTrue;
             return View("ActionResultInfo");
         }
 
