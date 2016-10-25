@@ -49,7 +49,6 @@ namespace QuestGame.WebApi.Constants
 
         public const string AccontUser = @"api/Account/GetUser?id=";
 
-
         #endregion
     }
 }

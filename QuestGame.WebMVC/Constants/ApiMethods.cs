@@ -60,6 +60,7 @@ namespace QuestGame.WebMVC.Constants
         public const string AccontResetToken = @"api/Account/GetResetToken?id=";
         public const string AccontSendResetToken = @"api/Account/SendResetToken";
         public const string AccontResetPassword = @"api/Account/ResetPassword";
+        public const string AccountChangePassword = @"api/Account/ChangePassword";
 
         #endregion
 

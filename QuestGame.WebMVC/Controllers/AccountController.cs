@@ -303,7 +303,7 @@ namespace QuestGame.WebMVC.Controllers
 
             using (var client = RestHelper.Create(currentUser.Token))
             {
-                var response = await client.PostAsJsonAsync(@"api/Account/ChangePassword", param);
+                var response = await client.PostAsJsonAsync(ApiMethods.AccountChangePassword, param);
                 response.EnsureSuccessStatusCode();
             }
 

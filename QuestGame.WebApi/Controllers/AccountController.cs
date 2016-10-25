@@ -78,7 +78,7 @@ namespace QuestGame.WebApi.Controllers
         {
             ApplicationUser user = await UserManager.FindByIdAsync(id);
 
-            if (user == null) { return InternalServerError(); }
+            if (user == null) { return NotFound(); }
 
             var result = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
 
@@ -88,13 +88,15 @@ namespace QuestGame.WebApi.Controllers
         [Route("GetUserByEmail")]
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ApplicationUserDTO> GetUserByEmail(string email)
+        public async Task<IHttpActionResult> GetUserByEmail(string email)
         {
             ApplicationUser user = await UserManager.FindByEmailAsync(email);
 
+            if (user == null) { return BadRequest(); }
+
             var result = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
 
-            return result;
+            return Ok(result);
         }
 
 
@@ -103,8 +105,6 @@ namespace QuestGame.WebApi.Controllers
         public async Task<IHttpActionResult> EditUser(ApplicationUserDTO model)
         {
             ApplicationUser user = await UserManager.FindByIdAsync(model.Id);
-
-            //ApplicationUser user = await UserManager.FindByNameAsync(model.UserName);
 
             var userResult = mapper.Map<ApplicationUserDTO, ApplicationUser>(model, user);
 
@@ -240,13 +240,11 @@ namespace QuestGame.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            //IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
-
             var result = await UserManager.ResetPasswordAsync(model.Id, model.ResetToken, model.NewPassword);
 
             if (!result.Succeeded)
             {
-                return GetErrorResult(result);
+                return BadRequest();
             }
 
             return Ok();
@@ -543,7 +541,7 @@ namespace QuestGame.WebApi.Controllers
                 {
                     return new HttpResponseMessage
                     {
-                        StatusCode = HttpStatusCode.InternalServerError,
+                        StatusCode = HttpStatusCode.BadRequest,
                     };
                 }
 
