@@ -1,9 +1,58 @@
-.fullPage {
+body .slider {
+	overflow:hidden;
+	position:relative;
+	height: 100%; max-height: 1050px; min-height:630px;
+	width: 100%;
+	margin:0 auto;
+}
+	
+body .slider .slides {
+	position:relative;
+	transition:1s;
+}
+		
+body .slider .slides .slide {
+	float:left;
+	display:block;
+}
+		
+body .slider .slides .slide .fullPageSlide {
    height: 100%; max-height: 1050px; min-height:630px;
    text-align:center;
+   width:100%;
    position: relative;
 }
-
+			
+body .slider .next {
+	position:absolute;
+	height:50px;
+	width:50px;
+    background:url(~/Content/Files/about/arrowRight.png) repeat-y #fc0;
+	right:10px;
+	top:225px;
+	z-index:1;
+	cursor:pointer;
+    border-radius:30px;
+}
+		
+body .slider .prev {
+	position:absolute;
+	height:50px;
+	width:50px;
+    background:url(~/Content/Files/about/arrowLeft.png) repeat-y #fc0;
+	left:10px;
+	top:225px;
+	z-index:1;
+	cursor:pointer;
+    border-radius:30px;
+}
+		
+.fullPage {
+		   height: 100%; max-height: 1050px; min-height:630px;
+		   text-align:center;
+		   width:100%;
+		   position: relative;
+		}			
 #firstBlock {
     background-color: #4388CC;
 }
@@ -22,12 +71,24 @@
     background-color: #24367A;
 }
 
-#thirdBlock {
+#thirdBlock_0 {
     background-color: #12B0CC;
+}
+
+#thirdBlock_1 {
+    background-color: #67B055;
+}
+
+#thirdBlock_2 {
+    background-color: #BCB0CC;
 }
 
 #fouthBlock {
     background-color: #A9CCAC;
+}
+
+#fifthBlock {
+    background-color: #E3AC40;
 }
 
 @font-face {
@@ -63,9 +124,9 @@
 .boxPhotos{white-space:nowrap}
 .boxPhotos div{width:350px;display:inline-block;}
 
-.containerAbout{overflow:hidden;width:100%}
+/*.containerAbout{overflow:hidden;width:100%}
 .boxAbout{white-space:nowrap}
-.boxAbout div{width:300px;display:inline-block;}
+.boxAbout div{width:300px;display:inline-block;}*/
 
 footer {
     height:70px;
@@ -80,4 +141,4 @@ footer {
     text-align:left;
 }
 
-li {line-height: 200%} 
+li {line-height: 200%;}

@@ -23,6 +23,15 @@ namespace QuestGame.WebApi
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/LandingScripts").Include(
+                       "~/Content/HomeJS/backgroundLP.js"));
+            bundles.Add(new StyleBundle("~/bundles/LandingStyles").Include(
+                       "~/Content/HomeCSS/LandingPage.css"));
+            bundles.Add(new ScriptBundle("~/bundles/MainPageScripts").Include(
+                       "~/Content/HomeJS/background.js"));
+            bundles.Add(new StyleBundle("~/bundles/MainPageStyles").Include(
+                       "~/Content/HomeCSS/Home.css"));
         }
     }
 }

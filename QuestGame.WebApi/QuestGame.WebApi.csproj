@@ -266,6 +266,8 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Files\about\arrowLeft.png" />
+    <Content Include="Content\Files\about\arrowRight.png" />
     <Content Include="Content\Files\about\vidg.jpg" />
     <Content Include="Content\Files\about\play.jpg" />
     <Content Include="Content\Files\about\top.jpg" />

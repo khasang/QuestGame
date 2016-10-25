@@ -1,7 +1,12 @@
 ﻿@model IEnumerable<QuestGame.WebApi.Areas.Game.Models.QuestViewModels>
 @Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/Content/HomeJS/background.js")
-@Styles.Render("~/Content/HomeCSS/Home.css")
+
+@Styles.Render("~/bundles/MainPageStyles")
+@Scripts.Render("~/bundles/MainPageScripts")
+
+@*@Scripts.Render("~/Content/HomeJS/background.js")
+@Styles.Render("~/Content/HomeCSS/Home.css")*@
+
 <div id="backgroundPicture">
     <div class ="opacited" id="playGame">
         <br />
