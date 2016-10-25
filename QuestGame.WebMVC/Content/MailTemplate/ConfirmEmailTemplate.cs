@@ -22,8 +22,6 @@ namespace QuestGame.WebMVC
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "14.0.0.0")]
     public partial class ConfirmEmailTemplate : ConfirmEmailTemplateBase
     {
-        public string ActionUrl { get; set; }
-
 #line hidden
         /// <summary>
         /// Create the template output
@@ -38,7 +36,7 @@ namespace QuestGame.WebMVC
             
             #line default
             #line hidden
-            this.Write("\">Завершить регистрацию</a>\r\n</pre>\r\n<pre></pre>");
+            this.Write("\">[ Завершить регистрацию ]</a>\r\n</pre>\r\n<pre></pre>");
             return this.GenerationEnvironment.ToString();
         }
     }

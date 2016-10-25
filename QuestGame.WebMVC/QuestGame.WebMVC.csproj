@@ -148,6 +148,8 @@
     <Compile Include="Constants\ApiMethods.cs" />
     <Compile Include="Constants\InfoMessages.cs" />
     <Compile Include="Constants\ErrorMessages.cs" />
+    <Compile Include="Content\MailTemplate\PasswordResetTemplate-Extended.cs" />
+    <Compile Include="Content\MailTemplate\ConfirmEmailTemplate-Extended.cs" />
     <Compile Include="Content\MailTemplate\ConfirmEmailTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
