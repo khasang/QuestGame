@@ -145,6 +145,7 @@
     <Compile Include="Areas\Game\GameAreaRegistration.cs" />
     <Compile Include="Areas\Game\Models\QuestViewModels.cs" />
     <Compile Include="Attributes\CustomAuthorizeAttribute.cs" />
+    <Compile Include="Attributes\HTTPExceptionAttribute.cs" />
     <Compile Include="Constants\ApiMethods.cs" />
     <Compile Include="Constants\InfoMessages.cs" />
     <Compile Include="Constants\ErrorMessages.cs" />

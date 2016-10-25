@@ -16,6 +16,7 @@ using QuestGame.Domain.DTO;
 using AutoMapper;
 
 using System.Web.Configuration;
+using QuestGame.WebMVC.Attributes;
 
 namespace QuestGame.WebMVC.Controllers
 {
@@ -102,6 +103,7 @@ namespace QuestGame.WebMVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HTTPExceptionAttribute]
         [HttpGet]
         public async Task<ActionResult> UserProfile(string id)
         {
@@ -111,8 +113,9 @@ namespace QuestGame.WebMVC.Controllers
             using (var client = RestHelper.Create())
             {
                 var response = await client.GetAsync(ApiMethods.AccontUserById + id);
-                var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
+                response.EnsureSuccessStatusCode();
 
+                var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
                 var model = mapper.Map<ApplicationUserDTO, UserViewModel>(answer);
 
                 model.UserProfile.avatarUrl = "http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
@@ -122,6 +125,7 @@ namespace QuestGame.WebMVC.Controllers
         }
 
         [HttpPost]
+        [HTTPExceptionAttribute]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> UserProfileEdit(UserViewModel model)
         {
@@ -132,17 +136,14 @@ namespace QuestGame.WebMVC.Controllers
             using (var client = RestHelper.Create(currentUser.Token))
             {
                 var response = await client.PostAsJsonAsync(ApiMethods.AccontEditUser, user);
-
-                if (response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    ViewBag.ErrorMessage = "Неудачная попытка редактирования!";
-                }
+                response.EnsureSuccessStatusCode();
 
                 return RedirectToAction("UserProfile", new { id = model.Id });
             }
         }
 
         [HttpGet]
+        [HTTPExceptionAttribute]
         public async Task<ActionResult> SendEmail(string id)
         {
             string emailToken;
@@ -151,12 +152,7 @@ namespace QuestGame.WebMVC.Controllers
             using (var client = RestHelper.Create())
             {
                 var response = await client.GetAsync(ApiMethods.AccontEmailToken + id);
-
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    ViewBag.Message = ErrorMessages.AccountConfirmEmailError;
-                    return View("ConfirmEmail");
-                }
+                response.EnsureSuccessStatusCode();
 
                 emailToken = await response.Content.ReadAsAsync<string>();
             }
@@ -170,53 +166,33 @@ namespace QuestGame.WebMVC.Controllers
             {
                 var param = new Dictionary<string, string>();
                 param.Add("userId", id);
-                param.Add("subject", "Подтверждение email");
+                param.Add("subject", InfoMessages.EmailConfirmTitle);
                 param.Add("body", email.TransformText());
 
                 var response = await client.PostAsJsonAsync(ApiMethods.AccontSendEmailToken, param);
-
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    ViewBag.Message = ErrorMessages.AccountConfirmEmailError;
-                    return View("ConfirmEmail");
-                }
+                response.EnsureSuccessStatusCode();
             }
 
+            ViewBag.Title = InfoMessages.EmailConfirmTitle;
             ViewBag.Message = InfoMessages.EmailSendConfirm;
 
-            return View("ConfirmEmail");
+            return View("ActionResultInfo");
         }
 
         [AllowAnonymous]
         [HttpGet]
+        [HTTPExceptionAttribute]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
             using (var client = RestHelper.Create())
             {
                 var response = await client.GetAsync(ApiMethods.AccontConfirmEmail + userId + "&code=" + code);
+                response.EnsureSuccessStatusCode();
 
-                switch (response.StatusCode)
-                {
-                    case HttpStatusCode.NotFound:
-                        ViewBag.Message = ErrorMessages.AccountUserNotFound;
-                        break;
-                    case HttpStatusCode.BadRequest:
-                        ViewBag.Message = ErrorMessages.BadRequest;
-                        break;
-                    case HttpStatusCode.InternalServerError:
-                        ViewBag.Message = ErrorMessages.InternalServerError;
-                        break;
-                    case HttpStatusCode.OK:
-                        var currentUser = Session["User"] as ApplicationUserDTO;
-                        if (currentUser != null)
-                        {
-                            currentUser.EmailConfirmed = true;
-                        }                        
-                        ViewBag.Message = "Email успешно подтвержден!";
-                        break;
-                }
+                ViewBag.Title = InfoMessages.EmailConfirmTitle;
+                ViewBag.Message = InfoMessages.EmailConfirmAccepted;
 
-                return View("ConfirmEmail");
+                return View("ActionResultInfo");
             }
         }
 
@@ -227,6 +203,7 @@ namespace QuestGame.WebMVC.Controllers
         }
 
         [HttpPost]
+        [HTTPExceptionAttribute]
         public async Task<ActionResult> ResetPassword(ResetPasswordModel model)
         {
             if (!ModelState.IsValid)
@@ -237,23 +214,11 @@ namespace QuestGame.WebMVC.Controllers
             using (var client = RestHelper.Create())
             {
                 var response = await client.GetAsync(ApiMethods.AccontUserByEmail + model.Email);
-
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    ViewBag.Message = ErrorMessages.BadRequest;
-                    return View(model);
-                }
-
+                response.EnsureSuccessStatusCode();
                 var user = await response.Content.ReadAsAsync<ApplicationUserDTO>();
 
                 response = await client.GetAsync(ApiMethods.AccontResetToken + user.Id);
-
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    ViewBag.Message = ErrorMessages.BadRequest;
-                    return View(model);
-                }
-
+                response.EnsureSuccessStatusCode();
                 var code = await response.Content.ReadAsAsync<string>();
 
                 // Подготовить письмо
@@ -263,13 +228,14 @@ namespace QuestGame.WebMVC.Controllers
 
                 var param = new Dictionary<string, string>();
                 param.Add("userId", user.Id);
-                param.Add("subject", "Сброс пароля");
+                param.Add("subject", InfoMessages.PasswordResetTitle);
                 param.Add("body", email.TransformText());
 
                 response = await client.PostAsJsonAsync(ApiMethods.AccontSendResetToken, param);
+                response.EnsureSuccessStatusCode();
             }
 
-            ViewBag.Title = "Сброс пароля";
+            ViewBag.Title = InfoMessages.PasswordResetTitle;
             ViewBag.Message = InfoMessages.PasswordSendToken;
             return View("ActionResultInfo");
         }
@@ -279,7 +245,7 @@ namespace QuestGame.WebMVC.Controllers
         {
             if (userId == null || String.IsNullOrWhiteSpace(code))
             {
-                ViewBag.Title = "Сброс пароля";
+                ViewBag.Title = InfoMessages.PasswordResetTitle;
                 ViewBag.Message = ErrorMessages.AccountUserNotFound;
                 return View("ActionResultInfo");
             }
@@ -292,6 +258,7 @@ namespace QuestGame.WebMVC.Controllers
         }
 
         [HttpPost]
+        [HTTPExceptionAttribute]
         public async Task<ActionResult> NewPassword(ResetPasswordRequestModel model)
         {
             if (!ModelState.IsValid)
@@ -304,15 +271,10 @@ namespace QuestGame.WebMVC.Controllers
             {
                 var modelDTO = mapper.Map<ResetPasswordRequestModel, ResetPasswordDTO>(model);
                 var response = await client.PostAsJsonAsync(ApiMethods.AccontResetPassword, modelDTO);
-
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    ViewBag.Message = ErrorMessages.BadRequest;
-                    return View(model);
-                }
+                response.EnsureSuccessStatusCode();
             }
 
-            ViewBag.Title = "Сброс пароля";
+            ViewBag.Title = InfoMessages.PasswordResetTitle;
             ViewBag.Message = InfoMessages.PasswordConfirmTrue;
             return View("ActionResultInfo");
         }
@@ -324,6 +286,7 @@ namespace QuestGame.WebMVC.Controllers
         }
 
         [HttpPost]
+        [HTTPExceptionAttribute]
         public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -338,14 +301,12 @@ namespace QuestGame.WebMVC.Controllers
             using (var client = RestHelper.Create(currentUser.Token))
             {
                 var response = await client.PostAsJsonAsync(@"api/Account/ChangePassword", param);
-
-                if (response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    ViewBag.ErrorMessage = "Неудачная попытка редактирования!";
-                }
+                response.EnsureSuccessStatusCode();
             }
 
-            return RedirectToAction("UserProfile", new { id = currentUser.Id });
+            ViewBag.Title = InfoMessages.PasswordChangeTitle;
+            ViewBag.Message = InfoMessages.PasswordConfirmTrue;
+            return View("ActionResultInfo");
         }
     }
 }

@@ -74,13 +74,15 @@ namespace QuestGame.WebApi.Controllers
         [Route("GetUserById")]
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ApplicationUserDTO> GetUserById(string id)
+        public async Task<IHttpActionResult> GetUserById(string id)
         {
             ApplicationUser user = await UserManager.FindByIdAsync(id);
 
+            if (user == null) { return InternalServerError(); }
+
             var result = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
 
-            return result;
+            return Ok(result);
         }
 
         [Route("GetUserByEmail")]
@@ -110,7 +112,7 @@ namespace QuestGame.WebApi.Controllers
             {
                 var result = await UserManager.UpdateAsync(userResult);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return InternalServerError();
             }
@@ -457,7 +459,7 @@ namespace QuestGame.WebApi.Controllers
                 return Request.CreateResponse<string>(HttpStatusCode.OK, emailToken, new MediaTypeHeaderValue("application/json"));
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new HttpResponseMessage
                 {
@@ -478,7 +480,7 @@ namespace QuestGame.WebApi.Controllers
                 return Request.CreateResponse<string>(HttpStatusCode.OK, resetToken, new MediaTypeHeaderValue("application/json"));
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new HttpResponseMessage
                 {
@@ -501,7 +503,7 @@ namespace QuestGame.WebApi.Controllers
                 UserManager.SendEmail(userid, subject, body);
                 return Ok();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest();
             }
@@ -521,7 +523,7 @@ namespace QuestGame.WebApi.Controllers
                 UserManager.SendEmail(userid, subject, body);
                 return Ok();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest();
             }

@@ -33,7 +33,7 @@ namespace QuestGame.Domain
                 {
                     client.Send(mail);
                 }
-                 catch (Exception ex)
+                 catch (Exception)
                 {
                     throw;
                 }
@@ -69,7 +69,7 @@ namespace QuestGame.Domain
                 {
                     client.Send(mail);
                 }
-                catch (SmtpException ex)
+                catch (SmtpException)
                 {
                     throw;
                 }

@@ -13,9 +13,17 @@ namespace QuestGame.WebMVC.Attributes
         {
             if (!filterContext.ExceptionHandled && filterContext.Exception is HttpRequestException)
             {
-                filterContext.Result =
-                    new RedirectResult("~/Content/RangeErrorPage.html");
+                filterContext.Controller.ViewBag.Title = "Ошибка";
+                filterContext.Controller.ViewBag.Message = filterContext.Exception.Message;
+
                 filterContext.ExceptionHandled = true;
+
+                filterContext.Result =  new ViewResult
+                {
+                    ViewName = "ActionResultInfo",
+                    ViewData = filterContext.Controller.ViewData,
+                    TempData = filterContext.Controller.TempData
+                };
             }
         }
     }
