@@ -93,6 +93,9 @@
     <Compile Include="DBInitializers\IInitialization.cs" />
     <Compile Include="DBInitializers\InitQuest.cs" />
     <Compile Include="DBInitializers\InitUserProfile.cs" />
+    <Compile Include="DTO\AccountsDTO.cs" />
+    <Compile Include="DTO\Account\ChangePasswordDTO.cs" />
+    <Compile Include="DTO\ApplicationUserDTO.cs" />
     <Compile Include="DTO\MotionDTO.cs" />
     <Compile Include="DTO\QuestDTO.cs" />
     <Compile Include="DTO\QuestFullDTO.cs" />

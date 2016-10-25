@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using QuestGame.Common.Helpers;
+using QuestGame.Domain.DTO;
 using QuestGame.WebMVC.Attributes;
 using QuestGame.WebMVC.Constants;
 using QuestGame.WebMVC.Models;
@@ -24,11 +25,11 @@ namespace QuestGame.WebMVC.Controllers
             this.mapper = mapper;
         }
 
-        protected UserModel SessionUser
+        protected ApplicationUserDTO SessionUser
         {
             get
             {
-                return Session["User"] as UserModel;
+                return Session["User"] as ApplicationUserDTO;
             }
         }
 

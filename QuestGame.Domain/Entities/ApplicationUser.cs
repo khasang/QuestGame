@@ -12,7 +12,10 @@ namespace QuestGame.Domain.Entities
     // Чтобы добавить данные профиля для пользователя, можно добавить дополнительные свойства в класс ApplicationUser. Дополнительные сведения см. по адресу: http://go.microsoft.com/fwlink/?LinkID=317594.
     public class ApplicationUser : IdentityUser
     {
-        public int UserProfileId { get; set; }
+
+        public string NickName { get; set; }
+
+        //public int UserProfileId { get; set; }
         public virtual UserProfile UserProfile { get; set; }
 
         /// <summary>
@@ -30,6 +33,9 @@ namespace QuestGame.Domain.Entities
             // Обратите внимание, что authenticationType должен совпадать с типом, определенным в CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, authenticationType);
             // Здесь добавьте настраиваемые утверждения пользователя
+
+            //userIdentity.AddClaim(new Claim(ClaimTypes.Name, this.NickName));
+
             return userIdentity;
         }
     }    

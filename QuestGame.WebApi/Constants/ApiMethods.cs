@@ -44,5 +44,11 @@ namespace QuestGame.WebApi.Constants
         public const string MotionDelById = @"api/Motion/DelById?id=";
 
         #endregion
+
+        #region AccountController
+
+        public const string AccontUser = @"api/Account/GetUser?id=";
+
+        #endregion
     }
 }

@@ -25,6 +25,11 @@ using QuestGame.Common.Interfaces;
 using QuestGame.Common;
 using System.Diagnostics;
 using QuestGame.Common.Helpers;
+using AutoMapper;
+using QuestGame.Domain.DTO;
+using QuestGame.Domain.Interfaces;
+using System.Net.Mail;
+using System.Threading;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -35,9 +40,13 @@ namespace QuestGame.WebApi.Controllers
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
         private ILoggerService logger = LoggerService.Create();
+        IDataManager dataManager;
+        IMapper mapper;
 
-        public AccountController()
+        public AccountController(IMapper mapper, IDataManager dataManager)
         {
+            this.mapper = mapper;
+            this.dataManager = dataManager;
         }
 
         public AccountController(ApplicationUserManager userManager,
@@ -60,6 +69,57 @@ namespace QuestGame.WebApi.Controllers
         }
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
+
+
+        [Route("GetUserById")]
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetUserById(string id)
+        {
+            ApplicationUser user = await UserManager.FindByIdAsync(id);
+
+            if (user == null) { return NotFound(); }
+
+            var result = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
+
+            return Ok(result);
+        }
+
+        [Route("GetUserByEmail")]
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetUserByEmail(string email)
+        {
+            ApplicationUser user = await UserManager.FindByEmailAsync(email);
+
+            if (user == null) { return BadRequest(); }
+
+            var result = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
+
+            return Ok(result);
+        }
+
+
+        [Route("EditUser")]
+        [HttpPost]
+        public async Task<IHttpActionResult> EditUser(ApplicationUserDTO model)
+        {
+            ApplicationUser user = await UserManager.FindByIdAsync(model.Id);
+
+            var userResult = mapper.Map<ApplicationUserDTO, ApplicationUser>(model, user);
+
+            try
+            {
+                var result = await UserManager.UpdateAsync(userResult);
+            }
+            catch (Exception)
+            {
+                return InternalServerError();
+            }
+
+            return Ok();
+        }
+
 
         // GET api/Account/UserInfo
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
@@ -125,17 +185,21 @@ namespace QuestGame.WebApi.Controllers
         }
 
         // POST api/Account/ChangePassword
+        [HttpPost]
         [Route("ChangePassword")]
-        public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
+        public async Task<IHttpActionResult> ChangePassword(ChangePasswordDTO model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
-                model.NewPassword);
-            
+            var principal = Thread.CurrentPrincipal;
+            var identity = principal.Identity;
+            var userId = identity.GetUserId();
+
+            var result = await UserManager.ChangePasswordAsync(userId, model.OldPassword, model.NewPassword);
+
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
@@ -143,6 +207,8 @@ namespace QuestGame.WebApi.Controllers
 
             return Ok();
         }
+
+
 
         // POST api/Account/SetPassword
         [Route("SetPassword")]
@@ -158,6 +224,27 @@ namespace QuestGame.WebApi.Controllers
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
+            }
+
+            return Ok();
+        }
+
+
+        // POST api/Account/ResetPassword
+        [AllowAnonymous]
+        [Route("ResetPassword")]
+        public async Task<IHttpActionResult> ResetPassword(ResetPasswordDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await UserManager.ResetPasswordAsync(model.Id, model.ResetToken, model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest();
             }
 
             return Ok();
@@ -268,9 +355,9 @@ namespace QuestGame.WebApi.Controllers
             if (hasRegistered)
             {
                 Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
-                
-                 ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
-                    OAuthDefaults.AuthenticationType);
+
+                ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(UserManager,
+                   OAuthDefaults.AuthenticationType);
                 ClaimsIdentity cookieIdentity = await user.GenerateUserIdentityAsync(UserManager,
                     CookieAuthenticationDefaults.AuthenticationType);
 
@@ -331,14 +418,16 @@ namespace QuestGame.WebApi.Controllers
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<IHttpActionResult> Register(RegisterBindingModel model)
+        public async Task<IHttpActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var user = mapper.Map<RegisterViewModel, ApplicationUser>(model);
+            var profile = mapper.Map<RegisterViewModel, UserProfile>(model);
+            user.UserProfile = profile;
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
@@ -348,7 +437,7 @@ namespace QuestGame.WebApi.Controllers
             {
                 Success = result.Succeeded,
                 Status = result.Succeeded.ToString(),
-                Body = string.Empty,
+                Body = user.Id,
                 ErrorMessage = result.Errors.ToString()
             };
 
@@ -357,8 +446,116 @@ namespace QuestGame.WebApi.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet]
+        [Route("GetEmailToken")]
+        public async Task<HttpResponseMessage> GetEmailToken(string id)
+        {
+            try
+            {
+                var emailToken = await UserManager.GenerateEmailConfirmationTokenAsync(id);
+
+                return Request.CreateResponse<string>(HttpStatusCode.OK, emailToken, new MediaTypeHeaderValue("application/json"));
+
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("GetResetToken")]
+        public async Task<HttpResponseMessage> GetResetToken(string id)
+        {
+            try
+            {
+                var resetToken = await UserManager.GeneratePasswordResetTokenAsync(id);
+
+                return Request.CreateResponse<string>(HttpStatusCode.OK, resetToken, new MediaTypeHeaderValue("application/json"));
+
+            }
+            catch (Exception)
+            {
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("SendEmailToken")]
+        public IHttpActionResult SendEmailToken(Dictionary<string, string> parameters)
+        {
+            var userid = parameters["userId"];
+            var subject = parameters["subject"];
+            var body = parameters["body"];
+
+            try
+            {
+                UserManager.SendEmail(userid, subject, body);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("SendResetToken")]
+        public IHttpActionResult SendResetToken(Dictionary<string, string> parameters)
+        {
+            var userid = parameters["userId"];
+            var subject = parameters["subject"];
+            var body = parameters["body"];
+
+            try
+            {
+                UserManager.SendEmail(userid, subject, body);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("ConfirmEmail")]
+        public async Task<HttpResponseMessage> ConfirmEmail(string id, string code)
+        {
+
+            using (var client = RestHelper.Create())
+            {
+                var result = await UserManager.ConfirmEmailAsync(id, code);
+
+                if (!result.Succeeded)
+                {
+                    return new HttpResponseMessage
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                    };
+                }
+
+                return new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent("Email подтвержден")
+                };
+            }
+        }
+
+        [AllowAnonymous]
         [Route("LoginUser")]
-        public async Task<HttpResponseMessage> LoginUser(LoginBindingModel model)
+        public async Task<HttpResponseMessage> LoginUserNew(LoginBindingModel model)
         {
             if (model == null)
             {
@@ -368,7 +565,7 @@ namespace QuestGame.WebApi.Controllers
                     Content = new StringContent("Invalid user data")
                 };
             }
-            
+
             using (var client = RestHelper.Create())
             {
                 var requestParams = new Dictionary<string, string>
@@ -394,11 +591,14 @@ namespace QuestGame.WebApi.Controllers
 
                 logger.Information("| Login | {@user}", model);
 
-                return new HttpResponseMessage()
-                {
-                    Content = new StringContent(authToken),
-                    StatusCode = HttpStatusCode.OK
-                };                
+                var user = UserManager.FindByName(model.Email);
+                var userResult = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
+                userResult.Token = authToken;
+
+                HttpResponseMessage responseResult = Request.CreateResponse<ApplicationUserDTO>(HttpStatusCode.OK, userResult);
+                responseResult.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+                return responseResult;
             }
         }
 
@@ -430,7 +630,7 @@ namespace QuestGame.WebApi.Controllers
                 Body = string.Empty,
                 ErrorMessage = result.Errors.ToString()
             };
-            
+
             return Ok(response);
         }
 

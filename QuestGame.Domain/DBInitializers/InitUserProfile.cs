@@ -15,8 +15,8 @@ namespace QuestGame.Domain.DBInitializers
 
             var profile = new UserProfile
             {
-                Birthday  = DateTime.Now - new TimeSpan(10000, 0, 0, 0, 0),
-                Sex = true,
+                InviteDate  = DateTime.Now,
+                CountCompliteQuests = 5,
                 User = owner
             };
 

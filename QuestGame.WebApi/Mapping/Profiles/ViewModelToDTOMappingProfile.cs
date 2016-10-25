@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using QuestGame.WebApi.Areas.Game.Models;
 using QuestGame.WebApi.Areas.Design.Models;
+using QuestGame.WebApi.Models;
 
 namespace QuestGame.WebApi.Mapping.Profiles
 {
@@ -23,6 +24,12 @@ namespace QuestGame.WebApi.Mapping.Profiles
             CreateMap<StageViewModel, StageFullDTO>();
             CreateMap<StageViewModel, StageDTO>();
             CreateMap<MotionViewModel, MotionDTO>();
+
+            CreateMap<RegisterViewModel, ApplicationUser>().ForMember(x => x.UserName, y => y.MapFrom(v => v.Email));
+            CreateMap<RegisterViewModel, UserProfile>();
+
+            CreateMap<UserViewModel, UserDTO>();
+            CreateMap<UserProfileViewModel, UserProfileDTO>();
         }
 
         public override string ProfileName

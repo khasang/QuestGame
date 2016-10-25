@@ -1,0 +1,13 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".txt" #>
+
+<h1>QuestGame</h1>
+<p>Для подтвержения регистрации на сайте, пройдите по сслыке</p>
+<pre>
+	<a href="<#= this.ActionUrl #>">[ Завершить регистрацию ]</a>
+</pre>
+<pre></pre>

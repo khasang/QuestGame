@@ -8,8 +8,10 @@ namespace QuestGame.Domain.DTO
 {
     public class UserProfileDTO
     {
-        public int Id { get; set; }
-        public DateTime Birthday { get; set; }
-        public bool Sex { get; set; }
+        public string UserId { get; set; }
+        public string avatarUrl { get; set; }
+        public int Rating { get; set; }
+        public int CountCompliteQuests { get; set; }
+        public DateTime? InviteDate { get; set; }
     }
 }

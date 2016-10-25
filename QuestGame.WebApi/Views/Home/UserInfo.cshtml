@@ -1,0 +1,159 @@
+﻿@model QuestGame.WebApi.Models.UserViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Профиль пользователя</h2>
+
+
+<div id="Profile" class="row" style="margin-top:50px">
+    <div class="col-sm-4" style="text-align:right">
+        <img src="@Model.UserProfile.avatarUrl" class="img-thumbnail img-circle pull-xs-right" alt="Cinque Terre" width="200">
+    </div>
+    <div class="col-sm-8">
+        @if (Model.NickName != null)
+        {
+            <div style="margin-top:43px"><h1>@Model.NickName</h1></div>
+            <div><h3>@Model.Email</h3></div>
+        }
+        else
+        {
+            <div style="margin-top:43px"><h1>@Model.Email</h1></div>
+        }
+        <div>
+            <a id="btnProfileEdit" class="btn btn-default" href="#">Редактировать</a>
+        </div>
+    </div>
+</div>
+
+<div id="ProfileEdit" style="display:none; margin-top:50px">
+    @using (Html.BeginForm("UserInfoEdit", "Home", FormMethod.Post, new { enctype = "multipart/form-data", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal row">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="col-sm-4" style="text-align:right">
+                <img src="@Model.UserProfile.avatarUrl" class="img-thumbnail img-circle pull-xs-right" width="200">
+            </div>
+
+            <div class="col-sm-8">
+
+                    <div class="form-group" style="margin-top:43px">
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "hidden" } })
+
+                        @Html.EditorFor(model => model.UserProfile.avatarUrl, new { htmlAttributes = new { @class = "hidden" } })
+                        @Html.EditorFor(model => model.UserProfile.CountCompliteQuests, new { htmlAttributes = new { @class = "hidden" } })
+                        @Html.EditorFor(model => model.UserProfile.InviteDate, new { htmlAttributes = new { @class = "hidden" } })
+                        @Html.EditorFor(model => model.UserProfile.Rating, new { htmlAttributes = new { @class = "hidden" } })
+
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.NickName, new { htmlAttributes = new { @class = "form-control input-lg" }, style = "max-width: none;" })
+                            @Html.ValidationMessageFor(model => model.NickName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div><h3>@Model.Email</h3></div>
+
+                <div>
+                    <input id="btnEditAccept" type="submit" value="Сохранить" class="btn btn-success" />
+                    <a id="btnEditCancel" class="btn btn-warning" href="#">Отменить</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row bs-callout bs-callout-warning" style="margin-top:30px">
+    <div class="col-sm-12">
+        <div class="col-sm-3">
+            <div>Рейтинг пользователя</div>
+            <div>@Model.UserProfile.Rating</div>
+        </div>
+        <div class="col-sm-3">
+            <div>Пройдено квестов</div>
+            <div>@Model.UserProfile.CountCompliteQuests</div>
+        </div>
+        <div class="col-sm-3">
+            <div>Создано квестов</div>
+            <div>@Model.Quests.Count()</div>
+        </div>
+        <div class="col-sm-3">
+            <div>Дата регистрации</div>
+            <div>@Model.UserProfile.InviteDate</div>
+        </div>
+    </div>
+</div>
+
+<br>
+<h4>Квесты пользователя</h4>
+
+
+<div class="row" style="margin-top:30px">
+    <div class="col-sm-12">
+        @foreach (var Item in Model.Quests)
+            {
+            <div class="col-sm-3" style="margin-bottom: 20px">
+                <div class="card card_quest">
+                    <div class="card-img-title"
+                         style="background: url('http://beautylook.pro/upload/medialibrary/98f/4%20(3).jpg') top no-repeat; background-size: cover; height: 150px;"></div>
+                    <div class="card-block">
+                        <h4 class="card-title">@Item.Title</h4>
+                        @*<p class="card-text">Описание Описание Описание  Описание </p>*@
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            Рейтинг -
+                            @for (var i = 1; i <= 5; i++)
+                            {
+                                if (i <= Item.Rate)
+                                {
+                                    <span>&#9733</span>
+                                }
+                                else
+                                {
+                                    <span>&#9734</span>
+                                }
+                            }
+                        </li>
+                    </ul>
+                    <div class="card-block">
+                        <a href="#" class="card-link btn btn-primary">Играть</a>
+                        @*@Html.ActionLink("Редактировать", "Edit", "Quest",null,null,null, new { area = "Design" }, new { id = Item.Id})*@
+                        <a href="/Design/Quest/Edit?id=@Item.Id" class="card-link btn btn-default">Редактировать</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<style>
+   .bs-callout-warning {
+       background-color: #fcf8f2;
+       border-color: #f0ad4e;
+   }
+
+   .bs-callout {
+       margin: 20px 0;
+       padding: 20px;
+       border-left: 3px solid #f0ad4e;
+   }
+</style>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+
+<script>
+    var profile = $("#Profile");
+    var profileEdit = $("#ProfileEdit");
+
+    $("#btnProfileEdit, #btnEditCancel").click(function (event) {
+        event.preventDefault();
+        profile.toggle();
+        profileEdit.toggle();
+    });
+
+
+</script>

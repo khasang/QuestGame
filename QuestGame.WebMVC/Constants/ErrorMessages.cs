@@ -8,6 +8,7 @@ namespace QuestGame.WebMVC.Constants
     public class ErrorMessages
     {
         public const string BadRequest = "Неудачный запрос!";
+        public const string InternalServerError = "Ошибка обработки данных!";
 
         public const string QuestNotFound = "Квест не найден!";
         public const string QuestNotCreate = "Не удалось добавить квест!";
@@ -27,6 +28,8 @@ namespace QuestGame.WebMVC.Constants
         public const string AccountSuccessRegister = "Пользователь успешно зарегистрирован!";
         public const string AccountFailRegister = "Ошибка регистрации!";
         public const string AccountFailLogin = "Неудачная попытка аутентификации!";
+        public const string AccountUserNotFound = "Пользователь не найден!";
+        public const string AccountConfirmEmailError = "Не удалось отправить код подтверждения, возможно сервер не доступен. Попробуйте еще раз позднее.<br/> Чтобы повторить письмо с подтверждением - перейдите в Ваш профиль пользователя.";
 
         public const string BaseSuccessUploadFile = "Файл успешно отправлен!";
     }

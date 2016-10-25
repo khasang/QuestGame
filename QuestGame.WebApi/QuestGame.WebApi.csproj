@@ -252,15 +252,15 @@
     <Compile Include="Models\RegisterResponse.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\UserProfileViewModel.cs" />
+    <Compile Include="Models\UserQuestsViewModel.cs" />
+    <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\dbo.GetQuestsByUserRole.sql" />
-    <Content Include="App_Data\Query1.sql" />
-    <Content Include="App_Data\Query2.sql" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -358,11 +358,14 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Register.cshtml" />
+    <Content Include="Views\Home\RegisterOLD.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Home\Register.cshtml" />
+    <Content Include="Views\Home\UserInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Content\Files\" />
     <Folder Include="Content\Temp\" />
@@ -380,6 +383,9 @@
       <Project>{505742b2-622d-45a4-81b5-64c9ddaaff46}</Project>
       <Name>QuestGame.Domain</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -49,6 +49,18 @@ namespace QuestGame.WebMVC.Constants
 
         public const string AccountLogin = @"api/Account/LoginUser";
         public const string AccontRegister = @"api/Account/Register";
+        public const string AccontUserById = @"api/Account/GetUserById?id=";
+        public const string AccontUserByEmail = @"api/Account/GetUserByEmail?email=";
+
+        public const string AccontEditUser = @"api/Account/EditUser";
+
+        public const string AccontEmailToken = @"/api/Account/GetEmailToken?id=";
+        public const string AccontSendEmailToken = @"api/Account/SendEmailToken";
+        public const string AccontConfirmEmail = @"/api/Account/ConfirmEmail?id=";
+        public const string AccontResetToken = @"api/Account/GetResetToken?id=";
+        public const string AccontSendResetToken = @"api/Account/SendResetToken";
+        public const string AccontResetPassword = @"api/Account/ResetPassword";
+        public const string AccountChangePassword = @"api/Account/ChangePassword";
 
         #endregion
 

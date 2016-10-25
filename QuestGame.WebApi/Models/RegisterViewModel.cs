@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,8 +9,9 @@ namespace QuestGame.WebApi.Models
 {
     public class RegisterViewModel
     {
-        [Required]
         [Display(Name = "Адрес электронной почты")]
+        [DataType(DataType.EmailAddress)]
+        [Required(ErrorMessage = "Не указан Email")]
         public string Email { get; set; }
 
         [Required]
@@ -22,5 +24,15 @@ namespace QuestGame.WebApi.Models
         [Display(Name = "Подтверждение пароля")]
         [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
+
+        [Display(Name = "Как к Вам обращаться? Введите Ваше ФИО или Никнейм")]
+        public string NickName { get; set; }
+
+        [JsonIgnore]
+        [Display(Name = "Аватар")]
+        public HttpPostedFileBase File { get; set; }
+
+        [System.Web.Mvc.HiddenInput(DisplayValue = false)]
+        public string avatarUrl { get; set; }
     }
 }
