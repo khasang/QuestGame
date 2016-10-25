@@ -204,6 +204,7 @@ namespace QuestGame.WebMVC.Controllers
 
         [HttpPost]
         [HTTPExceptionAttribute]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(ResetPasswordModel model)
         {
             if (!ModelState.IsValid)
@@ -259,6 +260,7 @@ namespace QuestGame.WebMVC.Controllers
 
         [HttpPost]
         [HTTPExceptionAttribute]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> NewPassword(ResetPasswordRequestModel model)
         {
             if (!ModelState.IsValid)
@@ -287,6 +289,7 @@ namespace QuestGame.WebMVC.Controllers
 
         [HttpPost]
         [HTTPExceptionAttribute]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
