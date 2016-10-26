@@ -159,7 +159,7 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
             //var path = SaveImage(file);
 
             var model = mapper.Map<QuestViewModel, QuestDTO>(quest);
-            model.Cover = UploadFile(file);
+            model.Cover = await UploadFile(file);
 
             using (var client = RestHelper.Create(SessionUser.Token))
             {
@@ -215,7 +215,7 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
             string fileName = Guid.NewGuid().ToString();  // Чтобы избежать возможного конфликта одинаковых имен
             string fileExt = Path.GetExtension(file.FileName);
 
-            string path = string.Format("{0}{1}.{2}", DefaultParams.ImageRelativePath, fileName, fileExt);
+            string path = string.Format("{0}{1}.{2}", DefaultParams.FileRelativePath, fileName, fileExt);
             file.SaveAs(Server.MapPath(path));
 
             return path;

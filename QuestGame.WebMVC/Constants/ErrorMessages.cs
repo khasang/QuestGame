@@ -29,5 +29,7 @@ namespace QuestGame.WebMVC.Constants
         public const string AccountFailLogin = "Неудачная попытка аутентификации!";
 
         public const string BaseSuccessUploadFile = "Файл успешно отправлен!";
+
+        public const string BaseErrorLoadFile = "Ошибка загрузки файла!";
     }
 }

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
@@ -49,40 +50,33 @@ namespace QuestGame.WebMVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        protected string UploadFile(HttpPostedFileBase file)
+        protected async Task<string> UploadFile(HttpPostedFileBase file)
         {
-            string errorMessage = string.Empty;
-            string path = string.Empty;
-            if (file != null)
+            if (file == null)
+                throw new NullReferenceException(ErrorMessages.BaseErrorLoadFile);
+
+            var fileName = Guid.NewGuid().ToString();    // Чтобы избежать возможного конфликта одинаковых имен
+            var fileExt = Path.GetExtension(file.FileName);
+            var path = Server.MapPath($"{DefaultParams.FileRelativePath}{fileName}{fileExt}");
+            file.SaveAs(path);                              // сохраняем файл в папку Content/Temp в проекте
+
+            string result;
+            using (var client = RestHelper.Create(SessionUser.Token))
+            using (var fileStream = System.IO.File.Open(path, FileMode.Open))
             {
-                string fileName = Guid.NewGuid().ToString();    // Чтобы избежать возможного конфликта одинаковых имен
-                string fileExt = Path.GetExtension(file.FileName);
-                path = Server.MapPath($"{DefaultParams.ImageRelativePath}{fileName}{fileExt}");
-                file.SaveAs(path);                              // сохраняем файл в папку Content/Temp в проекте
+                var fileInfo = new FileInfo(path);
+                var content = new StreamContent(fileStream);
+                var form = new MultipartFormDataContent();
+                form.Add(content, DefaultParams.FileRelativePath, fileInfo.Name);
 
-                using (var client = RestHelper.Create(SessionUser.Token))
-                using(var fileStream = System.IO.File.Open(path, FileMode.Open))
-                {
-                    var fileInfo = new FileInfo(path);
-                    var content = new StreamContent(fileStream);
-                    var form = new MultipartFormDataContent();
-                    form.Add(content, DefaultParams.ImageRelativePath, fileInfo.Name);
-                    //form.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-
-                    var response = client.PostAsync(ApiMethods.BaseUploadFile, form).Result;
-                }
-
-
-
-
-
-
-
-                RestHelper.UploadFile(ApiMethods.BaseUploadFile, Server.MapPath(path)); // Отправляем файл в слой WebApi
-                System.IO.File.Delete(path);   // удаляем файл из папки Content/Temp в проекте
+                var response = await client.PostAsync(ApiMethods.BaseUploadFile, form);
+                result = await response.Content.ReadAsStringAsync();
             }
 
-            return path;
+            //RestHelper.UploadFile(ApiMethods.BaseUploadFile, path); // Отправляем файл в слой WebApi
+            System.IO.File.Delete(path);   // удаляем файл из папки Content/Temp в проекте
+
+            return result;
         }
     }
 }
