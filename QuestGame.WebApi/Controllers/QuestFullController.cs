@@ -207,11 +207,12 @@ namespace QuestGame.WebApi.Controllers
         /// </summary>
         [HttpPost]
         [Route("UploadFile")]
+        [AllowAnonymous]
         public IHttpActionResult UploadFile()
         {
             try
             {
-                UploadFile(Request.Content);
+                Upload();
                 return Ok();
             }
             catch (Exception ex)
@@ -222,44 +223,50 @@ namespace QuestGame.WebApi.Controllers
             }
         }
 
-        private void UploadFile(HttpContent content)
+        private void Upload()
         {
+            var content = Request.Content;
+
             if (!content.IsMimeMultipartContent())
-            {
                 throw new Exception();
+
+            var path = HttpContext.Current.Server.MapPath(WebConfigurationManager.AppSettings["PathToFiles"]);
+            var provider = new MultipartFormDataStreamProvider(path);
+
+            try
+            {
+                var result = content.ReadAsMultipartAsync(provider).Result;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                throw;
             }
 
-            var provider = new MultipartFormDataStreamProvider(WebConfigurationManager.AppSettings["pathToFiles"]);
+            if (provider.FileData.Count > 1)
+                throw new Exception("Доступна одновременная загрузка только одного файла");
 
-            content.ReadAsMultipartAsync(provider).Wait();
-
-            if (provider.FileData.Count == 1)
+            var file = new FileInfo(provider.FileData[0].LocalFileName);
+            if (file.Length != 0)
             {
-                var file = new FileInfo(provider.FileData[0].LocalFileName);
+                string name = provider.FileData[0].Headers.ContentDisposition.FileName.Trim('"');
+                int pos = name.LastIndexOfAny(new[] { '\\', '/' }) + 1;
+                name = file.DirectoryName + Path.DirectorySeparatorChar + name.Substring(pos);
 
-                if (file.Length != 0)
+                if (File.Exists(name))
+                    throw new Exception("Файл с таким именем существует!");
+                else
                 {
-                    string name = provider.FileData[0].Headers.ContentDisposition.FileName.Trim('"');
-                    int pos = name.LastIndexOfAny(new[] { '\\', '/' }) + 1;
-                    name = file.DirectoryName + Path.DirectorySeparatorChar + name.Substring(pos);
-
-                    if (File.Exists(name))
-                        throw new Exception("Сертификат с таким имененем уже загружен");
-                    else
+                    try
                     {
-                        try
-                        {
-                            file.MoveTo(name);
-                        }
-                        catch (Exception)
-                        {
-                            throw new Exception("Файл сертификата поврежден");
-                        }
+                        file.MoveTo(name);
+                    }
+                    catch (Exception)
+                    {
+                        throw new Exception("Файл поврежден");
                     }
                 }
             }
-            else
-                throw new Exception("Доступна одновременная загрузка только одного файла");
 
             //если какие-либо ошибки то удаляем загруженные файлы
             foreach (var fileData in provider.FileData)

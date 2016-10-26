@@ -16,7 +16,6 @@ namespace QuestGame.Domain.EntityConfigurations
             this.ToTable("Images");
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.Id).IsRequired();
-            this.Property(x => x.Name).IsRequired();
             this.Property(x => x.Ext).IsRequired();
         }
     }

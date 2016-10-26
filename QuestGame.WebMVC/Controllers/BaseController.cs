@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
@@ -47,33 +49,40 @@ namespace QuestGame.WebMVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpPost]
-        protected ActionResult UploadFile(HttpPostedFileBase file)
+        protected string UploadFile(HttpPostedFileBase file)
         {
+            string errorMessage = string.Empty;
+            string path = string.Empty;
             if (file != null)
             {
-                string fileName = Path.GetFileName(file.FileName);
-                var path = Path.Combine(Server.MapPath("~/Content/Temp/"), fileName);
-                try
+                string fileName = Guid.NewGuid().ToString();    // Чтобы избежать возможного конфликта одинаковых имен
+                string fileExt = Path.GetExtension(file.FileName);
+                path = Server.MapPath($"{DefaultParams.ImageRelativePath}{fileName}{fileExt}");
+                file.SaveAs(path);                              // сохраняем файл в папку Content/Temp в проекте
+
+                using (var client = RestHelper.Create(SessionUser.Token))
+                using(var fileStream = System.IO.File.Open(path, FileMode.Open))
                 {
-                    file.SaveAs(path);         // сохраняем файл в папку Files в проекте
+                    var fileInfo = new FileInfo(path);
+                    var content = new StreamContent(fileStream);
+                    var form = new MultipartFormDataContent();
+                    form.Add(content, DefaultParams.ImageRelativePath, fileInfo.Name);
+                    //form.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+
+                    var response = client.PostAsync(ApiMethods.BaseUploadFile, form).Result;
                 }
-                catch
-                {
-                    ViewBag.Message = "Ошибка локального сохранения";
-                }
 
-                RestHelper.UploadFile(ApiMethods.BaseUploadFile, path);
 
-                System.IO.File.Delete(path);   // удаляем файл из папки Files в проекте
 
-                ViewBag.Message = ErrorMessages.BaseSuccessUploadFile;
+
+
+
+
+                RestHelper.UploadFile(ApiMethods.BaseUploadFile, Server.MapPath(path)); // Отправляем файл в слой WebApi
+                System.IO.File.Delete(path);   // удаляем файл из папки Content/Temp в проекте
             }
-            else
-            {
-                ViewBag.Message = "Имя файла null";
-            }
-            return RedirectToAction("Index");
+
+            return path;
         }
     }
 }

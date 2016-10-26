@@ -19,6 +19,7 @@ namespace QuestGame.Domain
         public DbSet<Stage> Stages { get; set; }
         public DbSet<Motion> Motions { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
+        public DbSet<Image> Images { get; set; }
 
         public IDbSet<ApplicationUser> GetUsers() { return base.Users; }
         public IDbSet<IdentityRole> GetRoles() { return base.Roles; }
@@ -52,6 +53,7 @@ namespace QuestGame.Domain
             modelBuilder.Configurations.Add(new QuestMapper());
             modelBuilder.Configurations.Add(new StageMapper());
             modelBuilder.Configurations.Add(new UserProfileMapper());
+            modelBuilder.Configurations.Add(new ImageMapper());
 
             base.OnModelCreating(modelBuilder);
             // modelBuilder.Entity<ApplicationUser>().HasOptional(x => x.UserProfileId).WithRequired();

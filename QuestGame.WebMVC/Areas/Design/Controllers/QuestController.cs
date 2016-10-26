@@ -16,6 +16,7 @@ using QuestGame.WebMVC.Areas.Game.Models;
 using QuestGame.WebMVC.Areas.Design.Models;
 using QuestGame.WebMVC.Controllers;
 using System.Web;
+using System.IO;
 
 namespace QuestGame.WebMVC.Areas.Design.Controllers
 {
@@ -142,13 +143,12 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
 
                 questModel.Stages = stagesModel.ToDictionary(x => x.Id, y => y.Title);
 
-                ViewBag.ReturnUrl = HttpContext.Request.UrlReferrer.AbsolutePath;
                 return View(questModel);
             }            
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(QuestViewModel quest, HttpPostedFileBase file, string returnUrl)
+        public async Task<ActionResult> Edit(QuestViewModel quest, HttpPostedFileBase file)
         {
             //if(!ModelState.IsValid)
             //{
@@ -156,14 +156,17 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
             //    return View(quest);
             //}
 
-            var model = mapper.Map<QuestViewModel, QuestDTO>(quest);
+            //var path = SaveImage(file);
 
-            using(var client = RestHelper.Create(SessionUser.Token))
+            var model = mapper.Map<QuestViewModel, QuestDTO>(quest);
+            model.Cover = UploadFile(file);
+
+            using (var client = RestHelper.Create(SessionUser.Token))
             {
                 var response = await client.PutAsJsonAsync(ApiMethods.QuestUpdate, model);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    ViewBag.Message = ErrorMessages.QuestNotUdate;
+                    ViewBag.Message = ErrorMessages.QuestNotUpdate;
                     return RedirectToAction("Index", "Quest");
                 }
             }
@@ -197,6 +200,25 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
 
                 return View(questModel);
             }
+        }
+
+        /// <summary>
+        /// Сохраняет изображение на сервере во временную папку
+        /// </summary>
+        /// <param name="file">Файл изображения</param>
+        /// <returns>Путь к файлу изображения</returns>
+        public string  SaveImage(HttpPostedFileBase file)
+        {
+            if (file == null)
+                return string.Empty;
+
+            string fileName = Guid.NewGuid().ToString();  // Чтобы избежать возможного конфликта одинаковых имен
+            string fileExt = Path.GetExtension(file.FileName);
+
+            string path = string.Format("{0}{1}.{2}", DefaultParams.ImageRelativePath, fileName, fileExt);
+            file.SaveAs(Server.MapPath(path));
+
+            return path;
         }
     }
 }

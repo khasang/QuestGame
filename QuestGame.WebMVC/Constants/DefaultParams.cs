@@ -8,5 +8,6 @@ namespace QuestGame.WebMVC.Constants
     public class DefaultParams
     {
         public const string WebApiServiceUrlNameKey = "WebApiServiceBaseUrl";
+        public const string ImageRelativePath = @"~/Content/Temp/";
     }
 }

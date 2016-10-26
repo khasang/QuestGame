@@ -52,6 +52,6 @@ namespace QuestGame.WebMVC.Constants
 
         #endregion
 
-        public const string BaseUploadFile = @"api/UploadFile";
+        public const string BaseUploadFile = @"api/QuestFull/UploadFile";
     }
 }

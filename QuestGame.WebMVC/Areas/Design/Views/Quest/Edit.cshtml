@@ -10,7 +10,7 @@
         <div class="panel-heading"><h2>Редактирование квеста</h2></div>
         <div class="panel-body">
             
-            @using (Html.BeginForm("Edit", "Quest", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("Edit", "Quest", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true)
@@ -63,7 +63,7 @@
                     </dl>
                     <div class="col-md-6">
                         <img />
-                        <input type="file" name="upload" />
+                        <input type="file" name="file" />
                     </div>
                 </div>
                 <div class="list-group">

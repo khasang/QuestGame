@@ -93,6 +93,7 @@
     <Compile Include="DBInitializers\IInitialization.cs" />
     <Compile Include="DBInitializers\InitQuest.cs" />
     <Compile Include="DBInitializers\InitUserProfile.cs" />
+    <Compile Include="DTO\ImageDTO.cs" />
     <Compile Include="DTO\MotionDTO.cs" />
     <Compile Include="DTO\QuestDTO.cs" />
     <Compile Include="DTO\QuestFullDTO.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="EntityConfigurations\StageMapper.cs" />
     <Compile Include="EntityConfigurations\UserProfileMapper.cs" />
     <Compile Include="IdentityConfig.cs" />
+    <Compile Include="Implementations\EFImageRepository.cs" />
     <Compile Include="Implementations\EFMotionRepository.cs" />
     <Compile Include="Implementations\EFQuestRepository.cs" />
     <Compile Include="Implementations\EFRoleRopsitory.cs" />
@@ -121,6 +123,7 @@
     <Compile Include="Interfaces\IApplicationDbContext.cs" />
     <Compile Include="Interfaces\ICommonRepository.cs" />
     <Compile Include="Interfaces\IDataManager.cs" />
+    <Compile Include="Interfaces\IImageRepository.cs" />
     <Compile Include="Interfaces\IMotionRepository.cs" />
     <Compile Include="Interfaces\IQuestRepository.cs" />
     <Compile Include="Interfaces\IRoleRepository.cs" />
