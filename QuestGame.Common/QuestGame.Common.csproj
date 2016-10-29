@@ -99,6 +99,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\CommonHelper.cs" />
     <Compile Include="Helpers\RestHelper.cs" />
     <Compile Include="Interfaces\ILoggerService.cs" />
     <Compile Include="LoggerService.cs" />

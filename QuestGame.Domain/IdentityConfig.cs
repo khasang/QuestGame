@@ -10,6 +10,8 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using QuestGame.Common.Helpers;
+using QuestGame.Domain.Constants;
 
 namespace QuestGame.Domain
 {
@@ -18,27 +20,17 @@ namespace QuestGame.Domain
         public Task SendAsync(IdentityMessage message)
         {
             // Подключите здесь службу электронной почты для отправки сообщения электронной почты.
+            var mail = new MailMessage("kloder@yandex.ru", message.Destination);
+            mail.Subject = message.Subject;
+            mail.Body = message.Body;
+            mail.IsBodyHtml = true;
 
             using (var client = new SmtpClient())
             {
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 client.Timeout = 5000;
-
-                var mail = new MailMessage("kloder@yandex.ru", message.Destination);
-                    mail.Subject = message.Subject;
-                    mail.Body = message.Body;
-                    mail.IsBodyHtml = true;
-
-                try
-                {
-                    client.Send(mail);
-                }
-                 catch (Exception)
-                {
-                    throw;
-                }
+                client.SendAsync(mail, "test");
             }
-
 
             return Task.FromResult(0);
         }
@@ -48,34 +40,23 @@ namespace QuestGame.Domain
     {
         public Task SendAsync(IdentityMessage message)
         {
-            //using (FileStream fstream = new FileStream(@"e:\Temp\QGemails.html", FileMode.OpenOrCreate))
-            //{
-            //    byte[] array = System.Text.Encoding.Default.GetBytes(message.Body);
-            //    fstream.Write(array, 0, array.Length);
-            //}
+
+            var mail = new MailMessage("robot@questgame.ru", message.Destination);
+            mail.Subject = message.Subject;
+            mail.Body = message.Body;
+            mail.IsBodyHtml = true;
 
             using (var client = new SmtpClient())
             {
                 client.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
-                client.PickupDirectoryLocation = @"d:\Temp\";
+
+                var p = Path.GetFullPath(ConfigSettings.PathMail);
+                client.PickupDirectoryLocation = p;
                 client.EnableSsl = false;
-
-                var mail = new MailMessage("robot@questgame.ru", message.Destination);
-                mail.Subject = message.Subject;
-                mail.Body = message.Body;
-                mail.IsBodyHtml = true;
-
-                try
-                {
-                    client.Send(mail);
-                }
-                catch (SmtpException)
-                {
-                    throw;
-                }
+                client.Send(mail);
             }
 
-                return Task.FromResult(0);
+            return Task.FromResult(0);
         }
     }
 
