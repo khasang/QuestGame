@@ -57,7 +57,7 @@
                     @Html.ActionLink("Регистрация нового пользователя", "Register")
                 </p>
                 <p>
-                    @Html.ActionLink("Сбросить пароль", "ResetPassword")
+                    @Html.ActionLink("Забыли пароль?", "ResetPassword")
                 </p>
                 @* Включить, когда будет включено подтверждение учетной записи для функции сброса пароля
                     <p>
@@ -72,6 +72,10 @@
                 @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
             </section>
         </div>*@
+
+    <div class="col-md-4">
+        @Html.ActionLink("Google", "Index", "ExternalLogin", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+    </div>
 </div>
 
 @section Scripts {
