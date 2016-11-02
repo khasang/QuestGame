@@ -12,6 +12,7 @@ namespace QuestGame.WebMVC.App_Start
     using Ninject.Web.Common;
     using AutoMapper;
     using Mapping;
+    using Helpers.SocialProviderFactory;
 
     public static class NinjectWebCommon 
     {
