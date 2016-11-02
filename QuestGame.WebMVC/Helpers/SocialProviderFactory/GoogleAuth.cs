@@ -11,6 +11,7 @@ namespace QuestGame.WebMVC.Helpers.SocialProviderFactory
             this.ApplicationAuthPath = "https://accounts.google.com/o/oauth2/auth";
             this.ApplicationAuthTokenPath = "https://accounts.google.com/o/oauth2/token";
             this.RequestUserInfoPath = "https://www.googleapis.com/oauth2/v1/userinfo";
+            this.ApplicationScope = "email";
         }
 
         public override string ProviderName()

@@ -29,10 +29,7 @@ namespace QuestGame.WebMVC.Controllers
             this.provider = SocialProviderCreator.Create("GoogleAuth");
             provider.Code = code;
 
-            var token = await GetSocialToken();
-            provider.AccessToken = token;
-
-            await GetSocialUser();
+            await GetSocialUser(await provider.GetSocialUserEmail());
 
             return RedirectToAction("Index", "Home");
         }
@@ -43,25 +40,16 @@ namespace QuestGame.WebMVC.Controllers
             this.provider = SocialProviderCreator.Create("FaceBookAuth");
             provider.Code = code;
 
-            var token = await GetSocialToken();
-            provider.AccessToken = token;
-
-            await GetSocialUser();
+            await GetSocialUser(await provider.GetSocialUserEmail());
 
             return RedirectToAction("Index", "Home");
         }
 
-        private async Task GetSocialUser()
+
+
+
+        private async Task GetSocialUser(string useremail)
         {
-            var useremail = "";
-
-            using (var client = RestHelper.Create())
-            {
-                var request = await client.GetAsync(this.provider.RequestUserInfo);
-                var answer = await request.Content.ReadAsAsync<Dictionary<string, string>>();
-                useremail = answer["email"];
-            }
-
             using (var client = RestHelper.Create())
             {
                 var requestString = ApiMethods.AccontUserByEmail + useremail;
@@ -71,23 +59,6 @@ namespace QuestGame.WebMVC.Controllers
                     var answer = await request.Content.ReadAsAsync<ApplicationUserDTO>();
                     Session["User"] = answer;
                 }
-            }
-        }
-
-        
-        private async Task<string> GetSocialToken()
-        {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("https://localhost:44366/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
-                client.DefaultRequestHeaders.Add("Referer", this.provider.RedirectUri);
-
-                var response = await client.PostAsync(this.provider.RequestTokenUrl, this.provider.RequestTokenContent);
-                var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
-
-                return responseData["access_token"];
             }
         }
     }
