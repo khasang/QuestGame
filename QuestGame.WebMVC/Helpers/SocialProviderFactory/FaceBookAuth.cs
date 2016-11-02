@@ -1,9 +1,9 @@
 ﻿
 namespace QuestGame.WebMVC.Helpers.SocialProviderFactory
 {
-    public class GoogleAuth : SocialProvider
+    public class FaceBookAuth : SocialProvider
     {
-        public GoogleAuth()
+        public FaceBookAuth()
         {
             this.RedirectUri = "https://localhost:44366/ExternalLogin/GoogleAuthCallback";
             this.ClientId = "803183701728-q1ktbmuhces4vdj9udkmatn0gota8he8.apps.googleusercontent.com";

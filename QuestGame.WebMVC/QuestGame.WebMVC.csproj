@@ -169,6 +169,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ActiveHelper.cs" />
+    <Compile Include="Helpers\SocialProviderFactory\FaceBookAuth.cs" />
     <Compile Include="Helpers\SocialProviderFactory\GoogleAuth.cs" />
     <Compile Include="Helpers\SocialProviderFactory\SocialProvider.cs" />
     <Compile Include="Mapping\AutoMapperConfiguration.cs" />

@@ -4,15 +4,10 @@ using QuestGame.WebMVC.Constants;
 using QuestGame.WebMVC.Helpers.SocialProviderFactory;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace QuestGame.WebMVC.Controllers
@@ -21,48 +16,34 @@ namespace QuestGame.WebMVC.Controllers
     {
         SocialProvider provider;
 
-        public ActionResult Index()
+        public ActionResult Index(string providerName)
         {
-            this.provider = SocialProviderCreator.Create("GoogleAuth");
+            this.provider = SocialProviderCreator.Create(providerName);
 
             return Redirect(provider.RequestAuth);
         }
 
         [HttpGet]
-        public async Task<ActionResult> GoogleCode(string code)
+        public async Task<ActionResult> GoogleAuthCallback(string code)
         {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri("https://localhost:44366/");
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+            this.provider = SocialProviderCreator.Create("GoogleAuth");
+            provider.Code = code;
 
-                    var requestParams = new Dictionary<string, string>
-                    {
-                        { "client_id", "803183701728-q1ktbmuhces4vdj9udkmatn0gota8he8.apps.googleusercontent.com" },
-                        { "client_secret", "yXNNeyD0OlL7pS-yfSzGL4bv" },
-                        { "redirect_uri", "https://localhost:44366/ExternalLogin/GoogleCode" },
-                        { "grant_type","authorization_code" },
-                        { "code", code}
-                    };
-                    var content = new FormUrlEncodedContent(requestParams);
-                    var response = await client.PostAsync("https://accounts.google.com/o/oauth2/token", content);
+            var token = await GetSocialToken();
+            provider.AccessToken = token;
 
-                    var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
+            await GetSocialUser();
 
-                    return RedirectToAction("GoogleUser", new { token = responseData["access_token"] });
-
-                }
+            return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]
-        public async Task<ActionResult> GoogleUser(string token)
+        private async Task GetSocialUser()
         {
             var useremail = "";
 
             using (var client = RestHelper.Create())
             {
-                var request = await client.GetAsync("https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + token);
+                var request = await client.GetAsync(this.provider.RequestUserInfo);
                 var answer = await request.Content.ReadAsAsync<Dictionary<string, string>>();
                 useremail = answer["email"];
             }
@@ -77,8 +58,23 @@ namespace QuestGame.WebMVC.Controllers
                     Session["User"] = answer;
                 }
             }
+        }
 
-            return RedirectToAction("Index", "Home");
+        
+        private async Task<string> GetSocialToken()
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:44366/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+                client.DefaultRequestHeaders.Add("Referer", this.provider.RedirectUri);
+
+                var response = await client.PostAsync(this.provider.RequestTokenUrl, this.provider.RequestTokenContent);
+                var responseData = await response.Content.ReadAsAsync<Dictionary<string, string>>();
+
+                return responseData["access_token"];
+            }
         }
     }
 

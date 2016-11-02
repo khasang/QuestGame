@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 
 namespace QuestGame.WebMVC.Helpers.SocialProviderFactory
@@ -21,7 +22,7 @@ namespace QuestGame.WebMVC.Helpers.SocialProviderFactory
     {
         public string AccessToken { get; set; }
         public string Code { get; set; }
-        protected string RedirectUri { get; set; }
+        public string RedirectUri { get; set; }
         protected string ClientId { get; set; }
         protected string ClientSecret { get; set; }
         protected string ApplicationAuthPath { get; set; }
@@ -37,25 +38,29 @@ namespace QuestGame.WebMVC.Helpers.SocialProviderFactory
                 parameters["response_type"] = "code";
                 parameters["client_id"] = this.ClientId;
                 parameters["redirect_uri"] = this.RedirectUri;
-                parameters["scope"] = "openid profile email";
+                parameters["scope"] = "email";
                 uriBuilder.Query = parameters.ToString();
                 return uriBuilder.Uri.ToString();
             }
         }
 
-        public virtual string RequestToken
+        public virtual string RequestTokenUrl { get { return this.ApplicationAuthTokenPath;  } }
+
+        public virtual FormUrlEncodedContent RequestTokenContent
         {
             get
             {
-                var uriBuilder = new UriBuilder(this.ApplicationAuthTokenPath);
-                var parameters = HttpUtility.ParseQueryString(string.Empty);
-                parameters["client_id"] = this.ClientId;
-                parameters["client_secret"] = this.ClientSecret;
-                parameters["redirect_uri"] = this.RedirectUri;
-                parameters["grant_type"] = "authorization_code";
-                parameters["code"] = this.Code;
-                uriBuilder.Query = parameters.ToString();
-                return uriBuilder.Uri.ToString();
+                var requestParams = new Dictionary<string, string>
+                    {
+                        { "client_id", this.ClientId },
+                        { "client_secret", this.ClientSecret },
+                        { "redirect_uri", this.RedirectUri },
+                        { "grant_type","authorization_code" },
+                        { "code", this.Code}
+                    };
+                var content = new FormUrlEncodedContent(requestParams);
+
+                return content;
             }
         }
 

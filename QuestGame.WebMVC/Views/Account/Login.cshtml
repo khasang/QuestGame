@@ -74,7 +74,7 @@
         </div>*@
 
     <div class="col-md-4">
-        @Html.ActionLink("Google", "Index", "ExternalLogin", routeValues: null, htmlAttributes: new { @class = "btn btn-default" })
+        @Html.ActionLink("Google", "Index", "ExternalLogin", new { providerName = "GoogleAuth" }, htmlAttributes: new { @class = "btn btn-default" })
     </div>
 </div>
 
