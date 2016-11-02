@@ -5,17 +5,17 @@ namespace QuestGame.WebMVC.Helpers.SocialProviderFactory
     {
         public FaceBookAuth()
         {
-            this.RedirectUri = "https://localhost:44366/ExternalLogin/GoogleAuthCallback";
-            this.ClientId = "803183701728-q1ktbmuhces4vdj9udkmatn0gota8he8.apps.googleusercontent.com";
-            this.ClientSecret = "yXNNeyD0OlL7pS-yfSzGL4bv";
-            this.ApplicationAuthPath = "https://accounts.google.com/o/oauth2/auth";
-            this.ApplicationAuthTokenPath = "https://accounts.google.com/o/oauth2/token";
-            this.RequestUserInfoPath = "https://www.googleapis.com/oauth2/v1/userinfo";
+            this.RedirectUri = "https://localhost:44366/ExternalLogin/FaceBookAuthCallback";
+            this.ClientId = "1601644850130436";
+            this.ClientSecret = "5ca60a2235c69ed57cb4aa43685e84cc";
+            this.ApplicationAuthPath = "https://www.facebook.com/dialog/oauth";
+            this.ApplicationAuthTokenPath = "https://graph.facebook.com/oauth/access_token";
+            this.RequestUserInfoPath = "https://graph.facebook.com/me";
         }
 
         public override string ProviderName()
         {
-            return "Google";
+            return "FaceBook";
         }
     }
 }

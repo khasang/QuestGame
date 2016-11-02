@@ -37,6 +37,20 @@ namespace QuestGame.WebMVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpGet]
+        public async Task<ActionResult> FaceBookAuthCallback(string code)
+        {
+            this.provider = SocialProviderCreator.Create("FaceBookAuth");
+            provider.Code = code;
+
+            var token = await GetSocialToken();
+            provider.AccessToken = token;
+
+            await GetSocialUser();
+
+            return RedirectToAction("Index", "Home");
+        }
+
         private async Task GetSocialUser()
         {
             var useremail = "";
