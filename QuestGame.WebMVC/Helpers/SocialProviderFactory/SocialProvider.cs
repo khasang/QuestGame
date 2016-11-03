@@ -12,16 +12,16 @@ namespace QuestGame.WebMVC.Helpers.SocialProviderFactory
 
     public static class SocialProviderCreator
     {
-        public static SocialProvider Create(string providerName)
+        public static SocialProvider1 Create(string providerName)
         {
             Type T = Type.GetType("QuestGame.WebMVC.Helpers.SocialProviderFactory." + providerName);
             object Obj = Activator.CreateInstance(T);
-            return (SocialProvider)Obj;
+            return (SocialProvider1)Obj;
         }
     }
 
 
-    public abstract class SocialProvider
+    public abstract class SocialProvider1
     {
         public string AccessToken { get; set; }
         private string code;

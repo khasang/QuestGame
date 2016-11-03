@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="QuestGame.WebMVC.Helpers.SocialProviders.SocialAppPaths">
+    <Position X="3.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Helpers\SocialProviders\SocialPath.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuestGame.WebMVC.Helpers.SocialProviders.SocialAppParams">
+    <Position X="1" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAgAAgAAAAEAhAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helpers\SocialProviders\SocialAppParams.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuestGame.WebMVC.Helpers.SocialProviders.SocialProvider">
+    <Position X="6.75" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAABAEAAAAAAAAgAAAAAAAAABAAAAgQAAIAAAA=</HashCode>
+      <FileName>Helpers\SocialProviders\SocialProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuestGame.WebMVC.GetGoggleToken">
+    <Position X="3.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAABAAAAAAAAIAAAA=</HashCode>
+      <FileName>Helpers\SocialProviders\GetGoggleToken.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="QuestGame.WebMVC.GetGoogleUserInfo">
+    <Position X="3.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAA=</HashCode>
+      <FileName>Helpers\SocialProviders\GetGoogleUserInfo.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="QuestGame.WebMVC.Helpers.SocialProviders.GoogleAuth">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Helpers\SocialProviders\GoogleAuth.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuestGame.WebMVC.Helpers.SocialProviders.FacebookAuth">
+    <Position X="10" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Helpers\SocialProviders\FacebookAuth.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuestGame.WebMVC.GetFaceBookToken">
+    <Position X="5.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAABAAAAAAAAIAAAA=</HashCode>
+      <FileName>Helpers\SocialProviders\GetFaceBookToken.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="QuestGame.WebMVC.GetFaceBookUserInfo">
+    <Position X="5.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helpers\SocialProviders\GetFaceBookUserInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="QuestGame.WebMVC.Helpers.SocialProviders.IGetSocialToken">
+    <Position X="0.75" Y="4" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helpers\SocialProviders\IGetSocialToken.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="QuestGame.WebMVC.Helpers.SocialProviders.IGetSocialUserInfo">
+    <Position X="0.75" Y="6.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Helpers\SocialProviders\IGetSocialUserInfo.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -9,9 +9,9 @@ using System.Web;
 
 namespace QuestGame.WebMVC.Helpers.SocialProviderFactory
 {
-    public class FaceBookAuth : SocialProvider
+    public class FaceBookAuth1 : SocialProvider1
     {
-        public FaceBookAuth()
+        public FaceBookAuth1()
         {
             this.RedirectUri = "https://localhost:44366/ExternalLogin/FaceBookAuthCallback";
             this.ClientId = "1601644850130436";
