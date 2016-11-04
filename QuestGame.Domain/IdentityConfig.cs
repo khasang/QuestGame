@@ -20,40 +20,17 @@ namespace QuestGame.Domain
         public Task SendAsync(IdentityMessage message)
         {
             // Подключите здесь службу электронной почты для отправки сообщения электронной почты.
-            var mail = new MailMessage("kloder@yandex.ru", message.Destination);
-            mail.Subject = message.Subject;
-            mail.Body = message.Body;
-            mail.IsBodyHtml = true;
+            var mail = new MailMessage("ramunis4e@gmail.com", message.Destination)
+            {
+                Subject = message.Subject,
+                Body = message.Body,
+                IsBodyHtml = true
+            };
 
             using (var client = new SmtpClient())
             {
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.Timeout = 5000;
-                client.SendAsync(mail, "test");
-            }
-
-            return Task.FromResult(0);
-        }
-    }
-
-    public class EmailToFileService : IIdentityMessageService
-    {
-        public Task SendAsync(IdentityMessage message)
-        {
-
-            var mail = new MailMessage("robot@questgame.ru", message.Destination);
-            mail.Subject = message.Subject;
-            mail.Body = message.Body;
-            mail.IsBodyHtml = true;
-
-            using (var client = new SmtpClient())
-            {
-                client.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
-
-                var p = Path.GetFullPath(ConfigSettings.PathMail);
-                client.PickupDirectoryLocation = p;
-                client.EnableSsl = false;
-                client.Send(mail);
+                client.Timeout = 50000;
+                client.SendAsync(mail, "token");
             }
 
             return Task.FromResult(0);
@@ -92,10 +69,9 @@ namespace QuestGame.Domain
                 BodyFormat = "Ваш код безопасности: {0}"
             });
 
-            manager.EmailService = new EmailToFileService(); 
-            //manager.EmailService = new EmailService();
+            manager.EmailService = new EmailService();
 
-             var dataProtectionProvider = options.DataProtectionProvider;
+            var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
                 manager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
