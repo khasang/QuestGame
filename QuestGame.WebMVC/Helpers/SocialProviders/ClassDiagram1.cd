@@ -1,83 +1,100 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="QuestGame.WebMVC.Helpers.SocialProviders.SocialAppPaths">
-    <Position X="3.5" Y="0.5" Width="2" />
+    <Position X="0.75" Y="2.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAEAA=</HashCode>
-      <FileName>Helpers\SocialProviders\SocialPath.cs</FileName>
+      <FileName>Helpers\SocialProviders\Implementations\SocialPath.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="QuestGame.WebMVC.Helpers.SocialProviders.SocialAppParams">
-    <Position X="1" Y="0.5" Width="2" />
+    <Position X="0.75" Y="4" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAACAAgAAgAAAAEAhAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Helpers\SocialProviders\SocialAppParams.cs</FileName>
+      <FileName>Helpers\SocialProviders\Implementations\SocialAppParams.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="QuestGame.WebMVC.Helpers.SocialProviders.SocialProvider">
-    <Position X="6.75" Y="0.5" Width="2.5" />
+    <Position X="3.5" Y="2.75" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAQAABAEAAAAAAAAgAAAAAAAAABAAAAgQAAIAAAA=</HashCode>
       <FileName>Helpers\SocialProviders\SocialProvider.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="QuestGame.WebMVC.GetGoggleToken">
-    <Position X="3.25" Y="4" Width="1.5" />
+  <Class Name="QuestGame.WebMVC.GetGoggleToken" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.25" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAABAAAAAAAAIAAAA=</HashCode>
-      <FileName>Helpers\SocialProviders\GetGoggleToken.cs</FileName>
+      <FileName>Helpers\SocialProviders\Implementations\GetGoggleToken.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="QuestGame.WebMVC.GetGoogleUserInfo">
-    <Position X="3.25" Y="6.75" Width="1.5" />
+  <Class Name="QuestGame.WebMVC.GetGoogleUserInfo" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.25" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAA=</HashCode>
-      <FileName>Helpers\SocialProviders\GetGoogleUserInfo.cs</FileName>
+      <FileName>Helpers\SocialProviders\Implementations\GetGoogleUserInfo.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="QuestGame.WebMVC.Helpers.SocialProviders.GoogleAuth">
-    <Position X="10" Y="0.5" Width="1.5" />
+    <Position X="2.75" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
       <FileName>Helpers\SocialProviders\GoogleAuth.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="QuestGame.WebMVC.Helpers.SocialProviders.FacebookAuth">
-    <Position X="10" Y="2.5" Width="1.5" />
+    <Position X="5.25" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
       <FileName>Helpers\SocialProviders\FacebookAuth.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="QuestGame.WebMVC.GetFaceBookToken">
-    <Position X="5.25" Y="4" Width="1.5" />
+  <Class Name="QuestGame.WebMVC.GetFaceBookToken" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAABAAAAAAAAIAAAA=</HashCode>
-      <FileName>Helpers\SocialProviders\GetFaceBookToken.cs</FileName>
+      <FileName>Helpers\SocialProviders\Implementations\GetFaceBookToken.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="QuestGame.WebMVC.GetFaceBookUserInfo" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAACAAAAAAAAAAAAAAAAAMAAAA=</HashCode>
+      <FileName>Helpers\SocialProviders\Implementations\GetFaceBookUserInfo.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="QuestGame.WebMVC.GetYandexToken" Collapsed="true">
+    <Position X="12" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAABAAAAAAAAIAAAA=</HashCode>
+      <FileName>Helpers\SocialProviders\Implementations\GetYandexToken.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="QuestGame.WebMVC.GetFaceBookUserInfo">
-    <Position X="5.25" Y="6.75" Width="1.5" />
+  <Class Name="QuestGame.WebMVC.GetYandexUserInfo">
+    <Position X="12" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Helpers\SocialProviders\GetFaceBookUserInfo.cs</FileName>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAA=</HashCode>
+      <FileName>Helpers\SocialProviders\Implementations\GetYandexUserInfo.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Interface Name="QuestGame.WebMVC.Helpers.SocialProviders.IGetSocialToken">
-    <Position X="0.75" Y="4" Width="1.75" />
+    <Position X="6.5" Y="2" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
-      <FileName>Helpers\SocialProviders\IGetSocialToken.cs</FileName>
+      <FileName>Helpers\SocialProviders\Interfaces\IGetSocialToken.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="QuestGame.WebMVC.Helpers.SocialProviders.IGetSocialUserInfo">
-    <Position X="0.75" Y="6.75" Width="1.75" />
+    <Position X="6.5" Y="4" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
-      <FileName>Helpers\SocialProviders\IGetSocialUserInfo.cs</FileName>
+      <FileName>Helpers\SocialProviders\Interfaces\IGetSocialUserInfo.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Font Name="Segoe UI" Size="9" />

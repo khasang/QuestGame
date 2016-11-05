@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuestGame.WebMVC.Models;
+using System;
 using System.Collections.Generic;
 using System.Web;
 
@@ -27,7 +28,7 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
             return getToken.GetSocialToken();
         }
 
-        public Dictionary<string, string> GetUserInfo()
+        public SocialUserModel GetUserInfo()
         {
             return getUserInfo.GetSocialUserInfo();
         }

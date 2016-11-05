@@ -5,31 +5,34 @@ using System.Web.Services.Protocols;
 using System.ComponentModel;
 using QuestGame.WebMVC.Helpers.SocialProviders;
 using System.Collections.Generic;
-using System.Net.Http;
 using QuestGame.Common.Helpers;
-using QuestGame.WebMVC.Models;
+using System.Net.Http;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Collections;
+using QuestGame.WebMVC.Models;
 
 namespace QuestGame.WebMVC
 {
-    public class GetFaceBookUserInfo : IGetSocialUserInfo
+    public class GetYandexUserInfo : IGetSocialUserInfo
     {
         private SocialAppParams appParams;
         private SocialAppPaths appPaths;
 
-        public GetFaceBookUserInfo(SocialAppParams appParams, SocialAppPaths appPaths)
+        public GetYandexUserInfo(SocialAppParams appParams, SocialAppPaths appPaths)
         {
             this.appParams = appParams;
             this.appPaths = appPaths;
         }
 
-        SocialUserModel IGetSocialUserInfo.GetSocialUserInfo()
+        public SocialUserModel GetSocialUserInfo()
         {
             var uriBuilder = new UriBuilder(this.appPaths.AppGetUserInfoPath);
             var parameters = HttpUtility.ParseQueryString(string.Empty);
-            parameters["access_token"] = this.appParams.AccessToken;
-            parameters["fields"] = this.appParams.Scope;
+            parameters["format"] = "json";
+            parameters["oauth_token"] = this.appParams.AccessToken;
             uriBuilder.Query = parameters.ToString();
+
             var queryUrl = uriBuilder.Uri.ToString();
 
             using (var client = RestHelper.Create())
@@ -40,25 +43,25 @@ namespace QuestGame.WebMVC
 
                 string avatar;
 
-                bool pictureIsAviable = (bool)json.picture.data.is_silhouette;
-
-                if (!pictureIsAviable)
+                if (!(bool)json.is_avatar_empty)
                 {
-                    avatar = json.picture[0].data[0].url;
+                    avatar = @"http://avatars.mds.yandex.net/get-yapic/" + json.default_avatar_id + @"/islands-200";
                 }
                 else
                 {
                     avatar = @"http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
                 }
 
-                return new SocialUserModel
-                {
+                var user = new SocialUserModel {
                     SocialId = json.id,
-                    Email = json.email,
-                    NickName = json.name,
+                    Email = json.emails[0],
+                    NickName = json.real_name,
                     AvatarUrl = avatar
                 };
+
+                return user;
             }
         }
     }
+
 }

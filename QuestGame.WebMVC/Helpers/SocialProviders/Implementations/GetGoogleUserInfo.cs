@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using QuestGame.WebMVC.Helpers.SocialProviders;
 using QuestGame.Common.Helpers;
 using System.Net.Http;
+using QuestGame.WebMVC.Models;
 
 namespace QuestGame.WebMVC
 {
@@ -18,7 +19,7 @@ namespace QuestGame.WebMVC
             this.appPaths = appPaths;
         }
 
-        public Dictionary<string, string> GetSocialUserInfo()
+        public SocialUserModel GetSocialUserInfo()
         {
             var uriBuilder = new UriBuilder(this.appPaths.AppGetUserInfoPath);
             var parameters = HttpUtility.ParseQueryString(string.Empty);
@@ -32,7 +33,13 @@ namespace QuestGame.WebMVC
                 var request = client.GetAsync(queryUrl).Result;
                 var answer = request.Content.ReadAsAsync<Dictionary<string, string>>().Result;
 
-                return answer;
+                return new SocialUserModel
+                {
+                    SocialId = answer["id"],
+                    Email = answer["email"],
+                    NickName = answer["name"],
+                    AvatarUrl = answer["picture"]
+                };
             }
         }
     }
