@@ -14,7 +14,7 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
 
         public virtual string RequestCodeUrl { get; }
 
-        public string Code
+        public virtual string Code
         {
             set
             {

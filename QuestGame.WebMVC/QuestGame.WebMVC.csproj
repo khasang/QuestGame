@@ -166,6 +166,7 @@
     <Compile Include="Controllers\ExternalLoginController.cs" />
     <Compile Include="Controllers\ExternalLoginController1.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Helpers\SocialProviders\Implementations\GetVKontakteToken.cs" />
     <Compile Include="Helpers\SocialProviders\Implementations\GetFaceBookUserInfo.cs" />
     <Compile Include="Helpers\SocialProviders\Implementations\GetFaceBookToken.cs" />
     <Compile Include="Helpers\SocialProviders\FacebookAuth.cs" />
@@ -179,10 +180,12 @@
     <Compile Include="Helpers\SocialProviderFactory\FaceBookAuth.cs" />
     <Compile Include="Helpers\SocialProviderFactory\GoogleAuth.cs" />
     <Compile Include="Helpers\SocialProviderFactory\SocialProvider.cs" />
+    <Compile Include="Helpers\SocialProviders\Implementations\GetVKontakteUserInfo.cs" />
     <Compile Include="Helpers\SocialProviders\Implementations\GetYandexToken.cs" />
     <Compile Include="Helpers\SocialProviders\Implementations\GetYandexUserInfo.cs" />
     <Compile Include="Helpers\SocialProviders\Interfaces\IGetSocialToken.cs" />
     <Compile Include="Helpers\SocialProviders\Interfaces\IGetSocialUserInfo.cs" />
+    <Compile Include="Helpers\SocialProviders\VKontakteAuth.cs" />
     <Compile Include="Helpers\SocialProviders\YandexAuth.cs" />
     <Compile Include="Mapping\AutoMapperConfiguration.cs" />
     <Compile Include="Mapping\Profiles\DTOToViewModelMappingProfile.cs" />

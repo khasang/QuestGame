@@ -1,4 +1,6 @@
-﻿namespace QuestGame.WebMVC.Helpers.SocialProviders
+﻿using System.Collections.Generic;
+
+namespace QuestGame.WebMVC.Helpers.SocialProviders
 {
     public interface IGetSocialToken
     {

@@ -16,7 +16,8 @@ namespace QuestGame.WebMVC.Controllers
         // GET: ExternalLogin
         public ActionResult Index()
         {
-            SocialProvider provider = new YandexAuth();
+            SocialProvider provider = new VKontakteAuth();
+            //SocialProvider provider = new YandexAuth();
             //SocialProvider provider = new GoogleAuth();
             //SocialProvider provider = new FacebookAuth();
 
@@ -63,6 +64,18 @@ namespace QuestGame.WebMVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpGet]
+        public async Task<ActionResult> VKontakteAuthCallback(string code)
+        {
+            SocialProvider provider = new VKontakteAuth();
+            provider.Code = code;
+
+            var userInfo = provider.GetUserInfo();
+
+            await GetSocialUser(userInfo);
+
+            return RedirectToAction("Index", "Home");
+        }
 
         private async Task GetSocialUser(SocialUserModel socialUser)
         {
@@ -70,31 +83,27 @@ namespace QuestGame.WebMVC.Controllers
             {
                 var requestString = ApiMethods.AccontUserByEmail + socialUser.Email;
                 var request = await client.GetAsync(requestString);
-                if (request.StatusCode != HttpStatusCode.BadRequest)
+                if (request.StatusCode != HttpStatusCode.NotFound)
                 {
                     var answer = await request.Content.ReadAsAsync<ApplicationUserDTO>();
                     Session["User"] = answer;
                 }
                 else
                 {
-                    RedirectToAction("CreateSocialUser", new { socialUser = socialUser });
+                    await CreateSocialUser(socialUser);
                 }
             }
         }
 
-        //public async Task<ActionResult> CreateSocialUser(SocialUserModel socialUser)
-        //{
-        //    var ussser = new RegisterExternalBindingModel {
-        //        Email = socialUser.Email
-        //    };
+        public async Task<ActionResult> CreateSocialUser(SocialUserModel socialUser)
+        {
+            using (var client = RestHelper.Create())
+            {
+                var response = await client.PostAsJsonAsync(@"api/Account/RegisterExternal", socialUser);
+            }
 
-        //    using (var client = RestHelper.Create())
-        //    {
-        //        var response = await client.PostAsJsonAsync(@"api/Account/RegisterExternal", ussser);
-        //    }
-
-        //    return View();
-        //}
+            return View();
+        }
 
         //public async Task<ActionResult> ExternalLoginConfirmation()
         //{

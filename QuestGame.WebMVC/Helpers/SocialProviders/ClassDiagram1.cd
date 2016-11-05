@@ -10,7 +10,7 @@
   <Class Name="QuestGame.WebMVC.Helpers.SocialProviders.SocialAppParams">
     <Position X="0.75" Y="4" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAACAAgAAgAAAAEAhAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAACAAgAAgAAAAEIhAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Helpers\SocialProviders\Implementations\SocialAppParams.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -27,7 +27,7 @@
       <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAABAAAAAAAAIAAAA=</HashCode>
       <FileName>Helpers\SocialProviders\Implementations\GetGoggleToken.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="QuestGame.WebMVC.GetGoogleUserInfo" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="10.25" Y="4.75" Width="1.5" />
@@ -35,7 +35,7 @@
       <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAA=</HashCode>
       <FileName>Helpers\SocialProviders\Implementations\GetGoogleUserInfo.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="QuestGame.WebMVC.Helpers.SocialProviders.GoogleAuth">
     <Position X="2.75" Y="6.5" Width="1.5" />
@@ -45,7 +45,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="QuestGame.WebMVC.Helpers.SocialProviders.FacebookAuth">
-    <Position X="5.25" Y="6.5" Width="1.5" />
+    <Position X="4.75" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
       <FileName>Helpers\SocialProviders\FacebookAuth.cs</FileName>
@@ -57,15 +57,15 @@
       <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAABAAAAAAAAIAAAA=</HashCode>
       <FileName>Helpers\SocialProviders\Implementations\GetFaceBookToken.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="QuestGame.WebMVC.GetFaceBookUserInfo" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="8.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAABAAAAAAAAAAACAAAAAAAAAAAAAAAAAMAAAA=</HashCode>
+      <HashCode>AAAAAAAABAAAAAAAAAAACAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
       <FileName>Helpers\SocialProviders\Implementations\GetFaceBookUserInfo.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="QuestGame.WebMVC.GetYandexToken" Collapsed="true">
     <Position X="12" Y="2.75" Width="1.5" />
@@ -75,11 +75,41 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="QuestGame.WebMVC.GetYandexUserInfo">
+  <Class Name="QuestGame.WebMVC.GetYandexUserInfo" Collapsed="true">
     <Position X="12" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAA=</HashCode>
       <FileName>Helpers\SocialProviders\Implementations\GetYandexUserInfo.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="QuestGame.WebMVC.Helpers.SocialProviders.YandexAuth">
+    <Position X="6.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Helpers\SocialProviders\YandexAuth.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuestGame.WebMVC.Helpers.SocialProviders.VKontakteAuth">
+    <Position X="8.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Helpers\SocialProviders\VKontakteAuth.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuestGame.WebMVC.GetVKontakteToken" Collapsed="true">
+    <Position X="13.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAABAAAAAAAAIAAAA=</HashCode>
+      <FileName>Helpers\SocialProviders\Implementations\GetVKontakteToken.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="QuestGame.WebMVC.Helpers.SocialProviders.Implementations.GetVKontakteUserInfo" Collapsed="true">
+    <Position X="13.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAA=</HashCode>
+      <FileName>Helpers\SocialProviders\Implementations\GetVKontakteUserInfo.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>

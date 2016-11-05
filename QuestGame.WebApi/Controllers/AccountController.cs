@@ -92,7 +92,7 @@ namespace QuestGame.WebApi.Controllers
         {
             ApplicationUser user = await UserManager.FindByEmailAsync(email);
 
-            if (user == null) { return BadRequest(); }
+            if (user == null) { return NotFound(); }
 
             var result = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
 
