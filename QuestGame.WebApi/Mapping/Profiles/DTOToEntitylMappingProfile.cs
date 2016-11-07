@@ -29,8 +29,13 @@ namespace QuestGame.WebApi.Mapping.Profiles
             CreateMap<UserProfileDTO, UserProfile>()
                 .ForMember(x => x.UserId, y => y.Ignore());
 
-            CreateMap<QuestFullDTO, Quest>().ForMember(x => x.Owner, y => y.Ignore());
-            CreateMap<QuestDTO, Quest>().ForMember(x => x.Owner, y => y.Ignore());
+            CreateMap<QuestFullDTO, Quest>()
+                .ForMember(x => x.Owner, y => y.Ignore());
+
+            CreateMap<QuestDTO, Quest>()
+                .ForMember(x => x.Owner, y => y.Ignore())
+                .ForMember(x => x.Cover, y => y.Ignore());
+
             CreateMap<StageFullDTO, Stage>();
             CreateMap<StageDTO, Stage>();
             CreateMap<MotionDTO, Motion>();

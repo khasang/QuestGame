@@ -244,9 +244,7 @@
     <Compile Include="Infrastructure\NinjectConfig.cs" />
     <Compile Include="Mapping\AutoMapperConfiguration.cs" />
     <Compile Include="Mapping\Profiles\DTOToEntitylMappingProfile.cs" />
-    <Compile Include="Mapping\Profiles\DTOToViewModelMappingProfile.cs" />
     <Compile Include="Mapping\Profiles\EntityToDTOMappingProfile.cs" />
-    <Compile Include="Mapping\Profiles\ViewModelToDTOMappingProfile.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
@@ -369,6 +367,9 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Content\Files\" />
+    <Folder Include="Content\Images\Avatars\" />
+    <Folder Include="Content\Images\Quests\" />
+    <Folder Include="Content\Images\Stages\" />
     <Folder Include="Content\Temp\" />
   </ItemGroup>
   <ItemGroup>

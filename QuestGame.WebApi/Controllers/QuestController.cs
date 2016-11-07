@@ -141,6 +141,11 @@ namespace QuestGame.WebApi.Controllers
                 var questEntity = dataManager.Quests.GetById(quest.Id);
                 var model = mapper.Map<QuestDTO, Quest>(quest, questEntity);
 
+                model.Cover = new Image
+                {
+                    Path = quest.Cover,
+                };
+
                 var owner = dataManager.Users.GetAll().FirstOrDefault(x => x.UserName == quest.Owner);
                 model.Owner = owner;
                 dataManager.Quests.Update(model);

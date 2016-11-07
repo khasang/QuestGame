@@ -62,7 +62,7 @@ namespace QuestGame.WebMVC.Controllers
                 form.Add(content, DefaultParams.FileRelativePath, fileInfo.Name);
 
                 var response = await client.PostAsync(ApiMethods.BaseUploadFile, form);
-                result = await response.Content.ReadAsStringAsync();
+                result = await response.Content.ReadAsAsync<string>();
             }
 
             //RestHelper.UploadFile(ApiMethods.BaseUploadFile, path); // Отправляем файл в слой WebApi
