@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using QuestGame.Common.Helpers;
 using System.Collections.Specialized;
+using System.Web;
 using QuestGame.WebMVC.Constants;
 using QuestGame.WebMVC.Areas.Game.Models;
 using QuestGame.WebMVC.Areas.Design.Models;
@@ -147,7 +148,7 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(QuestViewModel quest, string returnUrl)
+        public async Task<ActionResult> Edit(QuestViewModel quest, HttpPostedFileBase file)
         {
             //if(!ModelState.IsValid)
             //{
@@ -156,13 +157,14 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
             //}
 
             var model = mapper.Map<QuestViewModel, QuestDTO>(quest);
+            model.Cover = await UploadFile(file);
 
-            using(var client = RestHelper.Create(SessionUser.Token))
+            using (var client = RestHelper.Create(SessionUser.Token))
             {
                 var response = await client.PutAsJsonAsync(ApiMethods.QuestUpdate, model);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    ViewBag.Message = ErrorMessages.QuestNotUdate;
+                    ViewBag.Message = ErrorMessages.QuestNotUpdate;
                     return RedirectToAction("Index", "Quest");
                 }
             }

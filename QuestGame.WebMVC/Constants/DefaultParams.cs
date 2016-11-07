@@ -5,17 +5,18 @@ using System.Web;
 
 namespace QuestGame.WebMVC.Constants
 {
-    public class ConfigSettings
+    public class DefaultParams
     {
         #region Ключи параметров
 
-        public const string ServiceBaseUrlKey = "WebApiServiceBaseUrl";
+        public const string WebApiServiceUrlNameKey = "WebApiServiceBaseUrl";
 
         #endregion
 
         #region Настройки по умолчанию
 
         public const string WebApiServiceBaseUrl = @"http://localhost:9243/";
+        public const string FileRelativePath = @"~/Content/Temp/";
 
         #endregion
 

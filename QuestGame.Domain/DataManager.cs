@@ -23,6 +23,7 @@ namespace QuestGame.Domain
         IMotionRepository motionRrepository;
         IUserRepository userRepository;        
         IRoleRepository roleRepository;
+        IImageRepository imageRepository;
 
         public DataManager(IApplicationDbContext dbContext)
         {
@@ -62,6 +63,18 @@ namespace QuestGame.Domain
                     motionRrepository = new EFMotionRepository(dbContext);
                 }
                 return motionRrepository;
+            }
+        }
+
+        public IImageRepository Images
+        {
+            get
+            {
+                if (imageRepository == null)
+                {
+                    imageRepository = new EFImageRepository(dbContext);
+                }
+                return imageRepository;
             }
         }
 

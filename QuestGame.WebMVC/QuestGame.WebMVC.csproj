@@ -147,7 +147,7 @@
     <Compile Include="Attributes\CustomAuthorizeAttribute.cs" />
     <Compile Include="Attributes\HTTPExceptionAttribute.cs" />
     <Compile Include="Constants\ApiMethods.cs" />
-    <Compile Include="Constants\ConfigSettings.cs" />
+    <Compile Include="Constants\DefaultParams.cs" />
     <Compile Include="Constants\InfoMessages.cs" />
     <Compile Include="Constants\ErrorMessages.cs" />
     <Compile Include="Content\MailTemplate\PasswordResetTemplate-Extended.cs" />

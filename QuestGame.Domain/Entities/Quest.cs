@@ -20,6 +20,12 @@ namespace QuestGame.Domain.Entities
         public string Title { get; set; }
 
         /// <summary>
+        /// Изображение обложки
+        /// </summary>
+        public int? CoverId { get; set; }
+        public virtual Image Cover { get; set; }
+
+        /// <summary>
         /// Дата создания квеста
         /// </summary>
         public DateTime Date { get; set; }

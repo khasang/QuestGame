@@ -10,6 +10,7 @@ namespace QuestGame.Domain.DTO
     {
         public int Id { get; set; }
         public string Title { get; set; }
+        public string Cover { get; set; }
         public string Body { get; set; }
         public int Point { get; set; }
         public int QuestId { get; set; }
