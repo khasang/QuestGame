@@ -1,4 +1,5 @@
-﻿using QuestGame.Common.Helpers;
+﻿using AutoMapper;
+using QuestGame.Common.Helpers;
 using QuestGame.Domain.DTO;
 using QuestGame.WebMVC.Constants;
 using QuestGame.WebMVC.Helpers.SocialProviders;
@@ -13,6 +14,13 @@ namespace QuestGame.WebMVC.Controllers
 {
     public class ExternalLoginController : Controller
     {
+        IMapper mapper;
+
+        public ExternalLoginController(IMapper mapper)
+        {
+            this.mapper = mapper;
+        }
+
         // GET: ExternalLogin
         public ActionResult Index()
         {
@@ -72,7 +80,7 @@ namespace QuestGame.WebMVC.Controllers
 
             var userInfo = provider.GetUserInfo();
 
-            await GetSocialUser(userInfo);
+            await CreateSocialUser(userInfo);
 
             return RedirectToAction("Index", "Home");
         }
@@ -97,27 +105,20 @@ namespace QuestGame.WebMVC.Controllers
 
         public async Task<ActionResult> CreateSocialUser(SocialUserModel socialUser)
         {
+            SocialUserDTO user = mapper.Map<SocialUserModel, SocialUserDTO>(socialUser);
+
             using (var client = RestHelper.Create())
             {
-                var response = await client.PostAsJsonAsync(@"api/Account/RegisterExternal", socialUser);
+                
+                var response = await client.PostAsJsonAsync(@"api/Account/RegisterSocialUser", user);
+
+                var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
+
+                Session["User"] = answer;
             }
 
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
-        //public async Task<ActionResult> ExternalLoginConfirmation()
-        //{
-        //    var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-        //    var result = await UserManager.CreateAsync(user);
-        //    if (result.Succeeded)
-        //    {
-        //        result = await UserManager.AddLoginAsync(user.Id, info.Login);
-        //        if (result.Succeeded)
-        //        {
-        //            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-        //            return RedirectToLocal(returnUrl);
-        //        }
-        //    }
-        //}
     }
 }

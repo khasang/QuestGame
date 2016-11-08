@@ -95,7 +95,7 @@ namespace QuestGame.WebApi.Models
         [EmailAddress]
         public string Email { get; set; }
 
-        [Required]
+        //[Required]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
         public string Password { get; set; }

@@ -16,7 +16,8 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
                 ClientId = "5712694",
                 ClientSecret = "yFCa0WNATugPbAMqsxso",
                 RedirectUri = "https://localhost:44366/ExternalLogin/VKontakteAuthCallback",
-                Scope = "uid,first_name,last_name,screen_name,photo_big,email"
+                Scope = "uid,first_name,last_name,screen_name,photo_big,email",
+                Provider = "VKontakte"
             };
 
             appPaths = new SocialAppPaths

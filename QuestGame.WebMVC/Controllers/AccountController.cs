@@ -109,7 +109,6 @@ namespace QuestGame.WebMVC.Controllers
         {
             var currentUser = Session["User"] as ApplicationUserDTO;
 
-
             using (var client = RestHelper.Create())
             {
                 var response = await client.GetAsync(ApiMethods.AccontUserById + id);
@@ -118,7 +117,7 @@ namespace QuestGame.WebMVC.Controllers
                 var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
                 var model = mapper.Map<ApplicationUserDTO, UserViewModel>(answer);
 
-                model.UserProfile.avatarUrl = "http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
+                //model.UserProfile.avatarUrl = "http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
 
                 return View(model);
             }

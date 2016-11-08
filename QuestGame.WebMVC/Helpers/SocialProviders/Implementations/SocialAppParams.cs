@@ -15,5 +15,8 @@
         public string Scope { get; set; }
 
         public string SocialID { get; set; }
+
+        public string Provider { get; set; }
+
     }
 }

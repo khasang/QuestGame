@@ -82,6 +82,8 @@ namespace QuestGame.WebApi.Controllers
 
             var result = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
 
+            if (user.Logins.Count > 0) { result.EmailConfirmed = true; }
+
             return Ok(result);
         }
 
@@ -95,6 +97,8 @@ namespace QuestGame.WebApi.Controllers
             if (user == null) { return NotFound(); }
 
             var result = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
+
+            if (user.Logins.Count > 0) { result.EmailConfirmed = true; }
 
             return Ok(result);
         }
@@ -601,6 +605,38 @@ namespace QuestGame.WebApi.Controllers
                 return responseResult;
             }
         }
+
+        [AllowAnonymous]
+        [Route("RegisterSocialUser")]
+        public async Task<IHttpActionResult> RegisterSocialUser(SocialUserDTO model)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
+
+            var user = mapper.Map<SocialUserDTO, ApplicationUser>(model);
+            var profile = mapper.Map<SocialUserDTO, UserProfile>(model);
+            
+            user.UserProfile = profile;
+
+            IdentityResult result = await UserManager.CreateAsync(user);
+
+            IdentityResult toRole = UserManager.AddToRole(user.Id, "user");
+
+            var userAddLogin = new UserLoginInfo(model.Provider, model.SocialId);
+
+            IdentityResult addLogin = UserManager.AddLogin(user.Id, userAddLogin);
+
+            var userReturn = LoginUserNew(new LoginBindingModel { Email = user.Email });
+            //userReturn.EmailConfirmed = true;
+
+            logger.Information("| Registration | {@user}", model);
+            return Ok(userReturn);
+
+        }
+
+
 
         // POST api/Account/RegisterExternal
         [OverrideAuthentication]

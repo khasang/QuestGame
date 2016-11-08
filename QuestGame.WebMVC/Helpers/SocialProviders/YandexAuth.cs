@@ -12,7 +12,8 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
                 ClientId = "2c5f922adc9248c5ac8ac6a6cc74b5d8",
                 ClientSecret = "0885fc2c643147049560890503abf227",
                 RedirectUri = "https://localhost:44366/ExternalLogin/YandexAuthCallback",
-                Scope = "email"
+                Scope = "email",
+                Provider = "Yandex"
             };
 
             appPaths = new SocialAppPaths

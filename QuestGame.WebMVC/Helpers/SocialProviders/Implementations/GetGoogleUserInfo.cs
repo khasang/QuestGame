@@ -38,7 +38,8 @@ namespace QuestGame.WebMVC
                     SocialId = answer["id"],
                     Email = answer["email"],
                     NickName = answer["name"],
-                    AvatarUrl = answer["picture"]
+                    AvatarUrl = answer["picture"],
+                    Provider = appParams.Provider
                 };
             }
         }

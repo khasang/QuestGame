@@ -12,7 +12,8 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
                 ClientId = "803183701728-q1ktbmuhces4vdj9udkmatn0gota8he8.apps.googleusercontent.com",
                 ClientSecret = "yXNNeyD0OlL7pS-yfSzGL4bv",
                 RedirectUri = "https://localhost:44366/ExternalLogin/GoogleAuthCallback",
-                Scope = "email"
+                Scope = "email",
+                Provider = "Google"
             };
 
             appPaths = new SocialAppPaths

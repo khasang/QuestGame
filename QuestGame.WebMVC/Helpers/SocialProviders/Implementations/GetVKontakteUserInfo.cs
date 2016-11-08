@@ -41,9 +41,10 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders.Implementations
                 return new SocialUserModel
                 {
                     SocialId = resultObject.uid,
-                    Email = resultObject.screen_name,
+                    Email = resultObject.screen_name + "@VKfakeemail.ru",
                     NickName = resultObject.first_name + " " + resultObject.last_name,
-                    AvatarUrl = resultObject.photo_big
+                    AvatarUrl = resultObject.photo_big,
+                    Provider = appParams.Provider
                 };
             }
         }

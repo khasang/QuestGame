@@ -16,7 +16,8 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
                 ClientId = "1601644850130436",
                 ClientSecret = "5ca60a2235c69ed57cb4aa43685e84cc",
                 RedirectUri = "https://localhost:44366/ExternalLogin/FaceBookAuthCallback",
-                Scope = "id,email,name,picture.width(200).height(200)"
+                Scope = "id,email,name,picture.width(200).height(200)",
+                Provider = "FaceBook"
             };
 
             appPaths = new SocialAppPaths

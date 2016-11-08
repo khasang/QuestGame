@@ -56,7 +56,8 @@ namespace QuestGame.WebMVC
                     SocialId = json.id,
                     Email = json.emails[0],
                     NickName = json.real_name,
-                    AvatarUrl = avatar
+                    AvatarUrl = avatar,
+                    Provider = appParams.Provider
                 };
 
                 return user;
