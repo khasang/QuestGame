@@ -37,6 +37,7 @@ namespace QuestGame.WebMVC
                 {
                     SocialId = answer["id"],
                     Email = answer["email"],
+                    Password = answer["id"],
                     NickName = answer["name"],
                     AvatarUrl = answer["picture"],
                     Provider = appParams.Provider

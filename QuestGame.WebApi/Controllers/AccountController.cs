@@ -30,6 +30,7 @@ using QuestGame.Domain.DTO;
 using QuestGame.Domain.Interfaces;
 using System.Net.Mail;
 using System.Threading;
+using QuestGame.WebApi.Constants;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -616,24 +617,27 @@ namespace QuestGame.WebApi.Controllers
             }
 
             var user = mapper.Map<SocialUserDTO, ApplicationUser>(model);
+            user.EmailConfirmed = true;
+
             var profile = mapper.Map<SocialUserDTO, UserProfile>(model);
-            
+            profile.InviteDate = DateTime.Now;
+
             user.UserProfile = profile;
 
-            IdentityResult result = await UserManager.CreateAsync(user);
+            IdentityResult createUser = await UserManager.CreateAsync(user, model.Password);
+            IdentityResult assignRole = UserManager.AddToRole(user.Id, "user");
+            IdentityResult addLogin = UserManager.AddLogin(user.Id, new UserLoginInfo(model.Provider, model.SocialId));
 
-            IdentityResult toRole = UserManager.AddToRole(user.Id, "user");
+            ApplicationUserDTO userResult;
 
-            var userAddLogin = new UserLoginInfo(model.Provider, model.SocialId);
-
-            IdentityResult addLogin = UserManager.AddLogin(user.Id, userAddLogin);
-
-            var userReturn = LoginUserNew(new LoginBindingModel { Email = user.Email });
-            //userReturn.EmailConfirmed = true;
+            using (var client = RestHelper.Create())
+            {
+                var response = await client.PostAsJsonAsync(ApiMethods.AccontUserLogin, new LoginBindingModel { Email = user.Email, Password = model.Password });
+                userResult = await response.Content.ReadAsAsync<ApplicationUserDTO>();
+            }
 
             logger.Information("| Registration | {@user}", model);
-            return Ok(userReturn);
-
+            return Ok(userResult);
         }
 
 

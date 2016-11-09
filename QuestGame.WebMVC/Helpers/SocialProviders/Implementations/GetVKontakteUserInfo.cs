@@ -42,6 +42,7 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders.Implementations
                 {
                     SocialId = resultObject.uid,
                     Email = resultObject.screen_name + "@VKfakeemail.ru",
+                    Password = resultObject.uid,
                     NickName = resultObject.first_name + " " + resultObject.last_name,
                     AvatarUrl = resultObject.photo_big,
                     Provider = appParams.Provider

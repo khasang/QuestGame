@@ -13,7 +13,8 @@ namespace QuestGame.WebApi.Mapping.Profiles
         public EntityToDTOMappingProfile()
         {
             CreateMap<ApplicationUser, UserDTO>();
-            CreateMap<ApplicationUser, ApplicationUserDTO>();
+            CreateMap<ApplicationUser, ApplicationUserDTO>()
+                .ForMember(x => x.isExternalLogin, y => y.MapFrom(pr => pr.Logins.Count > 0));
 
             CreateMap<Quest, QuestFullDTO>().ForMember(x => x.Owner, y => y.MapFrom(pr => pr.Owner.UserName));
             CreateMap<Quest, QuestDTO>().ForMember(x => x.Owner, y => y.MapFrom(pr => pr.Owner.UserName));

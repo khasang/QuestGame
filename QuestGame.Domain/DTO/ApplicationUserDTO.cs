@@ -13,6 +13,7 @@ namespace QuestGame.Domain.DTO
         public string UserName { get; set; }
         public string Email { get; set; }
         public bool EmailConfirmed { get; set; }
+        public bool isExternalLogin { get; set; }
 
         public string Token { get; set; }
 

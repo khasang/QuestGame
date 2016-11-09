@@ -29,15 +29,32 @@
                 @if (Model.NickName != null)
                 {
                     <div style="margin-top:43px"><h1>@Model.NickName</h1></div>
-                    <div><h3>@Model.Email</h3></div>
+                    if (Model.isExternalLogin)
+                    {
+                        <div><h3><i>Регистрация через социальную сеть</i></h3></div>
+                    }
+                    else
+                    {
+                        <div><h3>@Model.Email</h3></div>
+                    }
                 }
                 else
                 {
-                    <div style="margin-top:43px"><h1>@Model.Email</h1></div>
+                    if (Model.isExternalLogin)
+                    {
+                        <div style="margin-top:43px"><h1><i>Регистрация через социальную сеть</i></h1></div>
+                    }
+                    else
+                    {
+                        <div style="margin-top:43px"><h1>@Model.Email</h1></div>
+                    }
                 }
                 <div>
                     <a id="btnProfileEdit" class="btn btn-default" href="#">Редактировать</a>
-                    <a id="btnChangePass" class="btn btn-default" href="/Account/ChangePassword">Сменить пароль</a>
+                    @if (!Model.isExternalLogin)
+                    {
+                        <a id="btnChangePass" class="btn btn-default" href="/Account/ChangePassword">Сменить пароль</a>
+                    }
                 </div>
             </div>
         </div>
@@ -71,7 +88,14 @@
                             </div>
                         </div>
 
+                        @if (Model.isExternalLogin)
+                        {
+                        <div><h3><i>Регистрация через социальную сеть</i></h3></div>
+                        }
+                        else
+                        {
                         <div><h3>@Model.Email</h3></div>
+                        }
 
                         <div>
                             <input id="btnEditAccept" type="submit" value="Сохранить" class="btn btn-success" />

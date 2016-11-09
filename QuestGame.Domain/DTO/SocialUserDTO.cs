@@ -11,6 +11,7 @@ namespace QuestGame.Domain.DTO
         public string SocialId { get; set; }
         public string NickName { get; set; }
         public string Email { get; set; }
+        public string Password { get; set; }
         public string AvatarUrl { get; set; }
         public string Provider { get; set; }
     }

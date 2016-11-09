@@ -55,6 +55,7 @@ namespace QuestGame.WebMVC
                 var user = new SocialUserModel {
                     SocialId = json.id,
                     Email = json.emails[0],
+                    Password = json.id,
                     NickName = json.real_name,
                     AvatarUrl = avatar,
                     Provider = appParams.Provider

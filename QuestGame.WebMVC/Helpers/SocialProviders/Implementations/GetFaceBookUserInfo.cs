@@ -55,6 +55,7 @@ namespace QuestGame.WebMVC
                 {
                     SocialId = json.id,
                     Email = json.email,
+                    Password = json.id,
                     NickName = json.name,
                     AvatarUrl = avatar,
                     Provider = appParams.Provider

@@ -22,13 +22,9 @@ namespace QuestGame.WebMVC.Controllers
         }
 
         // GET: ExternalLogin
-        public ActionResult Index()
+        public ActionResult Index(string providerName)
         {
-            SocialProvider provider = new VKontakteAuth();
-            //SocialProvider provider = new YandexAuth();
-            //SocialProvider provider = new GoogleAuth();
-            //SocialProvider provider = new FacebookAuth();
-
+            var provider = GetProvider.Provider(providerName);
 
             return Redirect(provider.RequestCodeUrl);
         }
@@ -80,7 +76,7 @@ namespace QuestGame.WebMVC.Controllers
 
             var userInfo = provider.GetUserInfo();
 
-            await CreateSocialUser(userInfo);
+            await GetSocialUser(userInfo);
 
             return RedirectToAction("Index", "Home");
         }
@@ -90,20 +86,22 @@ namespace QuestGame.WebMVC.Controllers
             using (var client = RestHelper.Create())
             {
                 var requestString = ApiMethods.AccontUserByEmail + socialUser.Email;
+
                 var request = await client.GetAsync(requestString);
-                if (request.StatusCode != HttpStatusCode.NotFound)
+
+                if (request.StatusCode == HttpStatusCode.NotFound)
+                {
+                    await CreateSocialUser(socialUser);
+                }
+                else if (request.StatusCode == HttpStatusCode.OK)
                 {
                     var answer = await request.Content.ReadAsAsync<ApplicationUserDTO>();
                     Session["User"] = answer;
                 }
-                else
-                {
-                    await CreateSocialUser(socialUser);
-                }
             }
         }
 
-        public async Task<ActionResult> CreateSocialUser(SocialUserModel socialUser)
+        public async Task CreateSocialUser(SocialUserModel socialUser)
         {
             SocialUserDTO user = mapper.Map<SocialUserModel, SocialUserDTO>(socialUser);
 
@@ -116,8 +114,6 @@ namespace QuestGame.WebMVC.Controllers
 
                 Session["User"] = answer;
             }
-
-            return RedirectToAction("Index", "Home");
         }
 
     }

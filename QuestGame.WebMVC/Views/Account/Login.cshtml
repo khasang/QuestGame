@@ -74,10 +74,10 @@
         </div>*@
 
     <div class="col-md-4">
-        @Html.ActionLink("Google", "Index", "ExternalLogin", new { providerName = "GoogleAuth" }, htmlAttributes: new { @class = "btn btn-default" })
-        @Html.ActionLink("FaceBook", "Index", "ExternalLogin", new { providerName = "FaceBookAuth" }, htmlAttributes: new { @class = "btn btn-default" })
-
-
+        @Html.ActionLink("Google", "Index", "ExternalLogin", new { providerName = "Google" }, htmlAttributes: new { @class = "btn btn-default" })
+        @Html.ActionLink("FaceBook", "Index", "ExternalLogin", new { providerName = "FaceBook" }, htmlAttributes: new { @class = "btn btn-default" })
+        @Html.ActionLink("VK", "Index", "ExternalLogin", new { providerName = "VK" }, htmlAttributes: new { @class = "btn btn-default" })
+        @Html.ActionLink("Yandex", "Index", "ExternalLogin", new { providerName = "Yandex" }, htmlAttributes: new { @class = "btn btn-default" })
     </div>
 </div>
 

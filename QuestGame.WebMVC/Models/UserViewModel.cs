@@ -22,5 +22,8 @@ namespace QuestGame.WebMVC.Models
         public bool EmailConfirmed { get; set; }
 
         public UserProfileViewModel UserProfile { get; set; }
+
+        public bool isExternalLogin { get; set; }
+
     }
 }
