@@ -31,6 +31,7 @@ using QuestGame.Domain.Interfaces;
 using System.Net.Mail;
 using System.Threading;
 using QuestGame.WebApi.Constants;
+using System.Linq;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -607,6 +608,7 @@ namespace QuestGame.WebApi.Controllers
             }
         }
 
+        [HttpPost]
         [AllowAnonymous]
         [Route("RegisterSocialUser")]
         public async Task<IHttpActionResult> RegisterSocialUser(SocialUserDTO model)
@@ -640,7 +642,40 @@ namespace QuestGame.WebApi.Controllers
             return Ok(userResult);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("GetSocialUser")]
+        public async Task<IHttpActionResult> GetSocialUser(SocialUserDTO model)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
 
+            ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
+
+            if (user == null) { return NotFound(); }
+
+            //var providers = from prov in user.Logins
+            //                select prov.LoginProvider;
+
+            //var y = providers.Any(s => s.Equals(model.Provider));
+
+            //if ( !y )
+            //{
+            //    IdentityResult addLogin = UserManager.AddLogin(user.Id, new UserLoginInfo(model.Provider, model.SocialId));
+            //}
+
+            ApplicationUserDTO userResult;
+
+            using (var client = RestHelper.Create())
+            {
+                var response = await client.PostAsJsonAsync(ApiMethods.AccontUserLogin, new LoginBindingModel { Email = user.Email, Password = model.Password });
+                userResult = await response.Content.ReadAsAsync<ApplicationUserDTO>();
+            }
+
+            return Ok(userResult);
+        }
 
         // POST api/Account/RegisterExternal
         [OverrideAuthentication]

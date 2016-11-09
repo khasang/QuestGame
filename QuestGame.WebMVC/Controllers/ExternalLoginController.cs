@@ -83,11 +83,11 @@ namespace QuestGame.WebMVC.Controllers
 
         private async Task GetSocialUser(SocialUserModel socialUser)
         {
+            SocialUserDTO user = mapper.Map<SocialUserModel, SocialUserDTO>(socialUser);
+
             using (var client = RestHelper.Create())
             {
-                var requestString = ApiMethods.AccontUserByEmail + socialUser.Email;
-
-                var request = await client.GetAsync(requestString);
+                var request = await client.PostAsJsonAsync(@"api/Account/GetSocialUser", user);
 
                 if (request.StatusCode == HttpStatusCode.NotFound)
                 {
