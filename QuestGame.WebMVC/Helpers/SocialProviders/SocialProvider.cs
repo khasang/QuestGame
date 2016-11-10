@@ -23,10 +23,7 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
             }
         }
 
-        protected string GetToken()
-        {
-            return getToken.GetSocialToken();
-        }
+        protected abstract string GetToken();
 
         public SocialUserModel GetUserInfo()
         {

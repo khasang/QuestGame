@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using System.Web.Configuration;
 
 namespace QuestGame.WebMVC.Helpers.SocialProviders
 {
@@ -34,8 +35,7 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
                 var uriBuilder = new UriBuilder(this.appPaths.AppGetCodePath);
                 var parameters = HttpUtility.ParseQueryString(string.Empty);
                 parameters["response_type"] = "code";
-                parameters["client_id"] = this.appParams.ClientId;
-                //parameters["redirect_uri"] = this.appParams.RedirectUri;
+                parameters["client_id"] = WebConfigurationManager.AppSettings["YandexClientId"];
                 parameters["display"] = "'popup'";
                 uriBuilder.Query = parameters.ToString();
                 return uriBuilder.Uri.ToString();

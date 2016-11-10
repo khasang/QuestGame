@@ -3,14 +3,19 @@ using System.Web;
 using System.Web.Services;
 using System.Web.Services.Protocols;
 using System.ComponentModel;
+using System.Web.Configuration;
 
 namespace QuestGame.WebMVC.Helpers.SocialProviders
 {
     public class FacebookAuth : Helpers.SocialProviders.SocialProvider
     {
+        string clientId = WebConfigurationManager.AppSettings["FaceBookClientId"];
 
         public FacebookAuth()
         {
+            
+
+
             appParams = new SocialAppParams
             {
                 ClientId = "1601644850130436",
@@ -38,13 +43,32 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
                 var uriBuilder = new UriBuilder(this.appPaths.AppGetCodePath);
                 var parameters = HttpUtility.ParseQueryString(string.Empty);
                 parameters["response_type"] = "code";
-                parameters["client_id"] = this.appParams.ClientId;
-                parameters["redirect_uri"] = this.appParams.RedirectUri;
-                //parameters["scope"] = this.appParams.Scope;
+                parameters["client_id"] = this.clientId;
+                parameters["redirect_uri"] = WebConfigurationManager.AppSettings["FaceBookRedirectUri"];
                 uriBuilder.Query = parameters.ToString();
                 return uriBuilder.Uri.ToString();
             }
         }
 
+        protected override string GetToken()
+        {
+            var uriBuilder = new UriBuilder(this.appPaths.AppGetTokenPath);
+            var parameters = HttpUtility.ParseQueryString(string.Empty);
+            parameters["client_id"] = this.appParams.ClientId;
+            parameters["redirect_uri"] = this.appParams.RedirectUri;
+            parameters["client_secret"] = this.appParams.ClientSecret;
+            parameters["code"] = this.appParams.Code;
+            uriBuilder.Query = parameters.ToString();
+
+            var queryUrl = uriBuilder.Uri.ToString();
+
+            using (var client = RestHelper.Create())
+            {
+                var response = client.GetAsync(queryUrl).Result;
+                var responseData = response.Content.ReadAsAsync<Dictionary<string, string>>().Result;
+
+                return responseData["access_token"];
+            }
+        }
     }
 }
