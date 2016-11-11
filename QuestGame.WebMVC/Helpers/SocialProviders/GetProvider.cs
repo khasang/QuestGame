@@ -13,16 +13,12 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
             {
                 case "Google":
                     return new GoogleAuth();
-                    break;
                 case "FaceBook":
                     return new FacebookAuth();
-                    break;
                 case "VK":
                     return new VKontakteAuth();
-                    break;
                 case "Yandex":
                     return new YandexAuth();
-                    break;
             }
             return null;
         }

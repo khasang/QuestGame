@@ -7,6 +7,8 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
 {
     public abstract class SocialProvider
     {
+        private string code;
+
         protected string ClientId { get; set; }
         protected string ClientSecret { get; set; }
         protected string RedirectUri { get; set; }
@@ -21,10 +23,10 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
 
         public virtual string Code
         {
-            get { return this.Code; }
+            get { return this.code; }
             set
             {
-                this.Code = value;
+                this.code = value;
                 this.AccessToken = GetToken();
             }
         }

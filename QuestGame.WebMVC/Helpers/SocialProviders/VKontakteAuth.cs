@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
-using QuestGame.WebMVC.Helpers.SocialProviders.Implementations;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Configuration;
 using QuestGame.WebMVC.Models;
@@ -12,6 +9,8 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
 {
     public class VKontakteAuth : SocialProvider
     {
+        private string code;
+
         public VKontakteAuth()
         {
             this.Provider = WebConfigurationManager.AppSettings["VKontakteProvider"];
@@ -42,10 +41,10 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
 
         public override string Code
         {
-            get { return this.Code; }
+            get { return this.code; }
             set
             {
-                this.Code = value;
+                this.code = value;
                 var query = GetToken();
 
                 dynamic json = JsonConvert.DeserializeObject(query);

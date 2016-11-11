@@ -164,7 +164,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ExternalLoginController.cs" />
-    <Compile Include="Controllers\ExternalLoginController1.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Helpers\SocialProviders\GetProvider.cs" />
     <Compile Include="Helpers\SocialProviders\FacebookAuth.cs" />
