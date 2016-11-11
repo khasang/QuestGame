@@ -7,30 +7,31 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
 {
     public abstract class SocialProvider
     {
-        protected SocialAppPaths appPaths;
-        protected SocialAppParams appParams;
-        protected IGetSocialToken getToken;
-        protected IGetSocialUserInfo getUserInfo;
+        protected string ClientId { get; set; }
+        protected string ClientSecret { get; set; }
+        protected string RedirectUri { get; set; }
+        protected string AccessToken { get; set; }
+        protected string Scope { get; set; }
+        protected string SocialID { get; set; }
+        protected string Provider { get; set; }
 
-        public virtual string RequestCodeUrl { get; }
+        protected string AppGetCodePath { get; set; }
+        protected string AppGetTokenPath { get; set; }
+        protected string AppGetUserInfoPath { get; set; }
 
         public virtual string Code
         {
             set
             {
-                appParams.Code = value;
-                this.appParams.AccessToken = GetToken();
+                this.Code = value;
+                this.AccessToken = GetToken();
             }
         }
 
-        protected string GetToken()
-        {
-            return getToken.GetSocialToken();
-        }
+        protected abstract string GetToken();
 
-        public SocialUserModel GetUserInfo()
-        {
-            return getUserInfo.GetSocialUserInfo();
-        }
+        public abstract string RequestCodeUrl { get; }
+
+        public abstract SocialUserModel GetUserInfo();
     }
 }
