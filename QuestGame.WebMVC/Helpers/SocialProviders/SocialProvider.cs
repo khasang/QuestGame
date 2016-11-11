@@ -21,6 +21,7 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
 
         public virtual string Code
         {
+            get { return this.Code; }
             set
             {
                 this.Code = value;

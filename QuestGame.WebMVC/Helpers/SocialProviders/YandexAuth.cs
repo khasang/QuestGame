@@ -1,5 +1,12 @@
 ﻿using System;
 using System.Web;
+using System.Web.Configuration;
+using QuestGame.WebMVC.Models;
+using QuestGame.Common.Helpers;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace QuestGame.WebMVC.Helpers.SocialProviders
 {
@@ -7,41 +14,97 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
     {
         public YandexAuth()
         {
-            appParams = new SocialAppParams
-            {
-                ClientId = "2c5f922adc9248c5ac8ac6a6cc74b5d8",
-                ClientSecret = "0885fc2c643147049560890503abf227",
-                RedirectUri = "https://localhost:44366/ExternalLogin/YandexAuthCallback",
-                Scope = "email",
-                Provider = "Yandex"
-            };
+            this.Provider = WebConfigurationManager.AppSettings["YandexProvider"];
 
-            appPaths = new SocialAppPaths
-            {
-                AppGetCodePath = "https://oauth.yandex.ru/authorize",
-                AppGetTokenPath = "https://oauth.yandex.ru/token",
-                AppGetUserInfoPath = "https://login.yandex.ru/info"
-            };
+            ClientId = WebConfigurationManager.AppSettings[this.Provider + "ClientId"];
+            ClientSecret = WebConfigurationManager.AppSettings[this.Provider + "ClientSecret"];
+            RedirectUri = WebConfigurationManager.AppSettings[this.Provider + "RedirectUri"];
+            Scope = WebConfigurationManager.AppSettings[this.Provider + "Scope"];
 
-            getToken = new GetYandexToken(appParams, appPaths);
-            getUserInfo = new GetYandexUserInfo(appParams, appPaths);
+            AppGetCodePath = WebConfigurationManager.AppSettings[this.Provider + "AppGetCodePath"];
+            AppGetTokenPath = WebConfigurationManager.AppSettings[this.Provider + "AppGetTokenPath"];
+            AppGetUserInfoPath = WebConfigurationManager.AppSettings[this.Provider + "AppGetUserInfoPath"];
         }
 
         public override string RequestCodeUrl
         {
             get
             {
-                var uriBuilder = new UriBuilder(this.appPaths.AppGetCodePath);
+                var uriBuilder = new UriBuilder(this.AppGetCodePath);
                 var parameters = HttpUtility.ParseQueryString(string.Empty);
                 parameters["response_type"] = "code";
-                parameters["client_id"] = this.appParams.ClientId;
-                //parameters["redirect_uri"] = this.appParams.RedirectUri;
+                parameters["client_id"] = this.ClientId;
                 parameters["display"] = "'popup'";
                 uriBuilder.Query = parameters.ToString();
                 return uriBuilder.Uri.ToString();
             }
         }
 
+        public override SocialUserModel GetUserInfo()
+        {
+            var uriBuilder = new UriBuilder(this.AppGetUserInfoPath);
+            var parameters = HttpUtility.ParseQueryString(string.Empty);
+            parameters["format"] = "json";
+            parameters["oauth_token"] = this.AccessToken;
+            uriBuilder.Query = parameters.ToString();
 
+            var queryUrl = uriBuilder.Uri.ToString();
+
+            using (var client = RestHelper.Create())
+            {
+                var request = client.GetAsync(queryUrl).Result;
+                var answer = request.Content.ReadAsStringAsync().Result;
+                dynamic json = JsonConvert.DeserializeObject(answer);
+
+                string avatar;
+
+                if (!(bool)json.is_avatar_empty)
+                {
+                    avatar = @"http://avatars.mds.yandex.net/get-yapic/" + json.default_avatar_id + @"/islands-200";
+                }
+                else
+                {
+                    avatar = @"http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
+                }
+
+                var user = new SocialUserModel
+                {
+                    SocialId = json.id,
+                    Email = json.emails[0],
+                    Password = json.id,
+                    NickName = json.real_name,
+                    AvatarUrl = avatar,
+                    Provider = this.Provider
+                };
+
+                return user;
+            }
+        }
+
+        protected override string GetToken()
+        {
+            var requestParams = new Dictionary<string, string>
+                    {
+                        { "client_id", this.ClientId },
+                        { "client_secret", this.ClientSecret },
+                        { "grant_type", "authorization_code" },
+                        { "code", this.Code}
+                    };
+
+            var content = new FormUrlEncodedContent(requestParams);
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:44366/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+                client.DefaultRequestHeaders.Add("Referer", this.RedirectUri);
+
+                var response = client.PostAsync(this.AppGetTokenPath, content).Result;
+                var responseData = response.Content.ReadAsAsync<Dictionary<string, string>>().Result;
+
+                return responseData["access_token"];
+            }
+        }
     }
 }
