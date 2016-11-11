@@ -167,25 +167,12 @@
     <Compile Include="Controllers\ExternalLoginController1.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Helpers\SocialProviders\GetProvider.cs" />
-    <Compile Include="Helpers\SocialProviders\Implementations\GetVKontakteToken.cs" />
-    <Compile Include="Helpers\SocialProviders\Implementations\GetFaceBookUserInfo.cs" />
-    <Compile Include="Helpers\SocialProviders\Implementations\GetFaceBookToken.cs" />
     <Compile Include="Helpers\SocialProviders\FacebookAuth.cs" />
-    <Compile Include="Helpers\SocialProviders\Implementations\GetGoogleUserInfo.cs" />
-    <Compile Include="Helpers\SocialProviders\Implementations\GetGoggleToken.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\SocialProviders\GoogleAuth.cs" />
     <Compile Include="Helpers\ActiveHelper.cs" />
-    <Compile Include="Helpers\SocialProviderFactory\FaceBookAuth.cs" />
-    <Compile Include="Helpers\SocialProviderFactory\GoogleAuth.cs" />
-    <Compile Include="Helpers\SocialProviderFactory\SocialProvider.cs" />
-    <Compile Include="Helpers\SocialProviders\Implementations\GetVKontakteUserInfo.cs" />
-    <Compile Include="Helpers\SocialProviders\Implementations\GetYandexToken.cs" />
-    <Compile Include="Helpers\SocialProviders\Implementations\GetYandexUserInfo.cs" />
-    <Compile Include="Helpers\SocialProviders\Interfaces\IGetSocialToken.cs" />
-    <Compile Include="Helpers\SocialProviders\Interfaces\IGetSocialUserInfo.cs" />
     <Compile Include="Helpers\SocialProviders\VKontakteAuth.cs" />
     <Compile Include="Helpers\SocialProviders\YandexAuth.cs" />
     <Compile Include="Mapping\AutoMapperConfiguration.cs" />
@@ -254,7 +241,6 @@
     <Content Include="Areas\Design\Views\_ViewStart.cshtml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Helpers\SocialProviders\ClassDiagram1.cd" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.1.1.js" />
     <Content Include="Scripts\jquery-3.1.1.min.js" />
