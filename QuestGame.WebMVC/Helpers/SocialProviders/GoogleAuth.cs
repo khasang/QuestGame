@@ -1,5 +1,11 @@
 ﻿using System;
 using System.Web;
+using System.Web.Configuration;
+using QuestGame.WebMVC.Models;
+using QuestGame.Common.Helpers;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace QuestGame.WebMVC.Helpers.SocialProviders
 {
@@ -7,41 +13,83 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
     {
         public GoogleAuth()
         {
-            appParams = new SocialAppParams
-            {
-                ClientId = "803183701728-q1ktbmuhces4vdj9udkmatn0gota8he8.apps.googleusercontent.com",
-                ClientSecret = "yXNNeyD0OlL7pS-yfSzGL4bv",
-                RedirectUri = "https://localhost:44366/ExternalLogin/GoogleAuthCallback",
-                Scope = "email",
-                Provider = "Google"
-            };
+            this.Provider = WebConfigurationManager.AppSettings["GoogleProvider"];
 
-            appPaths = new SocialAppPaths
-            {
-                AppGetCodePath = "https://accounts.google.com/o/oauth2/auth",
-                AppGetTokenPath = "https://accounts.google.com/o/oauth2/token",
-                AppGetUserInfoPath = "https://www.googleapis.com/oauth2/v1/userinfo"
-            };
+            ClientId = WebConfigurationManager.AppSettings[this.Provider + "ClientId"];
+            ClientSecret = WebConfigurationManager.AppSettings[this.Provider + "ClientSecret"];
+            RedirectUri = WebConfigurationManager.AppSettings[this.Provider + "RedirectUri"];
+            Scope = WebConfigurationManager.AppSettings[this.Provider + "Scope"];
 
-            getToken = new GetGoggleToken(appParams, appPaths);
-            getUserInfo = new GetGoogleUserInfo(appParams, appPaths);
+            AppGetCodePath = WebConfigurationManager.AppSettings[this.Provider + "AppGetCodePath"];
+            AppGetTokenPath = WebConfigurationManager.AppSettings[this.Provider + "AppGetTokenPath"];
+            AppGetUserInfoPath = WebConfigurationManager.AppSettings[this.Provider + "AppGetUserInfoPath"];
         }
 
         public override string RequestCodeUrl
         {
             get
             {
-                var uriBuilder = new UriBuilder(this.appPaths.AppGetCodePath);
+                var uriBuilder = new UriBuilder(this.AppGetCodePath);
                 var parameters = HttpUtility.ParseQueryString(string.Empty);
                 parameters["response_type"] = "code";
-                parameters["client_id"] = this.appParams.ClientId;
-                parameters["redirect_uri"] = this.appParams.RedirectUri;
-                parameters["scope"] = this.appParams.Scope;
+                parameters["client_id"] = this.ClientId;
+                parameters["redirect_uri"] = this.RedirectUri;
+                parameters["scope"] = this.Scope;
                 uriBuilder.Query = parameters.ToString();
                 return uriBuilder.Uri.ToString();
             }
         }
 
+        public override SocialUserModel GetUserInfo()
+        {
+            var uriBuilder = new UriBuilder(this.AppGetUserInfoPath);
+            var parameters = HttpUtility.ParseQueryString(string.Empty);
+            parameters["access_token"] = this.AccessToken;
+            uriBuilder.Query = parameters.ToString();
 
+            var queryUrl = uriBuilder.Uri.ToString();
+
+            using (var client = RestHelper.Create())
+            {
+                var request = client.GetAsync(queryUrl).Result;
+                var answer = request.Content.ReadAsAsync<Dictionary<string, string>>().Result;
+
+                return new SocialUserModel
+                {
+                    SocialId = answer["id"],
+                    Email = answer["email"],
+                    Password = answer["id"],
+                    NickName = answer["name"],
+                    AvatarUrl = answer["picture"],
+                    Provider = this.Provider
+                };
+            }
+        }
+
+        protected override string GetToken()
+        {
+            var requestParams = new Dictionary<string, string>
+                    {
+                        { "client_id", this.ClientId },
+                        { "client_secret", this.ClientSecret },
+                        { "redirect_uri", this.RedirectUri },
+                        { "grant_type", "authorization_code" },
+                        { "code", this.Code}
+                    };
+            var content = new FormUrlEncodedContent(requestParams);
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:44366/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+                client.DefaultRequestHeaders.Add("Referer", this.RedirectUri);
+
+                var response = client.PostAsync(this.AppGetTokenPath, content).Result;
+                var responseData = response.Content.ReadAsAsync<Dictionary<string, string>>().Result;
+
+                return responseData["access_token"];
+            }
+        }
     }
 }
