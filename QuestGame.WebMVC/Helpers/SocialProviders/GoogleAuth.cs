@@ -12,17 +12,8 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
     public class GoogleAuth : SocialProvider
     {
         public GoogleAuth()
+            : base(WebConfigurationManager.AppSettings["GoogleProvider"])
         {
-            this.Provider = WebConfigurationManager.AppSettings["GoogleProvider"];
-
-            ClientId = WebConfigurationManager.AppSettings[this.Provider + "ClientId"];
-            ClientSecret = WebConfigurationManager.AppSettings[this.Provider + "ClientSecret"];
-            RedirectUri = WebConfigurationManager.AppSettings[this.Provider + "RedirectUri"];
-            Scope = WebConfigurationManager.AppSettings[this.Provider + "Scope"];
-
-            AppGetCodePath = WebConfigurationManager.AppSettings[this.Provider + "AppGetCodePath"];
-            AppGetTokenPath = WebConfigurationManager.AppSettings[this.Provider + "AppGetTokenPath"];
-            AppGetUserInfoPath = WebConfigurationManager.AppSettings[this.Provider + "AppGetUserInfoPath"];
         }
 
         public override string RequestCodeUrl
