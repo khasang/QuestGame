@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
+using QuestGame.WebMVC.Models;
+using QuestGame.Common.Helpers;
 
 namespace QuestGame.WebMVC.Helpers.SocialProviders
 {
@@ -11,35 +14,27 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
     {
         public VKontakteAuth()
         {
-            appParams = new SocialAppParams
-            {
-                ClientId = "5712694",
-                ClientSecret = "yFCa0WNATugPbAMqsxso",
-                RedirectUri = "https://localhost:44366/ExternalLogin/VKontakteAuthCallback",
-                Scope = "uid,first_name,last_name,screen_name,photo_big,email",
-                Provider = "VKontakte"
-            };
+            this.Provider = WebConfigurationManager.AppSettings["VKontakteProvider"];
 
-            appPaths = new SocialAppPaths
-            {
-                AppGetCodePath = "http://oauth.vk.com/authorize",
-                AppGetTokenPath = "https://oauth.vk.com/access_token",
-                AppGetUserInfoPath = "https://api.vk.com/method/users.get"
-            };
+            ClientId = WebConfigurationManager.AppSettings[this.Provider + "ClientId"];
+            ClientSecret = WebConfigurationManager.AppSettings[this.Provider + "ClientSecret"];
+            RedirectUri = WebConfigurationManager.AppSettings[this.Provider + "RedirectUri"];
+            Scope = WebConfigurationManager.AppSettings[this.Provider + "Scope"];
 
-            getToken = new GetVKontakteToken(appParams, appPaths);
-            getUserInfo = new GetVKontakteUserInfo(appParams, appPaths);
+            AppGetCodePath = WebConfigurationManager.AppSettings[this.Provider + "AppGetCodePath"];
+            AppGetTokenPath = WebConfigurationManager.AppSettings[this.Provider + "AppGetTokenPath"];
+            AppGetUserInfoPath = WebConfigurationManager.AppSettings[this.Provider + "AppGetUserInfoPath"];
         }
 
         public override string RequestCodeUrl
         {
             get
             {
-                var uriBuilder = new UriBuilder(this.appPaths.AppGetCodePath);
+                var uriBuilder = new UriBuilder(this.AppGetCodePath);
                 var parameters = HttpUtility.ParseQueryString(string.Empty);
                 parameters["response_type"] = "code";
-                parameters["client_id"] = this.appParams.ClientId;
-                parameters["redirect_uri"] = this.appParams.RedirectUri;
+                parameters["client_id"] = this.ClientId;
+                parameters["redirect_uri"] = this.RedirectUri;
                 uriBuilder.Query = parameters.ToString();
                 return uriBuilder.Uri.ToString();
             }
@@ -47,15 +42,68 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
 
         public override string Code
         {
+            get { return this.Code; }
             set
             {
-                appParams.Code = value;
+                this.Code = value;
                 var query = GetToken();
 
                 dynamic json = JsonConvert.DeserializeObject(query);
 
-                this.appParams.AccessToken = json.access_token;
-                this.appParams.SocialID = json.user_id;
+                this.AccessToken = json.access_token;
+                this.SocialID = json.user_id;
+            }
+        }
+
+        protected override string GetToken()
+        {
+            var uriBuilder = new UriBuilder(this.AppGetTokenPath);
+            var parameters = HttpUtility.ParseQueryString(string.Empty);
+            parameters["client_id"] = this.ClientId;
+            parameters["redirect_uri"] = this.RedirectUri;
+            parameters["client_secret"] = this.ClientSecret;
+            parameters["code"] = this.Code;
+            uriBuilder.Query = parameters.ToString();
+
+            var queryUrl = uriBuilder.Uri.ToString();
+
+            using (var client = RestHelper.Create())
+            {
+                var response = client.GetAsync(queryUrl).Result;
+                var responseData = response.Content.ReadAsStringAsync().Result;
+
+                return responseData;
+            }
+        }
+
+        public override SocialUserModel GetUserInfo()
+        {
+            var uriBuilder = new UriBuilder(this.AppGetUserInfoPath);
+            var parameters = HttpUtility.ParseQueryString(string.Empty);
+            parameters["uids"] = this.SocialID;
+            parameters["fields"] = this.Scope;
+            parameters["access_token"] = this.AccessToken;
+            uriBuilder.Query = parameters.ToString();
+
+            var queryUrl = uriBuilder.Uri.ToString();
+
+            using (var client = RestHelper.Create())
+            {
+                var request = client.GetAsync(queryUrl).Result;
+                var answer = request.Content.ReadAsStringAsync().Result;
+                dynamic json = JsonConvert.DeserializeObject(answer);
+
+                var resultObject = json.response[0];
+
+                return new SocialUserModel
+                {
+                    SocialId = resultObject.uid,
+                    Email = resultObject.screen_name + "@VKfakeemail.ru",
+                    Password = resultObject.uid,
+                    NickName = resultObject.first_name + " " + resultObject.last_name,
+                    AvatarUrl = resultObject.photo_big,
+                    Provider = this.Provider
+                };
             }
         }
     }
