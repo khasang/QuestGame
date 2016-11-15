@@ -75,7 +75,7 @@ namespace QuestGame.WebApi.Controllers
         {
             try
             {
-                var stage = dataManager.Stages.GetByQuestId(id);
+                var stage = dataManager.Stages.GetByQuestId(id).ToList();
                 var model = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(stage);
                 return model;
             }
@@ -118,6 +118,12 @@ namespace QuestGame.WebApi.Controllers
             {
                 var stageEntity = dataManager.Stages.GetById(stage.Id);
                 var model = mapper.Map<StageDTO, Stage>(stage, stageEntity);
+
+                model.Cover = new Image
+                {
+                    Name = stage.Cover,
+                    Prefix = ConfigSettings.StagePrefixFile,
+                };
 
                 var owner = dataManager.Quests.GetById(stage.QuestId);
 

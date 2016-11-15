@@ -24,7 +24,13 @@
                 <div class="col-md-12">
                     <dl class="dl-horizontal col-md-6">
                         <dt>
+                            @Html.DisplayNameFor(n => n.Cover)
+                        </dt>
+                        <dd>
                             <img src=@Model.Cover alt="cover" height="100" width="100"/>
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(n => n.Title)
                         </dt>
                         <dd>
                             @Html.EditorFor(t => t.Title, new {@class = "form-control"})

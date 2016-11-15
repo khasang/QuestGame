@@ -48,6 +48,9 @@ namespace QuestGame.WebMVC.Areas.Game.Models
         [Display(Name = "Название")]
         public string Title { get; set; }
 
+        [Display(Name = "Обложка")]
+        public string Cover { get; set; }
+
         [Display(Name = "Тело")]
         public string Body { get; set; }
 

@@ -140,7 +140,7 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(StageViewModel quest)
+        public async Task<ActionResult> Edit(StageViewModel quest, HttpPostedFileBase file)
         {
             //if(!ModelState.IsValid)
             //{
@@ -149,7 +149,9 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
             //}
 
             var model = mapper.Map<StageViewModel, StageDTO>(quest);
-            //model.Cover = await UploadFile(file, ApiMethods.QuestUploadFile);
+            var filePath = await UploadFile(file, ApiMethods.StageUploadFile);
+            if (!string.IsNullOrEmpty(filePath))
+                model.Cover = filePath;
 
             using (var client = RestHelper.Create(SessionUser.Token))
             {

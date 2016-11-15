@@ -2,16 +2,15 @@
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.Configuration;
 using System.Web.Http;
+using QuestGame.Common.Helpers;
 using QuestGame.WebApi.Constants;
 
 namespace QuestGame.WebApi.Controllers
 {
     public class BaseController : ApiController
     {
-        protected async Task<string> Upload(string prefix)
+        protected async Task<string> Upload(string fileType)
         {
             var content = Request.Content;
 
@@ -22,7 +21,7 @@ namespace QuestGame.WebApi.Controllers
             var provider = new MultipartFormDataStreamProvider(path);
 
             var result = await content.ReadAsMultipartAsync(provider);
-            var test = result.FormData["Test"];
+            
             if (provider.FileData.Count > 1)
                 throw new FileLoadException(ErrorMessages.LoadOnlyOneFile);
 
@@ -31,7 +30,7 @@ namespace QuestGame.WebApi.Controllers
                 throw new Exception(ErrorMessages.DefectFile);
 
             var fileName = provider.FileData[0].Headers.ContentDisposition.FileName.Trim('"');
-            var pathName = $"{path}{prefix}{fileName}";
+            var pathName = $"{path}{fileType}\\{fileName}";
 
             if (File.Exists(pathName))
                 throw new Exception(ErrorMessages.ExistsFile);
@@ -48,8 +47,9 @@ namespace QuestGame.WebApi.Controllers
                 throw new Exception(ErrorMessages.DefectFile, ex);
             }
 
-            //var pr = prefix.Replace(@"\", @"/");
-            return $"{ConfigSettings.WebApiServiceBaseUrl}Content/Images/{prefix.Replace(@"\", @"/")}{fileName}";
+            var baseUrl = CommonHelper.GetConfigOrDefaultValue(ConfigSettings.BaseUrlKey, ConfigSettings.WebApiServiceBaseUrl);
+            var urlFile = $"{baseUrl}Content/Images/{fileType}/{fileName}";
+            return urlFile;
         }
     }
 }

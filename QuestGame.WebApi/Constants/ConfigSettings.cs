@@ -21,18 +21,18 @@ namespace QuestGame.WebApi.Constants
         #region Настройки по умолчанию
 
         public const string WebApiServiceBaseUrl = @"http://localhost:9243/";
-        public const string PathMail = @"..\..\Content\Temp\";
+        public const string MailPath = @"..\..\Content\Temp\";
         public const string FilePath = @"~\Content\Images\";
 
-        public const string QuestPrefixFile = @"Quests\";
-        public const string StagePrefixFile = @"Stages\";
-        public const string AvatarPrefixFile = @"Avatars\";
+        public const string QuestPrefixFile = @"Quests";
+        public const string StagePrefixFile = @"Stages";
+        public const string AvatarPrefixFile = @"Avatars";
 
         #endregion
 
         public static string GetAbsFilePath()
         {
-            var relativePath = CommonHelper.GetParamOrDefaultValue(FilePathKey, FilePath);
+            var relativePath = CommonHelper.GetConfigOrDefaultValue(FilePathKey, FilePath);
             var absPath = HttpContext.Current.Server.MapPath(relativePath);
             return absPath;
         }

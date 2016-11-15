@@ -50,7 +50,7 @@ namespace QuestGame.WebMVC.Controllers
 
             var fileName = Guid.NewGuid().ToString();    // Чтобы избежать возможного конфликта одинаковых имен
             var fileExt = Path.GetExtension(file.FileName);
-            var path = Server.MapPath($"{DefaultParams.FileRelativePath}{fileName}{fileExt}");
+            var path = Server.MapPath($"{ConfigSettings.RelativeFilePath}{fileName}{fileExt}");
             file.SaveAs(path);                              // сохраняем файл в папку Content/Temp в проекте
 
             using (var client = RestHelper.Create(SessionUser.Token))
@@ -59,8 +59,7 @@ namespace QuestGame.WebMVC.Controllers
                 var fileInfo = new FileInfo(path);
                 var content = new StreamContent(fileStream);
                 var form = new MultipartFormDataContent();
-                form.Add(content, DefaultParams.FileRelativePath, fileInfo.Name);
-                form.Add(new StringContent("eeeeeee"), "Test");
+                form.Add(content, ConfigSettings.RelativeFilePath, fileInfo.Name);
 
                 var response = await client.PostAsync(apiUpload, form);
                 var result = await response.Content.ReadAsAsync<string>();

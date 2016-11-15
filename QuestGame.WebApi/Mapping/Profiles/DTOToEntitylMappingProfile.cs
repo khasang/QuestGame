@@ -37,7 +37,9 @@ namespace QuestGame.WebApi.Mapping.Profiles
                 .ForMember(x => x.Cover, y => y.Ignore());
 
             CreateMap<StageFullDTO, Stage>();
-            CreateMap<StageDTO, Stage>();
+            CreateMap<StageDTO, Stage>()
+                .ForMember(x => x.Cover, y => y.Ignore());
+
             CreateMap<MotionDTO, Motion>();
         }
 
