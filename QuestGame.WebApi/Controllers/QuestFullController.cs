@@ -109,6 +109,11 @@ namespace QuestGame.WebApi.Controllers
 
                 model.Owner = owner;
                 model.Date = DateTime.Now;
+                model.Cover = new Image
+                {
+                    Name = ConfigSettings.GetServerFilePath(ConfigSettings.NoImage),
+                    Prefix = string.Empty
+                };
 
                 dataManager.Quests.Add(model);
                 dataManager.Save();

@@ -17,7 +17,7 @@ namespace QuestGame.WebApi.Controllers
             if (!content.IsMimeMultipartContent())
                 throw new Exception();
 
-            var path = ConfigSettings.GetAbsFilePath();
+            var path = ConfigSettings.GetLocalFilePath();
             var provider = new MultipartFormDataStreamProvider(path);
 
             var result = await content.ReadAsMultipartAsync(provider);

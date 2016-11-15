@@ -106,8 +106,8 @@ namespace QuestGame.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("Add")]
-        public IHttpActionResult Add(QuestDTO quest)
+        [Route("Create")]
+        public IHttpActionResult Create(QuestDTO quest)
         {
             try
             {
@@ -115,6 +115,11 @@ namespace QuestGame.WebApi.Controllers
                 var owner = dataManager.Users.GetAll().FirstOrDefault(x => x.UserName == quest.Owner);
                 model.Owner = owner;
                 model.Date = DateTime.Now;
+                model.Cover = new Image
+                {
+                    Name = ConfigSettings.GetServerFilePath(ConfigSettings.NoImage),
+                    Prefix = string.Empty
+                };
 
                 dataManager.Quests.Add(model);
                 dataManager.Save();

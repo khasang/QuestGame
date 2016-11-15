@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -95,8 +94,12 @@ namespace QuestGame.WebApi.Controllers
             {
                 var model = mapper.Map<StageDTO, Stage>(stage);
                 var owner = dataManager.Quests.GetById(stage.QuestId);
-
                 model.Quest = owner;
+                model.Cover = new Image
+                {
+                    Name = ConfigSettings.GetServerFilePath(ConfigSettings.NoImage),
+                    Prefix = string.Empty
+                };
 
                 dataManager.Stages.Add(model);
                 dataManager.Save();

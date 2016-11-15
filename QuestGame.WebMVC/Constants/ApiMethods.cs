@@ -14,6 +14,7 @@ namespace QuestGame.WebMVC.Constants
         public const string QuestGetByActive = @"api/Quest/GetByActive";
         public const string QuestGetUserName = @"api/Quest/GetByUserName?userName=";
         public const string QuestUpdate = @"api/Quest/Update";
+        public const string QuestCreate = @"api/Quest/Create";
 
         #endregion
 
