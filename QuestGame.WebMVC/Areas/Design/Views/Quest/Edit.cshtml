@@ -19,14 +19,15 @@
                 @Html.HiddenFor(x => x.Owner)
                 @Html.HiddenFor(x => x.Rate)
                 @Html.HiddenFor(x => x.Date)
+                @Html.HiddenFor(x => x.Cover)
 
                 <div class="col-md-12">
                     <dl class="dl-horizontal col-md-6">
                         <dt>
-                            @Html.DisplayNameFor(n => n.Title)
+                            <img src=@Model.Cover alt="cover" height="100" width="100"/>
                         </dt>
                         <dd>
-                            @Html.EditorFor(t => t.Title, new { @class = "form-control" })
+                            @Html.EditorFor(t => t.Title, new {@class = "form-control"})
                             @Html.ValidationMessageFor(v => v.Title)
                         </dd>
                         <dt>
@@ -51,7 +52,7 @@
                             @Html.DisplayNameFor(n => n.Active)
                         </dt>
                         <dd>
-                            @Html.CheckBoxFor(t => t.Active, new { @class = "checkbox" })
+                            @Html.CheckBoxFor(t => t.Active, new {@class = "checkbox"})
                             @Html.ValidationMessageFor(v => v.Active)
                         </dd>
                         <dt>
@@ -62,7 +63,7 @@
                         </dd>
                     </dl>
                     <div class="col-md-6">
-                        <img />
+                        <p>Изменить обложку</p>
                         <input type="file" name="file" />
                     </div>
                 </div>

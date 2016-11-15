@@ -30,101 +30,23 @@ namespace QuestGame.Domain
             this.dbContext = dbContext;
         }
 
-        public IQuestRepository Quests
-        {
-            get
-            {
-                if(questRepository == null)
-                {
-                    questRepository = new EFQuestRepository(dbContext);
-                }
-                return questRepository;
-            }
-        }
+        public IQuestRepository Quests => questRepository ?? (questRepository = new EFQuestRepository(dbContext));
 
-        public IStageRepository Stages
-        {
-            get
-            {
-                if (stageRepository == null)
-                {
-                    stageRepository = new EFStageRepository(dbContext);
-                }
-                return stageRepository;
-            }
-        }
+        public IStageRepository Stages => stageRepository ?? (stageRepository = new EFStageRepository(dbContext));
 
-        public IMotionRepository Motions
-        {
-            get
-            {
-                if (motionRrepository == null)
-                {
-                    motionRrepository = new EFMotionRepository(dbContext);
-                }
-                return motionRrepository;
-            }
-        }
+        public IMotionRepository Motions => motionRrepository ?? (motionRrepository = new EFMotionRepository(dbContext));
 
-        public IImageRepository Images
-        {
-            get
-            {
-                if (imageRepository == null)
-                {
-                    imageRepository = new EFImageRepository(dbContext);
-                }
-                return imageRepository;
-            }
-        }
+        public IImageRepository Images => imageRepository ?? (imageRepository = new EFImageRepository(dbContext));
 
-        public IUserRepository Users
-        {
-            get
-            {
-                if (userRepository == null)
-                {
-                    userRepository = new EFUserRepository(dbContext);
-                }
-                return userRepository;
-            }
-        }
+        public IUserRepository Users => userRepository ?? (userRepository = new EFUserRepository(dbContext));
 
-        public IRoleRepository Roles
-        {
-            get
-            {
-                if (roleRepository == null)
-                {
-                    roleRepository = new EFRoleRepository(dbContext);
-                }
-                return roleRepository;
-            }
-        }
+        public IRoleRepository Roles => roleRepository ?? (roleRepository = new EFRoleRepository(dbContext));
 
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                if (userManager == null)
-                {
-                    userManager = new ApplicationUserManager(new UserStore<ApplicationUser>((DbContext)dbContext));
-                }
-                return userManager;
-            }
-        }
+        public ApplicationUserManager UserManager => userManager ??
+                                                     (userManager = new ApplicationUserManager(new UserStore<ApplicationUser>((DbContext) dbContext)));
 
-        public RoleManager<IdentityRole> RoleManager
-        {
-            get
-            {
-                if (roleManager == null)
-                {
-                    roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>((DbContext)dbContext));
-                }
-                return roleManager;
-            }
-        }
+        public RoleManager<IdentityRole> RoleManager => roleManager ??
+                                                        (roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>((DbContext) dbContext)));
 
         public void Save()
         {

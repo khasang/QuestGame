@@ -1,70 +1,55 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using AutoMapper;
-using QuestGame.WebApi.Attributes;
-using QuestGame.WebApi.Models;
 using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Configuration;
-using System.Net;
-using QuestGame.Common.Helpers;
+using System.Web.Http;
+using QuestGame.WebApi.Constants;
 
 namespace QuestGame.WebApi.Controllers
 {
-    [CustomAuthorize]
-    public class BaseController : Controller
+    public class BaseController : ApiController
     {
-        protected IMapper mapper;
-
-        public BaseController(IMapper mapper)
+        protected async Task<string> Upload(string prefix)
         {
-            this.mapper = mapper;
-        }
+            var content = Request.Content;
 
-        protected UserModel SessionUser
-        {
-            get
+            if (!content.IsMimeMultipartContent())
+                throw new Exception();
+
+            var path = ConfigSettings.GetAbsFilePath();
+            var provider = new MultipartFormDataStreamProvider(path);
+
+            var result = await content.ReadAsMultipartAsync(provider);
+            var test = result.FormData["Test"];
+            if (provider.FileData.Count > 1)
+                throw new FileLoadException(ErrorMessages.LoadOnlyOneFile);
+
+            var file = new FileInfo(provider.FileData[0].LocalFileName);
+            if (file.Length == 0)
+                throw new Exception(ErrorMessages.DefectFile);
+
+            var fileName = provider.FileData[0].Headers.ContentDisposition.FileName.Trim('"');
+            var pathName = $"{path}{prefix}{fileName}";
+
+            if (File.Exists(pathName))
+                throw new Exception(ErrorMessages.ExistsFile);
+
+            try
             {
-                return Session["User"] as UserModel;
+                file.MoveTo(pathName); // Здесь мы можем настроить какие картинки где хранить
             }
+            catch (Exception ex)
+            {
+                foreach (var fileData in provider.FileData)  // если какие-либо ошибки при перемещении,
+                    File.Delete(fileData.LocalFileName);     // то удаляем загруженные файлы
+
+                throw new Exception(ErrorMessages.DefectFile, ex);
+            }
+
+            //var pr = prefix.Replace(@"\", @"/");
+            return $"{ConfigSettings.WebApiServiceBaseUrl}Content/Images/{prefix.Replace(@"\", @"/")}{fileName}";
         }
-
-        protected ActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-                return Redirect(returnUrl);
-            return RedirectToAction("Index", "Home");
-        }
-
-        //[HttpPost]
-        //protected string UploadFile(HttpPostedFileBase file)
-        //{
-        //    if (file != null)
-        //    {
-        //        var fileName = Path.GetFileName(file.FileName);
-        //        var path = Path.Combine(Server.MapPath("~/Content/Temp/"), fileName);
-        //        try
-        //        {
-        //            file.SaveAs(path);         // сохраняем файл в папку Files в проекте
-        //        }
-        //        catch
-        //        {
-        //            ViewBag.Message = "Ошибка локального сохранения";
-        //        }
-
-        //        RestHelper.UploadFile("api/UploadFile", path);
-
-        //        System.IO.File.Delete(path);   // удаляем файл из папки Files в проекте
-
-        //        ViewBag.Message = "Файл успешно отправлен";
-        //    }
-        //    else
-        //    {
-        //        ViewBag.Message = "Имя файла null";
-        //    }
-        //    return RedirectToAction("Index");
-        //}
     }
 }

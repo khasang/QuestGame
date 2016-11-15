@@ -8,10 +8,13 @@ using System.Threading.Tasks;
 
 namespace QuestGame.Domain.Entities
 {
+    /// <summary>
+    /// Модель сцены в квесте
+    /// </summary>
     public class Stage
     {
         /// <summary>
-        /// Первичный ключ
+        /// Идентификатор
         /// </summary>
         public int Id { get; set; }
 

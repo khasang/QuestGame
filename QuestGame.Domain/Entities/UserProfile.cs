@@ -9,16 +9,35 @@ using System.Threading.Tasks;
 
 namespace QuestGame.Domain.Entities
 {
+    /// <summary>
+    /// Модель профайла пользователя
+    /// </summary>
     public class UserProfile
     {
-        public string avatarUrl { get; set; }
-        public int Rating { get; set; }
-        public int CountCompliteQuests { get; set; }
-        public DateTime? InviteDate { get; set; }
-
         public string UserId { get; set; }
-
         [JsonIgnore]
         public virtual ApplicationUser User { get; set; }
+
+        /// <summary>
+        /// Изображение аватарки
+        /// </summary>
+        public int? AvatarId { get; set; }
+        public virtual Image Avatar { get; set; }
+
+
+        /// <summary>
+        /// Игровой рейтинг
+        /// </summary>
+        public int Rating { get; set; }
+
+        /// <summary>
+        /// Кол-во пройденных квестов
+        /// </summary>
+        public int CountCompliteQuests { get; set; }
+
+        /// <summary>
+        /// Дата регистрации
+        /// </summary>
+        public DateTime? InviteDate { get; set; }
     }
 }

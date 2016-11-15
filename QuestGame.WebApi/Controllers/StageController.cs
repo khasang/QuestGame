@@ -9,14 +9,16 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using QuestGame.WebApi.Constants;
 
 namespace QuestGame.WebApi.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Stage")]
-    public class StageController : ApiController
+    public class StageController : BaseController
     {
         IDataManager dataManager;
         IMapper mapper;
@@ -167,6 +169,26 @@ namespace QuestGame.WebApi.Controllers
                 logger.Error("Stage | DelById | ", ex.ToString());
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }            
+        }
+
+        /// <summary>
+        /// Загрузка обложки квеста
+        /// </summary>
+        [HttpPost]
+        [Route("UploadFile")]
+        public async Task<string> UploadFile()
+        {
+            try
+            {
+                var result = await Upload(ConfigSettings.StagePrefixFile);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Stage | UploadFile | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
         }
     }
 }

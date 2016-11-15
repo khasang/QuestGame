@@ -1,27 +1,23 @@
 ﻿using AutoMapper;
-using Newtonsoft.Json;
-using QuestGame.Domain;
 using QuestGame.Domain.DTO;
 using QuestGame.Domain.Entities;
 using QuestGame.Domain.Interfaces;
-using QuestGame.WebApi.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System.Data.Entity;
+using System.Threading.Tasks;
 using QuestGame.Common.Interfaces;
 using System.Web;
+using QuestGame.WebApi.Constants;
 
 namespace QuestGame.WebApi.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Quest")]
-    public class QuestController : ApiController
+    public class QuestController : BaseController
     {
         IDataManager dataManager;
         IMapper mapper;
@@ -143,7 +139,8 @@ namespace QuestGame.WebApi.Controllers
 
                 model.Cover = new Image
                 {
-                    Path = quest.Cover,
+                    Name = quest.Cover,
+                    Prefix = ConfigSettings.QuestPrefixFile,
                 };
 
                 var owner = dataManager.Users.GetAll().FirstOrDefault(x => x.UserName == quest.Owner);
@@ -177,6 +174,26 @@ namespace QuestGame.WebApi.Controllers
                 logger.Error("Quest | Delete | ", ex.ToString());
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }             
+        }
+
+        /// <summary>
+        /// Загрузка обложки квеста
+        /// </summary>
+        [HttpPost]
+        [Route("UploadFile")]
+        public async Task<string> UploadFile()
+        {
+            try
+            {
+                var result = await Upload(ConfigSettings.QuestPrefixFile);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Quest | UploadFile | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
         }
     }
 }

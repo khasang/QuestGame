@@ -41,9 +41,6 @@ namespace QuestGame.WebApi.Mapping.Profiles
             CreateMap<MotionDTO, Motion>();
         }
 
-        public override string ProfileName
-        {
-            get { return "DTOToEntitylMappingProfile"; }
-        }
+        public override string ProfileName => "DTOToEntitylMappingProfile";
     }
 }

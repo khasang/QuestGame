@@ -140,7 +140,7 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(StageViewModel quest, string returnUrl)
+        public async Task<ActionResult> Edit(StageViewModel quest)
         {
             //if(!ModelState.IsValid)
             //{
@@ -149,6 +149,7 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
             //}
 
             var model = mapper.Map<StageViewModel, StageDTO>(quest);
+            //model.Cover = await UploadFile(file, ApiMethods.QuestUploadFile);
 
             using (var client = RestHelper.Create(SessionUser.Token))
             {

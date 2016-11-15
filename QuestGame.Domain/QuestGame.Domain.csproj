@@ -88,6 +88,7 @@
   <ItemGroup>
     <Compile Include="ApplicationDbContext.cs" />
     <Compile Include="Constants\ConfigSettings.cs" />
+    <Compile Include="Constants\ImageType.cs" />
     <Compile Include="DataManager.cs" />
     <Compile Include="DBInitializer.cs" />
     <Compile Include="DBInitializers\DBInitialization.cs" />

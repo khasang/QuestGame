@@ -64,6 +64,12 @@ namespace QuestGame.WebMVC.Constants
 
         #endregion
 
-        public const string BaseUploadFile = @"api/QuestFull/UploadFile";
+        #region UploadFile
+
+        public const string QuestUploadFile = @"api/Quest/UploadFile";
+        public const string StageUploadFile = @"api/Stage/UploadFile";
+        public const string AccountUploadFile = @"api/Account/UploadFile";
+
+        #endregion
     }
 }

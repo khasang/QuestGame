@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 
 namespace QuestGame.Domain.Entities
 {
+    /// <summary>
+    /// Модель действия в сцене
+    /// </summary>
     public class Motion
     {
         /// <summary>
-        /// Первичный ключ
+        /// Идентификатор
         /// </summary>
         public int Id { get; set; }
 

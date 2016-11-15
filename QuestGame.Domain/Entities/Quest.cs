@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace QuestGame.Domain.Entities
 {
+    /// <summary>
+    /// Модель квеста
+    /// </summary>
     public class Quest
     {
         /// <summary>
