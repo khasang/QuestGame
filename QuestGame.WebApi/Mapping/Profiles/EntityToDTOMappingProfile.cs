@@ -14,7 +14,9 @@ namespace QuestGame.WebApi.Mapping.Profiles
         {
             CreateMap<ApplicationUser, UserDTO>();
             CreateMap<ApplicationUser, ApplicationUserDTO>()
-                .ForMember(x => x.isExternalLogin, y => y.MapFrom(pr => pr.Logins.Count > 0));
+                .ForMember(x => x.EmailConfirmed, y => y.MapFrom(pr => pr.Logins.Count > 0))
+                .ForMember(x => x.Logins, y => y.MapFrom(pr => pr.Logins.Select(d=> d.LoginProvider)));
+
 
             CreateMap<Quest, QuestFullDTO>().ForMember(x => x.Owner, y => y.MapFrom(pr => pr.Owner.UserName));
             CreateMap<Quest, QuestDTO>().ForMember(x => x.Owner, y => y.MapFrom(pr => pr.Owner.UserName));

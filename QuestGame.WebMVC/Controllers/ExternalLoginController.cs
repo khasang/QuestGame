@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using QuestGame.Common.Helpers;
 using QuestGame.Domain.DTO;
+using QuestGame.WebMVC.Attributes;
 using QuestGame.WebMVC.Constants;
 using QuestGame.WebMVC.Helpers.SocialProviders;
 using QuestGame.WebMVC.Models;
@@ -8,6 +9,12 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Net.Http.Headers;
 
 
 namespace QuestGame.WebMVC.Controllers
@@ -30,89 +37,95 @@ namespace QuestGame.WebMVC.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GoogleAuthCallback(string code)
+        public ActionResult GoogleAuthCallback(string code)
         {
             SocialProvider provider = new GoogleAuth();
             provider.Code = code;
 
             var userInfo = provider.GetUserInfo();
 
-            await GetSocialUser(userInfo);
-
-            return RedirectToAction("Index", "Home");
+            return GetSocialUser(userInfo).Result;
         }
 
         [HttpGet]
-        public async Task<ActionResult> YandexAuthCallback(string code)
+        public ActionResult YandexAuthCallback(string code)
         {
             SocialProvider provider = new YandexAuth();
             provider.Code = code;
 
             var userInfo = provider.GetUserInfo();
 
-            await GetSocialUser(userInfo);
-
-            return RedirectToAction("Index", "Home");
+            return GetSocialUser(userInfo).Result;
         }
 
         [HttpGet]
-        public async Task<ActionResult> FaceBookAuthCallback(string code)
+        public ActionResult FaceBookAuthCallback(string code)
         {
             SocialProvider provider = new FacebookAuth();
             provider.Code = code;
 
             var userInfo = provider.GetUserInfo();
 
-            await GetSocialUser(userInfo);
-
-            return RedirectToAction("Index", "Home");
+            return GetSocialUser(userInfo).Result;
         }
 
         [HttpGet]
-        public async Task<ActionResult> VKontakteAuthCallback(string code)
+        public ActionResult VKontakteAuthCallback(string code)
         {
             SocialProvider provider = new VKontakteAuth();
             provider.Code = code;
 
             var userInfo = provider.GetUserInfo();
 
-            await GetSocialUser(userInfo);
-
-            return RedirectToAction("Index", "Home");
+            return GetSocialUser(userInfo).Result;
         }
 
-        private async Task GetSocialUser(SocialUserModel socialUser)
+        [HttpGet]
+        [HTTPExceptionAttribute]
+        public async Task<ActionResult> GetSocialUser(SocialUserModel model)
         {
-            SocialUserDTO user = mapper.Map<SocialUserModel, SocialUserDTO>(socialUser);
+            var user = mapper.Map<SocialUserModel, SocialUserDTO>(model);
 
             using (var client = RestHelper.Create())
             {
-                var request = await client.PostAsJsonAsync(@"api/Account/GetSocialUser", user);
+                var response = client.GetAsync(ApiMethods.AccontUserByEmail + user.Email).Result;
 
-                if (request.StatusCode == HttpStatusCode.NotFound)
+                if (response.StatusCode == HttpStatusCode.NoContent)
                 {
-                    await CreateSocialUser(socialUser);
+                    return CreateSocialUser(model).Result;
                 }
-                else if (request.StatusCode == HttpStatusCode.OK)
+
+                response.EnsureSuccessStatusCode();
+
+                var result = await response.Content.ReadAsAsync<ApplicationUserDTO>();
+
+                if (result.Logins.Count == 0 )
                 {
-                    var answer = await request.Content.ReadAsAsync<ApplicationUserDTO>();
-                    Session["User"] = answer;
+                    ViewBag.Title = "Ошибка";
+                    ViewBag.Message = "Пользователь с email указанным соц. сетью уже существует";
+
+                    return View("ActionResultInfo");
                 }
+
+                Session["User"] = result;
+
+                return RedirectToAction("Index", "Home");
             }
         }
 
-        public async Task CreateSocialUser(SocialUserModel socialUser)
+        [HTTPExceptionAttribute]
+        public async Task<ActionResult> CreateSocialUser(SocialUserModel model)
         {
-            SocialUserDTO user = mapper.Map<SocialUserModel, SocialUserDTO>(socialUser);
+            SocialUserDTO user = mapper.Map<SocialUserModel, SocialUserDTO>(model);
 
             using (var client = RestHelper.Create())
             {
-                
-                var response = await client.PostAsJsonAsync(@"api/Account/RegisterSocialUser", user);
-
+                var response = client.PostAsJsonAsync(@"api/Account/RegisterSocialUser", user).Result;
                 var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
 
                 Session["User"] = answer;
+
+                return RedirectToAction("Index", "Home");
             }
         }
 

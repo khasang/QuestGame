@@ -84,8 +84,6 @@ namespace QuestGame.WebApi.Controllers
 
             var result = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
 
-            if (user.Logins.Count > 0) { result.EmailConfirmed = true; }
-
             return Ok(result);
         }
 
@@ -96,11 +94,9 @@ namespace QuestGame.WebApi.Controllers
         {
             ApplicationUser user = await UserManager.FindByEmailAsync(email);
 
-            if (user == null) { return NotFound(); }
+            if (user == null) { Content(HttpStatusCode.NoContent, "Пользователь не найден"); }
 
             var result = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
-
-            if (user.Logins.Count > 0) { result.EmailConfirmed = true; }
 
             return Ok(result);
         }

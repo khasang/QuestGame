@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace QuestGame.Domain.DTO
         public string UserName { get; set; }
         public string Email { get; set; }
         public bool EmailConfirmed { get; set; }
-        public bool isExternalLogin { get; set; }
+        public ICollection<string> Logins { get; set; }
 
         public string Token { get; set; }
 
