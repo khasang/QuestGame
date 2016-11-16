@@ -89,23 +89,27 @@ namespace QuestGame.WebMVC.Controllers
             using (var client = RestHelper.Create())
             {
                 var response = client.GetAsync(ApiMethods.AccontUserByEmail + user.Email).Result;
+                response.EnsureSuccessStatusCode();
 
                 if (response.StatusCode == HttpStatusCode.NoContent)
                 {
                     return CreateSocialUser(model).Result;
                 }
 
-                response.EnsureSuccessStatusCode();
-
                 var result = await response.Content.ReadAsAsync<ApplicationUserDTO>();
 
-                if (result.Logins.Count == 0 )
+                var isSelf = result.Logins.Any(s => s.Equals(model.Provider));
+
+                if (!isSelf)
                 {
-                    ViewBag.Title = "Ошибка";
-                    ViewBag.Message = "Пользователь с email указанным соц. сетью уже существует";
+                    ViewBag.Title = ErrorMessages.AccountFailRegister;
+                    ViewBag.Message = ErrorMessages.AccountUserExist;
 
                     return View("ActionResultInfo");
                 }
+
+                var authrequest = client.PostAsJsonAsync(ApiMethods.AccontUserGetSocial, user).Result;
+                var answer = await authrequest.Content.ReadAsAsync<ApplicationUserDTO>();
 
                 Session["User"] = result;
 
@@ -120,7 +124,7 @@ namespace QuestGame.WebMVC.Controllers
 
             using (var client = RestHelper.Create())
             {
-                var response = client.PostAsJsonAsync(@"api/Account/RegisterSocialUser", user).Result;
+                var response = client.PostAsJsonAsync(ApiMethods.AccontUserSocialRegister, user).Result;
                 var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
 
                 Session["User"] = answer;

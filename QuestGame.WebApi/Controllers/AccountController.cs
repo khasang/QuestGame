@@ -648,29 +648,12 @@ namespace QuestGame.WebApi.Controllers
                 return BadRequest();
             }
 
-            ApplicationUser user = await UserManager.FindByEmailAsync(model.Email);
-
-            if (user == null) { return NotFound(); }
-
-            //var providers = from prov in user.Logins
-            //                select prov.LoginProvider;
-
-            //var y = providers.Any(s => s.Equals(model.Provider));
-
-            //if ( !y )
-            //{
-            //    IdentityResult addLogin = UserManager.AddLogin(user.Id, new UserLoginInfo(model.Provider, model.SocialId));
-            //}
-
-            ApplicationUserDTO userResult;
-
             using (var client = RestHelper.Create())
             {
-                var response = await client.PostAsJsonAsync(ApiMethods.AccontUserLogin, new LoginBindingModel { Email = user.Email, Password = model.Password });
-                userResult = await response.Content.ReadAsAsync<ApplicationUserDTO>();
+                var response = await client.PostAsJsonAsync(ApiMethods.AccontUserLogin, new LoginBindingModel { Email = model.Email, Password = model.Password });
+                var userResult = await response.Content.ReadAsAsync<ApplicationUserDTO>();
+                return Ok(userResult);
             }
-
-            return Ok(userResult);
         }
 
         // POST api/Account/RegisterExternal
