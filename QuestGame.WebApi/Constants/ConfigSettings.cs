@@ -9,7 +9,6 @@ namespace QuestGame.WebApi.Constants
 {
     public class ConfigSettings
     {
-
         #region Ключи параметров
 
         public const string BaseUrlKey = "WebApiServiceBaseUrl";
@@ -23,11 +22,11 @@ namespace QuestGame.WebApi.Constants
         public const string WebApiServiceBaseUrl = @"http://localhost:9243/";
         public const string MailPath = @"..\..\Content\Temp\";
         public const string FilePath = @"~\Content\Images\";
-        public const string NoImage = @"NoImageAvailable.png";
+        public const string NoImage = "NoImageAvailable.png";
 
-        public const string QuestPrefixFile = @"Quests";
-        public const string StagePrefixFile = @"Stages";
-        public const string AvatarPrefixFile = @"Avatars";
+        public const string QuestPrefixFile = "Quests";
+        public const string StagePrefixFile = "Stages";
+        public const string AvatarPrefixFile = "Avatars";
 
         #endregion
 
@@ -40,7 +39,8 @@ namespace QuestGame.WebApi.Constants
 
         public static string GetServerFilePath(string fileNme)
         {
-            return $"{WebApiServiceBaseUrl}Content/Images/{fileNme}";
+            var baseUrl = CommonHelper.GetConfigOrDefaultValue(BaseUrlKey, WebApiServiceBaseUrl);
+            return $"{baseUrl}Content/Images/{fileNme}";
         }
     }
 }

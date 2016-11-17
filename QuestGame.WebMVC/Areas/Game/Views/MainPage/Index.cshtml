@@ -28,16 +28,7 @@
                     {
                         <tr>
                             <td>
-                                @{
-                                    if (string.IsNullOrEmpty(quest.Cover))
-                                    {
-                                        <img src="http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716" alt="Без обложки" height="100" width="100">
-                                    }
-                                    else
-                                    {
-                                        <img src=@quest.Cover alt=@quest.Title height="100" width="100">
-                                    }
-                                }
+                                <img src=@quest.Cover alt=@quest.Title height="100" width="100">
                             </td>
                             <td>@Html.ActionLink(quest.Title, "Details", new {id = quest.Title}, null)</td>
                             <td>@quest.Owner</td>

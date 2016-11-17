@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using QuestGame.WebApi.Constants;
+using System.IO;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -122,11 +123,24 @@ namespace QuestGame.WebApi.Controllers
                 var stageEntity = dataManager.Stages.GetById(stage.Id);
                 var model = mapper.Map<StageDTO, Stage>(stage, stageEntity);
 
-                model.Cover = new Image
+                if (stageEntity.Cover.Name != stage.Cover)
                 {
-                    Name = stage.Cover,
-                    Prefix = ConfigSettings.StagePrefixFile,
-                };
+                    if (!string.IsNullOrEmpty(stageEntity.Cover.Prefix))
+                    {
+                        Uri uri = new Uri(stageEntity.Cover.Name);
+                        string filename = Path.GetFileName(uri.LocalPath);
+                        var path = $"{ConfigSettings.GetLocalFilePath()}{stageEntity.Cover.Prefix}\\{filename}";
+
+                        if (File.Exists(path))
+                            File.Delete(path);
+                    }
+
+                    model.Cover.Name = stage.Cover;
+                    model.Cover.Prefix = ConfigSettings.QuestPrefixFile;
+                }
+
+                model.Cover.Name = stage.Cover;
+                model.Cover.Prefix = ConfigSettings.StagePrefixFile;
 
                 var owner = dataManager.Quests.GetById(stage.QuestId);
 

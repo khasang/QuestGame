@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using QuestGame.Common.Interfaces;
 using System.Web;
 using QuestGame.WebApi.Constants;
+using System.IO;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -145,11 +146,21 @@ namespace QuestGame.WebApi.Controllers
                 var questEntity = dataManager.Quests.GetById(quest.Id);
                 var model = mapper.Map<QuestDTO, Quest>(quest, questEntity);
 
-                model.Cover = new Image
+                if (questEntity.Cover.Name != quest.Cover)
                 {
-                    Name = quest.Cover,
-                    Prefix = ConfigSettings.QuestPrefixFile,
-                };
+                    if (!string.IsNullOrEmpty(questEntity.Cover.Prefix))
+                    {
+                        Uri uri = new Uri(questEntity.Cover.Name);
+                        string filename = Path.GetFileName(uri.LocalPath);
+                        var path = $"{ConfigSettings.GetLocalFilePath()}{questEntity.Cover.Prefix}\\{filename}";
+
+                        if (File.Exists(path))
+                            File.Delete(path);
+                    }
+
+                    model.Cover.Name = quest.Cover;
+                    model.Cover.Prefix = ConfigSettings.QuestPrefixFile;
+                }
 
                 var owner = dataManager.Users.GetAll().FirstOrDefault(x => x.UserName == quest.Owner);
                 model.Owner = owner;

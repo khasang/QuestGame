@@ -30,6 +30,7 @@ using QuestGame.Domain.Interfaces;
 using System.Net.Mail;
 using System.Threading;
 using QuestGame.WebApi.Constants;
+using System.IO;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -103,12 +104,25 @@ namespace QuestGame.WebApi.Controllers
         public async Task<IHttpActionResult> EditUser(ApplicationUserDTO model)
         {
             var user = await UserManager.FindByIdAsync(model.Id);
+            var oldAvatar = user.UserProfile.Avatar;
+
             var userResult = mapper.Map<ApplicationUserDTO, ApplicationUser>(model, user);
-            userResult.UserProfile.Avatar = new Image
+
+            if(oldAvatar.Name != model.UserProfile.AvatarUrl)
             {
-                Name = model.UserProfile.AvatarUrl,
-                Prefix = ConfigSettings.AvatarPrefixFile,
-            };
+                if(!string.IsNullOrEmpty(oldAvatar.Prefix))
+                {
+                    Uri uri = new Uri(oldAvatar.Name);
+                    string filename = Path.GetFileName(uri.LocalPath);
+                    var path = $"{ConfigSettings.GetLocalFilePath()}{oldAvatar.Prefix}\\{filename}";
+
+                    if (File.Exists(path))
+                        File.Delete(path);
+                }
+
+                userResult.UserProfile.Avatar.Name = model.UserProfile.AvatarUrl;
+                userResult.UserProfile.Avatar.Prefix = ConfigSettings.AvatarPrefixFile;
+            }
 
             try
             {
@@ -431,6 +445,13 @@ namespace QuestGame.WebApi.Controllers
 
             var user = mapper.Map<RegisterViewModel, ApplicationUser>(model);
             var profile = mapper.Map<RegisterViewModel, UserProfile>(model);
+
+            profile.Avatar = new Image
+            {
+                Name = ConfigSettings.GetServerFilePath(ConfigSettings.NoImage),
+                Prefix = string.Empty,
+            };
+
             user.UserProfile = profile;
 
             var result = await UserManager.CreateAsync(user, model.Password);
