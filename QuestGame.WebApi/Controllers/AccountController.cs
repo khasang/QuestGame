@@ -6,7 +6,6 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -105,6 +104,11 @@ namespace QuestGame.WebApi.Controllers
         {
             var user = await UserManager.FindByIdAsync(model.Id);
             var userResult = mapper.Map<ApplicationUserDTO, ApplicationUser>(model, user);
+            userResult.UserProfile.Avatar = new Image
+            {
+                Name = model.UserProfile.AvatarUrl,
+                Prefix = ConfigSettings.AvatarPrefixFile,
+            };
 
             try
             {
@@ -132,7 +136,7 @@ namespace QuestGame.WebApi.Controllers
             {
                 Email = User.Identity.GetUserName(),
                 HasRegistered = externalLogin == null,
-                LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
+                LoginProvider = externalLogin?.LoginProvider
             };
         }
 

@@ -1,21 +1,14 @@
 ﻿using QuestGame.Common.Helpers;
 using QuestGame.WebMVC.Constants;
 using QuestGame.WebMVC.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using QuestGame.Domain.DTO;
-
-
 using AutoMapper;
-
-using System.Web.Configuration;
 using QuestGame.WebMVC.Attributes;
 
 namespace QuestGame.WebMVC.Controllers
@@ -105,9 +98,6 @@ namespace QuestGame.WebMVC.Controllers
         [HttpGet]
         public async Task<ActionResult> UserProfile(string id)
         {
-            var currentUser = Session["User"] as ApplicationUserDTO;
-
-
             using (var client = RestHelper.Create())
             {
                 var response = await client.GetAsync(ApiMethods.AccontUserById + id);
@@ -115,8 +105,6 @@ namespace QuestGame.WebMVC.Controllers
 
                 var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
                 var model = mapper.Map<ApplicationUserDTO, UserViewModel>(answer);
-
-                model.UserProfile.avatarUrl = "http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
 
                 return View(model);
             }
@@ -126,9 +114,12 @@ namespace QuestGame.WebMVC.Controllers
         [HttpPost]
         [HTTPExceptionAttribute]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UserProfileEdit(UserViewModel model)
+        public async Task<ActionResult> UserProfileEdit(UserViewModel model, HttpPostedFileBase file)
         {
             var user = mapper.Map<UserViewModel, ApplicationUserDTO>(model);
+            var filePath = await UploadFile(file, ApiMethods.AccountUploadFile);
+            if (!string.IsNullOrEmpty(filePath))
+                user.UserProfile.AvatarUrl = filePath;
 
             using (var client = RestHelper.Create(SessionUser.Token))
             {

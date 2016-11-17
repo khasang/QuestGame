@@ -30,7 +30,8 @@ namespace QuestGame.WebApi.Mapping.Profiles
 
             CreateMap<Motion, MotionDTO>();
 
-            CreateMap<UserProfile, UserProfileDTO>();
+            CreateMap<UserProfile, UserProfileDTO>()
+                .ForMember(x => x.AvatarUrl, y => y.MapFrom(pr => pr.Avatar.Name));
         }
 
         public override string ProfileName => "EntityToDTOMappingProfile";

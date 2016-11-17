@@ -113,6 +113,9 @@ namespace QuestGame.WebApi.Controllers
             {
                 var model = mapper.Map<QuestDTO, Quest>(quest);
                 var owner = dataManager.Users.GetAll().FirstOrDefault(x => x.UserName == quest.Owner);
+                if (owner == null)
+                    throw new HttpResponseException(HttpStatusCode.BadRequest);
+                
                 model.Owner = owner;
                 model.Date = DateTime.Now;
                 model.Cover = new Image

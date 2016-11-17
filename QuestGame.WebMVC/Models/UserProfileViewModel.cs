@@ -1,18 +1,16 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+using System.Web.Mvc;
 
 namespace QuestGame.WebMVC.Models
 {
     public class UserProfileViewModel
     {
-        [System.Web.Mvc.HiddenInput(DisplayValue = false)]
+        [HiddenInput(DisplayValue = false)]
         public string UserId { get; set; }
 
-        public string avatarUrl { get; set; }
+        public string AvatarUrl { get; set; }
 
         [JsonIgnore]
         [Display(Name = "Рейтинг")]

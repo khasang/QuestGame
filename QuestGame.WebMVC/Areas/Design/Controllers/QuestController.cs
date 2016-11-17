@@ -65,7 +65,7 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
 
             using (var client = RestHelper.Create(SessionUser.Token))
             {
-                var response = await client.PostAsJsonAsync(ApiMethods.QuestFullCreate, request);
+                var response = await client.PostAsJsonAsync(ApiMethods.QuestCreate, request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     ViewBag.Message = ErrorMessages.QuestNotCreate;
