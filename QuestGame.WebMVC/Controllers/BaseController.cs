@@ -9,13 +9,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace QuestGame.WebMVC.Controllers
 {
-    [CustomAuthorize]
+    
     public class BaseController : Controller
     {
         protected IMapper mapper;
@@ -40,33 +42,32 @@ namespace QuestGame.WebMVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpPost]
-        protected ActionResult UploadFile(HttpPostedFileBase file)
+        [CustomAuthorize]
+        protected async Task<string> UploadFile(HttpPostedFileBase file, string apiUpload)
         {
-            if (file != null)
+            if (file == null)
+                return string.Empty;
+
+            var fileName = Guid.NewGuid().ToString();    // Чтобы избежать возможного конфликта одинаковых имен
+            var fileExt = Path.GetExtension(file.FileName);
+            var path = Server.MapPath($"{ConfigSettings.RelativeFilePath}{fileName}{fileExt}");
+            file.SaveAs(path);                              // сохраняем файл в папку Content/Temp в проекте
+
+            using (var client = RestHelper.Create(SessionUser.Token))
+            using (var fileStream = System.IO.File.Open(path, FileMode.Open))
             {
-                string fileName = Path.GetFileName(file.FileName);
-                var path = Path.Combine(Server.MapPath("~/Content/Temp/"), fileName);
-                try
-                {
-                    file.SaveAs(path);         // сохраняем файл в папку Files в проекте
-                }
-                catch
-                {
-                    ViewBag.Message = "Ошибка локального сохранения";
-                }
+                var fileInfo = new FileInfo(path);
+                var content = new StreamContent(fileStream);
+                var form = new MultipartFormDataContent();
+                form.Add(content, ConfigSettings.RelativeFilePath, fileInfo.Name);
 
-                RestHelper.UploadFile(ApiMethods.BaseUploadFile, path);
+                var response = await client.PostAsync(apiUpload, form);
+                var result = await response.Content.ReadAsAsync<string>();
+                
+                System.IO.File.Delete(path);   // удаляем файл из папки Content/Temp в проекте
 
-                System.IO.File.Delete(path);   // удаляем файл из папки Files в проекте
-
-                ViewBag.Message = ErrorMessages.BaseSuccessUploadFile;
+                return result;
             }
-            else
-            {
-                ViewBag.Message = "Имя файла null";
-            }
-            return RedirectToAction("Index");
         }
     }
 }

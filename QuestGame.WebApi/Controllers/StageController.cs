@@ -8,15 +8,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using QuestGame.WebApi.Constants;
+using System.IO;
 
 namespace QuestGame.WebApi.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Stage")]
-    public class StageController : ApiController
+    public class StageController : BaseController
     {
         IDataManager dataManager;
         IMapper mapper;
@@ -73,7 +75,7 @@ namespace QuestGame.WebApi.Controllers
         {
             try
             {
-                var stage = dataManager.Stages.GetByQuestId(id);
+                var stage = dataManager.Stages.GetByQuestId(id).ToList();
                 var model = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(stage);
                 return model;
             }
@@ -93,8 +95,12 @@ namespace QuestGame.WebApi.Controllers
             {
                 var model = mapper.Map<StageDTO, Stage>(stage);
                 var owner = dataManager.Quests.GetById(stage.QuestId);
-
                 model.Quest = owner;
+                model.Cover = new Image
+                {
+                    Name = ConfigSettings.GetServerFilePath(ConfigSettings.NoImage),
+                    Prefix = string.Empty
+                };
 
                 dataManager.Stages.Add(model);
                 dataManager.Save();
@@ -116,6 +122,25 @@ namespace QuestGame.WebApi.Controllers
             {
                 var stageEntity = dataManager.Stages.GetById(stage.Id);
                 var model = mapper.Map<StageDTO, Stage>(stage, stageEntity);
+
+                if (stageEntity.Cover.Name != stage.Cover)
+                {
+                    if (!string.IsNullOrEmpty(stageEntity.Cover.Prefix))
+                    {
+                        Uri uri = new Uri(stageEntity.Cover.Name);
+                        string filename = Path.GetFileName(uri.LocalPath);
+                        var path = $"{ConfigSettings.GetLocalFilePath()}{stageEntity.Cover.Prefix}\\{filename}";
+
+                        if (File.Exists(path))
+                            File.Delete(path);
+                    }
+
+                    model.Cover.Name = stage.Cover;
+                    model.Cover.Prefix = ConfigSettings.QuestPrefixFile;
+                }
+
+                model.Cover.Name = stage.Cover;
+                model.Cover.Prefix = ConfigSettings.StagePrefixFile;
 
                 var owner = dataManager.Quests.GetById(stage.QuestId);
 
@@ -167,6 +192,26 @@ namespace QuestGame.WebApi.Controllers
                 logger.Error("Stage | DelById | ", ex.ToString());
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }            
+        }
+
+        /// <summary>
+        /// Загрузка обложки квеста
+        /// </summary>
+        [HttpPost]
+        [Route("UploadFile")]
+        public async Task<string> UploadFile()
+        {
+            try
+            {
+                var result = await Upload(ConfigSettings.StagePrefixFile);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Stage | UploadFile | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
         }
     }
 }

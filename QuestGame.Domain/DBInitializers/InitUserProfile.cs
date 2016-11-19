@@ -1,4 +1,5 @@
-﻿using QuestGame.Domain.Entities;
+﻿using QuestGame.Common.Helpers;
+using QuestGame.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,14 @@ namespace QuestGame.Domain.DBInitializers
 
             var profile = new UserProfile
             {
-                InviteDate  = DateTime.Now,
+                InviteDate = DateTime.Now,
                 CountCompliteQuests = 5,
-                User = owner
+                User = owner,
+                Avatar = new Image
+                {
+                    Name = @"http://localhost:9243/Content/Images/NoImageAvailable.png",
+                    Prefix = string.Empty,
+                }
             };
 
             dbContext.UserProfiles.Add(profile);

@@ -27,18 +27,26 @@ namespace QuestGame.WebApi.Mapping.Profiles
                 .ForMember(x => x.Quests, y => y.Ignore());
 
             CreateMap<UserProfileDTO, UserProfile>()
-                .ForMember(x => x.UserId, y => y.Ignore());
+                .ForMember(x => x.UserId, y => y.Ignore())
+                .ForMember(x => x.Avatar, y => y.Ignore());
 
-            CreateMap<QuestFullDTO, Quest>().ForMember(x => x.Owner, y => y.Ignore());
-            CreateMap<QuestDTO, Quest>().ForMember(x => x.Owner, y => y.Ignore());
-            CreateMap<StageFullDTO, Stage>();
-            CreateMap<StageDTO, Stage>();
+            CreateMap<QuestFullDTO, Quest>()
+                .ForMember(x => x.Owner, y => y.Ignore())
+                .ForMember(x => x.Cover, y => y.Ignore());
+
+            CreateMap<QuestDTO, Quest>()
+                .ForMember(x => x.Owner, y => y.Ignore())
+                .ForMember(x => x.Cover, y => y.Ignore());
+
+            CreateMap<StageFullDTO, Stage>()
+                .ForMember(x => x.Cover, y => y.Ignore());
+
+            CreateMap<StageDTO, Stage>()
+                .ForMember(x => x.Cover, y => y.Ignore());
+
             CreateMap<MotionDTO, Motion>();
         }
 
-        public override string ProfileName
-        {
-            get { return "DTOToEntitylMappingProfile"; }
-        }
+        public override string ProfileName => "DTOToEntitylMappingProfile";
     }
 }

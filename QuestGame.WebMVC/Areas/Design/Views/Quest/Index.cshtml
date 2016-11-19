@@ -24,26 +24,28 @@
             {
                 <table class="table table-hover table-bordered">
                     <thead>
-                        <tr>
-                            <th>@Html.DisplayNameFor(x => x.Title)</th>
-                            <th>@Html.DisplayNameFor(x => x.Date)</th>
-                            <th>@Html.DisplayNameFor(x => x.Rate)</th>
-                            <th>@Html.DisplayNameFor(x => x.Active)</th>
-                            <th>Действие</th>
-                        </tr>
+                    <tr>
+                        <th>@Html.DisplayNameFor(x => x.Cover)</th>
+                        <th>@Html.DisplayNameFor(x => x.Title)</th>
+                        <th>@Html.DisplayNameFor(x => x.Date)</th>
+                        <th>@Html.DisplayNameFor(x => x.Rate)</th>
+                        <th>@Html.DisplayNameFor(x => x.Active)</th>
+                        <th>Действие</th>
+                    </tr>
                     </thead>
                     <tbody>
                     @foreach (var quest in Model)
                     {
                         <tr>
-                            <td>@Html.ActionLink(quest.Title, "Details", new { id = quest.Id }, null)</td>
+                            <td><img src=@quest.Cover alt="cover" height="100" width="100"/></td>
+                            <td>@Html.ActionLink(quest.Title, "Details", new {id = quest.Id}, null)</td>
                             <td>@quest.Date</td>
                             <td>@quest.Rate</td>
                             <td>@Html.Active(quest.Active)</td>
                             <td>
-                                <a href=@Url.Action("Details", "Quest", new { id = quest.Id }, null)><span class="glyphicon glyphicon-info-sign"></span></a>
-                                <a href=@Url.Action("Edit", "Quest", new { id = quest.Id }, null)><span class="glyphicon glyphicon-pencil"></span></a>
-                                <a href=@Url.Action("Delete", "Quest", new { id = quest.Id }, null)><span class="glyphicon glyphicon-remove-circle"></span></a>                               
+                                <a href=@Url.Action("Details", "Quest", new {id = quest.Id}, null)><span class="glyphicon glyphicon-info-sign"></span></a>
+                                <a href=@Url.Action("Edit", "Quest", new {id = quest.Id}, null)><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a href=@Url.Action("Delete", "Quest", new {id = quest.Id}, null)><span class="glyphicon glyphicon-remove-circle"></span></a>
                             </td>
                         </tr>
                     }

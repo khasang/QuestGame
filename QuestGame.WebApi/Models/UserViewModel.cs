@@ -1,11 +1,6 @@
 ﻿using Newtonsoft.Json;
-using QuestGame.Domain.DTO;
-using QuestGame.WebApi.Areas.Game.Models;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace QuestGame.WebApi.Models
 {

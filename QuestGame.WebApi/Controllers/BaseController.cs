@@ -1,70 +1,75 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using AutoMapper;
-using QuestGame.WebApi.Attributes;
-using QuestGame.WebApi.Models;
 using System.IO;
-using System.Web.Configuration;
-using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Http;
 using QuestGame.Common.Helpers;
+using QuestGame.WebApi.Constants;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace QuestGame.WebApi.Controllers
 {
-    [CustomAuthorize]
-    public class BaseController : Controller
+    public class BaseController : ApiController
     {
-        protected IMapper mapper;
-
-        public BaseController(IMapper mapper)
+        protected async Task<string> Upload(string prefix)
         {
-            this.mapper = mapper;
-        }
+            var content = Request.Content;
 
-        protected UserModel SessionUser
-        {
-            get
+            if (!content.IsMimeMultipartContent())
+                throw new Exception();
+
+            var path = ConfigSettings.GetLocalFilePath();
+            var provider = new MultipartFormDataStreamProvider(path);
+
+            if (provider.FileData.Count > 1)
+                throw new FileLoadException(ErrorMessages.LoadOnlyOneFile);
+
+            var result = await content.ReadAsMultipartAsync(provider);
+
+            var file = new FileInfo(provider.FileData[0].LocalFileName);
+            if (file.Length == 0)
+                throw new Exception(ErrorMessages.DefectFile);
+
+            var fileName = provider.FileData[0].Headers.ContentDisposition.FileName.Trim('"');
+            var filePath = $"{path}{prefix}\\{fileName}";
+
+            if (File.Exists(filePath))
+                throw new Exception(ErrorMessages.ExistsFile);
+
+            try
             {
-                return Session["User"] as UserModel;
+                file.MoveTo(filePath); // Здесь мы можем настроить какие картинки где хранить
+
+                //var newImg = ImageResize(img, 600, 800);
+                //newImg.Save(filePath);
             }
-        }
-
-        protected ActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-                return Redirect(returnUrl);
-            return RedirectToAction("Index", "Home");
-        }
-
-        [HttpPost]
-        protected ActionResult UploadFile(HttpPostedFileBase file)
-        {
-            if (file != null)
+            catch (Exception ex)
             {
-                string fileName = Path.GetFileName(file.FileName);
-                var path = Path.Combine(Server.MapPath("~/Content/Temp/"), fileName);
-                try
-                {
-                    file.SaveAs(path);         // сохраняем файл в папку Files в проекте
-                }
-                catch
-                {
-                    ViewBag.Message = "Ошибка локального сохранения";
-                }
+                foreach (var fileData in provider.FileData)  // если какие-либо ошибки при перемещении,
+                    File.Delete(fileData.LocalFileName);     // то удаляем загруженные файлы
 
-                RestHelper.UploadFile("api/UploadFile", path);
-
-                System.IO.File.Delete(path);   // удаляем файл из папки Files в проекте
-
-                ViewBag.Message = "Файл успешно отправлен";
+                throw new Exception(ErrorMessages.DefectFile, ex);
             }
-            else
-            {
-                ViewBag.Message = "Имя файла null";
-            }
-            return RedirectToAction("Index");
+
+            var baseUrl = CommonHelper.GetConfigOrDefaultValue(ConfigSettings.BaseUrlKey, ConfigSettings.WebApiServiceBaseUrl);
+            var urlFile = $"{baseUrl}Content/Images/{prefix}/{fileName}";
+            return urlFile;
         }
+
+        //private Image ImageResize(Image img, int height, int width)
+        //{
+        //    var stream = new MemoryStream()
+        //    var img = Image.FromStream()
+        //    var bmp = new Bitmap(img, 600, 800);
+
+        //    using (Graphics g = Graphics.FromImage((Image)bmp))
+        //    {
+        //        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+        //        g.DrawImage(img, 0, 0, width, height);
+        //    }
+
+        //    return bmp;
+        //}
     }
 }

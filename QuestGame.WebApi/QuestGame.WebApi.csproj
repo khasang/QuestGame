@@ -187,16 +187,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
-    <Compile Include="Areas\Admin\Controllers\QuestsController.cs" />
-    <Compile Include="Areas\Design\DesignAreaRegistration.cs" />
-    <Compile Include="Areas\Design\Controllers\QuestController.cs" />
-    <Compile Include="Areas\Design\Models\NewItemViewModel.cs" />
-    <Compile Include="Areas\Game\Controllers\MainPageController.cs" />
-    <Compile Include="Areas\Design\Controllers\MotionController.cs" />
-    <Compile Include="Areas\Design\Controllers\StageController.cs" />
-    <Compile Include="Areas\Game\GameAreaRegistration.cs" />
-    <Compile Include="Areas\Game\Models\QuestViewModels.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
     <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
     <Compile Include="Areas\HelpPage\Controllers\HelpController.cs" />
@@ -227,6 +217,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Attributes\CustomAuthorizeAttribute.cs" />
     <Compile Include="Constants\ApiMethods.cs" />
+    <Compile Include="Constants\ConfigSettings.cs" />
     <Compile Include="Constants\ErrorMessages.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -243,9 +234,7 @@
     <Compile Include="Infrastructure\NinjectConfig.cs" />
     <Compile Include="Mapping\AutoMapperConfiguration.cs" />
     <Compile Include="Mapping\Profiles\DTOToEntitylMappingProfile.cs" />
-    <Compile Include="Mapping\Profiles\DTOToViewModelMappingProfile.cs" />
     <Compile Include="Mapping\Profiles\EntityToDTOMappingProfile.cs" />
-    <Compile Include="Mapping\Profiles\ViewModelToDTOMappingProfile.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
@@ -266,6 +255,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\NoImageAvailable.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -296,32 +286,6 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Areas\Admin\Views\web.config" />
-    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\Admin\Views\Quests\Index.cshtml" />
-    <Content Include="Areas\Design\Views\Quest\Create.cshtml" />
-    <Content Include="Areas\Design\Views\Quest\Index.cshtml" />
-    <Content Include="Areas\Game\Views\MainPage\Index.cshtml" />
-    <Content Include="Areas\Game\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\Game\Views\web.config" />
-    <Content Include="Areas\Game\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Design\Views\Quest\Edit.cshtml" />
-    <Content Include="Areas\Design\Views\web.config" />
-    <Content Include="Areas\Design\Views\Quest\Delete.cshtml" />
-    <Content Include="Areas\Design\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\Design\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Design\Views\Quest\Details.cshtml" />
-    <Content Include="Areas\Design\Views\Stage\Details.cshtml" />
-    <Content Include="Areas\Design\Views\Stage\Create.cshtml" />
-    <Content Include="Areas\Design\Views\Stage\Edit.cshtml" />
-    <Content Include="Areas\Design\Views\Motion\Create.cshtml" />
-    <Content Include="Areas\Design\Views\Motion\Edit.cshtml" />
-    <Content Include="Areas\Design\Views\Motion\Details.cshtml" />
-    <Content Include="Areas\Design\Views\Stage\Delete.cshtml" />
-    <Content Include="Areas\Design\Views\Motion\Delete.cshtml" />
-    <Content Include="Areas\Design\Views\Stage\Index.cshtml" />
-    <Content Include="Areas\Design\Views\Motion\Index.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -366,8 +330,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Content\Files\" />
+    <Folder Include="Content\Images\Avatars\" />
+    <Folder Include="Content\Images\Quests\" />
+    <Folder Include="Content\Images\Stages\" />
     <Folder Include="Content\Temp\" />
   </ItemGroup>
   <ItemGroup>

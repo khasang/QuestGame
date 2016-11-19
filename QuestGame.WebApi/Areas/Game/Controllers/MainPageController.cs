@@ -19,10 +19,9 @@ using QuestGame.WebApi.Constants;
 
 namespace QuestGame.WebApi.Areas.Game.Controllers
 {
-    public class MainPageController : BaseController
+    public class MainPageController : Controller
     {
         public MainPageController(IMapper mapper)
-            : base(mapper)
         { }
 
         // GET: Game/MainPage
@@ -40,7 +39,6 @@ namespace QuestGame.WebApi.Areas.Game.Controllers
                 else
                 {
                     var answer = await response.Content.ReadAsAsync<IEnumerable<QuestDTO>>();
-                    model = mapper.Map<IEnumerable<QuestDTO>, IEnumerable<QuestViewModel>>(answer);
                 }
 
                 return View(model);

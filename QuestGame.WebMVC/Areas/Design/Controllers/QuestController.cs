@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using QuestGame.Common.Helpers;
 using System.Collections.Specialized;
+using System.Web;
 using QuestGame.WebMVC.Constants;
 using QuestGame.WebMVC.Areas.Game.Models;
 using QuestGame.WebMVC.Areas.Design.Models;
@@ -64,7 +65,7 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
 
             using (var client = RestHelper.Create(SessionUser.Token))
             {
-                var response = await client.PostAsJsonAsync(ApiMethods.QuestFullCreate, request);
+                var response = await client.PostAsJsonAsync(ApiMethods.QuestCreate, request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     ViewBag.Message = ErrorMessages.QuestNotCreate;
@@ -147,27 +148,28 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(QuestViewModel quest, string returnUrl)
+        public async Task<ActionResult> Edit(QuestViewModel quest, HttpPostedFileBase file)
         {
-            //if(!ModelState.IsValid)
+            //if (!ModelState.IsValid)
             //{
-            //    ViewBag.ReturnUrl = returnUrl;
             //    return View(quest);
             //}
 
             var model = mapper.Map<QuestViewModel, QuestDTO>(quest);
+            var filePath = await UploadFile(file, ApiMethods.QuestUploadFile);
+            if (!string.IsNullOrEmpty(filePath))
+                model.Cover = filePath;
 
-            using(var client = RestHelper.Create(SessionUser.Token))
+            using (var client = RestHelper.Create(SessionUser.Token))
             {
                 var response = await client.PutAsJsonAsync(ApiMethods.QuestUpdate, model);
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    ViewBag.Message = ErrorMessages.QuestNotUdate;
-                    return RedirectToAction("Index", "Quest");
-                }
-            }
 
-            return RedirectToAction("Details", "Quest", new { id = quest.Id });
+                if (response.StatusCode == HttpStatusCode.OK)
+                    return RedirectToAction("Details", "Quest", new {id = quest.Id});
+
+                ViewBag.Message = ErrorMessages.QuestNotUpdate;
+                return RedirectToAction("Index", "Quest");
+            }
         }
 
         public async Task<ActionResult> Details(int id)

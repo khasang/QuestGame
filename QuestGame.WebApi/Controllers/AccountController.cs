@@ -6,7 +6,6 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -30,23 +29,24 @@ using QuestGame.Domain.DTO;
 using QuestGame.Domain.Interfaces;
 using System.Net.Mail;
 using System.Threading;
+using QuestGame.WebApi.Constants;
+using System.IO;
 
 namespace QuestGame.WebApi.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Account")]
-    public class AccountController : ApiController
+    public class AccountController : BaseController
     {
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
-        private ILoggerService logger = LoggerService.Create();
-        IDataManager dataManager;
-        IMapper mapper;
+        private ILoggerService logger;
+        private IMapper mapper;
 
-        public AccountController(IMapper mapper, IDataManager dataManager)
+        public AccountController(IMapper mapper, ILoggerService logger)
         {
             this.mapper = mapper;
-            this.dataManager = dataManager;
+            this.logger = logger;
         }
 
         public AccountController(ApplicationUserManager userManager,
@@ -76,7 +76,7 @@ namespace QuestGame.WebApi.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetUserById(string id)
         {
-            ApplicationUser user = await UserManager.FindByIdAsync(id);
+            var user = await UserManager.FindByIdAsync(id);
 
             if (user == null) { return NotFound(); }
 
@@ -90,12 +90,11 @@ namespace QuestGame.WebApi.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetUserByEmail(string email)
         {
-            ApplicationUser user = await UserManager.FindByEmailAsync(email);
-
-            if (user == null) { return BadRequest(); }
+            var user = await UserManager.FindByEmailAsync(email);
+            if (user == null)
+                return BadRequest();
 
             var result = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
-
             return Ok(result);
         }
 
@@ -104,16 +103,35 @@ namespace QuestGame.WebApi.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> EditUser(ApplicationUserDTO model)
         {
-            ApplicationUser user = await UserManager.FindByIdAsync(model.Id);
+            var user = await UserManager.FindByIdAsync(model.Id);
+            var oldAvatar = user.UserProfile.Avatar;
 
             var userResult = mapper.Map<ApplicationUserDTO, ApplicationUser>(model, user);
+
+            if(oldAvatar.Name != model.UserProfile.AvatarUrl)
+            {
+                if(!string.IsNullOrEmpty(oldAvatar.Prefix))
+                {
+                    Uri uri = new Uri(oldAvatar.Name);
+                    string filename = Path.GetFileName(uri.LocalPath);
+                    var path = $"{ConfigSettings.GetLocalFilePath()}{oldAvatar.Prefix}\\{filename}";
+
+                    if (File.Exists(path))
+                        File.Delete(path);
+                }
+
+                userResult.UserProfile.Avatar.Name = model.UserProfile.AvatarUrl;
+                userResult.UserProfile.Avatar.Prefix = ConfigSettings.AvatarPrefixFile;
+            }
 
             try
             {
                 var result = await UserManager.UpdateAsync(userResult);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Account | EditUser | ", ex.ToString());
                 return InternalServerError();
             }
 
@@ -126,13 +144,13 @@ namespace QuestGame.WebApi.Controllers
         [Route("UserInfo")]
         public UserInfoViewModel GetUserInfo()
         {
-            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
+            var externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
 
             return new UserInfoViewModel
             {
                 Email = User.Identity.GetUserName(),
                 HasRegistered = externalLogin == null,
-                LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
+                LoginProvider = externalLogin?.LoginProvider
             };
         }
 
@@ -350,7 +368,7 @@ namespace QuestGame.WebApi.Controllers
             ApplicationUser user = await UserManager.FindAsync(new UserLoginInfo(externalLogin.LoginProvider,
                 externalLogin.ProviderKey));
 
-            bool hasRegistered = user != null;
+            var hasRegistered = user != null;
 
             if (hasRegistered)
             {
@@ -394,9 +412,9 @@ namespace QuestGame.WebApi.Controllers
                 state = null;
             }
 
-            foreach (AuthenticationDescription description in descriptions)
+            foreach (var description in descriptions)
             {
-                ExternalLoginViewModel login = new ExternalLoginViewModel
+                var login = new ExternalLoginViewModel
                 {
                     Name = description.Caption,
                     Url = Url.Route("ExternalLogin", new
@@ -427,11 +445,17 @@ namespace QuestGame.WebApi.Controllers
 
             var user = mapper.Map<RegisterViewModel, ApplicationUser>(model);
             var profile = mapper.Map<RegisterViewModel, UserProfile>(model);
+
+            profile.Avatar = new Image
+            {
+                Name = ConfigSettings.GetServerFilePath(ConfigSettings.NoImage),
+                Prefix = string.Empty,
+            };
+
             user.UserProfile = profile;
 
-            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-
-            IdentityResult toRole = UserManager.AddToRole(user.Id, "user");
+            var result = await UserManager.CreateAsync(user, model.Password);
+            var toRole = UserManager.AddToRole(user.Id, "user");
 
             var response = new RegisterResponse
             {
@@ -453,9 +477,7 @@ namespace QuestGame.WebApi.Controllers
             try
             {
                 var emailToken = await UserManager.GenerateEmailConfirmationTokenAsync(id);
-
                 return Request.CreateResponse<string>(HttpStatusCode.OK, emailToken, new MediaTypeHeaderValue("application/json"));
-
             }
             catch (Exception)
             {
@@ -474,9 +496,7 @@ namespace QuestGame.WebApi.Controllers
             try
             {
                 var resetToken = await UserManager.GeneratePasswordResetTokenAsync(id);
-
                 return Request.CreateResponse<string>(HttpStatusCode.OK, resetToken, new MediaTypeHeaderValue("application/json"));
-
             }
             catch (Exception)
             {
@@ -595,7 +615,7 @@ namespace QuestGame.WebApi.Controllers
                 var userResult = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
                 userResult.Token = authToken;
 
-                HttpResponseMessage responseResult = Request.CreateResponse<ApplicationUserDTO>(HttpStatusCode.OK, userResult);
+                var responseResult = Request.CreateResponse<ApplicationUserDTO>(HttpStatusCode.OK, userResult);
                 responseResult.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                 return responseResult;
@@ -634,6 +654,26 @@ namespace QuestGame.WebApi.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Загрузка аватара
+        /// </summary>
+        [HttpPost]
+        [Route("UploadFile")]
+        public async Task<string> UploadFile()
+        {
+            try
+            {
+                var result = await Upload(ConfigSettings.AvatarPrefixFile);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Account | UploadFile | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && _userManager != null)
@@ -647,10 +687,7 @@ namespace QuestGame.WebApi.Controllers
 
         #region Вспомогательные приложения
 
-        private IAuthenticationManager Authentication
-        {
-            get { return Request.GetOwinContext().Authentication; }
-        }
+        private IAuthenticationManager Authentication => Request.GetOwinContext().Authentication;
 
         private IHttpActionResult GetErrorResult(IdentityResult result)
         {
@@ -659,26 +696,23 @@ namespace QuestGame.WebApi.Controllers
                 return InternalServerError();
             }
 
-            if (!result.Succeeded)
+            if (result.Succeeded)
+                return null;
+
+            if (result.Errors != null)
             {
-                if (result.Errors != null)
+                foreach (var error in result.Errors)
                 {
-                    foreach (string error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error);
-                    }
+                    ModelState.AddModelError("", error);
                 }
-
-                if (ModelState.IsValid)
-                {
-                    // Ошибки ModelState для отправки отсутствуют, поэтому просто возвращается пустой BadRequest.
-                    return BadRequest();
-                }
-
-                return BadRequest(ModelState);
+            }
+            if (ModelState.IsValid)
+            {
+                // Ошибки ModelState для отправки отсутствуют, поэтому просто возвращается пустой BadRequest.
+                return BadRequest();
             }
 
-            return null;
+            return BadRequest(ModelState);
         }
 
         private class ExternalLoginData
@@ -702,24 +736,15 @@ namespace QuestGame.WebApi.Controllers
 
             public static ExternalLoginData FromIdentity(ClaimsIdentity identity)
             {
-                if (identity == null)
+                var providerKeyClaim = identity?.FindFirst(ClaimTypes.NameIdentifier);
+
+                if (string.IsNullOrEmpty(providerKeyClaim?.Issuer) ||
+                    string.IsNullOrEmpty(providerKeyClaim.Value) ||
+                    providerKeyClaim.Issuer == ClaimsIdentity.DefaultIssuer)
                 {
                     return null;
                 }
-
-                Claim providerKeyClaim = identity.FindFirst(ClaimTypes.NameIdentifier);
-
-                if (providerKeyClaim == null || String.IsNullOrEmpty(providerKeyClaim.Issuer)
-                    || String.IsNullOrEmpty(providerKeyClaim.Value))
-                {
-                    return null;
-                }
-
-                if (providerKeyClaim.Issuer == ClaimsIdentity.DefaultIssuer)
-                {
-                    return null;
-                }
-
+                    
                 return new ExternalLoginData
                 {
                     LoginProvider = providerKeyClaim.Issuer,

@@ -11,37 +11,50 @@
             <h2>Редактирование сцены</h2>
         </div>
         <div class="panel-body">
-            @using (Html.BeginForm("Edit", "Stage", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            @using (Html.BeginForm("Edit", "Stage", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true)
                 @Html.HiddenFor(x => x.Id)
                 @Html.HiddenFor(x => x.Motions)
                 @Html.HiddenFor(x => x.QuestId)
+                @Html.HiddenFor(x => x.Cover)
 
-                <dl class="dl-horizontal">
-                    <dt>
-                        @Html.DisplayNameFor(n => n.Title)
-                    </dt>
-                    <dd>
-                        @Html.EditorFor(t => t.Title, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(v => v.Title)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(n => n.Body)
-                    </dt>
-                    <dd>
-                        @Html.EditorFor(t => t.Body)
-                        @Html.ValidationMessageFor(v => v.Body)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(n => n.Point)
-                    </dt>
-                    <dd>
-                        @Html.EditorFor(t => t.Point)
-                        @Html.ValidationMessageFor(v => v.Point)
-                    </dd>
-                </dl>
+                <div class="col-md-12">
+                    <dl class="dl-horizontal col-md-6">
+                        <dt>
+                            @Html.DisplayNameFor(n => n.Cover)
+                        </dt>
+                        <dd>
+                            <img src=@Model.Cover alt="cover" height="100" width="100" />
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(n => n.Title)
+                        </dt>
+                        <dd>
+                            @Html.EditorFor(t => t.Title, new {@class = "form-control"})
+                            @Html.ValidationMessageFor(v => v.Title)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(n => n.Body)
+                        </dt>
+                        <dd>
+                            @Html.EditorFor(t => t.Body)
+                            @Html.ValidationMessageFor(v => v.Body)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(n => n.Point)
+                        </dt>
+                        <dd>
+                            @Html.EditorFor(t => t.Point)
+                            @Html.ValidationMessageFor(v => v.Point)
+                        </dd>
+                    </dl>
+                    <div class="col-md-6">
+                        <p>Изменить обложку</p>
+                        <input type="file" name="file" />
+                    </div>
+                </div>
                 <div class="list-group">
                     @Html.ActionLink("Добавить действие", "Create", "Motion", new { area = "Design", id = @Model.Id }, new { @class = "btn btn-primary" })
                 </div>
@@ -66,7 +79,7 @@
                 </table>
                 <div class="btn-group">
                     <input type="submit" class="btn btn-primary" value="Сохранить" />
-                    <a class="btn btn-default" href="@ViewBag.ReturnUrl">Назад</a>
+                    @Html.ActionLink("Назад", "Details", "Stage", new { area = "Design", id = @Model.Id }, new { @class = "btn btn-default" })
                 </div>
             }
         </div>

@@ -1,27 +1,24 @@
 ﻿using AutoMapper;
-using Newtonsoft.Json;
-using QuestGame.Domain;
 using QuestGame.Domain.DTO;
 using QuestGame.Domain.Entities;
 using QuestGame.Domain.Interfaces;
-using QuestGame.WebApi.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System.Data.Entity;
+using System.Threading.Tasks;
 using QuestGame.Common.Interfaces;
 using System.Web;
+using QuestGame.WebApi.Constants;
+using System.IO;
 
 namespace QuestGame.WebApi.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Quest")]
-    public class QuestController : ApiController
+    public class QuestController : BaseController
     {
         IDataManager dataManager;
         IMapper mapper;
@@ -110,15 +107,23 @@ namespace QuestGame.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("Add")]
-        public IHttpActionResult Add(QuestDTO quest)
+        [Route("Create")]
+        public IHttpActionResult Create(QuestDTO quest)
         {
             try
             {
                 var model = mapper.Map<QuestDTO, Quest>(quest);
                 var owner = dataManager.Users.GetAll().FirstOrDefault(x => x.UserName == quest.Owner);
+                if (owner == null)
+                    throw new HttpResponseException(HttpStatusCode.BadRequest);
+                
                 model.Owner = owner;
                 model.Date = DateTime.Now;
+                model.Cover = new Image
+                {
+                    Name = ConfigSettings.GetServerFilePath(ConfigSettings.NoImage),
+                    Prefix = string.Empty
+                };
 
                 dataManager.Quests.Add(model);
                 dataManager.Save();
@@ -140,6 +145,22 @@ namespace QuestGame.WebApi.Controllers
             {
                 var questEntity = dataManager.Quests.GetById(quest.Id);
                 var model = mapper.Map<QuestDTO, Quest>(quest, questEntity);
+
+                if (questEntity.Cover.Name != quest.Cover)
+                {
+                    if (!string.IsNullOrEmpty(questEntity.Cover.Prefix))
+                    {
+                        Uri uri = new Uri(questEntity.Cover.Name);
+                        string filename = Path.GetFileName(uri.LocalPath);
+                        var path = $"{ConfigSettings.GetLocalFilePath()}{questEntity.Cover.Prefix}\\{filename}";
+
+                        if (File.Exists(path))
+                            File.Delete(path);
+                    }
+
+                    model.Cover.Name = quest.Cover;
+                    model.Cover.Prefix = ConfigSettings.QuestPrefixFile;
+                }
 
                 var owner = dataManager.Users.GetAll().FirstOrDefault(x => x.UserName == quest.Owner);
                 model.Owner = owner;
@@ -172,6 +193,26 @@ namespace QuestGame.WebApi.Controllers
                 logger.Error("Quest | Delete | ", ex.ToString());
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }             
+        }
+
+        /// <summary>
+        /// Загрузка обложки квеста
+        /// </summary>
+        [HttpPost]
+        [Route("UploadFile")]
+        public async Task<string> UploadFile()
+        {
+            try
+            {
+                var result = await Upload(ConfigSettings.QuestPrefixFile);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Quest | UploadFile | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
         }
     }
 }

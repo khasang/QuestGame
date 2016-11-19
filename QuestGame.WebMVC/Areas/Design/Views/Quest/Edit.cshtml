@@ -10,7 +10,7 @@
         <div class="panel-heading"><h2>Редактирование квеста</h2></div>
         <div class="panel-body">
             
-            @using (Html.BeginForm("Edit", "Quest", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            @using (Html.BeginForm("Edit", "Quest", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true)
@@ -19,47 +19,60 @@
                 @Html.HiddenFor(x => x.Owner)
                 @Html.HiddenFor(x => x.Rate)
                 @Html.HiddenFor(x => x.Date)
+                @Html.HiddenFor(x => x.Cover)
 
-                <dl class="dl-horizontal">
-                    <dt>
-                        @Html.DisplayNameFor(n => n.Title)
-                    </dt>
-                    <dd>
-                        @Html.EditorFor(t => t.Title, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(v => v.Title)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(n => n.Date)
-                    </dt>
-                    <dd>
-                        @Html.DisplayTextFor(t => t.Date)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(n => n.Owner)
-                    </dt>
-                    <dd>
-                        @Html.DisplayTextFor(n => n.Owner)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(n => n.Rate)
-                    </dt>
-                    <dd>
-                        @Html.DisplayTextFor(n => n.Rate)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(n => n.Active)
-                    </dt>
-                    <dd>
-                        @Html.CheckBoxFor(t => t.Active, new { @class = "checkbox" })
-                        @Html.ValidationMessageFor(v => v.Active)
-                    </dd>
-                    <dt>
-                        Кол-во сцен
-                    </dt>
-                    <dd>
-                        @Model.Stages.Count()
-                    </dd>
-                </dl>
+                <div class="col-md-12">
+                    <dl class="dl-horizontal col-md-6">
+                        <dt>
+                            @Html.DisplayNameFor(n => n.Cover)
+                        </dt>
+                        <dd>
+                            <img src=@Model.Cover alt="cover" height="100" width="100"/>
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(n => n.Title)
+                        </dt>
+                        <dd>
+                            @Html.EditorFor(t => t.Title, new {@class = "form-control"})
+                            @Html.ValidationMessageFor(v => v.Title)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(n => n.Date)
+                        </dt>
+                        <dd>
+                            @Html.DisplayTextFor(t => t.Date)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(n => n.Owner)
+                        </dt>
+                        <dd>
+                            @Html.DisplayTextFor(n => n.Owner)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(n => n.Rate)
+                        </dt>
+                        <dd>
+                            @Html.DisplayTextFor(n => n.Rate)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(n => n.Active)
+                        </dt>
+                        <dd>
+                            @Html.CheckBoxFor(t => t.Active, new {@class = "checkbox"})
+                            @Html.ValidationMessageFor(v => v.Active)
+                        </dd>
+                        <dt>
+                            Кол-во сцен
+                        </dt>
+                        <dd>
+                            @Model.Stages.Count()
+                        </dd>
+                    </dl>
+                    <div class="col-md-6">
+                        <p>Изменить обложку</p>
+                        <input type="file" name="file" />
+                    </div>
+                </div>
                 <div class="list-group">
                     @Html.ActionLink("Добавить сцену", "Create", "Stage", new { area = "Design", id = @Model.Id }, new { @class = "btn btn-primary" })
                 </div>

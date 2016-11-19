@@ -147,6 +147,7 @@
     <Compile Include="Attributes\CustomAuthorizeAttribute.cs" />
     <Compile Include="Attributes\HTTPExceptionAttribute.cs" />
     <Compile Include="Constants\ApiMethods.cs" />
+    <Compile Include="Constants\ConfigSettings.cs" />
     <Compile Include="Constants\InfoMessages.cs" />
     <Compile Include="Constants\ErrorMessages.cs" />
     <Compile Include="Content\MailTemplate\PasswordResetTemplate-Extended.cs" />
@@ -182,6 +183,28 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Design\Views\Motion\Create.cshtml" />
+    <Content Include="Areas\Design\Views\Motion\Delete.cshtml" />
+    <Content Include="Areas\Design\Views\Motion\Details.cshtml" />
+    <Content Include="Areas\Design\Views\Motion\Edit.cshtml" />
+    <Content Include="Areas\Design\Views\Motion\Index.cshtml" />
+    <Content Include="Areas\Design\Views\Quest\Create.cshtml" />
+    <Content Include="Areas\Design\Views\Quest\Delete.cshtml" />
+    <Content Include="Areas\Design\Views\Quest\Details.cshtml" />
+    <Content Include="Areas\Design\Views\Quest\Edit.cshtml" />
+    <Content Include="Areas\Design\Views\Quest\Index.cshtml" />
+    <Content Include="Areas\Design\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Design\Views\Stage\Create.cshtml" />
+    <Content Include="Areas\Design\Views\Stage\Delete.cshtml" />
+    <Content Include="Areas\Design\Views\Stage\Details.cshtml" />
+    <Content Include="Areas\Design\Views\Stage\Edit.cshtml" />
+    <Content Include="Areas\Design\Views\Stage\Index.cshtml" />
+    <Content Include="Areas\Design\Views\web.config" />
+    <Content Include="Areas\Design\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Game\Views\MainPage\Index.cshtml" />
+    <Content Include="Areas\Game\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Game\Views\web.config" />
+    <Content Include="Areas\Game\Views\_ViewStart.cshtml" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -208,28 +231,6 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Areas\Design\Views\web.config" />
-    <Content Include="Areas\Game\Views\web.config" />
-    <Content Include="Areas\Design\Views\Motion\Create.cshtml" />
-    <Content Include="Areas\Design\Views\Motion\Delete.cshtml" />
-    <Content Include="Areas\Design\Views\Motion\Details.cshtml" />
-    <Content Include="Areas\Design\Views\Motion\Edit.cshtml" />
-    <Content Include="Areas\Design\Views\Motion\Index.cshtml" />
-    <Content Include="Areas\Design\Views\Quest\Create.cshtml" />
-    <Content Include="Areas\Design\Views\Quest\Delete.cshtml" />
-    <Content Include="Areas\Design\Views\Quest\Details.cshtml" />
-    <Content Include="Areas\Design\Views\Quest\Edit.cshtml" />
-    <Content Include="Areas\Design\Views\Quest\Index.cshtml" />
-    <Content Include="Areas\Design\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\Design\Views\Stage\Create.cshtml" />
-    <Content Include="Areas\Design\Views\Stage\Delete.cshtml" />
-    <Content Include="Areas\Design\Views\Stage\Details.cshtml" />
-    <Content Include="Areas\Design\Views\Stage\Edit.cshtml" />
-    <Content Include="Areas\Design\Views\Stage\Index.cshtml" />
-    <Content Include="Areas\Game\Views\MainPage\Index.cshtml" />
-    <Content Include="Areas\Game\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\Game\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Design\Views\_ViewStart.cshtml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
@@ -274,6 +275,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Temp\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
