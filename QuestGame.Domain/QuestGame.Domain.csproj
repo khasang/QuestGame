@@ -87,6 +87,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationDbContext.cs" />
+    <Compile Include="Constants\ConfigSettings.cs" />
+    <Compile Include="Constants\ImageType.cs" />
     <Compile Include="DataManager.cs" />
     <Compile Include="DBInitializer.cs" />
     <Compile Include="DBInitializers\DBInitialization.cs" />
@@ -96,6 +98,7 @@
     <Compile Include="DTO\AccountsDTO.cs" />
     <Compile Include="DTO\Account\ChangePasswordDTO.cs" />
     <Compile Include="DTO\ApplicationUserDTO.cs" />
+    <Compile Include="DTO\ImageDTO.cs" />
     <Compile Include="DTO\MotionDTO.cs" />
     <Compile Include="DTO\QuestDTO.cs" />
     <Compile Include="DTO\QuestFullDTO.cs" />
@@ -105,16 +108,19 @@
     <Compile Include="DTO\UserProfileDTO.cs" />
     <Compile Include="Entities\ApplicationUser.cs" />
     <Compile Include="DBInitializers\InitUserAdmin.cs" />
+    <Compile Include="Entities\Image.cs" />
     <Compile Include="Entities\Motion.cs" />
     <Compile Include="Entities\Quest.cs" />
     <Compile Include="Entities\Stage.cs" />
     <Compile Include="Entities\UserProfile.cs" />
     <Compile Include="EntityConfigurations\ApplicationUserMapper.cs" />
+    <Compile Include="EntityConfigurations\ImageMapper.cs" />
     <Compile Include="EntityConfigurations\MotionMapper.cs" />
     <Compile Include="EntityConfigurations\QuestMapper.cs" />
     <Compile Include="EntityConfigurations\StageMapper.cs" />
     <Compile Include="EntityConfigurations\UserProfileMapper.cs" />
     <Compile Include="IdentityConfig.cs" />
+    <Compile Include="Implementations\EFImageRepository.cs" />
     <Compile Include="Implementations\EFMotionRepository.cs" />
     <Compile Include="Implementations\EFQuestRepository.cs" />
     <Compile Include="Implementations\EFRoleRopsitory.cs" />
@@ -123,6 +129,7 @@
     <Compile Include="Interfaces\IApplicationDbContext.cs" />
     <Compile Include="Interfaces\ICommonRepository.cs" />
     <Compile Include="Interfaces\IDataManager.cs" />
+    <Compile Include="Interfaces\IImageRepository.cs" />
     <Compile Include="Interfaces\IMotionRepository.cs" />
     <Compile Include="Interfaces\IQuestRepository.cs" />
     <Compile Include="Interfaces\IRoleRepository.cs" />
@@ -130,7 +137,12 @@
     <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\QuestGame.Common\QuestGame.Common.csproj">
+      <Project>{4961D524-DE45-4384-A674-4C3903AD8321}</Project>
+      <Name>QuestGame.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />

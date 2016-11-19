@@ -1,33 +1,23 @@
 ﻿using QuestGame.Common.Helpers;
 using QuestGame.WebMVC.Constants;
 using QuestGame.WebMVC.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using QuestGame.Domain.DTO;
-
-
 using AutoMapper;
-
-using System.Web.Configuration;
 using QuestGame.WebMVC.Attributes;
 
 namespace QuestGame.WebMVC.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
-        IMapper mapper;
-
         public AccountController(IMapper mapper)
-        {
-            this.mapper = mapper;
-        }
+            : base(mapper)
+        { }
 
         public ActionResult Register()
         {
@@ -62,7 +52,7 @@ namespace QuestGame.WebMVC.Controllers
                 return RedirectToAction("SendEmail", new { id = answer.Body });
             }
         }
-
+        
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
@@ -103,12 +93,11 @@ namespace QuestGame.WebMVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [CustomAuthorize]
         [HTTPExceptionAttribute]
         [HttpGet]
         public async Task<ActionResult> UserProfile(string id)
         {
-            var currentUser = Session["User"] as ApplicationUserDTO;
-
             using (var client = RestHelper.Create())
             {
                 var response = await client.GetAsync(ApiMethods.AccontUserById + id);
@@ -121,16 +110,18 @@ namespace QuestGame.WebMVC.Controllers
             }
         }
 
+        [CustomAuthorize]
         [HttpPost]
         [HTTPExceptionAttribute]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> UserProfileEdit(UserViewModel model)
+        public async Task<ActionResult> UserProfileEdit(UserViewModel model, HttpPostedFileBase file)
         {
             var user = mapper.Map<UserViewModel, ApplicationUserDTO>(model);
+            var filePath = await UploadFile(file, ApiMethods.AccountUploadFile);
+            if (!string.IsNullOrEmpty(filePath))
+                user.UserProfile.AvatarUrl = filePath;
 
-            var currentUser = Session["User"] as ApplicationUserDTO;
-
-            using (var client = RestHelper.Create(currentUser.Token))
+            using (var client = RestHelper.Create(SessionUser.Token))
             {
                 var response = await client.PostAsJsonAsync(ApiMethods.AccontEditUser, user);
                 response.EnsureSuccessStatusCode();
@@ -155,16 +146,19 @@ namespace QuestGame.WebMVC.Controllers
             }
 
             // Подготовить письмо
-            var email = new ConfirmEmailTemplate {
+            var email = new ConfirmEmailTemplate
+            {
                 ActionUrl = Url.Action("ConfirmEmail", "Account", new { userId = id, code = HttpUtility.UrlEncode(emailToken) }, protocol: Request.Url.Scheme)
             };
 
             using (var client = RestHelper.Create())
             {
-                var param = new Dictionary<string, string>();
-                param.Add("userId", id);
-                param.Add("subject", InfoMessages.EmailConfirmTitle);
-                param.Add("body", email.TransformText());
+                var param = new Dictionary<string, string>
+                {
+                    { "userId", id },
+                    { "subject", InfoMessages.EmailConfirmTitle },
+                    { "body", email.TransformText() }
+                };
 
                 var response = await client.PostAsJsonAsync(ApiMethods.AccontSendEmailToken, param);
                 response.EnsureSuccessStatusCode();
@@ -175,8 +169,7 @@ namespace QuestGame.WebMVC.Controllers
 
             return View("ActionResultInfo");
         }
-
-        [AllowAnonymous]
+        
         [HttpGet]
         [HTTPExceptionAttribute]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
@@ -220,14 +213,17 @@ namespace QuestGame.WebMVC.Controllers
                 var code = await response.Content.ReadAsAsync<string>();
 
                 // Подготовить письмо
-                var email = new PasswordResetTemplate {
+                var email = new PasswordResetTemplate
+                {
                     ActionUrl = Url.Action("NewPassword", "Account", new { userId = user.Id, code = HttpUtility.UrlEncode(code) }, protocol: Request.Url.Scheme)
                 };
 
-                var param = new Dictionary<string, string>();
-                param.Add("userId", user.Id);
-                param.Add("subject", InfoMessages.PasswordResetTitle);
-                param.Add("body", email.TransformText());
+                var param = new Dictionary<string, string>
+                {
+                    { "userId", user.Id },
+                    { "subject", InfoMessages.PasswordResetTitle },
+                    { "body", email.TransformText() }
+                };
 
                 response = await client.PostAsJsonAsync(ApiMethods.AccontSendResetToken, param);
                 response.EnsureSuccessStatusCode();
@@ -241,16 +237,18 @@ namespace QuestGame.WebMVC.Controllers
         [HttpGet]
         public ActionResult NewPassword(string userId, string code)
         {
-            if (userId == null || String.IsNullOrWhiteSpace(code))
+            if (userId == null || string.IsNullOrWhiteSpace(code))
             {
                 ViewBag.Title = InfoMessages.PasswordResetTitle;
                 ViewBag.Message = ErrorMessages.AccountUserNotFound;
                 return View("ActionResultInfo");
             }
 
-            var model = new ResetPasswordRequestModel();
-            model.Id = userId;
-            model.ResetToken = HttpUtility.UrlDecode(code);
+            var model = new ResetPasswordRequestModel
+            {
+                Id = userId,
+                ResetToken = HttpUtility.UrlDecode(code)
+            };
 
             return View(model);
         }
@@ -294,11 +292,9 @@ namespace QuestGame.WebMVC.Controllers
                 return View(model);
             }
 
-            var currentUser = Session["User"] as ApplicationUserDTO;
-
             var param = mapper.Map<ChangePasswordViewModel, ChangePasswordDTO>(model);
 
-            using (var client = RestHelper.Create(currentUser.Token))
+            using (var client = RestHelper.Create(SessionUser.Token))
             {
                 var response = await client.PostAsJsonAsync(ApiMethods.AccountChangePassword, param);
                 response.EnsureSuccessStatusCode();

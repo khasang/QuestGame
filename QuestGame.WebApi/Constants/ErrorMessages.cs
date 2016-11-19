@@ -23,5 +23,9 @@ namespace QuestGame.WebApi.Constants
         public const string MotionNotCreate = "Не удалось добавить действие!";
         public const string MotionNotUpdate = "Не удалось обновить действие!";
         public const string MotionNotDelete = "Не удалось удалить действие!";
+
+        public const string ExistsFile = "Файл с таким именем уже существует!";
+        public const string DefectFile = "Файл поврежден!";
+        public const string LoadOnlyOneFile = "Доступна одновременная загрузка только одного файла!";
     }
 }

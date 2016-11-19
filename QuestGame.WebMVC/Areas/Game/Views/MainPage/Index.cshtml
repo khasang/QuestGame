@@ -11,22 +11,26 @@
             <h3>Доступные квесты</h3>
         </div>
         <div class="panel-body">
-            <p>Здессь список квестов</p>
+            <p>Здесь список квестов</p>
             
             <table class="table table-hover table-bordered">
                 <thead>
                     <tr>
-                        <th>Название</th>
-                        <th>Атор</th>
-                        <th>Рейтинг</th>
-                        <th>Дата создания</th>
+                        <th>@Html.DisplayNameFor(x => x.Cover)</th>
+                        <th>@Html.DisplayNameFor(x => x.Title)</th>
+                        <th>@Html.DisplayNameFor(x => x.Owner)</th>
+                        <th>@Html.DisplayNameFor(x => x.Rate)</th>
+                        <th>@Html.DisplayNameFor(x => x.Date)</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var quest in Model)
                     {
                         <tr>
-                            <td>@Html.ActionLink(quest.Title, "Details", new { id = quest.Title }, null)</td>
+                            <td>
+                                <img src=@quest.Cover alt=@quest.Title height="100" width="100">
+                            </td>
+                            <td>@Html.ActionLink(quest.Title, "Details", new {id = quest.Title}, null)</td>
                             <td>@quest.Owner</td>
                             <td>@quest.Rate</td>
                             <td>@quest.Date</td>

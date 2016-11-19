@@ -13,7 +13,7 @@ namespace QuestGame.WebMVC.Constants
         public const string QuestNotFound = "Квест не найден!";
         public const string QuestNotCreate = "Не удалось добавить квест!";
         public const string QuestNotDelete = "Не удалось удалить квест!";
-        public const string QuestNotUdate = "Не удалось обновить квест!";
+        public const string QuestNotUpdate = "Не удалось обновить квест!";
 
         public const string StageNotFound = "Сцена не найдена!";
         public const string StageNotCreate = "Не удалось добавить сцену!";
@@ -34,5 +34,7 @@ namespace QuestGame.WebMVC.Constants
 
         
         public const string BaseSuccessUploadFile = "Файл успешно отправлен!";
+
+        public const string BaseErrorLoadFile = "Ошибка загрузки файла!";
     }
 }

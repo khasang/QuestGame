@@ -21,7 +21,12 @@ namespace QuestGame.Domain.DBInitializers
                 {
                     Title = "Stage1",
                     Body = "Body1",
-                    Point = rnd.Next(5)
+                    Point = rnd.Next(5),
+                    Cover = new Image
+                    {
+                        Name = @"http://localhost:9243/Content/Images/NoImageAvailable.png",
+                        Prefix = string.Empty,
+                    },
                 };
 
                 var quest = new Quest
@@ -31,11 +36,36 @@ namespace QuestGame.Domain.DBInitializers
                     Active = true,
                     Rate = rnd.Next(10),
                     Owner = owner,
+                    Cover = new Image
+                    {
+                        Name = @"http://localhost:9243/Content/Images/NoImageAvailable.png",
+                        Prefix = string.Empty,
+                    },
                     Stages = new List<Stage>
                     {
                         stage1,
-                        new Stage { Title = "Stage2", Body = "Body2", Point = rnd.Next(5) },
-                        new Stage { Title = "Stage3", Body = "Body3", Point = rnd.Next(5) }
+                        new Stage
+                        {
+                            Title = "Stage2",
+                            Body = "Body2",
+                            Point = rnd.Next(5),
+                            Cover = new Image
+                            {
+                                Name = @"http://localhost:9243/Content/Images/NoImageAvailable.png",
+                                Prefix = string.Empty,
+                            },
+                        },
+                        new Stage
+                        {
+                            Title = "Stage3",
+                            Body = "Body3",
+                            Point = rnd.Next(5),
+                            Cover = new Image
+                            {
+                                Name = @"http://localhost:9243/Content/Images/NoImageAvailable.png",
+                                Prefix = string.Empty,
+                            },
+                        }
                     }
                 };
 

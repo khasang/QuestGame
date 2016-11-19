@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace QuestGame.Domain.Entities
 {
+    /// <summary>
+    /// Модель квеста
+    /// </summary>
     public class Quest
     {
         /// <summary>
@@ -18,6 +21,12 @@ namespace QuestGame.Domain.Entities
         /// Название квеста
         /// </summary>
         public string Title { get; set; }
+
+        /// <summary>
+        /// Изображение обложки
+        /// </summary>
+        public int? CoverId { get; set; }
+        public virtual Image Cover { get; set; }
 
         /// <summary>
         /// Дата создания квеста

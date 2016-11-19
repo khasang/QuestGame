@@ -19,7 +19,7 @@ namespace QuestGame.Domain
         public DbSet<Stage> Stages { get; set; }
         public DbSet<Motion> Motions { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
-
+        public DbSet<Image> Images { get; set; }
         public IDbSet<ApplicationUser> GetUsers() { return base.Users; }
         public IDbSet<IdentityRole> GetRoles() { return base.Roles; }
 

@@ -18,6 +18,8 @@ using QuestGame.Common.Interfaces;
 using System.Web;
 using System.Web.Configuration;
 using System.IO;
+using System.Threading.Tasks;
+using QuestGame.WebApi.Constants;
 
 namespace QuestGame.WebApi.Controllers
 {
@@ -107,6 +109,11 @@ namespace QuestGame.WebApi.Controllers
 
                 model.Owner = owner;
                 model.Date = DateTime.Now;
+                model.Cover = new Image
+                {
+                    Name = ConfigSettings.GetServerFilePath(ConfigSettings.NoImage),
+                    Prefix = string.Empty
+                };
 
                 dataManager.Quests.Add(model);
                 dataManager.Save();
@@ -207,65 +214,60 @@ namespace QuestGame.WebApi.Controllers
         /// </summary>
         [HttpPost]
         [Route("UploadFile")]
-        public IHttpActionResult UploadFile()
+        [AllowAnonymous]  // На время тестирования
+        public async Task<string> UploadFile()
         {
             try
             {
-                UploadFile(Request.Content);
-                return Ok();
+                var result = await Upload();
+                return result;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                logger.Error("QuestFull | DelById | ", ex.ToString());
-                return InternalServerError(ex);
+                logger.Error("QuestFull | UploadFile | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
         }
 
-        private void UploadFile(HttpContent content)
+        private async Task<string> Upload()
         {
+            var content = Request.Content;
+
             if (!content.IsMimeMultipartContent())
-            {
                 throw new Exception();
-            }
 
-            var provider = new MultipartFormDataStreamProvider(WebConfigurationManager.AppSettings["pathToFiles"]);
+            var path = HttpContext.Current.Server.MapPath(WebConfigurationManager.AppSettings["PathToFiles"]);
+            var provider = new MultipartFormDataStreamProvider(path);
 
-            content.ReadAsMultipartAsync(provider).Wait();
+            var result = await content.ReadAsMultipartAsync(provider);
 
-            if (provider.FileData.Count == 1)
+            if (provider.FileData.Count > 1)
+                throw new FileLoadException(ErrorMessages.LoadOnlyOneFile);
+
+            var file = new FileInfo(provider.FileData[0].LocalFileName);
+            if (file.Length == 0)
+                throw new Exception(ErrorMessages.DefectFile);
+
+            var fileName = provider.FileData[0].Headers.ContentDisposition.FileName.Trim('"');
+            var pathName = $"{path}{fileName}";
+
+            if (File.Exists(pathName))
+                throw new Exception(ErrorMessages.ExistsFile);
+
+            try
             {
-                var file = new FileInfo(provider.FileData[0].LocalFileName);
-
-                if (file.Length != 0)
-                {
-                    string name = provider.FileData[0].Headers.ContentDisposition.FileName.Trim('"');
-                    int pos = name.LastIndexOfAny(new[] { '\\', '/' }) + 1;
-                    name = file.DirectoryName + Path.DirectorySeparatorChar + name.Substring(pos);
-
-                    if (File.Exists(name))
-                        throw new Exception("Сертификат с таким имененем уже загружен");
-                    else
-                    {
-                        try
-                        {
-                            file.MoveTo(name);
-                        }
-                        catch (Exception)
-                        {
-                            throw new Exception("Файл сертификата поврежден");
-                        }
-                    }
-                }
+                file.MoveTo(pathName); // Здесь мы можем настроить какие картинки где хранить
             }
-            else
-                throw new Exception("Доступна одновременная загрузка только одного файла");
-
-            //если какие-либо ошибки то удаляем загруженные файлы
-            foreach (var fileData in provider.FileData)
+            catch (Exception ex)
             {
-                File.Delete(fileData.LocalFileName);
+                foreach (var fileData in provider.FileData)  // если какие-либо ошибки при перемещении,
+                    File.Delete(fileData.LocalFileName);     // то удаляем загруженные файлы
+
+                throw new Exception(ErrorMessages.DefectFile, ex);
             }
+
+            return pathName;
         }
     }    
 }

@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 
 namespace QuestGame.Domain.DTO
 {
-    public class QuestDTO
+    public class ImageDTO
     {
         public int Id { get; set; }
-        public string Title { get; set; }
-        public string Cover { get; set; }
-        public DateTime Date { get; set; }
-        public int Rate { get; set; }
-        public bool Active { get; set; }
+        public string Name { get; set; }
         public string Owner { get; set; }
     }
 }

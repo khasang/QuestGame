@@ -28,6 +28,9 @@ namespace QuestGame.Domain.EntityConfigurations
                 .WithOptional(m => m.NextStage)
                 .HasForeignKey(m => m.NextStageId)
                 .WillCascadeOnDelete(false);
+
+            this.HasOptional(x => x.Cover)
+                .WithMany();
         }
     }
 }

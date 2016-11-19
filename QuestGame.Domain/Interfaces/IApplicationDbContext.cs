@@ -14,6 +14,7 @@ namespace QuestGame.Domain.Interfaces
         DbSet<Quest> Quests { get; set; }
         DbSet<Stage> Stages { get; set; }
         DbSet<Motion> Motions { get; set; }
+        DbSet<Image> Images { get; set; }
 
         IDbSet<ApplicationUser> GetUsers();
         IDbSet<IdentityRole> GetRoles();

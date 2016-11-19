@@ -8,10 +8,13 @@ using System.Threading.Tasks;
 
 namespace QuestGame.Domain.Entities
 {
+    /// <summary>
+    /// Модель сцены в квесте
+    /// </summary>
     public class Stage
     {
         /// <summary>
-        /// Первичный ключ
+        /// Идентификатор
         /// </summary>
         public int Id { get; set; }
 
@@ -19,6 +22,12 @@ namespace QuestGame.Domain.Entities
         /// Название сцены
         /// </summary>
         public string Title { get; set; }
+
+        /// <summary>
+        /// Изображение обложки
+        /// </summary>
+        public int? CoverId { get; set; }
+        public virtual Image Cover { get; set; }
 
         /// <summary>
         /// Текстовое тело сцены
