@@ -92,7 +92,7 @@ namespace QuestGame.WebMVC.Controllers
 
             using (var client = RestHelper.Create())
             {
-                var response = client.GetAsync("s" + ApiMethods.AccontUserByEmail + user.Email).Result;
+                var response = client.GetAsync(ApiMethods.AccontUserByEmail + user.Email).Result;
                 response.EnsureSuccessStatusCode();
 
                 if (response.StatusCode == HttpStatusCode.NoContent)
