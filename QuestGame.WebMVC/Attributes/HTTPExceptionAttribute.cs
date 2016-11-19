@@ -11,14 +11,14 @@ namespace QuestGame.WebMVC.Attributes
     {
         public void OnException(ExceptionContext filterContext)
         {
-            if (!filterContext.ExceptionHandled && filterContext.Exception is HttpRequestException)
+            if (!filterContext.ExceptionHandled && filterContext.Exception != null)
             {
                 filterContext.Controller.ViewBag.Title = "Ошибка";
                 filterContext.Controller.ViewBag.Message = filterContext.Exception.Message;
 
                 filterContext.ExceptionHandled = true;
 
-                filterContext.Result =  new ViewResult
+                filterContext.Result = new ViewResult
                 {
                     ViewName = "ActionResultInfo",
                     ViewData = filterContext.Controller.ViewData,

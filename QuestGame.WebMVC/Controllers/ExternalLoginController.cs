@@ -37,6 +37,7 @@ namespace QuestGame.WebMVC.Controllers
         }
 
         [HttpGet]
+        [HTTPExceptionAttribute]
         public ActionResult GoogleAuthCallback(string code)
         {
             SocialProvider provider = new GoogleAuth();
@@ -48,6 +49,7 @@ namespace QuestGame.WebMVC.Controllers
         }
 
         [HttpGet]
+        [HTTPExceptionAttribute]
         public ActionResult YandexAuthCallback(string code)
         {
             SocialProvider provider = new YandexAuth();
@@ -59,6 +61,7 @@ namespace QuestGame.WebMVC.Controllers
         }
 
         [HttpGet]
+        [HTTPExceptionAttribute]
         public ActionResult FaceBookAuthCallback(string code)
         {
             SocialProvider provider = new FacebookAuth();
@@ -70,6 +73,7 @@ namespace QuestGame.WebMVC.Controllers
         }
 
         [HttpGet]
+        [HTTPExceptionAttribute]
         public ActionResult VKontakteAuthCallback(string code)
         {
             SocialProvider provider = new VKontakteAuth();
@@ -88,7 +92,7 @@ namespace QuestGame.WebMVC.Controllers
 
             using (var client = RestHelper.Create())
             {
-                var response = client.GetAsync(ApiMethods.AccontUserByEmail + user.Email).Result;
+                var response = client.GetAsync("s" + ApiMethods.AccontUserByEmail + user.Email).Result;
                 response.EnsureSuccessStatusCode();
 
                 if (response.StatusCode == HttpStatusCode.NoContent)
@@ -96,7 +100,7 @@ namespace QuestGame.WebMVC.Controllers
                     return CreateSocialUser(model).Result;
                 }
 
-                var result = await response.Content.ReadAsAsync<ApplicationUserDTO>();
+                var result = response.Content.ReadAsAsync<ApplicationUserDTO>().Result;
 
                 var isSelf = result.Logins.Any(s => s.Equals(model.Provider));
 
