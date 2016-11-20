@@ -42,44 +42,37 @@ namespace QuestGame.WebMVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        /// <summary>
+        /// Принимает объект HttpPostedFileBase из форм и отпраляет на сервер.
+        /// </summary>
+        /// <returns></returns>
         [CustomAuthorize]
         protected async Task<string> UploadFile(HttpPostedFileBase file, string apiUpload)
         {
             if (file == null)
                 return string.Empty;
 
-            var fileName = Guid.NewGuid().ToString();    // Чтобы избежать возможного конфликта одинаковых имен
-            var fileExt = Path.GetExtension(file.FileName);
-            var path = Server.MapPath($"{ConfigSettings.RelativeFilePath}{fileName}{fileExt}");
+            var path = PathForFile(file.FileName);
+
             file.SaveAs(path);                              // сохраняем файл в папку Content/Temp в проекте
 
-            using (var client = RestHelper.Create(SessionUser.Token))
-            using (var fileStream = System.IO.File.Open(path, FileMode.Open))
-            {
-                var fileInfo = new FileInfo(path);
-                var content = new StreamContent(fileStream);
-                var form = new MultipartFormDataContent();
-                form.Add(content, ConfigSettings.RelativeFilePath, fileInfo.Name);
+            return await UploadToServer(path, apiUpload);
 
-                var response = await client.PostAsync(apiUpload, form);
-                var result = await response.Content.ReadAsAsync<string>();
-                
-                System.IO.File.Delete(path);   // удаляем файл из папки Content/Temp в проекте
-
-                return result;
-            }
         }
 
+        /// <summary>
+        /// Принимает Url картинки и отпраляет на сервер.
+        /// </summary>
+        /// <returns></returns>
         [CustomAuthorize]
         protected async Task<string> UploadFile(string url, string apiUpload)
         {
             if (url == null)
                 return string.Empty;
 
-            var fileName = Guid.NewGuid().ToString();    // Чтобы избежать возможного конфликта одинаковых имен
-            var fileExt = Path.GetExtension(url);
-            var path = Server.MapPath($"{ConfigSettings.RelativeFilePath}{fileName}{fileExt}");
+            var path = PathForFile(url);
 
+            // сохраняем файл в папку Content/Temp в проекте
             using (var myWebClient = new WebClient())
             {
                 try
@@ -92,25 +85,38 @@ namespace QuestGame.WebMVC.Controllers
                 }
 
             }
-                
 
-            using (var client = RestHelper.Create())
-            using (var fileStream = System.IO.File.Open(path, FileMode.Open))
-            {
-                var fileInfo = new FileInfo(path);
-                var content = new StreamContent(fileStream);
-                var form = new MultipartFormDataContent();
-                form.Add(content, ConfigSettings.RelativeFilePath, fileInfo.Name);
-
-                var response = client.PostAsync(apiUpload, form).Result;
-                var result = await response.Content.ReadAsAsync<string>();
-
-                System.IO.File.Delete(path);   // удаляем файл из папки Content/Temp в проекте
-
-                return result;
-            }
+            return await UploadToServer(path, apiUpload);
         }
 
+        private string PathForFile(string uri)
+        {
+            var fileName = Guid.NewGuid().ToString();    // Чтобы избежать возможного конфликта одинаковых имен
+            var fileExt = Path.GetExtension(uri);
+            var path = Server.MapPath($"{ConfigSettings.RelativeFilePath}{fileName}{fileExt}");
 
+            return path;
+        }
+
+        private async Task<string> UploadToServer(string path, string apiUpload)
+        {
+            using (var client = RestHelper.Create())
+            {
+                using (var fileStream = System.IO.File.Open(path, FileMode.Open))
+                {
+                    var fileInfo = new FileInfo(path);
+                    var content = new StreamContent(fileStream);
+                    var form = new MultipartFormDataContent();
+                    form.Add(content, ConfigSettings.RelativeFilePath, fileInfo.Name);
+
+                    var response = client.PostAsync(apiUpload, form).Result;
+                    var result = await response.Content.ReadAsAsync<string>();
+
+                    System.IO.File.Delete(path);   // удаляем файл из папки Content/Temp в проекте
+
+                    return result;
+                }
+            }            
+        }
     }
 }
