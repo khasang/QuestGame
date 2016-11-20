@@ -69,5 +69,48 @@ namespace QuestGame.WebMVC.Controllers
                 return result;
             }
         }
+
+        [CustomAuthorize]
+        protected async Task<string> UploadFile(string url, string apiUpload)
+        {
+            if (url == null)
+                return string.Empty;
+
+            var fileName = Guid.NewGuid().ToString();    // Чтобы избежать возможного конфликта одинаковых имен
+            var fileExt = Path.GetExtension(url);
+            var path = Server.MapPath($"{ConfigSettings.RelativeFilePath}{fileName}{fileExt}");
+
+            using (var myWebClient = new WebClient())
+            {
+                try
+                {
+                    myWebClient.DownloadFile(url, path);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+            }
+                
+
+            using (var client = RestHelper.Create())
+            using (var fileStream = System.IO.File.Open(path, FileMode.Open))
+            {
+                var fileInfo = new FileInfo(path);
+                var content = new StreamContent(fileStream);
+                var form = new MultipartFormDataContent();
+                form.Add(content, ConfigSettings.RelativeFilePath, fileInfo.Name);
+
+                var response = client.PostAsync(apiUpload, form).Result;
+                var result = await response.Content.ReadAsAsync<string>();
+
+                System.IO.File.Delete(path);   // удаляем файл из папки Content/Temp в проекте
+
+                return result;
+            }
+        }
+
+
     }
 }

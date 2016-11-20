@@ -639,6 +639,12 @@ namespace QuestGame.WebApi.Controllers
             var profile = mapper.Map<SocialUserDTO, UserProfile>(model);
             profile.InviteDate = DateTime.Now;
 
+            profile.Avatar = new Image
+            {
+                Name = model.AvatarUrl,
+                Prefix = ConfigSettings.AvatarPrefixFile,
+            };
+
             user.UserProfile = profile;
 
             IdentityResult createUser = await UserManager.CreateAsync(user, model.Password);
@@ -711,6 +717,7 @@ namespace QuestGame.WebApi.Controllers
         /// Загрузка аватара
         /// </summary>
         [HttpPost]
+        [AllowAnonymous]
         [Route("UploadFile")]
         public async Task<string> UploadFile()
         {

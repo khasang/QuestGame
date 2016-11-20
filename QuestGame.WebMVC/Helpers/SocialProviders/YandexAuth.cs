@@ -51,11 +51,11 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
 
                 if (!(bool)json.is_avatar_empty)
                 {
-                    avatar = @"http://avatars.mds.yandex.net/get-yapic/" + json.default_avatar_id + @"/islands-200";
+                    avatar = @"http://avatars.mds.yandex.net/get-yapic/" + json.default_avatar_id + @"/islands-200" + @"?.png";
                 }
                 else
                 {
-                    avatar = @"http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png/revision/latest?cb=20150708082716";
+                    avatar = @"http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png";
                 }
 
                 var user = new SocialUserModel

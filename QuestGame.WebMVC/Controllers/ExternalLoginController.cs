@@ -15,18 +15,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Net.Http.Headers;
-
+using System.IO;
 
 namespace QuestGame.WebMVC.Controllers
 {
-    public class ExternalLoginController : Controller
+    public class ExternalLoginController : BaseController
     {
-        IMapper mapper;
-
         public ExternalLoginController(IMapper mapper)
-        {
-            this.mapper = mapper;
-        }
+            : base(mapper)
+        { }
 
         // GET: ExternalLogin
         public ActionResult Index(string providerName)
@@ -115,7 +112,7 @@ namespace QuestGame.WebMVC.Controllers
                 var authrequest = client.PostAsJsonAsync(ApiMethods.AccontUserGetSocial, user).Result;
                 var answer = await authrequest.Content.ReadAsAsync<ApplicationUserDTO>();
 
-                Session["User"] = result;
+                Session["User"] = answer;
 
                 return RedirectToAction("Index", "Home");
             }
@@ -125,6 +122,10 @@ namespace QuestGame.WebMVC.Controllers
         public async Task<ActionResult> CreateSocialUser(SocialUserModel model)
         {
             SocialUserDTO user = mapper.Map<SocialUserModel, SocialUserDTO>(model);
+
+            var filePath = await UploadFile(user.AvatarUrl, ApiMethods.AccountUploadFile);
+            if (!string.IsNullOrEmpty(filePath))
+                user.AvatarUrl = filePath;
 
             using (var client = RestHelper.Create())
             {
