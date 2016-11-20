@@ -26,6 +26,8 @@ namespace QuestGame.WebMVC.Mapping.Profiles
             CreateMap<MotionViewModel, MotionDTO>(); 
             CreateMap<SocialUserModel, SocialUserDTO>();
 
+            CreateMap<RegisterViewModel, RegisterUserDTO>();
+
             CreateMap<ResetPasswordRequestModel, ResetPasswordDTO>();
 
             CreateMap<UserViewModel, ApplicationUserDTO>();

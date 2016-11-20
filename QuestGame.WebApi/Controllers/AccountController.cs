@@ -437,15 +437,15 @@ namespace QuestGame.WebApi.Controllers
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<IHttpActionResult> Register(RegisterViewModel model)
+        public async Task<IHttpActionResult> Register(RegisterUserDTO model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = mapper.Map<RegisterViewModel, ApplicationUser>(model);
-            var profile = mapper.Map<RegisterViewModel, UserProfile>(model);
+            var user = mapper.Map<RegisterUserDTO, ApplicationUser>(model);
+            var profile = new UserProfile();
 
             profile.Avatar = new Image
             {

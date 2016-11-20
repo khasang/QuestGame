@@ -102,6 +102,7 @@
     <Compile Include="DTO\MotionDTO.cs" />
     <Compile Include="DTO\QuestDTO.cs" />
     <Compile Include="DTO\QuestFullDTO.cs" />
+    <Compile Include="DTO\RegisterUserDTO.cs" />
     <Compile Include="DTO\SocialUserDTO.cs" />
     <Compile Include="DTO\StageDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />

@@ -34,9 +34,11 @@ namespace QuestGame.WebMVC.Controllers
                 View(model);
             }
 
+            var registerUser = mapper.Map<RegisterViewModel, RegisterUserDTO>(model);
+
             using (var client = RestHelper.Create())
             {
-                var response = await client.PostAsJsonAsync(ApiMethods.AccontRegister, model);
+                var response = await client.PostAsJsonAsync(ApiMethods.AccontRegister, registerUser);
                 var answer = await response.Content.ReadAsAsync<RegisterResponse>();
 
                 if (answer.Success)

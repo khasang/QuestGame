@@ -243,5 +243,4 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-/QuestGame.WebApi/Content/Images/Avatars/fe91e511-531f-422a-8a7a-c5665f35c2cb.jpg
-/QuestGame.WebApi/Content/Images/Avatars/025c34ea-a3b0-4a3c-bece-37e5d4732049.jpg
+*.jpg

@@ -22,7 +22,8 @@
 
         <div id="Profile" class="row" style="margin-top:50px">
             <div class="col-sm-4" style="text-align:right">
-                <img src="@Model.UserProfile.AvatarUrl" class="img-thumbnail img-circle pull-xs-right" alt="Cinque Terre" height="200">
+                <div class="img-thumbnail img-circle pull-xs-right user_profile_avatar">
+                </div>
             </div>
             <div class="col-sm-8">
                 @if (Model.NickName != null)
@@ -66,10 +67,11 @@
                 <div class="form-horizontal row">
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                    <div class="col-sm-3" style="text-align:right">
-                        <img src="@Model.UserProfile.AvatarUrl" alt="avatar" class="img-thumbnail img-circle pull-xs-right" width="200">
+                    <div class="col-sm-4" style="text-align:right">
+                        <div class="img-thumbnail img-circle pull-xs-right user_profile_avatar">
+                        </div>
                     </div>
-                    
+
                     <div class="col-sm-3">
                         <p>Изменить аватар</p>
                         <input type="file" name="file" />
@@ -93,11 +95,11 @@
 
                         @if (Model.isExternalLogin)
                         {
-                        <div><h3><i>Регистрация через социальную сеть</i></h3></div>
+                            <div><h3><i>Регистрация через социальную сеть</i></h3></div>
                         }
                         else
                         {
-                        <div><h3>@Model.Email</h3></div>
+                            <div><h3>@Model.Email</h3></div>
                         }
 
                         <div>
@@ -120,9 +122,9 @@
                     <div>@Model.UserProfile.CountCompliteQuests</div>
                 </div>
                 @*<div class="col-sm-3">
-                    <div>Создано квестов</div>
-                    <div>@Model.Quests.Count()</div>
-                </div>*@
+                        <div>Создано квестов</div>
+                        <div>@Model.Quests.Count()</div>
+                    </div>*@
                 <div class="col-sm-3">
                     <div>Дата регистрации</div>
                     <div>@Model.UserProfile.InviteDate</div>
@@ -144,6 +146,16 @@
        padding: 20px;
        border-left: 3px solid #f0ad4e;
    }
+
+   .user_profile_avatar {
+        width: 200px;
+        height: 200px;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-image: url(@Model.UserProfile.AvatarUrl);
+        background-size: cover;
+        border: antiquewhite 6px solid
+    }
 </style>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
