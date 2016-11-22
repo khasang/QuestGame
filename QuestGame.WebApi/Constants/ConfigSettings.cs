@@ -14,6 +14,9 @@ namespace QuestGame.WebApi.Constants
         public const string BaseUrlKey = "WebApiServiceBaseUrl";
         public const string MailPathKey = "MailPath";
         public const string FilePathKey = "FilePath";
+        public const string ResizeEnableKey = "ResizeEnable";
+        public const string ResizeXKey = "ResizeX";
+        public const string ResizeYKey = "ResizeY";
 
         #endregion
 
@@ -27,6 +30,10 @@ namespace QuestGame.WebApi.Constants
         public const string QuestPrefixFile = "Quests";
         public const string StagePrefixFile = "Stages";
         public const string AvatarPrefixFile = "Avatars";
+
+        public const string ResizeEnable = "true";
+        public const string ResizeX = "200";
+        public const string ResizeY = "200";
 
         #endregion
 

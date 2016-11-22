@@ -28,7 +28,7 @@
                     {
                         <tr>
                             <td>
-                                <img src=@quest.Cover alt=@quest.Title height="100" width="100">
+                                <img src=@quest.Cover alt=@quest.Title />
                             </td>
                             <td>@Html.ActionLink(quest.Title, "Details", new {id = quest.Title}, null)</td>
                             <td>@quest.Owner</td>

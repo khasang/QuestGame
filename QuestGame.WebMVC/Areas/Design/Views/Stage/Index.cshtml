@@ -35,7 +35,7 @@
                         @foreach (var stage in Model)
                         {
                             <tr>
-                                <td><img src=@stage.Cover alt="cover" height="100" width="100" /></td>
+                                <td><img src=@stage.Cover alt="cover" /></td>
                                 <td>@Html.ActionLink(stage.Title, "Details", new {id = stage.Id}, null)</td>
                                 <td>@stage.Body</td>
                                 <td>@stage.Point</td>
