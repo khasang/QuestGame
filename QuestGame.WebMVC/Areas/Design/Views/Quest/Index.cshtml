@@ -37,7 +37,7 @@
                     @foreach (var quest in Model)
                     {
                         <tr>
-                            <td><img src=@quest.Cover alt="cover" height="100" width="100"/></td>
+                            <td><img src=@quest.Cover alt="cover" /></td>
                             <td>@Html.ActionLink(quest.Title, "Details", new {id = quest.Id}, null)</td>
                             <td>@quest.Date</td>
                             <td>@quest.Rate</td>
