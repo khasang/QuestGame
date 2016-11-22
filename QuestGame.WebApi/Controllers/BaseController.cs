@@ -28,12 +28,17 @@ namespace QuestGame.WebApi.Controllers
                 throw new FileLoadException(ErrorMessages.LoadOnlyOneFile);
 
             var stream = provider.Contents[0];
+            var imgStream = await stream.ReadAsStreamAsync();
+            var img = Image.FromStream(imgStream);
+
+            var resizeEnable = bool.Parse(CommonHelper.GetConfigOrDefaultValue(ConfigSettings.ResizeEnableKey,
+                    ConfigSettings.ResizeEnable));
+
+            if (resizeEnable)
+                img = GetImageResize(img);
+
             var fileName = Guid.NewGuid().ToString();    // Чтобы избежать возможного конфликта одинаковых имен
             var fileExt = Path.GetExtension(stream.Headers.ContentDisposition.FileName.Trim('"'));
-            
-            var imgStream = await stream.ReadAsStreamAsync();
-            var img = GetImageResize(Image.FromStream(imgStream), 200, 200); // константы перенести в конфиг
-
             img.Save($"{path}{prefix}\\{fileName}{fileExt}");
             
             var baseUrl = CommonHelper.GetConfigOrDefaultValue(ConfigSettings.BaseUrlKey, ConfigSettings.WebApiServiceBaseUrl);
@@ -41,8 +46,11 @@ namespace QuestGame.WebApi.Controllers
             return urlFile;
         }
 
-        private Image GetImageResize(Image img, int width, int height)
+        private Image GetImageResize(Image img)
         {
+            var width = int.Parse(CommonHelper.GetConfigOrDefaultValue(ConfigSettings.ResizeXKey, ConfigSettings.ResizeX));
+            var height = int.Parse(CommonHelper.GetConfigOrDefaultValue(ConfigSettings.ResizeYKey, ConfigSettings.ResizeY));
+
             int newWidth;
             int newHeight;
 
@@ -67,10 +75,6 @@ namespace QuestGame.WebApi.Controllers
             thumbnailGraph.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
             var imageRectangle = new Rectangle(0, 0, newWidth, newHeight);
-
-            //int left = newWidth < width ? (width - newWidth) / 2 : 0;
-            //int top = newHeight < height ? (height - newHeight) / 2 : 0;
-
             thumbnailGraph.DrawImage(img, imageRectangle);
 
             return thumbnailBitmap;
