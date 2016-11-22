@@ -20,56 +20,60 @@ namespace QuestGame.WebApi.Controllers
                 throw new Exception();
 
             var path = ConfigSettings.GetLocalFilePath();
-            var provider = new MultipartFormDataStreamProvider(path);
 
-            if (provider.FileData.Count > 1)
-                throw new FileLoadException(ErrorMessages.LoadOnlyOneFile);
-
+            var provider = new MultipartMemoryStreamProvider();
             var result = await content.ReadAsMultipartAsync(provider);
 
-            var file = new FileInfo(provider.FileData[0].LocalFileName);
-            if (file.Length == 0)
-                throw new Exception(ErrorMessages.DefectFile);
+            if (provider.Contents.Count != 1)
+                throw new FileLoadException(ErrorMessages.LoadOnlyOneFile);
 
-            var fileName = provider.FileData[0].Headers.ContentDisposition.FileName.Trim('"');
-            var filePath = $"{path}{prefix}\\{fileName}";
+            var stream = provider.Contents[0];
+            var fileName = Guid.NewGuid().ToString();    // Чтобы избежать возможного конфликта одинаковых имен
+            var fileExt = Path.GetExtension(stream.Headers.ContentDisposition.FileName.Trim('"'));
+            
+            var imgStream = await stream.ReadAsStreamAsync();
+            var img = GetImageResize(Image.FromStream(imgStream), 200, 200); // константы перенести в конфиг
 
-            if (File.Exists(filePath))
-                throw new Exception(ErrorMessages.ExistsFile);
-
-            try
-            {
-                file.MoveTo(filePath); // Здесь мы можем настроить какие картинки где хранить
-
-                //var newImg = ImageResize(img, 600, 800);
-                //newImg.Save(filePath);
-            }
-            catch (Exception ex)
-            {
-                foreach (var fileData in provider.FileData)  // если какие-либо ошибки при перемещении,
-                    File.Delete(fileData.LocalFileName);     // то удаляем загруженные файлы
-
-                throw new Exception(ErrorMessages.DefectFile, ex);
-            }
-
+            img.Save($"{path}{prefix}\\{fileName}{fileExt}");
+            
             var baseUrl = CommonHelper.GetConfigOrDefaultValue(ConfigSettings.BaseUrlKey, ConfigSettings.WebApiServiceBaseUrl);
-            var urlFile = $"{baseUrl}Content/Images/{prefix}/{fileName}";
+            var urlFile = $"{baseUrl}Content/Images/{prefix}/{fileName}{fileExt}";
             return urlFile;
         }
 
-        //private Image ImageResize(Image img, int height, int width)
-        //{
-        //    var stream = new MemoryStream()
-        //    var img = Image.FromStream()
-        //    var bmp = new Bitmap(img, 600, 800);
+        private Image GetImageResize(Image img, int width, int height)
+        {
+            int newWidth;
+            int newHeight;
 
-        //    using (Graphics g = Graphics.FromImage((Image)bmp))
-        //    {
-        //        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-        //        g.DrawImage(img, 0, 0, width, height);
-        //    }
+            var k = (double)img.Width / (double)img.Height;
 
-        //    return bmp;
-        //}
+            if (k > 1)
+            {
+                newWidth = img.Width > width ? width : img.Width;
+                newHeight = (int)(newWidth / k);
+            }
+            else
+            {
+                newHeight = img.Height > height ? height : img.Height;
+                newWidth = (int)(newHeight * k);
+            }
+
+            var thumbnailBitmap = new Bitmap(newWidth, newHeight);
+
+            var thumbnailGraph = Graphics.FromImage(thumbnailBitmap);
+            thumbnailGraph.CompositingQuality = CompositingQuality.HighQuality;
+            thumbnailGraph.SmoothingMode = SmoothingMode.HighQuality;
+            thumbnailGraph.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+            var imageRectangle = new Rectangle(0, 0, newWidth, newHeight);
+
+            //int left = newWidth < width ? (width - newWidth) / 2 : 0;
+            //int top = newHeight < height ? (height - newHeight) / 2 : 0;
+
+            thumbnailGraph.DrawImage(img, imageRectangle);
+
+            return thumbnailBitmap;
+        }
     }
 }
