@@ -87,6 +87,17 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
 
                 var resultObject = json.response[0];
 
+                string avatar;
+
+                if (!String.IsNullOrEmpty((string)resultObject.photo_big))
+                {
+                    avatar = resultObject.photo_big;
+                }
+                else
+                {
+                    avatar = WebConfigurationManager.AppSettings["RemoteNoImageAvailable"];
+                }
+
                 return new SocialUserModel
                 {
                     SocialId = resultObject.uid,

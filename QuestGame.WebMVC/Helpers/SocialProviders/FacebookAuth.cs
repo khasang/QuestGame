@@ -53,18 +53,16 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
                 string avatar;
 
                 bool pictureIsAviable = (bool)json.picture.data.is_silhouette;
+                bool pictureIsEmpty = String.IsNullOrEmpty((string)@json.picture.data.url);
 
-                if (!pictureIsAviable)
+                if (!pictureIsAviable & !pictureIsEmpty)
                 {
-                    string fullUrl = @json.picture.data.url;
-                    int extStartIndex = fullUrl.LastIndexOf(".");
-                    int extEndIndex = fullUrl.LastIndexOf("?");
-                    string ext = fullUrl.Substring(extStartIndex, extEndIndex- extStartIndex);
-                    avatar = @fullUrl + @"&" + @ext;
+                    var urlString = new Uri((string)@json.picture.data.url);
+                    avatar = urlString.Host + urlString.LocalPath;
                 }
                 else
                 {
-                    avatar = @"http://vignette3.wikia.nocookie.net/shokugekinosoma/images/6/60/No_Image_Available.png";
+                    avatar = WebConfigurationManager.AppSettings["RemoteNoImageAvailable"];
                 }
 
                 return new SocialUserModel

@@ -45,13 +45,25 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
                 var request = client.GetAsync(queryUrl).Result;
                 var answer = request.Content.ReadAsAsync<Dictionary<string, string>>().Result;
 
+                string avatar;
+
+                if (!String.IsNullOrEmpty(answer["picture"]))
+                {
+                    avatar = answer["picture"];
+                }
+                else
+                {
+                    avatar = WebConfigurationManager.AppSettings["RemoteNoImageAvailable"];
+                }
+
+
                 return new SocialUserModel
                 {
                     SocialId = answer["id"],
                     Email = answer["email"],
                     Password = answer["id"],
                     NickName = answer["name"],
-                    AvatarUrl = answer["picture"],
+                    AvatarUrl = avatar,
                     Provider = this.Provider
                 };
             }
@@ -71,7 +83,9 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
 
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("https://localhost:44366/");
+                //client.BaseAddress = new Uri("https://localhost:44366/");
+                client.BaseAddress = new Uri(WebConfigurationManager.AppSettings["WebApiServiceBaseUrl"]);
+
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
                 client.DefaultRequestHeaders.Add("Referer", this.RedirectUri);
