@@ -51,7 +51,7 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
 
                 if (!(bool)json.is_avatar_empty)
                 {
-                    avatar = WebConfigurationManager.AppSettings["YandexPicturePath"] + json.default_avatar_id + @"/islands-200" + @"?.png";
+                    avatar = $"{WebConfigurationManager.AppSettings["YandexPicturePath"]}{json.default_avatar_id}{"/islands-200?.png"}";
                 }
                 else
                 {

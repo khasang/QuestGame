@@ -100,7 +100,7 @@ namespace QuestGame.WebMVC.Controllers
 
         private async Task<string> UploadToServer(string path, string apiUpload)
         {
-            using (var client = RestHelper.Create())
+            using (var client = RestHelper.Create(SessionUser.Token))
             {
                 using (var fileStream = System.IO.File.Open(path, FileMode.Open))
                 {

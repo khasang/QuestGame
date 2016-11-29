@@ -118,14 +118,10 @@ namespace QuestGame.WebMVC.Controllers
             }
         }
 
-        [HTTPExceptionAttribute]
-        public async Task<ActionResult> CreateSocialUser(SocialUserModel model)
+        //[HTTPExceptionAttribute]
+        public async Task<ActionResult> CreateSocialUser(SocialUserModel userModel)
         {
-            SocialUserDTO user = mapper.Map<SocialUserModel, SocialUserDTO>(model);
-
-            var filePath = await UploadFile(user.AvatarUrl, ApiMethods.AccountUploadFile);
-            if (!string.IsNullOrEmpty(filePath))
-                user.AvatarUrl = filePath;
+            SocialUserDTO user = mapper.Map<SocialUserModel, SocialUserDTO>(userModel);
 
             using (var client = RestHelper.Create())
             {
@@ -134,8 +130,15 @@ namespace QuestGame.WebMVC.Controllers
 
                 Session["User"] = answer;
 
-                return RedirectToAction("Index", "Home");
+                var filePath = await UploadFile(user.AvatarUrl, ApiMethods.AccountUploadFile);
+                if (!string.IsNullOrEmpty(filePath))
+                    answer.UserProfile.AvatarUrl = filePath;
+
+                var responseUpdate = await client.PostAsJsonAsync(ApiMethods.AccontEditUser, answer);
+
+                return RedirectToAction("UserProfile", "Account", new { id = answer.Id });
             }
+
         }
 
     }
