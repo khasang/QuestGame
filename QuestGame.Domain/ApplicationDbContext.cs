@@ -24,13 +24,14 @@ namespace QuestGame.Domain
         public IDbSet<IdentityRole> GetRoles() { return base.Roles; }
 
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("QuestGameConnection", throwIfV1Schema: false)
         {
         }
 
         public static ApplicationDbContext Create()
         {
-            return new ApplicationDbContext();
+            var ttr = new ApplicationDbContext();
+            return ttr;
         }
 
         public void EntryObj<T>(T entity) where T : class

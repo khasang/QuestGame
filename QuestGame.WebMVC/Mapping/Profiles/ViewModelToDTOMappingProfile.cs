@@ -23,7 +23,10 @@ namespace QuestGame.WebMVC.Mapping.Profiles
             CreateMap<NewItemViewModel, MotionDTO>().ForMember(x => x.Description, y => y.MapFrom(v => v.Title));
             CreateMap<StageViewModel, StageFullDTO>();
             CreateMap<StageViewModel, StageDTO>();
-            CreateMap<MotionViewModel, MotionDTO>();
+            CreateMap<MotionViewModel, MotionDTO>(); 
+            CreateMap<SocialUserModel, SocialUserDTO>();
+
+            CreateMap<RegisterViewModel, RegisterUserDTO>();
 
             CreateMap<ResetPasswordRequestModel, ResetPasswordDTO>();
 
