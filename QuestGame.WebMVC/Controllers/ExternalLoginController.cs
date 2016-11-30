@@ -123,20 +123,26 @@ namespace QuestGame.WebMVC.Controllers
         {
             SocialUserDTO user = mapper.Map<SocialUserModel, SocialUserDTO>(userModel);
 
+            ApplicationUserDTO userResult;
+
             using (var client = RestHelper.Create())
             {
                 var response = client.PostAsJsonAsync(ApiMethods.AccontUserSocialRegister, user).Result;
-                var answer = await response.Content.ReadAsAsync<ApplicationUserDTO>();
+                userResult = await response.Content.ReadAsAsync<ApplicationUserDTO>();
 
-                Session["User"] = answer;
+                Session["User"] = userResult;
+            }
+
+            using (var clientUpdate = RestHelper.Create(SessionUser.Token))
+            {
 
                 var filePath = await UploadFile(user.AvatarUrl, ApiMethods.AccountUploadFile);
                 if (!string.IsNullOrEmpty(filePath))
-                    answer.UserProfile.AvatarUrl = filePath;
+                    userResult.UserProfile.AvatarUrl = filePath;
 
-                var responseUpdate = await client.PostAsJsonAsync(ApiMethods.AccontEditUser, answer);
+                var responseUpdate = clientUpdate.PostAsJsonAsync(ApiMethods.AccontEditUser, userResult).Result;
 
-                return RedirectToAction("UserProfile", "Account", new { id = answer.Id });
+                return RedirectToAction("UserProfile", "Account", new { id = userResult.Id });
             }
 
         }

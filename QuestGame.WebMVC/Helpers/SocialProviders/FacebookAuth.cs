@@ -9,6 +9,7 @@ using QuestGame.Common.Helpers;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.IO;
 
 namespace QuestGame.WebMVC.Helpers.SocialProviders
 {
@@ -58,7 +59,8 @@ namespace QuestGame.WebMVC.Helpers.SocialProviders
                 if (!pictureIsAviable & !pictureIsEmpty)
                 {
                     var urlString = new Uri((string)@json.picture.data.url);
-                    avatar = urlString.Host + urlString.LocalPath;
+                    var extensn = Path.GetExtension(urlString.LocalPath);
+                    avatar = urlString.OriginalString + @"&" + extensn;
                 }
                 else
                 {
