@@ -24,7 +24,7 @@ namespace QuestGame.Domain
         public IDbSet<IdentityRole> GetRoles() { return base.Roles; }
 
         public ApplicationDbContext()
-            : base("QuestGameConnection", throwIfV1Schema: false)
+            : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
 

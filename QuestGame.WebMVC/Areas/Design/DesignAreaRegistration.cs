@@ -4,13 +4,7 @@ namespace QuestGame.WebMVC.Areas.Design
 {
     public class DesignAreaRegistration : AreaRegistration 
     {
-        public override string AreaName 
-        {
-            get 
-            {
-                return "Design";
-            }
-        }
+        public override string AreaName => "Design";
 
         public override void RegisterArea(AreaRegistrationContext context) 
         {

@@ -142,7 +142,7 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
 
                 questModel.Stages = stagesModel.ToDictionary(x => x.Id, y => y.Title);
 
-                ViewBag.ReturnUrl = HttpContext.Request.UrlReferrer.AbsolutePath;
+                ViewBag.ReturnUrl = HttpContext.Request.UrlReferrer?.AbsolutePath;
                 return View(questModel);
             }            
         }

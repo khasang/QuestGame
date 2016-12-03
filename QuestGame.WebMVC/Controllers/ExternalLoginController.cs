@@ -1,21 +1,15 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using AutoMapper;
 using QuestGame.Common.Helpers;
 using QuestGame.Domain.DTO;
 using QuestGame.WebMVC.Attributes;
 using QuestGame.WebMVC.Constants;
 using QuestGame.WebMVC.Helpers.SocialProviders;
 using QuestGame.WebMVC.Models;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Net.Http.Headers;
-using System.IO;
 
 namespace QuestGame.WebMVC.Controllers
 {
@@ -28,76 +22,82 @@ namespace QuestGame.WebMVC.Controllers
         // GET: ExternalLogin
         public ActionResult Index(string providerName)
         {
-            var provider = GetProvider.Provider(providerName);
+            var provider = GetProvider.CreateProvider(providerName);
 
             return Redirect(provider.RequestCodeUrl);
         }
 
         [HttpGet]
-        [HTTPExceptionAttribute]
-        public ActionResult GoogleAuthCallback(string code)
+        [HTTPException]
+        public async Task<ActionResult> GoogleAuthCallback(string code)
         {
-            SocialProvider provider = new GoogleAuth();
-            provider.Code = code;
+            var provider = new GoogleAuth
+            {
+                Code = code
+            };
 
             var userInfo = provider.GetUserInfo();
 
-            return GetSocialUser(userInfo).Result;
+            return await GetSocialUser(userInfo);
         }
 
         [HttpGet]
-        [HTTPExceptionAttribute]
-        public ActionResult YandexAuthCallback(string code)
+        [HTTPException]
+        public async Task<ActionResult> YandexAuthCallback(string code)
         {
-            SocialProvider provider = new YandexAuth();
-            provider.Code = code;
+            var provider = new YandexAuth
+            {
+                Code = code
+            };
 
             var userInfo = provider.GetUserInfo();
 
-            return GetSocialUser(userInfo).Result;
+            return await GetSocialUser(userInfo);
         }
 
         [HttpGet]
-        [HTTPExceptionAttribute]
-        public ActionResult FaceBookAuthCallback(string code)
+        [HTTPException]
+        public async Task<ActionResult> FaceBookAuthCallback(string code)
         {
-            SocialProvider provider = new FacebookAuth();
-            provider.Code = code;
+            var provider = new FacebookAuth
+            {
+                Code = code
+            };
 
             var userInfo = provider.GetUserInfo();
 
-            return GetSocialUser(userInfo).Result;
+            return await GetSocialUser(userInfo);
         }
 
         [HttpGet]
-        [HTTPExceptionAttribute]
-        public ActionResult VKontakteAuthCallback(string code)
+        [HTTPException]
+        public async Task<ActionResult> VKontakteAuthCallback(string code)
         {
-            SocialProvider provider = new VKontakteAuth();
-            provider.Code = code;
+            var provider = new VKontakteAuth
+            {
+                Code = code
+            };
 
             var userInfo = provider.GetUserInfo();
 
-            return GetSocialUser(userInfo).Result;
+            return await GetSocialUser(userInfo);
         }
-
-        [HttpGet]
-        [HTTPExceptionAttribute]
-        public async Task<ActionResult> GetSocialUser(SocialUserModel model)
+        
+        private async Task<ActionResult> GetSocialUser(SocialUserModel model)
         {
             var user = mapper.Map<SocialUserModel, SocialUserDTO>(model);
 
             using (var client = RestHelper.Create())
             {
-                var response = client.GetAsync(ApiMethods.AccontUserByEmail + user.Email).Result;
+                var response = await client.GetAsync(ApiMethods.AccontUserByEmail + user.Email);
                 response.EnsureSuccessStatusCode();
 
                 if (response.StatusCode == HttpStatusCode.NoContent)
                 {
-                    return CreateSocialUser(model).Result;
+                    return await CreateSocialUser(model);
                 }
 
-                var result = response.Content.ReadAsAsync<ApplicationUserDTO>().Result;
+                var result = await response.Content.ReadAsAsync<ApplicationUserDTO>();
 
                 var isSelf = result.Logins.Any(s => s.Equals(model.Provider));
 
@@ -109,7 +109,7 @@ namespace QuestGame.WebMVC.Controllers
                     return View("ActionResultInfo");
                 }
 
-                var authrequest = client.PostAsJsonAsync(ApiMethods.AccontUserGetSocial, user).Result;
+                var authrequest = await client.PostAsJsonAsync(ApiMethods.AccontUserGetSocial, user);
                 var answer = await authrequest.Content.ReadAsAsync<ApplicationUserDTO>();
 
                 Session["User"] = answer;
@@ -117,17 +117,16 @@ namespace QuestGame.WebMVC.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
-
-        //[HTTPExceptionAttribute]
-        public async Task<ActionResult> CreateSocialUser(SocialUserModel userModel)
+        
+        private async Task<ActionResult> CreateSocialUser(SocialUserModel userModel)
         {
-            SocialUserDTO user = mapper.Map<SocialUserModel, SocialUserDTO>(userModel);
+            var user = mapper.Map<SocialUserModel, SocialUserDTO>(userModel);
 
             ApplicationUserDTO userResult;
 
             using (var client = RestHelper.Create())
             {
-                var response = client.PostAsJsonAsync(ApiMethods.AccontUserSocialRegister, user).Result;
+                var response = await client.PostAsJsonAsync(ApiMethods.AccontUserSocialRegister, user);
                 userResult = await response.Content.ReadAsAsync<ApplicationUserDTO>();
 
                 Session["User"] = userResult;
@@ -140,12 +139,10 @@ namespace QuestGame.WebMVC.Controllers
                 if (!string.IsNullOrEmpty(filePath))
                     userResult.UserProfile.AvatarUrl = filePath;
 
-                var responseUpdate = clientUpdate.PostAsJsonAsync(ApiMethods.AccontEditUser, userResult).Result;
+                var responseUpdate = await clientUpdate.PostAsJsonAsync(ApiMethods.AccontEditUser, userResult);
 
                 return RedirectToAction("UserProfile", "Account", new { id = userResult.Id });
             }
-
         }
-
     }
 }

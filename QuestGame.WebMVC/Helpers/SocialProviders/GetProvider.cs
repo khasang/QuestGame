@@ -5,11 +5,11 @@ using System.Web;
 
 namespace QuestGame.WebMVC.Helpers.SocialProviders
 {
-    public static class GetProvider
+    public class GetProvider
     {
-        public static SocialProvider Provider(string name)
+        public static SocialProvider CreateProvider(string nameProvider)
         {
-            switch (name)
+            switch (nameProvider)
             {
                 case "Google":
                     return new GoogleAuth();

@@ -27,13 +27,7 @@ namespace QuestGame.WebMVC.Controllers
             this.mapper = mapper;
         }
 
-        protected ApplicationUserDTO SessionUser
-        {
-            get
-            {
-                return Session["User"] as ApplicationUserDTO;
-            }
-        }
+        protected ApplicationUserDTO SessionUser => Session["User"] as ApplicationUserDTO;
 
         protected ActionResult RedirectToLocal(string returnUrl)
         {
