@@ -30,6 +30,7 @@ using QuestGame.Domain.Interfaces;
 using System.Net.Mail;
 using System.Threading;
 using QuestGame.WebApi.Constants;
+using System.Linq;
 using System.IO;
 
 namespace QuestGame.WebApi.Controllers
@@ -90,9 +91,9 @@ namespace QuestGame.WebApi.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetUserByEmail(string email)
         {
-            var user = await UserManager.FindByEmailAsync(email);
-            if (user == null)
-                return BadRequest();
+            ApplicationUser user = await UserManager.FindByEmailAsync(email);
+
+            if (user == null) { return Content(HttpStatusCode.NoContent, "Пользователь не найден"); }
 
             var result = mapper.Map<ApplicationUser, ApplicationUserDTO>(user);
             return Ok(result);
@@ -436,15 +437,15 @@ namespace QuestGame.WebApi.Controllers
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<IHttpActionResult> Register(RegisterViewModel model)
+        public async Task<IHttpActionResult> Register(RegisterUserDTO model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = mapper.Map<RegisterViewModel, ApplicationUser>(model);
-            var profile = mapper.Map<RegisterViewModel, UserProfile>(model);
+            var user = mapper.Map<RegisterUserDTO, ApplicationUser>(model);
+            var profile = new UserProfile();
 
             profile.Avatar = new Image
             {
@@ -622,6 +623,64 @@ namespace QuestGame.WebApi.Controllers
             }
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("RegisterSocialUser")]
+        public async Task<IHttpActionResult> RegisterSocialUser(SocialUserDTO model)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
+
+            var user = mapper.Map<SocialUserDTO, ApplicationUser>(model);
+            user.EmailConfirmed = true;
+
+            var profile = mapper.Map<SocialUserDTO, UserProfile>(model);
+            profile.InviteDate = DateTime.Now;
+
+            profile.Avatar = new Image
+            {
+                Name = model.AvatarUrl,
+                Prefix = ConfigSettings.AvatarPrefixFile,
+            };
+
+            user.UserProfile = profile;
+
+            IdentityResult createUser = await UserManager.CreateAsync(user, model.Password);
+            IdentityResult assignRole = UserManager.AddToRole(user.Id, "user");
+            IdentityResult addLogin = UserManager.AddLogin(user.Id, new UserLoginInfo(model.Provider, model.SocialId));
+
+            ApplicationUserDTO userResult;
+
+            using (var client = RestHelper.Create())
+            {
+                var response = await client.PostAsJsonAsync(ApiMethods.AccontUserLogin, new LoginBindingModel { Email = user.Email, Password = model.Password });
+                userResult = await response.Content.ReadAsAsync<ApplicationUserDTO>();
+            }
+
+            logger.Information("| Registration | {@user}", model);
+            return Ok(userResult);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("GetSocialUser")]
+        public async Task<IHttpActionResult> GetSocialUser(SocialUserDTO model)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
+
+            using (var client = RestHelper.Create())
+            {
+                var response = await client.PostAsJsonAsync(ApiMethods.AccontUserLogin, new LoginBindingModel { Email = model.Email, Password = model.Password });
+                var userResult = await response.Content.ReadAsAsync<ApplicationUserDTO>();
+                return Ok(userResult);
+            }
+        }
+
         // POST api/Account/RegisterExternal
         [OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
@@ -658,6 +717,7 @@ namespace QuestGame.WebApi.Controllers
         /// Загрузка аватара
         /// </summary>
         [HttpPost]
+        [AllowAnonymous]
         [Route("UploadFile")]
         public async Task<string> UploadFile()
         {

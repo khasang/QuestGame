@@ -19,7 +19,9 @@ namespace QuestGame.WebMVC.Mapping.Profiles
             CreateMap<StageDTO, StageViewModel>();
             CreateMap<MotionDTO, MotionViewModel>();
 
-            CreateMap<ApplicationUserDTO, UserViewModel>();
+            CreateMap<ApplicationUserDTO, UserViewModel>()
+                      .ForMember(x => x.isExternalLogin, y => y.MapFrom(pr => pr.Logins.Count > 0));
+            
             CreateMap<UserProfileDTO, UserProfileViewModel>();
         }
 

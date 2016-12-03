@@ -18,7 +18,18 @@ namespace QuestGame.WebApi.Mapping.Profiles
                 .ForMember(x => x.Email, y => y.Ignore())
                 .ForMember(x => x.EmailConfirmed, y => y.Ignore())
                 .ForMember(x => x.UserName, y => y.Ignore())
+                .ForMember(x => x.Logins, y => y.Ignore())
                 .ForMember(x => x.Quests, y => y.Ignore());
+
+            CreateMap<RegisterUserDTO, ApplicationUser>().ForMember(x => x.UserName, y => y.MapFrom(v => v.Email));
+
+            CreateMap<SocialUserDTO, ApplicationUser>()
+                .ForMember(x => x.NickName, y => y.MapFrom(pr => pr.NickName))
+                .ForMember(x => x.UserName, y => y.MapFrom(pr => pr.Email))
+                .ForMember(x => x.Email, y => y.MapFrom(pr => pr.Email))
+                .ForMember(x => x.Quests, y => y.Ignore());
+
+            CreateMap<SocialUserDTO, UserProfile>();
 
             CreateMap<UserDTO, ApplicationUser>()
                 .ForMember(x => x.Id, y => y.Ignore())
