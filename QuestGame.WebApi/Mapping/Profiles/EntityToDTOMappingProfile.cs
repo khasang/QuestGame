@@ -32,6 +32,7 @@ namespace QuestGame.WebApi.Mapping.Profiles
             CreateMap<Stage, StageFullDTO>();
 
             CreateMap<Motion, MotionDTO>();
+            CreateMap<Motion, MotionEditDTO>();
 
             CreateMap<UserProfile, UserProfileDTO>()
                 .ForMember(x => x.AvatarUrl, y => y.MapFrom(pr => pr.Avatar.Name));

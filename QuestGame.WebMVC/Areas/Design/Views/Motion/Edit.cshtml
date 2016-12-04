@@ -1,4 +1,4 @@
-﻿@model QuestGame.WebMVC.Areas.Game.Models.MotionViewModel
+﻿@model QuestGame.WebMVC.Areas.Game.Models.MotionEditViewModel
 
 @{
     ViewBag.Title = "Edit Motion";
@@ -30,7 +30,7 @@
                         @Html.DisplayNameFor(n => n.NextStageId)
                     </dt>
                     <dd>
-                        @Html.EditorFor(t => t.NextStageId)
+                        @Html.DropDownList("NextStageId", new SelectList(Model.RedirectStagesList, "Key", "Value"), "Выбор сцены")
                         @Html.ValidationMessageFor(v => v.NextStageId)
                     </dd>
                 </dl>

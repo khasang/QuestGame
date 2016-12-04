@@ -77,4 +77,9 @@ namespace QuestGame.WebMVC.Areas.Game.Models
 
         public int? NextStageId { get; set; }
     }
+
+    public class MotionEditViewModel : MotionViewModel
+    {
+        public Dictionary<int, string> RedirectStagesList { get; set; }
+    }
 }

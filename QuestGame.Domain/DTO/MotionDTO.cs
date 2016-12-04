@@ -13,4 +13,9 @@ namespace QuestGame.Domain.DTO
         public int? NextStageId { get; set; }
         public int OwnerStageId { get; set; }
     }
+
+    public class MotionEditDTO : MotionDTO
+    {
+        public Dictionary<int, string> RedirectStagesList { get; set; }
+    }
 }

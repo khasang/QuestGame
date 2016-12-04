@@ -85,6 +85,30 @@ namespace QuestGame.WebApi.Controllers
             }            
         }
 
+        [HttpGet]
+        [Route("GetFullById")]
+        public MotionEditDTO GetFullById(int? id)
+        {
+            try
+            {
+                var motion = dataManager.Motions.GetById(id);
+                var questStages = motion.OwnerStage.Quest.Stages;
+
+                var model = mapper.Map<Motion, MotionEditDTO>(motion);
+
+                model.RedirectStagesList = questStages.ToDictionary( s => s.Id, s => s.Title);
+                model.RedirectStagesList.Remove(model.RedirectStagesList.First( e => e.Key == motion.OwnerStageId).Key);
+
+                return model;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Motion | GetByStageId | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+        }
+
         [HttpPost]
         [Route("Add")]
         public IHttpActionResult Add(MotionDTO motion)

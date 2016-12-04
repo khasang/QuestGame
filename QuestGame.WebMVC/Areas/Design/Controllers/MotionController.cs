@@ -104,14 +104,14 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
 
             using (var client = RestHelper.Create(SessionUser.Token))
             {
-                var motionResponse = await client.GetAsync(ApiMethods.MotionGetById + id);
+                var motionResponse = await client.GetAsync(ApiMethods.MotionGetFullById + id);
                 if (motionResponse.StatusCode != HttpStatusCode.OK)
                 {
                     ViewBag.Message = ErrorMessages.MotionNotFound;
                     return RedirectToAction("Index", "Quest");
                 }
-                var motionDTO = await motionResponse.Content.ReadAsAsync<MotionDTO>();
-                var motionModel = mapper.Map<MotionDTO, MotionViewModel>(motionDTO);
+                var motionDTO = await motionResponse.Content.ReadAsAsync<MotionEditDTO>();
+                var motionModel = mapper.Map<MotionEditDTO, MotionEditViewModel>(motionDTO);
 
                 ViewBag.ReturnUrl = HttpContext.Request.UrlReferrer.AbsolutePath;
                 return View(motionModel);
@@ -119,7 +119,7 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(MotionViewModel quest, string returnUrl)
+        public async Task<ActionResult> Edit(MotionEditViewModel quest, string returnUrl)
         {
             //if(!ModelState.IsValid)
             //{
@@ -127,7 +127,7 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
             //    return View(quest);
             //}
 
-            var model = mapper.Map<MotionViewModel, MotionDTO>(quest);
+            var model = mapper.Map<MotionEditViewModel, MotionDTO>(quest);
 
             using (var client = RestHelper.Create(SessionUser.Token))
             {
