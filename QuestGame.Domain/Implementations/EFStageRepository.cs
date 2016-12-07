@@ -42,6 +42,11 @@ namespace QuestGame.Domain.Implementations
             return dbContext.Stages.Find((int)id);
         }
 
+        public IEnumerable<Stage> GetByMotionId(int id)
+        {
+            return dbContext.Motions.Find(id).OwnerStage.OwnerQuest.Stages;
+        }
+
         public void Update(Stage item)
         {
             dbContext.EntryObj(item);

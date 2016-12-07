@@ -104,14 +104,24 @@ namespace QuestGame.WebMVC.Areas.Design.Controllers
 
             using (var client = RestHelper.Create(SessionUser.Token))
             {
-                var motionResponse = await client.GetAsync(ApiMethods.MotionGetFullById + id);
+                var motionResponse = await client.GetAsync(ApiMethods.MotionGetById + id);
                 if (motionResponse.StatusCode != HttpStatusCode.OK)
                 {
                     ViewBag.Message = ErrorMessages.MotionNotFound;
                     return RedirectToAction("Index", "Quest");
                 }
-                var motionDTO = await motionResponse.Content.ReadAsAsync<MotionEditDTO>();
-                var motionModel = mapper.Map<MotionEditDTO, MotionEditViewModel>(motionDTO);
+                var motionDTO = await motionResponse.Content.ReadAsAsync<MotionDTO>();
+                var motionModel = mapper.Map<MotionDTO, MotionEditViewModel>(motionDTO);
+
+                var stagesResponse = await client.GetAsync(ApiMethods.StageByMotionId + id);
+                if (stagesResponse.StatusCode != HttpStatusCode.OK)
+                {
+                    ViewBag.Message = ErrorMessages.MotionNotFound;
+                    return RedirectToAction("Index", "Quest");
+                }
+
+                var stagesDTO = await stagesResponse.Content.ReadAsAsync<IEnumerable<StageDTO>>();
+                motionModel.RedirectStagesList = stagesDTO.ToDictionary(x => x.Id, y => y.Title);
 
                 ViewBag.ReturnUrl = HttpContext.Request.UrlReferrer.AbsolutePath;
                 return View(motionModel);

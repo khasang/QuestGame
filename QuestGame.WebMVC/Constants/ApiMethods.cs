@@ -34,12 +34,14 @@ namespace QuestGame.WebMVC.Constants
         public const string StageCreate = @"api/Stage/Create";
         public const string StageUpdate = @"api/Stage/Update";
         public const string StageDelById = @"api/Stage/DelById?id=";
+        public const string StageByMotionId = @"api/Stage/GetByMotionId?id=";
+
         #endregion
 
         #region MotionController
 
         public const string MotionGetByStageId = @"api/Motion/GetByStageId?id="; 
-        public const string MotionGetFullById = @"api/Motion/GetFullById?id=";
+        public const string MotionGeEditById = @"api/Motion/GetEditById?id=";
         public const string MotionGetById = @"api/Motion/GetById?id=";
         public const string MotionCreate = @"api/Motion/Create";
         public const string MotionUpdate = @"api/Motion/Update";

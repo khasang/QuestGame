@@ -44,7 +44,7 @@ namespace QuestGame.Domain.Entities
         /// </summary>
         public int QuestId { get; set; }
         [JsonIgnore]
-        public virtual Quest Quest { get; set; }
+        public virtual Quest OwnerQuest { get; set; }
 
         /// <summary>
         /// Коллекция действий

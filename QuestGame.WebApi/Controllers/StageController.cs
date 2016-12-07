@@ -87,6 +87,24 @@ namespace QuestGame.WebApi.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetByMotionId")]
+        public IEnumerable<StageDTO> GetByMotionId(int id)
+        {
+            try
+            {
+                var stages = dataManager.Stages.GetByMotionId(id);
+                var model = mapper.Map<IEnumerable<Stage>, IEnumerable<StageDTO>>(stages);
+                return model;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                logger.Error("Stage | GetByMotionId | ", ex.ToString());
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+        }
+
         [HttpPost]
         [Route("Create")]
         public IHttpActionResult Create(StageDTO stage)
@@ -95,7 +113,7 @@ namespace QuestGame.WebApi.Controllers
             {
                 var model = mapper.Map<StageDTO, Stage>(stage);
                 var owner = dataManager.Quests.GetById(stage.QuestId);
-                model.Quest = owner;
+                model.OwnerQuest = owner;
                 model.Cover = new Image
                 {
                     Name = ConfigSettings.GetServerFilePath(ConfigSettings.NoImage),
@@ -127,8 +145,8 @@ namespace QuestGame.WebApi.Controllers
                 {
                     if (!string.IsNullOrEmpty(stageEntity.Cover.Prefix))
                     {
-                        Uri uri = new Uri(stageEntity.Cover.Name);
-                        string filename = Path.GetFileName(uri.LocalPath);
+                        var uri = new Uri(stageEntity.Cover.Name);
+                        var filename = Path.GetFileName(uri.LocalPath);
                         var path = $"{ConfigSettings.GetLocalFilePath()}{stageEntity.Cover.Prefix}\\{filename}";
 
                         if (File.Exists(path))
@@ -144,7 +162,7 @@ namespace QuestGame.WebApi.Controllers
 
                 var owner = dataManager.Quests.GetById(stage.QuestId);
 
-                model.Quest = owner;
+                model.OwnerQuest = owner;
                 dataManager.Stages.Update(model);
                 dataManager.Save();
                 return Ok();
